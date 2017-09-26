@@ -1,6 +1,11 @@
 FG_GREEN="$(tput setaf 2)"
 BG_GREEN="$(tput setab 2)"
 
+# echo ''
+# echo 'Installing global files...'
+# npm install
+# echo -n ${FG_GREEN}
+# echo 'Global files installed successfully'
 
 cd ./backend
 echo ''
