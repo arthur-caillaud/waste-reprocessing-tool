@@ -2,6 +2,7 @@ var excel = require('exceljs');
 var mongoose = require('mongoose');
 var dataModel = require('.data/dataModel.js');
 
+//Creating something to export in other files
 var service = {}
 
 //Excel Consts
@@ -47,6 +48,8 @@ mongooseConnect(MONGOBASE_URL,function(){
     })
 });
 
+
+//setting what we want to export
 service.readXlsx = readXlsx;
 service.mongooseConnect = mongooseConnect;
 module.exports = service;
