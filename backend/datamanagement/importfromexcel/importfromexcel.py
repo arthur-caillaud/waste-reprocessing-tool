@@ -1,6 +1,7 @@
 import xlrd
 import unittest
 
+
 class ExcelFile:
     directory = "data/"
     head_line_quantity = 2
@@ -19,5 +20,5 @@ class ExcelFile:
 
 
 
-excel_file = ExcelFile("test.xlsx");
+excel_file = ExcelFile("importfromexceltestdata.xlsx");
 print(excel_file.read_row_spreadsheet())
