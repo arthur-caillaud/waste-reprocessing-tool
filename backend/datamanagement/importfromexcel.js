@@ -50,18 +50,39 @@ mongooseConnect(MONGOBASE_URL,function(){
             modeSuivi: String,
             codeFiliereDRPrevu: String,
             codeFiliereEDFPrevu: String,
-            codeInterneDechet: String,
-            libelleDechet: String,
-            codeEuropeenDechet: String,
-            categorieDechet: String,
-            indicateurNationalValorisation: String,
-            famille: String,
+            dechet: {
+                codeInterneDechet: String,
+                libelleDechet: String,
+                codeEuropeenDechet: String,
+                categorieDechet: String,
+                indicateurNationalValorisation: String,
+                famille: String,
+                referenceDossier: String
+            },
+            producteur: {
+                entiteProductrice: String,
+                site: String,
+                uniteDependance: String,
+                UPDependance: String,
+                metierDependance: String
+            },
+            transporteur1: {
+                dateTransport: Date,
+                modeTransport: String,
+                nom: String,
+                localisation: String,
+                recepisse: String,
+                immatriculationVehicule: String,
+                siret: Number,
+                adr: String,
+                quantiteTransportee: Number,
+                estimeeBool: Boolean
+            }
 
-        }
-        )
+
+        })
     })
 });
-})
 
 
 //setting what we want to export
