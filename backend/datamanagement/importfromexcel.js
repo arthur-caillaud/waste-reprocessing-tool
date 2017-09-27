@@ -38,7 +38,6 @@ mongooseConnect = function(mongoBaseUrl,callback) {
 
 mongooseConnect(MONGOBASE_URL,function(){
     readXlsx("importfromexceltestdata.xlsx",function(jsonExcel) {
-        console.log("Json Excel", jsonExcel);
         var Bordereau = mongoose.model('Bordereau', dataSchemas.bordereauSchema);
     })
 })
