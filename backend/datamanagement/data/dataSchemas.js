@@ -46,14 +46,14 @@ var bordereauSchema = new Schema({
         dateTraitement: Date,
         codeFiliereDR: String,
         codeFiliereEDF: String
-    }
+    },
     transporteur2: {
         nom: String,
         modeTransport: String,
         localisation: String,
         siret: Number,
         recepisse: String,
-    }
+    },
     traitementFinal: {
         nom: String,
         localisation: String,
@@ -65,6 +65,7 @@ var bordereauSchema = new Schema({
         codeFiliereEDF: String,
         qualificationTraitement: String
     }
+})
 
 dataModel = {}
 dataModel.bordereau = bordereauSchema

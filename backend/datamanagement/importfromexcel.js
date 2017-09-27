@@ -1,8 +1,7 @@
 var excel = require('exceljs');
 var mongoose = require('mongoose');
-var dataModel = require('.data/dataModel.js');
+var dataSchemas = require('./data/dataSchemas.js');
 
-//Creating something to export in other files
 var service = {}
 
 //Excel Consts
@@ -40,16 +39,10 @@ mongooseConnect = function(mongoBaseUrl,callback) {
 mongooseConnect(MONGOBASE_URL,function(){
     readXlsx("importfromexceltestdata.xlsx",function(jsonExcel) {
         console.log("Json Excel", jsonExcel);
-        var Schema = mongoose.Schema;
-        var schemaArchitecture = jsonExcel[0];
-        console.log(schemaArchitecture);
-
-        })
+        var Bordereau = mongoose.model('Bordereau', dataSchemas.bordereauSchema);
     })
-});
+})
 
-
-//setting what we want to export
 service.readXlsx = readXlsx;
 service.mongooseConnect = mongooseConnect;
 module.exports = service;
