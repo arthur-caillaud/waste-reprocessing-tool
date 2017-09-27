@@ -1,6 +1,8 @@
 var excel = require('exceljs');
 var mongoose = require('mongoose');
 
+var service = {}
+
 //Excel Consts
 const DATA_DIR = "data/"
 const MAIN_SHEET = 1
@@ -21,19 +23,45 @@ readXlsx = function (filename,callback){
         });
 };
 
-mongoose.connect(MONGOBASE_URL,{
-    useMongoClient: true
-});
-var database = mongoose.connection;
-database.on('error', console.error.bind(console, 'connection error:'));
-database.once('open', function() {
-    //Connection successfully achieved
-    console.log("Connection to database successfully achieved");
+mongooseConnect = function(mongoBaseUrl,callback) {
+    mongoose.connect(mongoBaseUrl,{
+        useMongoClient: true
+    });
+    var database = mongoose.connection;
+    database.on('error', console.error.bind(console, 'connection error:'));
+    database.once('open', function(){
+        console.log("Connection to database successfully achieved");
+        callback();
+    })
+}
+
+mongooseConnect(MONGOBASE_URL,function(){
     readXlsx("importfromexceltestdata.xlsx",function(jsonExcel) {
         console.log("Json Excel", jsonExcel);
         var Schema = mongoose.Schema;
         var schemaArchitecture = jsonExcel[0];
-        var bordereauSchema = new Schema(
+        console.log(schemaArchitecture);
+        var bordereauSchema = new Schema({
+            numeroBordereau: String,
+            cas: Number,
+            nomEmetteur: String,
+            etatBordereau: String,
+            modeSuivi: String,
+            codeFiliereDRPrevu: String,
+            codeFiliereEDFPrevu: String,
+            codeInterneDechet: String,
+            libelleDechet: String,
+            codeEuropeenDechet: String,
+            categorieDechet: String,
+            indicateurNationalValorisation: String,
+            famille: String,
+
+        }
         )
     })
 });
+})
+
+service.readXlsx = readXlsx;
+service.mongooseConnect = mongooseConnect;
+module.exports = service;
