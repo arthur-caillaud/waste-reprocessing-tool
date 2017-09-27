@@ -1,5 +1,6 @@
 var excel = require('exceljs');
 var mongoose = require('mongoose');
+var dataModel = require('.data/dataModel.js');
 
 //Creating something to export in other files
 var service = {}
@@ -42,43 +43,6 @@ mongooseConnect(MONGOBASE_URL,function(){
         var Schema = mongoose.Schema;
         var schemaArchitecture = jsonExcel[0];
         console.log(schemaArchitecture);
-        var bordereauSchema = new Schema({
-            numeroBordereau: String,
-            cas: Number,
-            nomEmetteur: String,
-            etatBordereau: String,
-            modeSuivi: String,
-            codeFiliereDRPrevu: String,
-            codeFiliereEDFPrevu: String,
-            dechet: {
-                codeInterneDechet: String,
-                libelleDechet: String,
-                codeEuropeenDechet: String,
-                categorieDechet: String,
-                indicateurNationalValorisation: String,
-                famille: String,
-                referenceDossier: String
-            },
-            producteur: {
-                entiteProductrice: String,
-                site: String,
-                uniteDependance: String,
-                UPDependance: String,
-                metierDependance: String
-            },
-            transporteur1: {
-                dateTransport: Date,
-                modeTransport: String,
-                nom: String,
-                localisation: String,
-                recepisse: String,
-                immatriculationVehicule: String,
-                siret: Number,
-                adr: String,
-                quantiteTransportee: Number,
-                estimeeBool: Boolean
-            }
-
 
         })
     })
