@@ -11,10 +11,10 @@ const MAIN_SHEET = 1
 //Mongoose Consts
 const MONGOBASE_URL = "mongodb://0.0.0.0:27017"
 
-readXlsx = function (filename,callback) {
+readXlsx = function (filepath, callback) {
     var workBook = new excel.Workbook();
     var jsonExcel = [];
-    workBook.xlsx.readFile("./data/" + filename).
+    workBook.xlsx.readFile(filepath).
         then(() => {
             // use workbook
             workBook.getWorksheet(MAIN_SHEET).eachRow(function(row,rowNumber) {
