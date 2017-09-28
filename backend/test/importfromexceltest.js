@@ -8,5 +8,5 @@ test("Import des données depuis Excel", function (t) {
         t.equal(err, null);
         t.equal(jsonExcel, "insert object here");
         t.end();
-    };
+    });
 });
