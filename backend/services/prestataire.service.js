@@ -15,7 +15,7 @@ module.exports = service;
 
 function getAllPrestataires() {
     var deferred = Q.defer();
-    Bordereau.distinct({ "traitementFinal.nom" }, function (err, PrestatairesListe) {
+    Bordereau.distinct({ "traitementFinal.nom" }, (err, PrestatairesListe) => {
         if (err) {
             deferred.reject(err.name + ': ' + err.message);
         }
