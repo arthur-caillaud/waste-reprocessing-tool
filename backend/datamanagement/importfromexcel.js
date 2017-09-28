@@ -7,12 +7,14 @@ var service = {}
 
 //Excel Consts
 const MAIN_SHEET = 1
+const STARTING_ROW = 2
 
 //Mongoose Consts
-const MONGOBASE_URL = "mongodb://0.0.0.0:27017"
+const MONGOBASE_URL = "mongodb://0.0.0.0:27017/akkadb"
 
 readXlsx = function (filename,callback) {
     //The input is an xlsx filename et the function callbacks a json containing the whole excel data
+    //Warning : function only supports .XLSX files
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
@@ -20,24 +22,32 @@ readXlsx = function (filename,callback) {
         then(() => {
             // use workbook
             workBook.getWorksheet(MAIN_SHEET).eachRow(function(row,rowNumber) {
-                jsonExcel.push(JSON.stringify(row.values))
+                if(rowNumber > STARTING_ROW){
+                    jsonExcel.push(row.values);
+                }
             });
-            callback(jsonExcel);
+            callback(null, jsonExcel);
         });
+    workBook.xlsx.readFile("data/" + filename).
+        catch(reason => {
+            console.log(reason);
+            callback(True, null);
+        })
 };
 
-writeXlsxIntoBdd = function(bddUrl, excelName) {
+writeBordereauIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the borderau schema
 
     database.mongooseConnect(bddUrl, function() {
-        readXlsx(excelName, function(jsonExcel, err, result) {
+        readXlsx(excelName, function(err, jsonExcel, result) {
             if (err) {
                 console.log('Error', error);
             }
             else {
-                var Bordereau = mongoose.model('Bordereau', dataSchemas.bordereauSchema);
+                console.log("Bordereau model built");
                 jsonExcel.forEach(function(row){
+                    console.log("Converting row into mongo JSON ...");
                     jsonBordereau = convertRawBordereauIntoMongoJson(row);
                     jsonBordereau.save(function(err){
                         if (err){
@@ -122,12 +132,14 @@ convertRawBordereauIntoMongoJson = function(bordereauRow) {
         codeFiliereEDF: bordereauRow[49],
         qualificationTraitement: bordereauRow[50]
     };
-    return (new Bordereau(jsonBordereau));
+    return (new dataSchemas.Bordereau(jsonBordereau));
 }
 
-
-
 service.readXlsx = readXlsx;
-service.writeXlsxIntoBDD = writeXlsxIntoBdd;
+service.writeBordereauIntoBDD = writeBordereauIntoBdd;
 service.convertRawBordereauIntoMongoJson = convertRawBordereauIntoMongoJson;
 module.exports = service;
+
+//Phase d'essai
+
+writeBordereauIntoBdd(MONGOBASE_URL, "dataedfmars.xlsx");

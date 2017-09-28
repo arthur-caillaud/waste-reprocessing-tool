@@ -65,9 +65,11 @@ var bordereauSchema = new Schema({
         codeFiliereEDF: String,
         qualificationTraitement: String
     }
-})
+}, {collection: "bordereaux"});
+
+var Bordereau = mongoose.model('Bordereaux', bordereauSchema)
 
 dataModel = {}
-dataModel.bordereau = bordereauSchema
+dataModel.Bordereau = Bordereau
 
-module.exports.dataModel = dataModel
+module.exports = dataModel
