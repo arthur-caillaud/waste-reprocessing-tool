@@ -1,6 +1,7 @@
 var excel = require('exceljs');
 var database = require('../database')
 var mongoose = require('mongoose');
+var dataSchemas = require('./data/dataSchemas');
 
 var service = {}
 
@@ -13,7 +14,7 @@ const MONGOBASE_URL = "mongodb://0.0.0.0:27017"
 readXlsx = function (filename,callback) {
     var workBook = new excel.Workbook();
     var jsonExcel = [];
-    workBook.xlsx.readFile("data/" + filename).
+    workBook.xlsx.readFile("./data/" + filename).
         then(() => {
             // use workbook
             workBook.getWorksheet(MAIN_SHEET).eachRow(function(row,rowNumber) {
