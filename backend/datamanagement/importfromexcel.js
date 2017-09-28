@@ -12,6 +12,8 @@ const MAIN_SHEET = 1
 const MONGOBASE_URL = "mongodb://0.0.0.0:27017"
 
 readXlsx = function (filename,callback) {
+    //The input is an xlsx filename et the function callbacks a json containing the whole excel data
+
     var workBook = new excel.Workbook();
     var jsonExcel = [];
     workBook.xlsx.readFile("data/" + filename).
@@ -27,6 +29,7 @@ readXlsx = function (filename,callback) {
 writeXlsxIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the borderau schema
+
     database.mongooseConnect(bddUrl, function() {
         readXlsx(excelName, function(jsonExcel, err, result) {
             if (err) {
@@ -55,6 +58,7 @@ writeXlsxIntoBdd = function(bddUrl, excelName) {
 convertRawBordereauIntoMongoJson = function(bordereauRow) {
     //The input is a stringified JSON read from an xlsx file using readXlsx function
     //The output is a ready to be pushed in the MongoDB bordereau
+    
     jsonBordereau = {};
     jsonBordereau.numeroBordereau = bordereauRow[1];
     jsonBordereau.cas = bordereauRow[2];
