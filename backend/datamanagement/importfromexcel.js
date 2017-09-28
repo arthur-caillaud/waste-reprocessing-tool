@@ -1,6 +1,6 @@
 var excel = require('exceljs');
-var database = require('../database');
-var dataSchemas = require('./data/dataSchemas.js');
+var database = require('./database.js');
+var dataSchemas = require('./dataSchemas.js');
 var mongoose = require('mongoose');
 
 var service = {}
@@ -58,7 +58,7 @@ writeXlsxIntoBdd = function(bddUrl, excelName) {
 convertRawBordereauIntoMongoJson = function(bordereauRow) {
     //The input is a stringified JSON read from an xlsx file using readXlsx function
     //The output is a ready to be pushed in the MongoDB bordereau
-    
+
     jsonBordereau = {};
     jsonBordereau.numeroBordereau = bordereauRow[1];
     jsonBordereau.cas = bordereauRow[2];
@@ -124,6 +124,8 @@ convertRawBordereauIntoMongoJson = function(bordereauRow) {
     };
     return (new Bordereau(jsonBordereau));
 }
+
+
 
 service.readXlsx = readXlsx;
 service.writeXlsxIntoBDD = writeXlsxIntoBdd;
