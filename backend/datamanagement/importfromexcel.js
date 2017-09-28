@@ -24,7 +24,9 @@ readXlsx = function (filename,callback) {
         });
 };
 
-writeXlsxIntoBDD = function(bddUrl, excelName) {
+writeXlsxIntoBdd = function(bddUrl, excelName) {
+    //The input is an excelname located in the data/ directory
+    //The function enables pushing raw data in the database by converting it to the borderau schema
     database.mongooseConnect(bddUrl, function() {
         readXlsx(excelName, function(jsonExcel, err, result) {
             if (err) {
@@ -120,6 +122,6 @@ convertRawBordereauIntoMongoJson = function(bordereauRow) {
 }
 
 service.readXlsx = readXlsx;
-service.writeXlsxIntoBDD = writeXlsxIntoBDD;
+service.writeXlsxIntoBDD = writeXlsxIntoBdd;
 service.convertRawBordereauIntoMongoJson = convertRawBordereauIntoMongoJson;
 module.exports = service;
