@@ -65,7 +65,7 @@ var bordereauSchema = new Schema({
         codeFiliereEDF: String,
         qualificationTraitement: String
     }
-})
+});
 
 dataModel = {}
 dataModel.bordereau = bordereauSchema
