@@ -1,5 +1,6 @@
 var excel = require('exceljs');
-var database = require('../database')
+var database = require('../database');
+var dataSchemas = require ('.data/dataSchemas.js') 
 var mongoose = require('mongoose');
 
 var service = {}
@@ -32,17 +33,17 @@ writeXlsxIntoBDD = function(BDD_URL, callback) {
             }
             else {
                 var Bordereau = mongoose.model('Bordereau', dataSchemas.bordereauSchema);
+
             }
 
         });
     });
-    callback();
 }
 
-// Uncomment this to have your file running when you start it
-// writeXlsxIntoBDD(MONGOBASE_URL, function callback() {
-//
-// });
+convertRawBordereauIntoMongoJson = function(bordereauRow,callback) {
+
+}
+
 service.readXlsx = readXlsx;
 service.writeXlsxIntoBDD = writeXlsxIntoBDD;
 module.exports = service;
