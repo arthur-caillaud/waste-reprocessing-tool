@@ -1,8 +1,8 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-var config = require('config.json');
-var prestataireService = require('services/prestataire.service');
+// var config = require('config.json');
+var prestataireService = require('../services/prestataire.service');
 
 /*
 This is a controller entirely dedicated to error handling when it comes
