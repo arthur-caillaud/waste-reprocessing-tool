@@ -1,16 +1,8 @@
 var excel = require('exceljs');
-var database = require('./database.js');
-var dataSchemas = require('./dataSchemas.js');
+var database = require('./db.js');
+var dataSchemas = require('./db_schemas.js');
+var dbConfig = require('./db_config.js');
 var mongoose = require('mongoose');
-
-var service = {}
-
-//Excel Consts
-const MAIN_SHEET = 1
-const STARTING_ROW = 2
-
-//Mongoose Consts
-const MONGOBASE_URL = "mongodb://0.0.0.0:27017/akkadb"
 
 readXlsx = function (filename,callback) {
     //The input is an xlsx filename et the function callbacks a json containing the whole excel data
@@ -21,8 +13,8 @@ readXlsx = function (filename,callback) {
     workBook.xlsx.readFile("data/" + filename).
         then(() => {
             // use workbook
-            workBook.getWorksheet(MAIN_SHEET).eachRow(function(row,rowNumber) {
-                if(rowNumber > STARTING_ROW){
+            workBook.getWorksheet(dbConfig.MAIN_SHEET).eachRow(function(row,rowNumber) {
+                if(rowNumber > dbConfig.STARTING_ROW){
                     jsonExcel.push(row.values);
                 }
             });
@@ -135,11 +127,16 @@ convertRawBordereauIntoMongoJson = function(bordereauRow) {
     return (new dataSchemas.Bordereau(jsonBordereau));
 }
 
+
+//Export du service
+
+var service = {}
 service.readXlsx = readXlsx;
 service.writeBordereauIntoBDD = writeBordereauIntoBdd;
 service.convertRawBordereauIntoMongoJson = convertRawBordereauIntoMongoJson;
 module.exports = service;
 
+
 //Phase d'essai
 
-writeBordereauIntoBdd(MONGOBASE_URL, "dataedfmars.xlsx");
+writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");

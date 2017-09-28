@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
-
 var bordereauSchema = new Schema({
     numeroBordereau: String,
     cas: Number,
@@ -66,10 +65,9 @@ var bordereauSchema = new Schema({
         qualificationTraitement: String
     }
 }, {collection: "bordereaux"});
-
 var Bordereau = mongoose.model('Bordereaux', bordereauSchema)
 
+//Export
 dataModel = {}
 dataModel.Bordereau = Bordereau
-
 module.exports = dataModel
