@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var dataSchemas = require('./data/dataSchemas.js');
 
 var service = {}
 
