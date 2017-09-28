@@ -1,8 +1,8 @@
 var path = require('path');
+var test = require('tape');
 var Excel = require(path.join(__dirname, '../datamanagement', 'importfromexcel'));
 
-var test = require('tape');
 
-test('First test!', function (t) {
-    t.end();
+test("Import des données depuis Excel", function (t) {
+    
 });
