@@ -1,27 +1,20 @@
 'use strict';
 
-var Q = require('q');
+var Rx = require('rx');
 var database = require('../database')
-var mongoose = require('mongoose');
-var dataSchemas = require('./data/dataSchemas');
-var Bordereau = mongoose.model('Bordereau', dataSchemas.bordereauSchema);
+
 
 var service = {};
 //All exported functionalities
-
+service.getAllPrestataires = getAllPrestataires;
 
 module.exports = service;
 
 
 function getAllPrestataires() {
-    var deferred = Q.defer();
-    Bordereau.distinct({ "traitementFinal.nom" }, (err, PrestatairesListe) => {
-        if (err) {
-            deferred.reject(err.name + ': ' + err.message);
-        }
-        else {
-            deferred.resolve(PrestatairesListe);
-        }
-    });
-    return deferred.promise;
+    
+}
+
+function getPrestataireByName(prestataireName){
+
 }

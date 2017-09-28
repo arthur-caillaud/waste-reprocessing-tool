@@ -18,14 +18,7 @@ function RenderPrestatairesPage(req, res) {
 
 
 function getAllPrestataires (req, res) {
-    prestataireService.getAllPrestataires()
-        .then(function () {
-            res.sendStatus(200);
-        })
-        .catch(function (err) {
-            res.status(400).send(err);
-        })
-
+    
 }
 
 //routes to above functions
