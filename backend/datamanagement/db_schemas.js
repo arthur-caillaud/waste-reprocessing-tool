@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
-
 var bordereauSchema = new Schema({
     numeroBordereau: String,
     cas: Number,
@@ -65,9 +64,14 @@ var bordereauSchema = new Schema({
         codeFiliereEDF: String,
         qualificationTraitement: String
     }
+<<<<<<< HEAD:backend/datamanagement/data/dataSchemas.js
 });
+=======
+}, {collection: "bordereaux"});
+var Bordereau = mongoose.model('Bordereaux', bordereauSchema)
+>>>>>>> datamanagement:backend/datamanagement/db_schemas.js
 
+//Export
 dataModel = {}
-dataModel.bordereau = bordereauSchema
-
-module.exports.dataModel = dataModel
+dataModel.Bordereau = Bordereau
+module.exports = dataModel
