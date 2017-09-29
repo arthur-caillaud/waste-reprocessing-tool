@@ -4,9 +4,16 @@
         "MAIN_SHEET": 1
     },
     "mysql": {
+<<<<<<< HEAD
         "url":,
         "user": "root",
         "password": "password",
         "database": "databaseName"
+=======
+        "url": "91.134.242.69",
+        "user": "root",
+        "password": "arthurpierreaurelien",
+        "database": "db"
+>>>>>>> cacf2e5559d74717d69d21d847febdcf494baaf6
     }
 }
