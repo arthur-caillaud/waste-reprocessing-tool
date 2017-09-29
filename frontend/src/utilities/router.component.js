@@ -1,8 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Client from './client/client.component';
-import Dashboard from './dashboard/dashboard.component';
+import Client from '../client/client.component';
+import Dashboard from '../dashboard/dashboard.component';
 
 
 const MainRouter = () => (

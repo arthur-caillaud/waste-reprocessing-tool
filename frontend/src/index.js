@@ -4,11 +4,12 @@ import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter } from 'react-router-dom';
 
-import MainRouter from './router.component';
+import MainRouter from './utilities/router.component';
+import Navbar from './utilities/navbar.component';
 
 render((
   <div>
-    <h2>Main title</h2>
+    <Navbar />
     <BrowserRouter>
       <MainRouter />
     </BrowserRouter>
