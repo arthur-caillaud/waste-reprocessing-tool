@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="0.07" tests="2" failures="1">
-  <testsuite name="Root Suite" timestamp="2017-09-29T12:59:49" tests="0" failures="0" time="0">
+<testsuites name="Mocha Tests" time="0.087" tests="2" failures="1">
+  <testsuite name="Root Suite" timestamp="2017-09-29T14:40:18" tests="0" failures="0" time="0">
   </testsuite>
-  <testsuite name="SAMPLE unit test" timestamp="2017-09-29T12:59:49" tests="1" file="/Users/aurelien/Coding/DTY/akkaxedf/backend/test/first-test.js" failures="1" time="0">
+  <testsuite name="SAMPLE unit test" timestamp="2017-09-29T14:40:18" tests="1" file="/Users/acris/Projects/akkaxedf/backend/test/first-test.js" failures="1" time="0">
     <testcase name="SAMPLE unit test should return home page" time="0" classname="should return home page">
       <failure><![CDATA[TypeError: Cannot read property 'status' of null
     at Test.<anonymous> (test/first-test.js:21:12)
@@ -17,8 +17,8 @@
     at process._tickCallback (internal/process/next_tick.js:180:9)]]></failure>
     </testcase>
   </testsuite>
-  <testsuite name="Data Management" timestamp="2017-09-29T12:59:50" tests="1" file="/Users/aurelien/Coding/DTY/akkaxedf/backend/test/importfromexceltest.js" failures="0" time="0.07">
-    <testcase name="Data Management should correctly import data from Excel" time="0.07" classname="should correctly import data from Excel">
+  <testsuite name="Data Management" timestamp="2017-09-29T14:40:18" tests="1" file="/Users/acris/Projects/akkaxedf/backend/test/importfromexceltest.js" failures="0" time="0.087">
+    <testcase name="Data Management should correctly import data from Excel" time="0.087" classname="should correctly import data from Excel">
     </testcase>
   </testsuite>
 </testsuites>
