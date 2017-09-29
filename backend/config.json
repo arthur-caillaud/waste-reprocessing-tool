@@ -2,5 +2,11 @@
     "excel": {
         "STARTING_ROW": 2,
         "MAIN_SHEET": 1
+    },
+    "mysql": {
+        "url":,
+        "user": "root",
+        "password": "password",
+        "database": "databaseName"
     }
 }
