@@ -1,5 +1,5 @@
 var excel = require('exceljs');
-
+var Rx = require ('rxjs/Rx');
 var config = require('../config.json');
 
 
@@ -9,7 +9,8 @@ readXlsx = function (filepath, callback) {
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
-    workBook.xlsx.readFile(filepath).
+    var readObservable = Rx.Observable.create(function(obs) {
+        workBook.xlsx.readFile(config.excel.DATA_DIR + filepath).
         then(() => {
             // use workbook
             workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
@@ -17,16 +18,15 @@ readXlsx = function (filepath, callback) {
                     jsonExcel.push(row.values);
                 }
             });
-            callback(null, jsonExcel);
+            obs.next(jsonExcel);
+            obs.complete();
         });
-    workBook.xlsx.readFile(filepath).
-        catch(reason => {
-            console.log(reason);
-            callback(True, null);
+        .catch(error => {
+            obs.error(error);
         })
-};
-
-
+    });
+    return readObservable;
+}
 
 /* To modify to delete mongooseConnect*/
 
@@ -35,40 +35,12 @@ writeBordereauIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the borderau schema
 
-    database.mongooseConnect(bddUrl, function() {
-        readXlsx(excelName, function(err, jsonExcel, result) {
-            if (err) {
-                console.log('Error', error);
-            }
-            else {
-                console.log("Bordereau model built");
-                jsonExcel.forEach(function(row){
-                    console.log("Converting row into mongo JSON ...");
-                    jsonBordereau = convertRawBordereauIntoMongoJson(row);
-                    jsonBordereau.save(function(err){
-                        if (err){
-                            console.error(handleError(err));
-                        }
-                        else {
-                            console.log(jsonBordereau.numeroBordereau)
-                            console.log("Bordereau successfully saved in MongoDB");
-                        }
-                    })
-                })
-            }
-
-        });
-    });
 }
 
-
-/*To modify to remove MongoDB*/
-
-
-convertRawBordereauIntoMongoJson = function(bordereauRow) {
+convertRowIntoSequelize = function(bordereauRow) {
     //The input is a stringified JSON read from an xlsx file using readXlsx function
     //The output is a ready to be pushed in the MongoDB bordereau
-
+    
     jsonBordereau = {};
     jsonBordereau.numeroBordereau = bordereauRow[1];
     jsonBordereau.cas = bordereauRow[2];
@@ -141,10 +113,21 @@ convertRawBordereauIntoMongoJson = function(bordereauRow) {
 var service = {}
 service.readXlsx = readXlsx;
 service.writeBordereauIntoBDD = writeBordereauIntoBdd;
-service.convertRawBordereauIntoMongoJson = convertRawBordereauIntoMongoJson;
+service.convertRowIntoSequelize = convertRowIntoSequelize;
 module.exports = service;
 
 
 //Phase d'essai
 
-// writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");
+var readXlsxObserver = {
+    next: function(value){
+        console.log(value);
+    },
+    error: function(error){
+        console.error(error);
+    },
+    complete: function(){
+        console.log("readXlsx completed");
+    }
+}
+readXlsx("dataedfmars.xlsx").subscribe(readXlsxObserver);

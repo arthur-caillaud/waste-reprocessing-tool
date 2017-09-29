@@ -1,5 +1,6 @@
 {
     "excel": {
+        "DATA_DIR": "./data/",
         "STARTING_ROW": 2,
         "MAIN_SHEET": 1
     },
