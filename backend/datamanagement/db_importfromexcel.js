@@ -1,7 +1,7 @@
 var excel = require('exceljs');
 var database = require('./db.js');
 
-var dbConfig = require('./db_config.js');
+var config = require('../config.json');
 
 
 readXlsx = function (filename,callback) {
@@ -13,8 +13,8 @@ readXlsx = function (filename,callback) {
     workBook.xlsx.readFile("data/" + filename).
         then(() => {
             // use workbook
-            workBook.getWorksheet(dbConfig.MAIN_SHEET).eachRow(function(row,rowNumber) {
-                if(rowNumber > dbConfig.STARTING_ROW){
+            workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
+                if(rowNumber > config.excel.STARTING_ROW){
                     jsonExcel.push(row.values);
                 }
             });
@@ -148,4 +148,4 @@ module.exports = service;
 
 //Phase d'essai
 
-writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");
+writeBordereauIntoBdd(config.MONGOBASE_URL, "dataedfmars.xlsx");
