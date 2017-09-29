@@ -4,8 +4,8 @@ var mysql = require('mysql');
 function connectToMySQL (URL, databaseName) {
     var connection = mysql.CreateConnection({
         host: URL,
-        user: ,
-        password: ,
+        user: "mock",
+        password: "mock",
         database: databaseName
     });
 

@@ -1,5 +1,4 @@
 var excel = require('exceljs');
-var database = require('./db.js');
 
 var config = require('../config.json');
 
@@ -148,8 +147,4 @@ module.exports = service;
 
 //Phase d'essai
 
-<<<<<<< HEAD
-writeBordereauIntoBdd(config.MONGOBASE_URL, "dataedfmars.xlsx");
-=======
 // writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");
->>>>>>> 25fd091138d3daf6526cd826d8406ce77596be4c
