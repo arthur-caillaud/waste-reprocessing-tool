@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^15.6.1",
+    "react-bootstrap": "^0.31.3",
     "react-d3": "^0.4.0",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.2.2",

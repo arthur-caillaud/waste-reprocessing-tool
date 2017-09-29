@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Nav, NavItem, Button } from 'react-bootstrap';
 
 class Navbar extends Component {
   render() {
@@ -7,11 +8,11 @@ class Navbar extends Component {
         <div>
           <h2>Navbar</h2>
         </div>
-        <div>
-          <a href="/">Home</a>
-          <a href="/client">Client</a>
-          <a href="/dashboard">Dashboard</a>
-        </div>
+        <Nav bsStyle="pills" activeKey={1}>
+          <NavItem eventKey={1} href="/">Dashboard</NavItem>
+          <NavItem eventKey={2} href="/client">Prestataire</NavItem>
+          <NavItem eventKey={3} href="/trash">Déchet</NavItem>
+        </Nav>
       </div>
     );
   }
