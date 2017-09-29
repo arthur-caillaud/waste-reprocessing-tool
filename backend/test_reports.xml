@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0.07" tests="2" failures="2">
+  <testsuite name="Root Suite" timestamp="2017-09-29T12:16:26" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="SAMPLE unit test" timestamp="2017-09-29T12:16:26" tests="1" file="/Users/aurelien/Coding/DTY/akkaxedf/backend/test/first-test.js" failures="1" time="0">
+    <testcase name="SAMPLE unit test should return home page" time="0" classname="should return home page">
+      <failure><![CDATA[TypeError: Cannot read property 'status' of null
+    at Test.<anonymous> (test/first-test.js:20:10)
+    at Test.assert (node_modules/supertest/lib/test.js:165:8)
+    at assert (node_modules/supertest/lib/test.js:131:12)
+    at node_modules/supertest/lib/test.js:128:5
+    at Test.Request.callback (node_modules/superagent/lib/node/index.js:699:3)
+    at ClientRequest.<anonymous> (node_modules/superagent/lib/node/index.js:636:10)
+    at Socket.socketErrorListener (_http_client.js:401:9)
+    at emitErrorNT (internal/streams/destroy.js:64:8)
+    at _combinedTickCallback (internal/process/next_tick.js:138:11)
+    at process._tickCallback (internal/process/next_tick.js:180:9)]]></failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Import des données depuis Excel" timestamp="2017-09-29T12:16:26" tests="1" file="/Users/aurelien/Coding/DTY/akkaxedf/backend/test/importfromexceltest.js" failures="1" time="0.07">
+    <testcase name="Import des données depuis Excel should correctly import data from Excel" time="0.07" classname="should correctly import data from Excel">
+      <failure><![CDATA[AssertionError [ERR_ASSERTION]: '["[null,\\"Chat\\",\\"Nombre\\",\\"Colonne parfois vide\\",\\"Repas\\"]","[null,\\"Siamois\\",14,null,\\"Thon\\"]","[null,\\"Pe == '[[null,"Siamois",14,null,"Thon"],[null,"Persan",10,"Rempli","Thon"],[null,"Lion",1,null,"Viande"]]'
+    at test/importfromexceltest.js:14:16
+    at workBook.xlsx.readFile.then (datamanagement/db_importfromexcel.js:20:13)
+    at <anonymous>]]></failure>
+    </testcase>
+  </testsuite>
+</testsuites>
