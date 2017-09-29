@@ -1,16 +1,22 @@
 var assert = require('assert');
 var Excel = require('../datamanagement/db_importfromexcel');
 
-describe("Import des données depuis Excel", function(t) {
+describe("Data Management", function(t) {
+
   it("should correctly import data from Excel", function(done) {
+
+    // Path starting from the ./backend folder
     var filepath = "./test/data/importfromexceltestdata.xlsx";
+
+    // The function ignores the headers
     var expectedResult = [
-      JSON.stringify([null,"Chat","Nombre","Colonne parfois vide","Repas"]),
-      JSON.stringify([null,"Siamois",14,null,"Thon"]),
-      JSON.stringify([null,"Persan",10,"Rempli","Thon"]),
-      JSON.stringify([null,"Lion",1,null,"Viande"])];
+      [null,"Siamois",14,null,"Thon"],
+      [null,"Persan",10,"Rempli","Thon"],
+      [null,"Lion",1,null,"Viande"]];
+
     Excel.readXlsx(filepath, function(error, jsonExcel) {
       try {
+        // Using JSON.stringify to avoid comparison problems
         assert.equal(JSON.stringify(expectedResult), JSON.stringify(jsonExcel));
         done();
       }
@@ -19,4 +25,5 @@ describe("Import des données depuis Excel", function(t) {
       }
     });
   });
+
 });
