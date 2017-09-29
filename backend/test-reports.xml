@@ -1,0 +1,10 @@
+expected["[null,\"Chat\",\"Nombre\",\"Colonne parfois vide\",\"Repas\"]","[null,\"Siamois\",14,null,\"Thon\"]","[null,\"Persan\",10,\"Rempli\",\"Thon\"]","[null,\"Lion\",1,null,\"Viande\"]"]
+returned[]
+<testsuite name="Mocha Tests" tests="2" failures="1" errors="1" skipped="0" timestamp="Fri, 29 Sep 2017 11:46:56 GMT" time="0.171">
+<testcase classname="SAMPLE unit test" name="should return home page" time="0.082"/>
+<testcase classname="Import des donn&#xE9;es depuis Excel" name="should correctly import data from Excel" time="0.077"><failure>&#x27;[&#x22;[null,\\&#x22;Chat\\&#x22;,\\&#x22;Nombre\\&#x22;,\\&#x22;Colonne parfois vide\\&#x22;,\\&#x22;Repas\\&#x22;]&#x22;,&#x22;[null,\\&#x22;Siamois\\&#x22;,14,null,\\&#x22;Thon\\&#x22;]&#x22;,&#x22;[null,\\&#x22;Pe == &#x27;[]&#x27;
+AssertionError [ERR_ASSERTION]: &#x27;[&#x22;[null,\\&#x22;Chat\\&#x22;,\\&#x22;Nombre\\&#x22;,\\&#x22;Colonne parfois vide\\&#x22;,\\&#x22;Repas\\&#x22;]&#x22;,&#x22;[null,\\&#x22;Siamois\\&#x22;,14,null,\\&#x22;Thon\\&#x22;]&#x22;,&#x22;[null,\\&#x22;Pe == &#x27;[]&#x27;
+    at test/importfromexceltest.js:16:16
+    at workBook.xlsx.readFile.then (datamanagement/db_importfromexcel.js:21:13)
+    at &#x3C;anonymous&#x3E;</failure></testcase>
+</testsuite>
