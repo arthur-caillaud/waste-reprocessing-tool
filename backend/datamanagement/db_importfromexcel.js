@@ -1,8 +1,8 @@
 var excel = require('exceljs');
 var database = require('./db.js');
-var dataSchemas = require('./db_schemas.js');
+
 var dbConfig = require('./db_config.js');
-var mongoose = require('mongoose');
+
 
 readXlsx = function (filename,callback) {
     //The input is an xlsx filename et the function callbacks a json containing the whole excel data
@@ -26,6 +26,11 @@ readXlsx = function (filename,callback) {
             callback(True, null);
         })
 };
+
+
+
+/* To modify to delete mongooseConnect*/
+
 
 writeBordereauIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
@@ -56,6 +61,10 @@ writeBordereauIntoBdd = function(bddUrl, excelName) {
         });
     });
 }
+
+
+/*To modify to remove MongoDB*/
+
 
 convertRawBordereauIntoMongoJson = function(bordereauRow) {
     //The input is a stringified JSON read from an xlsx file using readXlsx function

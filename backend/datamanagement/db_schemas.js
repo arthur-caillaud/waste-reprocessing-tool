@@ -1,7 +1,10 @@
-var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-var bordereauSchema = new Schema({
+/*
+
+Modified to remove Mongo, But Keeped the schema as it is a pain to rewrite
+
+*/
+
     numeroBordereau: String,
     cas: Number,
     nomEmetteur: String,
@@ -64,12 +67,7 @@ var bordereauSchema = new Schema({
         codeFiliereEDF: String,
         qualificationTraitement: String
     }
-<<<<<<< HEAD:backend/datamanagement/data/dataSchemas.js
-});
-=======
-}, {collection: "bordereaux"});
-var Bordereau = mongoose.model('Bordereaux', bordereauSchema)
->>>>>>> datamanagement:backend/datamanagement/db_schemas.js
+
 
 //Export
 dataModel = {}
