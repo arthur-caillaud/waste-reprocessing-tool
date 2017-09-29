@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Excel = require('../datamanagement/importfromexcel');
+var Excel = require('../datamanagement/db_importfromexcel');
 
 describe("Import des données depuis Excel", function(t) {
   it("should correctly import data from Excel", function(done) {
@@ -9,7 +9,9 @@ describe("Import des données depuis Excel", function(t) {
       JSON.stringify([null,"Siamois",14,null,"Thon"]),
       JSON.stringify([null,"Persan",10,"Rempli","Thon"]),
       JSON.stringify([null,"Lion",1,null,"Viande"])];
-    Excel.readXlsx(filepath, function(jsonExcel) {
+    Excel.readXlsx(filepath, function(error, jsonExcel) {
+      console.log("expected" + JSON.stringify(expectedResult));
+      console.log("returned" + JSON.stringify(jsonExcel));
       try {
         assert.equal(JSON.stringify(expectedResult), JSON.stringify(jsonExcel));
         done();

@@ -1,19 +1,16 @@
-var mongoose = require('mongoose');
-var dataSchemas = require('./datamanagement/data/dataSchemas.js');
+var mysql = require('mysql');
 
-var service = {}
 
-mongooseConnect = function(mongoBaseUrl,callback) {
-    mongoose.connect(mongoBaseUrl,{
-        useMongoClient: true
+function connectToMySQL (URL, databaseName) {
+    var connection = mysql.CreateConnection({
+        host: URL,
+        user: ,
+        password: ,
+        database: databaseName
     });
-    var database = mongoose.connection;
-    database.on('error', console.error.bind(console, 'connection error:'));
-    database.once('open', function(){
-        console.log("Connection to database successfully achieved");
-        callback();
-    })
+
+    connection.connect();
 }
 
-service.mongooseConnect = mongooseConnect;
+var service = {};
 module.exports = service;

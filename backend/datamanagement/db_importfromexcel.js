@@ -1,31 +1,36 @@
 var excel = require('exceljs');
 var database = require('./db.js');
-var dataSchemas = require('./db_schemas.js');
-var dbConfig = require('./db_config.js');
-var mongoose = require('mongoose');
 
-readXlsx = function (filename,callback) {
-    //The input is an xlsx filename et the function callbacks a json containing the whole excel data
+var config = require('../config.json');
+
+
+readXlsx = function (filepath, callback) {
+    //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //Warning : function only supports .XLSX files
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
-    workBook.xlsx.readFile("data/" + filename).
+    workBook.xlsx.readFile(filepath).
         then(() => {
             // use workbook
-            workBook.getWorksheet(dbConfig.MAIN_SHEET).eachRow(function(row,rowNumber) {
-                if(rowNumber > dbConfig.STARTING_ROW){
+            workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
+                if(rowNumber > config.excel.STARTING_ROW){
                     jsonExcel.push(row.values);
                 }
             });
             callback(null, jsonExcel);
         });
-    workBook.xlsx.readFile("data/" + filename).
+    workBook.xlsx.readFile(filepath).
         catch(reason => {
             console.log(reason);
             callback(True, null);
         })
 };
+
+
+
+/* To modify to delete mongooseConnect*/
+
 
 writeBordereauIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
@@ -56,6 +61,10 @@ writeBordereauIntoBdd = function(bddUrl, excelName) {
         });
     });
 }
+
+
+/*To modify to remove MongoDB*/
+
 
 convertRawBordereauIntoMongoJson = function(bordereauRow) {
     //The input is a stringified JSON read from an xlsx file using readXlsx function
@@ -136,6 +145,11 @@ service.writeBordereauIntoBDD = writeBordereauIntoBdd;
 service.convertRawBordereauIntoMongoJson = convertRawBordereauIntoMongoJson;
 module.exports = service;
 
+
 //Phase d'essai
 
-writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");
+<<<<<<< HEAD
+writeBordereauIntoBdd(config.MONGOBASE_URL, "dataedfmars.xlsx");
+=======
+// writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");
+>>>>>>> 25fd091138d3daf6526cd826d8406ce77596be4c
