@@ -4,13 +4,13 @@ var database = require('./db.js');
 var config = require('../config.json');
 
 
-readXlsx = function (filename,callback) {
-    //The input is an xlsx filename et the function callbacks a json containing the whole excel data
+readXlsx = function (filepath, callback) {
+    //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //Warning : function only supports .XLSX files
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
-    workBook.xlsx.readFile("data/" + filename).
+    workBook.xlsx.readFile(filepath).
         then(() => {
             // use workbook
             workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
@@ -20,7 +20,7 @@ readXlsx = function (filename,callback) {
             });
             callback(null, jsonExcel);
         });
-    workBook.xlsx.readFile("data/" + filename).
+    workBook.xlsx.readFile(filepath).
         catch(reason => {
             console.log(reason);
             callback(True, null);
@@ -148,4 +148,8 @@ module.exports = service;
 
 //Phase d'essai
 
+<<<<<<< HEAD
 writeBordereauIntoBdd(config.MONGOBASE_URL, "dataedfmars.xlsx");
+=======
+// writeBordereauIntoBdd(dbConfig.MONGOBASE_URL, "dataedfmars.xlsx");
+>>>>>>> 25fd091138d3daf6526cd826d8406ce77596be4c
