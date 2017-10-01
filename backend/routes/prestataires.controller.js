@@ -1,12 +1,12 @@
 'use strict';
 var express = require('express');
 var router = express.Router();
-// var config = require('config.json');
+var Rx = require('rx');
 var prestataireService = require('../services/prestataire.service');
 
 /*
 This is a controller entirely dedicated to error handling when it comes
-to database communication. The functions dealing directly with MongoClient
+to database communication. The functions dealing directly with Sequalize
 are written in the services being called in this controller
 */
 
@@ -18,7 +18,16 @@ function RenderPrestatairesPage(req, res) {
 
 
 function getAllPrestataires (req, res) {
-    
+    var getAllObserver = {
+        error: function (error) {
+            console.error(error);
+        },
+        complete: function(listePrestataires) {
+            console.log("finished loading all prestataires")
+            res.json(listePrestataires);
+        }
+    }
+    prestataireService.getAllPrestataires().subscribe(getAllObserver);
 }
 
 //routes to above functions
