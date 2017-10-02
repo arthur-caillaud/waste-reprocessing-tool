@@ -1,0 +1,26 @@
+{
+  "name": "akkaxedf",
+  "version": "1.0.0",
+  "description": "L'outil développé vise à piloter l'optimisation du retraitement des déchets de site d'EDF en France.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "^4.1.2",
+    "should": "^13.1.0",
+    "supertest": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^3.5.3"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.centralesupelec.fr:2015caillauda/akkaxedf.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

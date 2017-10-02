@@ -1,5 +1,5 @@
 var excel = require('exceljs');
-var Rx = require ('rxjs/Rx');
+var Rx = require ('rx');
 var config = require('../config.json');
 
 
@@ -9,8 +9,9 @@ readXlsx = function (filepath, callback) {
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
-    var readObservable = Rx.Observable.create(function(obs) {
-        workBook.xlsx.readFile(config.excel.DATA_DIR + filepath)
+    var readObservable = Rx.Observable.create((obs) => {
+        // Using directly the filepath, NOT APPENDING ANYTHING
+        workBook.xlsx.readFile(filepath)
             .then(() => {
                 // use workbook
                 workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
@@ -19,10 +20,10 @@ readXlsx = function (filepath, callback) {
                     }
                 });
                 obs.next(jsonExcel);
-                obs.complete();
+                obs.onCompleted();
             })
             .catch(error => {
-                obs.error(error);
+                obs.onError(error);
             })
     });
     return readObservable;
