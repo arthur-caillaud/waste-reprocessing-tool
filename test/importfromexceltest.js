@@ -1,5 +1,5 @@
 var assert = require('assert');
-var Excel = require('../datamanagement/db_importfromexcel');
+var Excel = require('./backend/datamanagement/db_importfromexcel');
 
 describe("Data Management", function(t) {
 
