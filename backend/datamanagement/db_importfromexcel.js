@@ -28,10 +28,7 @@ readXlsx = function (filepath, callback) {
     return readObservable;
 }
 
-/* To modify to delete mongooseConnect*/
-
-
-writeBordereauIntoBdd = function(bddUrl, excelName) {
+writeIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the borderau schema
 

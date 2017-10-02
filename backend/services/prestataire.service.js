@@ -1,36 +1,56 @@
 'use strict';
 var Rx = require('rx');
 var service = {};
-//All exported functionalities
-service.getAllPrestataires = getAllPrestataires;
+var sequelize = require('sequelize');
 
-module.exports = service;
+var models = require('../datamanagement/models/');
+var Client = models.Client;
 
-
-function getAllPrestataires() {
-    var getAllPrestatairesObservable = Rx.Observable.create(function (obs) {
+function getAllClients() {
+    /* This function creates an Observable and returns it. It searches for all
+    clients */
+    var getAllClientsObservable = Rx.Observable.create(function (obs) {
         try {
-            //db.getAllPrestataires
-            obs.complete(prestatairesList);
+            Client.findAll().then(function(clients){
+                obs.complete(clients);
+            })
         }
         catch (error) {
-            obs.error();
+            obs.error(error);
         };
 
 
     });
-    return getAllPrestatairesObservable;
+    return getAllClientsObservable;
 }
 
-function getPrestataireByName(prestataireName){
-    var getPrestataireByNameObservable = Rx.Observable.create(function (obs) {
+function getClientByName(clientName){
+
+    /* This function creates an Observable and returns it. It should
+    search for all the Clients that have a name containing ClientName
+    */
+    var getClientByNameObservable = Rx.Observable.create(function (obs) {
         try {
-            //db.getPrestataireByName
-            obs.complete(prestataire);
+            Client.findAll({
+                where: {
+                    nom: {$like: '%clientName%'}
+                }
+            })
+            .then(function(clients) {
+                obs.complete(clients);
+            })
+
         }
         catch (error) {
-            obs.error();
+            obs.error(error);
         };
-    })
+    });
+    return getClientByNameObservable;
 
 };
+
+//All exported functionalities
+service.getAllClients = getAllClients;
+service.getClientByName = getClientByName;
+
+module.exports = service;
