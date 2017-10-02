@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 
+import { longText } from '../utilities/text-generator.component';
+
 class Client extends Component {
   render() {
     return (
       <div>
-        <h2>Client</h2>
-      </div>
+        <div>
+          <h2>Vision prestataire</h2>
+        </div>
+        <div>
+          { longText }
+        </div>
+    </div>
     );
   }
 }

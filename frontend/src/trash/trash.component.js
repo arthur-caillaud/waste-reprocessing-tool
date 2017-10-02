@@ -4,7 +4,7 @@ class Trash extends Component {
   render() {
     return (
       <div>
-        <h2>Déchet</h2>
+        <h2>Vision déchets</h2>
       </div>
     );
   }
