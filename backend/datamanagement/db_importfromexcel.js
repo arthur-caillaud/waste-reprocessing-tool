@@ -10,20 +10,20 @@ readXlsx = function (filepath, callback) {
     var workBook = new excel.Workbook();
     var jsonExcel = [];
     var readObservable = Rx.Observable.create(function(obs) {
-        workBook.xlsx.readFile(config.excel.DATA_DIR + filepath).
-        then(() => {
-            // use workbook
-            workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
-                if(rowNumber > config.excel.STARTING_ROW){
-                    jsonExcel.push(row.values);
-                }
-            });
-            obs.next(jsonExcel);
-            obs.complete();
-        });
-        .catch(error => {
-            obs.error(error);
-        })
+        workBook.xlsx.readFile(config.excel.DATA_DIR + filepath)
+            .then(() => {
+                // use workbook
+                workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
+                    if(rowNumber > config.excel.STARTING_ROW){
+                        jsonExcel.push(row.values);
+                    }
+                });
+                obs.next(jsonExcel);
+                obs.complete();
+            })
+            .catch(error => {
+                obs.error(error);
+            })
     });
     return readObservable;
 }
@@ -40,7 +40,7 @@ writeBordereauIntoBdd = function(bddUrl, excelName) {
 convertRowIntoSequelize = function(bordereauRow) {
     //The input is a stringified JSON read from an xlsx file using readXlsx function
     //The output is a ready to be pushed in the MongoDB bordereau
-    
+
     jsonBordereau = {};
     jsonBordereau.numeroBordereau = bordereauRow[1];
     jsonBordereau.cas = bordereauRow[2];
