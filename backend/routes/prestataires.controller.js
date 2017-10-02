@@ -23,7 +23,7 @@ function getAllPrestataires (req, res) {
             console.log(error);
             res.status(400).send(error);
         },
-        complete: function(listePrestataires) {
+        onCompleted: function(listePrestataires) {
             console.log("finished loading all prestataires")
             res.json(listePrestataires);
         }
@@ -37,7 +37,7 @@ function getPrestataireByName (req, res) {
             console.log(error);
             res.status(400).send(error);
         },
-        complete: function(listePrestataires) {
+        onCompleted: function(listePrestataires) {
             console.log('finished loading all prestataires containing input string');
             res.json(listePrestataires);
         }

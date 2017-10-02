@@ -12,7 +12,7 @@ function getAllClients() {
     var getAllClientsObservable = Rx.Observable.create(function (obs) {
         try {
             Client.findAll().then(function(clients){
-                obs.complete(clients);
+                obs.onCompleted(clients);
             })
         }
         catch (error) {
@@ -37,7 +37,7 @@ function getClientByName(clientName){
                 }
             })
             .then(function(clients) {
-                obs.complete(clients);
+                obs.onCompleted(clients);
             })
 
         }
