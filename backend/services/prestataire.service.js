@@ -3,7 +3,7 @@ var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
 
-var models = require('../datamanagement/models/');
+var models = require('../models/');
 var Client = models.Client;
 
 function getAllClients() {
