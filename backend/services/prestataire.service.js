@@ -13,9 +13,9 @@ function getAllPrestataires() {
             //db.getAllPrestataires
             obs.complete(prestatairesList);
         }
-        catch (error => {
+        catch (error) {
             obs.error();
-        });
+        };
 
 
     });
@@ -28,9 +28,9 @@ function getPrestataireByName(prestataireName){
             //db.getPrestataireByName
             obs.complete(prestataire);
         }
-        catch (error => {
+        catch (error) {
             obs.error();
-        });
+        };
     })
 
 };
