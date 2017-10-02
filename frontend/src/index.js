@@ -1,8 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import { render } from 'react-dom';
 import './index.css';
-import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import MainRouter from './utilities/router.component';
+import Navbar from './utilities/navbar.component';
+
+render((
+  <div>
+    <BrowserRouter>
+      <div>
+        <Navbar />
+        <MainRouter />
+      </div>
+    </BrowserRouter>
+</div>
+), document.getElementById('root'));
+
+
+
+
+
 registerServiceWorker();
