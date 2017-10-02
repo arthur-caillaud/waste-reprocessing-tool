@@ -9,9 +9,11 @@ import Navbar from './utilities/navbar.component';
 
 render((
   <div>
-    <Navbar />
     <BrowserRouter>
-      <MainRouter />
+      <div>
+        <Navbar />
+        <MainRouter />
+      </div>
     </BrowserRouter>
 </div>
 ), document.getElementById('root'));
