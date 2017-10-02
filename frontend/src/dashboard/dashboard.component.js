@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Row, Col } from 'react-bootstrap';
 
 import Gauge from './gauge.component';
+import Info from './info.component';
 
 class Dashboard extends Component {
   render() {
@@ -13,9 +14,10 @@ class Dashboard extends Component {
         </div>
         <div>
           <Row>
-            <Col sm={3}> <Gauge number="1" /></Col>
-            <Col sm={3}> <Gauge number="2" /></Col>
-            <Col sm={3}> <Gauge number="3" /></Col>
+            <Col sm={3}> <Gauge number="1" /> </Col>
+            <Col sm={3}> <Gauge number="2" /> </Col>
+            <Col sm={3}> <Gauge number="3" /> </Col>
+            <Col sm={3}> <Info /> </Col>
           </Row>
         </div>
     </div>
