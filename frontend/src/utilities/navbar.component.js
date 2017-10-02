@@ -10,7 +10,7 @@ class Navbar extends Component {
         <div>
           <h2>Navbar</h2>
         </div>
-        <Nav bsStyle="pills" stacked='true' activeHref={this.props.location.pathname}>
+        <Nav bsStyle="pills" stacked activeHref={this.props.location.pathname}>
           <NavItem eventKey={1} href="/">Dashboard</NavItem>
           <NavItem eventKey={2} href="/client">Prestataire</NavItem>
           <NavItem eventKey={3} href="/trash">Déchet</NavItem>

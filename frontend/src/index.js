@@ -7,12 +7,16 @@ import { BrowserRouter } from 'react-router-dom';
 import MainRouter from './utilities/router.component';
 import Navbar from './utilities/navbar.component';
 
+import { Col, Row } from 'react-bootstrap';
+
 render((
   <div>
     <BrowserRouter>
       <div>
-        <Navbar />
-        <MainRouter />
+        <Row>
+          <Col sm={2}> <Navbar /> </Col>
+          <Col sm={8}> <MainRouter /> </Col>
+        </Row>
       </div>
     </BrowserRouter>
 </div>
