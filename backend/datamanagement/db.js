@@ -2,12 +2,12 @@ var mysql = require('mysql');
 var Sequelize = require('sequelize');
 var config = require('../config.json');
 
-mySqlConnect = function(){
+mySqlConnect = function() {
     const sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
         host: config.mysql.url,
         dialect: 'mysql',
         pool: {
-            max: 10,
+            max: 20,
             min: 0,
             idle: 10000
         },
