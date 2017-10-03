@@ -2,6 +2,17 @@ var excel = require('exceljs');
 var Rx = require ('rx');
 var config = require('../config.json');
 
+//Import data models
+var models = require('../models/');
+var bordereau = models.bordereau;
+var dechet = models.dechet;
+var prestataire = models.prestataire;
+var site = models.site;
+var traitement = models.traitement;
+var transport = models.transport;
+var transporteur = models.transporteur;
+var type_traitement = models.type_traitement;
+
 
 readXlsx = function (filepath, callback) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
@@ -29,15 +40,9 @@ readXlsx = function (filepath, callback) {
     return readObservable;
 }
 
-writeIntoBdd = function(bddUrl, excelName) {
-    //The input is an excelname located in the data/ directory
-    //The function enables pushing raw data in the database by converting it to the borderau schema
-
-}
-
 convertRowIntoSequelize = function(bordereauRow) {
-    //The input is a stringified JSON read from an xlsx file using readXlsx function
-    //The output is a ready to be pushed in the MongoDB bordereau
+    //The input is a json read from an xlsx file using readXlsx function
+    //The output is a ready to be pushed in the mySql db
 
     jsonBordereau = {};
     jsonBordereau.numeroBordereau = bordereauRow[1];
@@ -103,6 +108,12 @@ convertRowIntoSequelize = function(bordereauRow) {
         qualificationTraitement: bordereauRow[50]
     };
     return (new dataSchemas.Bordereau(jsonBordereau));
+}
+
+writeIntoBdd = function(bddUrl, excelName) {
+    //The input is an excelname located in the data/ directory
+    //The function enables pushing raw data in the database by converting it to the borderau schema
+
 }
 
 

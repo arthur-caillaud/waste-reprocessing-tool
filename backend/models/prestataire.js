@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('prestataire', {
+  var prestataire = sequelize.define('prestataire', {
     nom: {
       type: DataTypes.STRING(255),
       allowNull: false
@@ -22,4 +22,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'prestataire'
   });
+
+  prestataire.associate = function(models){
+      prestataire.hasMany(models.traitement, {foreignKey: 'id_prestataire', sourceKey: 'id'});
+  }
+
+  return prestataire;
 };
