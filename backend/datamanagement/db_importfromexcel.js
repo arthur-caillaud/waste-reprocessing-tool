@@ -20,6 +20,7 @@ readXlsx = function (filepath, callback) {
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
+
     var readObservable = Rx.Observable.create((obs) => {
         // Using directly the filepath, NOT APPENDING ANYTHING
         workBook.xlsx.readFile(filepath)
@@ -37,21 +38,80 @@ readXlsx = function (filepath, callback) {
                 obs.onError(error);
             })
     });
+
     return readObservable;
 }
 
 convertRowIntoDechetSequelize = function(excelRow){
-    newDechet = {
+    var newDechet = {
         libelle: excelRow[9],
         code_europeen: excelRow[10],
         categorie: excelRow[11],
         indicateur_national_valorisation: excelRow[12],
         famille: excelRow[13]
     };
-    dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
-    .spread((dechet, created) => {
-        return dechet
-    })
+
+    var dechetObservable = Rx.Observable.create(obs => {
+        dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
+        .spread((dechet, created) => {
+            obs.next(dechet);
+        })
+    });
+
+    return dechetObservable;
+};
+
+convertRowIntoSiteSequelize = function(excelRow){
+    var newSite = {
+        site_production: bordereauRow[16],
+        unite_dependance: bordereauRow[17],
+        up_dependance: bordereauRow[18],
+        metier_dependance: bordereauRow[19]
+    };
+
+    var siteObservable = Rx.Observable.create(obs => {
+        site.findOrCreate({where: {nom: excelRow[15]}, defaults: newSite})
+        .spread((site, created) => {
+            obs.next(site)
+        })
+    });
+
+    return siteObservable;
+};
+
+convertRowIntoPrestataireSequelize = function(excelRow){
+    var newPrestataireInter = {
+        nom: bordereauRow[30],
+        localisation: bordereauRow[31]
+    }
+
+    var newPrestataireFinal = {
+        nom: bordereauRow[42],
+        localisation: bordereauRow[43]
+    }
+
+    var prestataireObservable = Rx.Observable.create((obs) => {
+        prestataire.findOrCreate({where: {siret: bordereauRow[32],}, defaults: newPrestataireInter})
+        .spread((prestataireInter, created) => {
+            obs.next({
+                prestataireInter: prestataireInter,
+                prestataireFinal: null
+            })
+        })
+        prestataire.findOrCreate({where: {siret: bordereauRow[44],}, defaults: newPrestataireFinal})
+        .spread((prestataireFinal, created) => {
+            obs.next({
+                prestataireInter: null,
+                prestataireFinal: prestataireFinal
+            })
+        })
+    });
+
+    return prestataireObservable;
+};
+
+convertRowIntoTypeTraitementSequelize = function(excelRow){
+    var
 }
 
 convertRowIntoSequelize = function(bordereauRow) {
@@ -122,13 +182,13 @@ convertRowIntoSequelize = function(bordereauRow) {
         qualificationTraitement: bordereauRow[50]
     };
     return (new dataSchemas.Bordereau(jsonBordereau));
-}
+};
 
 writeIntoBdd = function(bddUrl, excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the borderau schema
 
-}
+};
 
 
 //Export du service
