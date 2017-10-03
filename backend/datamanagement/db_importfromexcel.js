@@ -17,6 +17,7 @@ var type_traitement = models.type_traitement;
 
 //
 toQualification = function(code_dr){
+    console.log("toQualification function...");
     if (code_dr.slice(0,1) == 'D'){
         return "Elimination"
     }
@@ -28,9 +29,11 @@ toQualification = function(code_dr){
     }
 }
 toSequelizeDate = function(excelDate){
-    return Sequelize.Date(excelDate.slice(6,10),excelDate.slice(3,5),excelDate.slice(0,2));
+    console.log("toSequelizeDate function...");
+    return (new Date(excelDate.toString().slice(6,10),excelDate.toString().slice(3,5),excelDate.toString().slice(0,2)));
 }
 toBordereauFinished = function(etatBordereau){
+    console.log("toBordereauFinished function...");
     if (etatBordereau == 'T'){
         return 1
     }
@@ -40,6 +43,7 @@ toBordereauFinished = function(etatBordereau){
     return 0;
 }
 toQuantiteeEstimee = function(estimeeBool){
+    console.log("toQuantiteeEstimee function...");
     if(estimeeBool == "E"){
         return 1
     }
@@ -65,7 +69,7 @@ convertRowIntoDechetSequelize = function(excelRow){
                 console.log("Successfully created new dechet:");
                 console.log(dechet);
             }
-            obs.next(dechet);
+            obs.onNext(dechet);
         })
     });
 
@@ -73,10 +77,10 @@ convertRowIntoDechetSequelize = function(excelRow){
 };
 convertRowIntoSiteSequelize = function(excelRow){
     var newSite = {
-        site_production: bordereauRow[16],
-        unite_dependance: bordereauRow[17],
-        up_dependance: bordereauRow[18],
-        metier_dependance: bordereauRow[19]
+        site_production: excelRow[16],
+        unite_dependance: excelRow[17],
+        up_dependance: excelRow[18],
+        metier_dependance: excelRow[19]
     };
 
     var siteObservable = Rx.Observable.create(obs => {
@@ -86,7 +90,7 @@ convertRowIntoSiteSequelize = function(excelRow){
                 console.log("Successfully created new site:");
                 console.log(site);
             }
-            obs.next(site)
+            obs.onNext(site)
         })
     });
 
@@ -94,34 +98,34 @@ convertRowIntoSiteSequelize = function(excelRow){
 };
 convertRowIntoPrestataireSequelize = function(excelRow){
     var newPrestataireInter = {
-        nom: bordereauRow[30],
-        localisation: bordereauRow[31]
+        nom: excelRow[30],
+        localisation: excelRow[31]
     };
 
     var newPrestataireFinal = {
-        nom: bordereauRow[42],
-        localisation: bordereauRow[43]
+        nom: excelRow[42],
+        localisation: excelRow[43]
     };
 
     var prestataireObservable = Rx.Observable.create((obs) => {
-        prestataire.findOrCreate({where: {siret: bordereauRow[32],}, defaults: newPrestataireInter})
+        prestataire.findOrCreate({where: {siret: excelRow[32],}, defaults: newPrestataireInter})
         .spread((prestataireInter, created) => {
             if (created){
                 console.log("Successfully created new prestataire:");
                 console.log(prestataireInter);
             }
-            obs.next({
+            obs.onNext({
                 prestataireInter: prestataireInter,
                 prestataireFinal: null
             })
         })
-        prestataire.findOrCreate({where: {siret: bordereauRow[44],}, defaults: newPrestataireFinal})
+        prestataire.findOrCreate({where: {siret: excelRow[44],}, defaults: newPrestataireFinal})
         .spread((prestataireFinal, created) => {
             if(created){
                 console.log("Successfully created new prestataire");
                 console.log(prestataireFinal);
             }
-            obs.next({
+            obs.onNext({
                 prestataireInter: null,
                 prestataireFinal: prestataireFinal
             })
@@ -151,7 +155,7 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
                 console.log("Successfully created new type_traitement:");
                 console.log(typeTraitementPrevu);
             }
-            obs.next({
+            obs.onNext({
                 typeTraitementPrevu: typeTraitementPrevu,
                 typeTraitementInter: null,
                 typeTraitementFinal: null
@@ -163,7 +167,7 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
                 console.log("Successfully created new type_traitement:");
                 console.log(typeTraitementFinal);
             }
-            obs.next({
+            obs.onNext({
                 typeTraitementPrevu: null,
                 typeTraitementInter: null,
                 typeTraitementFinal: typeTraitementFinal
@@ -175,7 +179,7 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
                 console.log("Successfully created new type_traitement:");
                 console.log(typeTraitementInter);
             }
-            obs.next({
+            obs.onNext({
                 typeTraitementPrevu: null,
                 typeTraitementInter: typeTraitementInter,
                 typeTraitementFinal: null
@@ -186,40 +190,42 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
     return typeTraitementObservable;
 }
 convertRowIntoTransporteurSequelize = function(excelRow){
-    var TransporteurObservable = Rx.Observable.create((obs) => {
+    console.log("Building TransporteurObservable...");
+    var transporteurObservable = Rx.Observable.create((obs) => {
         newTransporteur1 = {
-            nom: bordereauRow[22],
-            localisation: bordereauRow[23]
+            nom: excelRow[22],
+            localisation: excelRow[23]
         };
         newTransporteur2 = {
-            nom: bordereauRow[37],
-            localisation: bordereauRow[39]
+            nom: excelRow[37],
+            localisation: excelRow[39]
         }
-        transporteur.findOrCreate({where: {siret: bordereauRow[26]}, defaults: newTransporteur1})
+        transporteur.findOrCreate({where: {siret: excelRow[26]}, defaults: newTransporteur1})
         .spread((transporteur1, created) => {
             if(created){
                 console.log("Successfully created new transporteur:");
                 console.log(transporteur1);
             }
-            obs.next({
+            obs.onNext({
                 transporteur1: transporteur1,
                 transporteur2: null
             });
         });
 
-        transporteur.findOrCreate({where: {siret: bordereauRow[40]}, defaults: newTransporteur2})
+        transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
         .spread((transporteur2, created) => {
             if(created){
                 console.log("Successfully created new transporteur:");
                 console.log(transporteur2);
             }
-            obs.next({
+            obs.onNext({
                 transporteur1: null,
                 transporteur2: transporteur2
             });
         });
     });
-    return TransporteurObservable;
+    console.log("Successfully built transporteurObservable");
+    return transporteurObservable;
 }
 convertRowIntoTransportSequelize = function(excelRow){
     var transport1 = {
@@ -237,10 +243,11 @@ convertRowIntoTransportSequelize = function(excelRow){
         adr: null
     };
 
+    console.log("Building transportObservable...");
     var transportObservable = Rx.Observable.create(obs => {
         var transporteurObservable = convertRowIntoTransporteurSequelize(excelRow);
         transporteurObservable.subscribe({
-            next: function(value){
+            onNext: function(value){
                 if(value.transporteur1){
                     transport.findOrCreate({where: transport1, defaults: {id_transporteur: value.transporteur1.id}})
                     .spread((transport1, created) => {
@@ -248,7 +255,7 @@ convertRowIntoTransportSequelize = function(excelRow){
                             console.log("Successfully created new transport:");
                             console.log(transport1);
                         }
-                        obs.next({
+                        obs.onNext({
                             transport1: transport1,
                             transport2: null
                         })
@@ -261,7 +268,7 @@ convertRowIntoTransportSequelize = function(excelRow){
                             console.log("Successfully created new transport:");
                             console.log(transport2);
                         }
-                        obs.next({
+                        obs.onNext({
                             transport1: null,
                             transport2: transport2
                         })
@@ -270,6 +277,7 @@ convertRowIntoTransportSequelize = function(excelRow){
             }
         })
     });
+    console.log("Successfully built transportObservable");
 
     return transportObservable;
 }
@@ -277,17 +285,18 @@ convertRowIntoTraitementSequelize = function(excelRow){
     var traitementInter = {
         date_priseencharge: toSequelizeDate(excelRow[33]),
         date_traitement: toSequelizeDate(excelRow[34])
-    }
+    };
     var traitementFinal = {
         date_priseencharge: toSequelizeDate(excelRow[45]),
         date_traitement: toSequelizeDate(excelRow[47])
-    }
+    };
 
+    console.log("Building traitementObservable...");
     var traitementObservable = Rx.Observable.create(obs => {
         var typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
         var prestataireObservable = convertRowIntoPrestataireSequelize(excelRow);
         typeTraitementObservable.subscribe({
-            next: function(value){
+            onNext: function(value){
                 if(value.typeTraitementInter){
                     traitementInter.id_type_traitement = value.typeTraitementInter.id;
                     if(traitementInter.id_prestataire){
@@ -297,7 +306,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
                                 console.log("Successfully created new traitement:");
                                 console.log(traitementInter);
                             }
-                            obs.next({
+                            obs.onNext({
                                 traitementInter: traitementInter,
                                 traitementFinal: null
                             })
@@ -313,7 +322,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
                                 console.log("Successfully created new traitement:");
                                 console.log(traitementFinal);
                             }
-                            obs.next({
+                            obs.onNext({
                                 traitementInter: null,
                                 traitementFinal: traitementFinal
                             })
@@ -323,7 +332,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
             }
         });
         prestataireObservable.subscribe({
-            next: function(value){
+            onNext: function(value){
                 if(value.prestataireInter){
                     traitementInter.id_prestataire = value.prestataireInter.id;
                     if (traitementInter.id_type_traitement){
@@ -333,7 +342,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
                                 console.log("Successfully created new traitement:");
                                 console.log(traitementInter);
                             }
-                            obs.next({
+                            obs.onNext({
                                 traitementInter: traitementInter,
                                 traitementFinal: null
                             })
@@ -349,7 +358,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
                                 console.log("Successfully created new traitement:");
                                 console.log(traitementFinal);
                             }
-                            obs.next({
+                            obs.onNext({
                                 traitementInter: null,
                                 traitementFinal: traitementFinal
                             })
@@ -359,7 +368,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
             }
         });
     })
-
+    console.log("Successfully built traitementObservable");
     return traitementObservable;
 }
 convertRowIntoBordereauSequelize = function(excelRow){
@@ -372,10 +381,10 @@ convertRowIntoBordereauSequelize = function(excelRow){
         ref_dossier: excelRow[14],
         quantitee_transportee: excelRow[28],
         quantitee_finale: excelRow[46],
-        quantitee_estimee: toQuantiteeEstimee(xcelRow[29])
+        quantitee_estimee: toQuantiteeEstimee(excelRow[29])
     }
 
-    findOrCreateBordereau = function(){
+    var findOrCreateBordereau = function(){
         if(bordereau.id_dechet || bordereau.id_site || bordereau.id_transport_1 || bordereau.id_transport_2 || bordereau.id_traitement_final || bordereau.id_traitement_prevu || bordereau.id_traitement_inter){
             bordereau.findOrCreate({where: bordereau})
             .spread((bordereau, created) => {
@@ -383,137 +392,146 @@ convertRowIntoBordereauSequelize = function(excelRow){
                     console.log("Successfully created new bordereau");
                     console.log(bordereau);
                 }
-                obs.next(bordereau)
+                obs.onNext(bordereau);
             })
         }
     }
 
+    console.log("Building bordereauObservable...");
     var bordereauObservable = Rx.Observable.create(obs => {
-        var traitementObservable = convertRowIntoTraitementSequelize;
-        var dechetObservable = convertRowIntoDechetSequelize;
-        var transportObservable = convertRowIntoTransportSequelize;
-        var siteObservable = convertRowIntoSiteSequelize;
-        var typeTraitementObservable = convertRowIntoTypeTraitementSequelize;
+        var traitementObservable = convertRowIntoTraitementSequelize(excelRow);
+        var dechetObservable = convertRowIntoDechetSequelize(excelRow);
+        var transportObservable = convertRowIntoTransportSequelize(excelRow);
+        var siteObservable = convertRowIntoSiteSequelize(excelRow);
+        var typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
 
-        traitementObservable.subscribe({
-            next: value => {
-                if(value.traitementInter){
-                    bordereau.id_traitement_inter = value.traitementInter.id;
+        try{
+            traitementObservable.subscribe({
+                onNext: value => {
+                    if(value.traitementInter){
+                        bordereau.id_traitement_inter = value.traitementInter.id;
+                        findOrCreateBordereau();
+                    }
+                    if(value.traitementFinal){
+                        bordereau.id_traitement_final = value.traitementFinal.id;
+                        findOrCreateBordereau();
+                    }
+                }
+            });
+            dechetObservable.subscribe({
+                onNext: value => {
+                    bordereau.id_dechet = value.id;
                     findOrCreateBordereau();
                 }
-                if(value.traitementFinal){
-                    bordereau.id_traitement_final = value.traitementFinal.id;
+            });
+            transportObservable.subscribe({
+                onNext: value => {
+                    if(value.transport1){
+                        bordereau.id_transport_1 = value.transport1.id;
+                        findOrCreateBordereau();
+                    }
+                    if(value.transport2){
+                        bordereau.id_transport_2 = value.transport2.id;
+                        findOrCreateBordereau();
+                    }
+                }
+            });
+            siteObservable.subscribe({
+                onNext: value => {
+                    bordereau.id_site = value.id;
                     findOrCreateBordereau();
                 }
-            }
-        });
-        dechetObservable.subscribe({
-            next: value => {
-                bordereau.id_dechet = value.id;
-                findOrCreateBordereau();
-            }
-        });
-        transportObservable.subscribe({
-            next: value => {
-                if(value.transport1){
-                    bordereau.id_transport_1 = value.transport1.id;
-                    findOrCreateBordereau();
+            });
+            typeTraitementObservable.subscribe({
+                onNext: value => {
+                    if(value.typeTraitementPrevu){
+                        bordereau.id_traitement_prevu = value.typeTraitementPrevu.id;
+                        findOrCreateBordereau();
+                    }
                 }
-                if(value.transport2){
-                    bordereau.id_transport_2 = value.transport2.id;
-                    findOrCreateBordereau();
-                }
-            }
-        });
-        siteObservable.subscribe({
-            next: value => {
-                bordereau.id_site = value.id;
-                findOrCreateBordereau();
-            }
-        });
-        typeTraitementObservable.subscribe({
-            next: value => {
-                if(value.typeTraitementPrevu){
-                    bordereau.id_traitement_prevu = value.typeTraitementPrevu.id;
-                    findOrCreateBordereau();
-                }
-            }
-        });
+            });
+        }
+        catch (Exception){
+            obs.onError(Exception)
+        }
     });
+    console.log("Successfully built bordereauObservable");
 
     return bordereauObservable;
 }
+
 /*
-_old_convertRowIntoSequelize = function(bordereauRow) {
+_old_convertRowIntoSequelize = function(excelRow) {
     //The input is a json read from an xlsx file using readXlsx function
     //The output is a ready to be pushed in the mySql db
 
     jsonBordereau = {};
-    jsonBordereau.numeroBordereau = bordereauRow[1];
-    jsonBordereau.cas = bordereauRow[2];
-    jsonBordereau.nomEmetteur = bordereauRow[3];
-    jsonBordereau.etatBordereau = bordereauRow[4];
-    jsonBordereau.modeSuivi = bordereauRow[5];
-    jsonBordereau.codeFiliereDRPrevu = bordereauRow[6];
-    jsonBordereau.codeFiliereEDFPrevu = bordereauRow[7];
+    jsonBordereau.numeroBordereau = excelRow[1];
+    jsonBordereau.cas = excelRow[2];
+    jsonBordereau.nomEmetteur = excelRow[3];
+    jsonBordereau.etatBordereau = excelRow[4];
+    jsonBordereau.modeSuivi = excelRow[5];
+    jsonBordereau.codeFiliereDRPrevu = excelRow[6];
+    jsonBordereau.codeFiliereEDFPrevu = excelRow[7];
     jsonBordereau.dechet = {
-        codeInterneDechet: bordereauRow[8],
-        libelleDechet: bordereauRow[9],
-        codeEuropeenDechet: bordereauRow[10],
-        categorieDechet: bordereauRow[11],
-        indicateurNationalValorisation: bordereauRow[12],
-        famille: bordereauRow[13],
-        referenceDossier: bordereauRow[14]
+        codeInterneDechet: excelRow[8],
+        libelleDechet: excelRow[9],
+        codeEuropeenDechet: excelRow[10],
+        categorieDechet: excelRow[11],
+        indicateurNationalValorisation: excelRow[12],
+        famille: excelRow[13],
+        referenceDossier: excelRow[14]
     };
     jsonBordereau.producteur = {
-        entiteProductrice: bordereauRow[15],
-        site: bordereauRow[16],
-        uniteDependance: bordereauRow[17],
-        UPDependance: bordereauRow[18],
-        metierDependance: bordereauRow[19]
+        entiteProductrice: excelRow[15],
+        site: excelRow[16],
+        uniteDependance: excelRow[17],
+        UPDependance: excelRow[18],
+        metierDependance: excelRow[19]
     };
     jsonBordereau.transporteur1 = {
-        dateTransport: bordereauRow[20],
-        modeTransport: bordereauRow[21],
-        nom: bordereauRow[22],
-        localisation: bordereauRow[23],
-        recepisse: bordereauRow[24],
-        immatriculationVehicule: bordereauRow[25],
-        siret: bordereauRow[26],
-        adr: bordereauRow[27],
-        quantiteTransportee: bordereauRow[28],
-        estimeeBool: bordereauRow[29]
+        dateTransport: excelRow[20],
+        modeTransport: excelRow[21],
+        nom: excelRow[22],
+        localisation: excelRow[23],
+        recepisse: excelRow[24],
+        immatriculationVehicule: excelRow[25],
+        siret: excelRow[26],
+        adr: excelRow[27],
+        quantiteTransportee: excelRow[28],
+        estimeeBool: excelRow[29]
     };
     jsonBordereau.traitementIntermediaire = {
-        nom: bordereauRow[30],
-        localisation: bordereauRow[31],
-        siret: bordereauRow[32],
-        datePriseEnCharge: bordereauRow[33],
-        dateTraitement: bordereauRow[34],
-        codeFiliereDR: bordereauRow[35],
-        codeFiliereEDF: bordereauRow[36]
+        nom: excelRow[30],
+        localisation: excelRow[31],
+        siret: excelRow[32],
+        datePriseEnCharge: excelRow[33],
+        dateTraitement: excelRow[34],
+        codeFiliereDR: excelRow[35],
+        codeFiliereEDF: excelRow[36]
     };
     jsonBordereau.transporteur2 = {
-        nom: bordereauRow[37],
-        modeTransport: bordereauRow[38],
-        localisation: bordereauRow[39],
-        siret: bordereauRow[40],
-        recepisse: bordereauRow[41],
+        nom: excelRow[37],
+        modeTransport: excelRow[38],
+        localisation: excelRow[39],
+        siret: excelRow[40],
+        recepisse: excelRow[41],
     };
     jsonBordereau.traitementFinal = {
-        nom: bordereauRow[42],
-        localisation: bordereauRow[43],
-        siret: bordereauRow[44],
-        datePriseEnCharge: bordereauRow[45],
-        quantite: bordereauRow[46],
-        dateTraitement: bordereauRow[47],
-        codeFiliereDR: bordereauRow[48],
-        codeFiliereEDF: bordereauRow[49],
-        qualificationTraitement: bordereauRow[50]
+        nom: excelRow[42],
+        localisation: excelRow[43],
+        siret: excelRow[44],
+        datePriseEnCharge: excelRow[45],
+        quantite: excelRow[46],
+        dateTraitement: excelRow[47],
+        codeFiliereDR: excelRow[48],
+        codeFiliereEDF: excelRow[49],
+        qualificationTraitement: excelRow[50]
     };
     return (new dataSchemas.Bordereau(jsonBordereau));
 };
 */
+
 readXlsx = function (filepath) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //Warning : function only supports .XLSX files
@@ -521,17 +539,18 @@ readXlsx = function (filepath) {
     var workBook = new excel.Workbook();
     var jsonExcel = [];
 
-    var readObservable = Rx.Observable.create((obs) => {
+    var readObservable = Rx.Observable.create(obs => {
         // Using directly the filepath, NOT APPENDING ANYTHING
         workBook.xlsx.readFile(filepath)
             .then(() => {
                 // use workbook
+                console.log("Start reading excel file...")
                 workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
                     if(rowNumber > config.excel.STARTING_ROW){
                         jsonExcel.push(row.values);
                     }
                 });
-                obs.next(jsonExcel);
+                obs.onNext(jsonExcel);
                 obs.onCompleted();
             })
             .catch(error => {
@@ -551,29 +570,45 @@ writeIntoBdd = function(excelName) {
         console.log('Connection has been established successfully.');
         var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName);
         console.log("readXlsxObservable built");
-        var writeIntoBddObservable = Rx.Observable.create(obs => {
-            readXlsxObservable.subscribe({
-                next: jsonExcel => {
-                    console.log("Successfully read excel");
+        readXlsxObservable.subscribe({
+                onNext: (jsonExcel) => {
+                    console.log("Successfully loaded excel data in RAM");
+                    row = jsonExcel[0];
+                    console.log("Building bordereauObservable...");
+                    var bordereauObservable = convertRowIntoBordereauSequelize(row);
+                    console.log("Successfully built bordereauObservable");
+                    bordereauObservable.subscribe({
+                        onNext: bordereau => {
+                            console.log("Successfully pushed excel whole row into database:");
+                        },
+                        onError: error => {
+                            console.error("Error thrown by bordereauObservable", error);
+                        },
+                    });
+                    /*
                     jsonExcel.forEach(row => {
+                        console.log("Building bordereauObservable...");
                         var bordereauObservable = convertRowIntoBordereauSequelize(row);
                         console.log("Successfully built bordereauObservable");
                         bordereauObservable.subscribe({
-                            next: bordereau => {
+                            onNext: bordereau => {
                                 console.log("Successfully pushed excel whole row into database:");
-                            }
+                            },
+                            onError: error => {
+                                console.error("Error thrown by bordereauObservable", error);
+                            },
                         })
-                    })
+                    });
+                    */
                 },
                 onError: error => {
                     console.error("Error in writeIntoBdd")
-                    obs.onError(error);
+                    console.error(error);
                 },
                 onCompleted: () => {
                     console.log("readXlsx completed");
                 }
             })
-        })
     })
     .catch(err => {
         console.error('Database connection lost or unable to start');
@@ -591,4 +626,4 @@ module.exports = service;*/
 
 //Phase d'essai
 
-writeIntoBdd("dataedfmars.xslx");
+writeIntoBdd("dataedfmars.xlsx");

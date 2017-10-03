@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         distance: {
             type: DataTypes.INTEGER(11),
-            allowNull; false
+            allowNull: false
         }
 
     }, {
