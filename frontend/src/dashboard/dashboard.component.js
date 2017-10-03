@@ -24,7 +24,7 @@ class Dashboard extends Component {
               <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>
             <Row className="show-grid">
-              <Col sm={8}>
+              <Col sm={9}>
                 <Row>
                   <Col sm={3}> <Tile title="Hellow" /> </Col>
                   <Col sm={3}> <Tile title="Hellow" /> </Col>
@@ -38,7 +38,7 @@ class Dashboard extends Component {
                   <Col sm={3}> <Tile title="Hellow" /> </Col>
                 </Row>
               </Col>
-              <Col sm={4}> <Info paragraphs="2" /> </Col>
+              <Col sm={3}> <Info paragraphs="2" /> </Col>
             </Row>
 
           </Grid>
