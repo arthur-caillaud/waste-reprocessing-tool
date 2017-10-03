@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('type_traitement', {
+  var type_traitement = sequelize.define('type_traitement', {
     code_dr: {
       type: DataTypes.CHAR(3),
       allowNull: true
@@ -22,4 +22,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'type_traitement'
   });
+
+  type_traitement.associate = function(models) {
+      type_traitement.hasMany(models.bordereau, {foreignKey: 'id_traitement_final', sourceKey: 'id'});
+      type_traitement.hasMany(model.traitement, {foreignKey: 'id_type_traitemen', sourceKey: 'id'});
+  }
+  return type_traitement;
 };

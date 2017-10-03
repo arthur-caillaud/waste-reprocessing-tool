@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('site', {
     nom: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     site_production: {
       type: DataTypes.STRING(255),

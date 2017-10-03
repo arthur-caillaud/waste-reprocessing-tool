@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('transport', {
+  var transport = sequelize.define('transport', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -38,4 +38,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'transport'
   });
+
+  transport.associate = function(models) {
+      transport.belongsTo(models.transporteur, {foreignKey: 'id_transporteur', targetKey: 'id'});
+      transport.belongsTo(models.bordereau, {foreignKey: 'id_transport_1', targetKey: 'id'});
+  });
+  return transport;
 };

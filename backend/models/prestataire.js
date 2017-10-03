@@ -4,7 +4,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('prestataire', {
     nom: {
       type: DataTypes.STRING(255),
-      allowNull: true
+      allowNull: false
     },
     localisation: {
       type: DataTypes.STRING(255),
@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     siret: {
       type: DataTypes.BIGINT,
-      allowNull: true
+      allowNull: false
     },
     id: {
       type: DataTypes.INTEGER(11),

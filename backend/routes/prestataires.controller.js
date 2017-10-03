@@ -19,7 +19,7 @@ function RenderPrestatairesPage(req, res) {
 
 function getAllPrestataires (req, res) {
     var getAllObserver = {
-        error: function (error) {
+        onError: function (error) {
             console.log(error);
             res.status(400).send(error);
         },
@@ -33,7 +33,7 @@ function getAllPrestataires (req, res) {
 
 function getPrestataireByName (req, res) {
     var getPrestataireObserver = {
-        error: function (error) {
+        onError: function (error) {
             console.log(error);
             res.status(400).send(error);
         },

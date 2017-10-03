@@ -4,7 +4,7 @@ var service = {};
 var sequelize = require('sequelize');
 
 var models = require('../models/');
-var Client = models.Client;
+var Client = models.prestataire;
 
 function getAllClients() {
     /* This function creates an Observable and returns it. It searches for all
@@ -16,7 +16,7 @@ function getAllClients() {
             })
         }
         catch (error) {
-            obs.error(error);
+            obs.onError(error);
         };
 
 
@@ -42,7 +42,7 @@ function getClientByName(clientName){
 
         }
         catch (error) {
-            obs.error(error);
+            obs.onError(error);
         };
     });
     return getClientByNameObservable;
