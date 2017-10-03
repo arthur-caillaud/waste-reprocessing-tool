@@ -19,10 +19,13 @@ mySqlConnect = function() {
     .catch(err => {
         console.error('Unable to connect to the database:', err);
     });
-}
+};
 
 mysqlDisconnect = function(){
     sequelize.close();
-}
+};
 
-mySqlConnect();
+service = {}
+service.mySqlConnect = mySqlConnect;
+service.mysqlDisconnect = mysqlDisconnect;
+module.exports = service;

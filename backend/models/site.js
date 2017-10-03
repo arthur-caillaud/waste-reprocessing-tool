@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('site', {
+  var site = sequelize.define('site', {
     nom: {
       type: DataTypes.STRING(255),
       allowNull: true
@@ -30,4 +30,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'site'
   });
+
+  site.associate = function(models){
+      site.hasMany(models.bordereau, {foreignKey: 'id_site', sourceKey: 'id'});
+  };
+
+  return site;
 };

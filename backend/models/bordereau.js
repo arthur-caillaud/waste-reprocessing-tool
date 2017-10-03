@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('bordereau', {
+  var bordereau = sequelize.define('bordereau', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -102,4 +102,16 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'bordereau'
   });
+
+  bordereau.associate = function(models){
+      bordereau.hasOne(models.dechet, {foreignKey: 'id_dechet', targetKey: 'id'});
+      bordereau.hasOne(models.type_traitement, {foreignKey: 'id_traitement_prevu', targetKey: 'id'});
+      bordereau.hasOne(models.site, {foreignKey: 'id_site', targetKey: 'id'});
+      bordereau.hasOne(models.transport, {foreignKey: 'id_transport_1', targetKey: 'id'});
+      bordereau.hasOne(models.transport, {foreignKey: 'id_transport_2', targetKey: 'id'});
+      bordereau.hasOne(models.traitement, {foreignKey: 'id_traitement_inter', targetKey: 'id'});
+      bordereau.hasOne(models.traitement, {foreignKey: 'id_traitement_final', targetKey: 'id'});
+  }
+
+  return borderau;
 };

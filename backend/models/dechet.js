@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('dechet', {
+    var dechet = sequelize.define('dechet', {
     codeinterne: {
       type: DataTypes.CHAR(4),
       allowNull: true
@@ -31,7 +31,13 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     }
-  }, {
+    }, {
     tableName: 'dechet'
-  });
+    });
+
+    dechet.associate = function(models){
+         dechet.hasMany(models.bordereau, {foreignKey: 'id_dechet', sourceKey: 'id'});
+    }
+
+    return dechet
 };
