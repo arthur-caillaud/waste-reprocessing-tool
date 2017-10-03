@@ -40,6 +40,20 @@ readXlsx = function (filepath, callback) {
     return readObservable;
 }
 
+convertRowIntoDechetSequelize = function(excelRow){
+    newDechet = {
+        libelle: excelRow[9],
+        code_europeen: excelRow[10],
+        categorie: excelRow[11],
+        indicateur_national_valorisation: excelRow[12],
+        famille: excelRow[13]
+    };
+    dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
+    .spread((dechet, created) => {
+        return dechet
+    })
+}
+
 convertRowIntoSequelize = function(bordereauRow) {
     //The input is a json read from an xlsx file using readXlsx function
     //The output is a ready to be pushed in the mySql db
