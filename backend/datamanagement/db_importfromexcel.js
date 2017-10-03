@@ -38,7 +38,7 @@ readXlsx = function (filepath, callback) {
             })
     });
     return readObservable;
-}
+};
 
 convertRowIntoDechetSequelize = function(excelRow){
     newDechet = {
@@ -50,8 +50,31 @@ convertRowIntoDechetSequelize = function(excelRow){
     };
     dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
     .spread((dechet, created) => {
-        return dechet
-    })
+        return dechet;
+    });
+};
+
+convertRowIntoTransporteurSequelize = function(excelRow) {
+    var TransporteurObservable = Rx.Observable.create((obs) => {
+        newTransporteur1 = {
+            nom: bordereauRow[22],
+            localisation: bordereauRow[23]
+        };
+        newTransporteur2 = {
+            nom: bordereauRow[37],
+            localisation: bordereauRow[39]
+        }
+        transporteur.findOrCreate({where: {siret: bordereauRow[26]}, defaults: newTransporteur1})
+        .spread((transporteur1, created) => {
+            obs.next(transporteur1);
+        });
+
+        transporteur.findOrCreate({where: {siret: bordereauRow[40]}, defaults: newTransporteur2})
+        .sprend((transporteur2, created) => {
+            obs.next(transporteur2);
+        });
+    };
+    return TransporteurObservable;
 }
 
 convertRowIntoSequelize = function(bordereauRow) {
