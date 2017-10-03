@@ -5,12 +5,14 @@ import { Row, Col, Grid } from 'react-bootstrap';
 import Gauge from './gauge.component';
 import Info from './info.component';
 import Tile from './tile.component';
+import LocationNavigation from '../utilities/location-navigation.component';
 
 class Dashboard extends Component {
   render() {
     return (
       <div>
         <div>
+          <LocationNavigation/>
           <h2>Dashboard</h2>
         </div>
         <div>
