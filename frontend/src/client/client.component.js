@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Grid, Col, Row } from 'react-bootstrap';
-import { Form, FormControl, FormGroup } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 
@@ -8,6 +7,7 @@ import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
 import LocationNavigation from '../utilities/location-navigation.component';
+import ClientSearchBar from './search-client.component';
 
 class Client extends Component {
   render() {
@@ -28,11 +28,7 @@ class Client extends Component {
             <Row>
               <Col sm={2}>
                 <Row>
-                  <Form>
-                    <FormGroup controlId="formInlineName">
-                      <FormControl type="text" placeholder="Recherche par prestataire" />
-                    </FormGroup>
-                  </Form>
+                  <ClientSearchBar/>
                 </Row>
                 <Row>
                   <ListGroup>
@@ -51,14 +47,10 @@ class Client extends Component {
                   <Zone />
                 </Row>
                 <Row>
-                  <Col sm={5}>
-                    <Form>
-                      <FormGroup controlId="formInlineName">
-                        <FormControl type="text" placeholder="Recherche par prestataire" />
-                      </FormGroup>
-                    </Form>
+                  <Col sm={3}>
+                    <ClientSearchBar/>
                   </Col>
-                  <Col sm={7}>
+                  <Col sm={9}>
                     <Button>Tag 1</Button>
                     <Button>Tag 2</Button>
                     <Button>Tag 3</Button>
