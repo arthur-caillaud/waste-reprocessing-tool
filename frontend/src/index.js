@@ -14,8 +14,8 @@ render((
     <BrowserRouter>
       <div>
         <Row>
-          <Col sm={2}> <Navbar /> </Col>
-          <Col sm={10}> <MainRouter /> </Col>
+          <Col sm={1}> <Navbar /> </Col>
+          <Col sm={11}> <MainRouter /> </Col>
         </Row>
       </div>
     </BrowserRouter>
