@@ -545,37 +545,40 @@ writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
 
-    var connectionObservable = db.mySqlConnect();
-    connectionObservable.subscribe({
-        next:() => {
-            var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName);
-            var writeIntoBddObservable = Rx.Observable.create(obs => {
-                readXlsxObservable.subscribe({
-                    next: jsonExcel => {
-                        jsonExcel.forEach(row => {
-                            var bordereauObservable = convertRowIntoBordereauSequelize(row);
-                            bordereauObservable.subscribe({
-                                next: bordereau => {
-                                    console.log("Successfully pushed excel whole row into database:");
-                                }
-                            })
+    var sequelize = db.mySqlConnect();
+    sequelize.authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+        var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName);
+        console.log("readXlsxObservable built");
+        var writeIntoBddObservable = Rx.Observable.create(obs => {
+            readXlsxObservable.subscribe({
+                next: jsonExcel => {
+                    console.log("Successfully read excel");
+                    jsonExcel.forEach(row => {
+                        var bordereauObservable = convertRowIntoBordereauSequelize(row);
+                        console.log("Successfully built bordereauObservable");
+                        bordereauObservable.subscribe({
+                            next: bordereau => {
+                                console.log("Successfully pushed excel whole row into database:");
+                            }
                         })
-                    },
-                    onError: error => {
-                        console.error("Error in writeIntoBdd")
-                        obs.onError(error);
-                    },
-                    onCompleted: () => {
-                        console.log("readXlsx completed");
-                    }
-                })
+                    })
+                },
+                onError: error => {
+                    console.error("Error in writeIntoBdd")
+                    obs.onError(error);
+                },
+                onCompleted: () => {
+                    console.log("readXlsx completed");
+                }
             })
-        },
-        onError: err => {
-            console.error(err);
-        }
+        })
     })
-};
+    .catch(err => {
+        console.error('Database connection lost or unable to start');
+    });
+}
 
 //Export du service
 
