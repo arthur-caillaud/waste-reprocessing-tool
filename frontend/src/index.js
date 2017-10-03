@@ -15,7 +15,7 @@ render((
       <div>
         <Row>
           <Col sm={2}> <Navbar /> </Col>
-          <Col sm={8}> <MainRouter /> </Col>
+          <Col sm={10}> <MainRouter /> </Col>
         </Row>
       </div>
     </BrowserRouter>
