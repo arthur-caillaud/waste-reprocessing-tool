@@ -113,5 +113,5 @@ module.exports = function(sequelize, DataTypes) {
       bordereau.hasOne(models.traitement, {foreignKey: 'id_traitement_final', targetKey: 'id'});
   }
 
-  return borderau;
+  return bordereau;
 };
