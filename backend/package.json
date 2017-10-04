@@ -6,6 +6,9 @@
     "start": "node ./bin/www",
     "test": "rm ../test/test_reports.xml; ./node_modules/.bin/mocha ../test/* --reporter mocha-junit-reporter --reporter-options mochaFile=../test/test_reports.xml"
   },
+  "directories": {
+    "test": "test"
+  },
   "dependencies": {
     "body-parser": "~1.17.1",
     "config.json": "0.0.4",

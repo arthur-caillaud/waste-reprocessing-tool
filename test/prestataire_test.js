@@ -1,6 +1,6 @@
 var assert = require('assert');
 var router = require('../backend/routes/prestataires.controller');
-var service = require('../backend/services/prestataires.service');
+var service = require('../backend/services/prestataire.service');
 var Excel = require('../backend/datamanagement/db_importfromexcel');
 
 
@@ -37,7 +37,7 @@ describe("Should correctly find clients in database", function(t) {
                         assert.isNotNull(result);
                         done();
                     },
-                    handleError;
+                    handleError
                 );
             }
             catch (err) {

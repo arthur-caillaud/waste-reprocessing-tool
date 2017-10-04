@@ -30,7 +30,7 @@ function getPrestatairesCloseToClient(req, res) {
         },
         onCompleted: function(listePrestataires) {
             res.json(listePrestataires);
-        };
+        }
     }
     prestataireService.getClientsCloseToClient(client, distance).subscribe(getCloseClientsObserver);
 };
@@ -56,7 +56,7 @@ function getPrestataireByName (req, res) {
         },
         onCompleted: function(listePrestataires) {
             res.json(listePrestataires);
-        };
+        }
     }
     prestataireService.getPrestataireByName(req.params.clientName).subscribe(getPrestataireObserver);
 };
