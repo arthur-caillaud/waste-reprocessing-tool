@@ -1,6 +1,5 @@
 var supertest = require("supertest");
-var should = require("should");
-
+var assert = require("assert");
 // This agent refers to PORT where the program is running.
 var server = supertest.agent("http://localhost:4000");
 
@@ -18,7 +17,7 @@ describe("SAMPLE unit test",function(){
       .expect(200) // THis is HTTP response
       .end(function(err,res){
         // HTTP status should be 200
-        res.status.should.equal(200);
+        assert.equal(res.status, 200);
         done();
       });
     }
