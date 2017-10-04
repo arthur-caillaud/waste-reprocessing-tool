@@ -24,7 +24,8 @@
     "rxjs": "^5.4.3",
     "sequelize": "^4.11.5",
     "sequelize-cli": "^3.0.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "should": "^13.1.0",
   },
   "devDependencies": {
     "expect.js": "^0.3.1",
