@@ -21,6 +21,13 @@ echo -n ${FG_GREEN}
 echo 'Frontend installed successfully'
 echo $(tput sgr0)
 
+cd ..
+echo 'Installing global packages...'
+npm install
+echo -n ${FG_GREEN}
+echo 'Global packages installed successfully'
+echo $(tput sgr0)
+
 
 #Here we need to install Python, pip and use the command # pip3 install -r requirements.txt .
 #This file is found in backend/datamanagement
