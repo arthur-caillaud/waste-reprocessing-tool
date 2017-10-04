@@ -1,0 +1,14 @@
+.navBar {
+  vertical-align: middle;
+  padding-top: 10%;
+  padding-bottom: 33%;
+  background-color: #a5c7ff;
+}
+
+.row-eq-height {
+  vertical-align: middle;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}

@@ -1,0 +1,17 @@
+.location-selection-zone {
+  border: 1px solid;
+  border-radius: 5px;
+  width: 70%;
+  text-align: center;
+  vertical-align: top;
+  margin: auto;
+  margin-top: 1%;
+  padding-top: 0.2%;
+  padding-bottom: 0.2%;
+  flex-direction: row;
+}
+
+.location-selector {
+  display: inline-block;
+  vertical-align: top;
+}
