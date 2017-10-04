@@ -1,0 +1,11 @@
+.navBar {
+  background-color: #a5c7ff;
+}
+
+.row-eq-height {
+  vertical-align: middle;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
