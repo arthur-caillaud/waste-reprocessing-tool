@@ -1,14 +1,16 @@
 import React, { Component, } from 'react';
 
-import { Image } from 'react-bootstrap';
-
-import image from '../resources/logo.png';
+import '../styles/containers.css';
 
 class Zone extends Component {
 
   render() {
     return (
-      <Image src={image} responsive alt="yolo"/>
+      <div className="mock-container">
+        <svg className="mock-content">
+
+        </svg>
+      </div>
     )
   }
 }
