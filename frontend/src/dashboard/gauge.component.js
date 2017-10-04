@@ -1,5 +1,7 @@
 import React, { Component, } from 'react';
 import d3 from 'd3';
+import '../styles/containers.css';
+
 
 class Gauge extends Component {
   constructor(props) {
@@ -16,9 +18,11 @@ class Gauge extends Component {
     return (
       <div>
         <h2>Gauge {this.state.title}</h2>
-        <svg width="300" height="300" style={{border: "1px solid"}}>
+        <div className="svg-container">
+          <svg className="svg-content">
 
-        </svg>
+          </svg>
+        </div>
       </div>
     )
   }
