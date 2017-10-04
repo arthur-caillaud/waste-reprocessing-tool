@@ -17,7 +17,6 @@ var type_traitement = models.type_traitement;
 
 //
 toQualification = function(code_dr){
-    console.log("toQualification function...");
     if (code_dr.slice(0,1) == 'D'){
         return "Elimination"
     }
@@ -29,28 +28,28 @@ toQualification = function(code_dr){
     }
 }
 toSequelizeDate = function(excelDate){
-    console.log("toSequelizeDate function...");
-    return (new Date(excelDate.toString().slice(6,10),excelDate.toString().slice(3,5),excelDate.toString().slice(0,2)));
+    if (excelDate){
+        return (new Date(excelDate.toString().slice(6,10),excelDate.toString().slice(3,5),excelDate.toString().slice(0,2)));
+    }
+    return null;
 }
 toBordereauFinished = function(etatBordereau){
-    console.log("toBordereauFinished function...");
     if (etatBordereau == 'T'){
         return 1
     }
     if (etatBordereau == 'E'){
         return 0
     }
-    return 0;
+    return null;
 }
 toQuantiteeEstimee = function(estimeeBool){
-    console.log("toQuantiteeEstimee function...");
     if(estimeeBool == "E"){
         return 1
     }
     if(estimeeBool == "R"){
         return 0
     }
-    return 1
+    return null
 }
 
 convertRowIntoDechetSequelize = function(excelRow){
@@ -151,9 +150,9 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
     var typeTraitementObservable = Rx.Observable.create(obs => {
         type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, defaults: typeTraitementPrevu})
         .spread((typeTraitementPrevu, created) => {
+            console.log(typeTraitementPrevu);
             if (created){
                 console.log("Successfully created new type_traitement:");
-                console.log(typeTraitementPrevu);
             }
             obs.onNext({
                 typeTraitementPrevu: typeTraitementPrevu,
@@ -163,9 +162,9 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
         })
         type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
         .spread((typeTraitementFinal, created) => {
+            console.log(typeTraitementFinal);
             if (created){
                 console.log("Successfully created new type_traitement:");
-                console.log(typeTraitementFinal);
             }
             obs.onNext({
                 typeTraitementPrevu: null,
@@ -314,7 +313,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
                     }
                 }
                 if(value.typeTraitementFinal){
-                    traitementFinal.id_type_traitement = value.typeTraitementInter.id;
+                    traitementFinal.id_type_traitement = value.typeTraitementFinal.id;
                     if(traitementFinal.id_prestataire){
                         traitement.findOrCreate({where: traitementFinal})
                         .spread((traitementFinal, created) => {
@@ -384,7 +383,7 @@ convertRowIntoBordereauSequelize = function(excelRow){
         quantitee_estimee: toQuantiteeEstimee(excelRow[29])
     }
 
-    var findOrCreateBordereau = function(){
+    const findOrCreateBordereau = function(){
         if(bordereau.id_dechet || bordereau.id_site || bordereau.id_transport_1 || bordereau.id_transport_2 || bordereau.id_traitement_final || bordereau.id_traitement_prevu || bordereau.id_traitement_inter){
             bordereau.findOrCreate({where: bordereau})
             .spread((bordereau, created) => {
@@ -573,33 +572,17 @@ writeIntoBdd = function(excelName) {
         readXlsxObservable.subscribe({
                 onNext: (jsonExcel) => {
                     console.log("Successfully loaded excel data in RAM");
-                    row = jsonExcel[0];
-                    console.log("Building bordereauObservable...");
-                    var bordereauObservable = convertRowIntoBordereauSequelize(row);
-                    console.log("Successfully built bordereauObservable");
-                    bordereauObservable.subscribe({
-                        onNext: bordereau => {
-                            console.log("Successfully pushed excel whole row into database:");
-                        },
-                        onError: error => {
-                            console.error("Error thrown by bordereauObservable", error);
-                        },
-                    });
-                    /*
                     jsonExcel.forEach(row => {
-                        console.log("Building bordereauObservable...");
                         var bordereauObservable = convertRowIntoBordereauSequelize(row);
-                        console.log("Successfully built bordereauObservable");
                         bordereauObservable.subscribe({
                             onNext: bordereau => {
-                                console.log("Successfully pushed excel whole row into database:");
+                                console.log("Successfully pushed excel whole row into database");
                             },
                             onError: error => {
                                 console.error("Error thrown by bordereauObservable", error);
                             },
                         })
                     });
-                    */
                 },
                 onError: error => {
                     console.error("Error in writeIntoBdd")

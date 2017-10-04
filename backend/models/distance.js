@@ -22,7 +22,8 @@ module.exports = function(sequelize, DataTypes) {
         }
 
     }, {
-        tableName: 'distance'
+        tableName: 'distance',
+        timestamps: false
     });
 
     return distance;

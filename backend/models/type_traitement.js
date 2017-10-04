@@ -17,15 +17,17 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     }
   }, {
-    tableName: 'type_traitement'
+    tableName: 'type_traitement',
+    timestamps: false
   });
 
   type_traitement.associate = function(models) {
       type_traitement.hasMany(models.bordereau, {foreignKey: 'id_traitement_final', sourceKey: 'id'});
-      type_traitement.hasMany(models.traitement, {foreignKey: 'id_type_traitemen', sourceKey: 'id'});
+      type_traitement.hasMany(models.traitement, {foreignKey: 'id_type_traitement', sourceKey: 'id'});
   }
   return type_traitement;
 };

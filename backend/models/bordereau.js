@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     num_bordereau: {
       type: DataTypes.INTEGER(11),
@@ -100,17 +101,18 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    tableName: 'bordereau'
+    tableName: 'bordereau',
+    timestamps: false
   });
 
   bordereau.associate = function(models){
-      bordereau.hasOne(models.dechet, {foreignKey: 'id_dechet', targetKey: 'id'});
-      bordereau.hasOne(models.type_traitement, {foreignKey: 'id_traitement_prevu', targetKey: 'id'});
-      bordereau.hasOne(models.site, {foreignKey: 'id_site', targetKey: 'id'});
-      bordereau.hasOne(models.transport, {foreignKey: 'id_transport_1', targetKey: 'id'});
-      bordereau.hasOne(models.transport, {foreignKey: 'id_transport_2', targetKey: 'id'});
-      bordereau.hasOne(models.traitement, {foreignKey: 'id_traitement_inter', targetKey: 'id'});
-      bordereau.hasOne(models.traitement, {foreignKey: 'id_traitement_final', targetKey: 'id'});
+      bordereau.belongsTo(models.dechet, {foreignKey: 'id_dechet', targetKey: 'id'});
+      bordereau.belongsTo(models.type_traitement, {foreignKey: 'id_traitement_prevu', targetKey: 'id'});
+      bordereau.belongsTo(models.site, {foreignKey: 'id_site', targetKey: 'id'});
+      bordereau.belongsTo(models.transport, {foreignKey: 'id_transport_1', targetKey: 'id'});
+      bordereau.belongsTo(models.transport, {foreignKey: 'id_transport_2', targetKey: 'id'});
+      bordereau.belongsTo(models.traitement, {foreignKey: 'id_traitement_inter', targetKey: 'id'});
+      bordereau.belongsTo(models.traitement, {foreignKey: 'id_traitement_final', targetKey: 'id'});
   }
 
   return bordereau;

@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     date_priseencharge: {
       type: DataTypes.DATE,
@@ -32,12 +33,13 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   }, {
-    tableName: 'traitement'
+    tableName: 'traitement',
+    timestamps: false
   });
 
   traitement.associate = function(models){
-      traitement.hasOne(models.prestataire, {foreignKey: 'id_prestataire', targetKey: 'id'});
-      traitement.hasOne(models.type_traitement, {foreignKey: 'id_type_traitement', targetKey: 'id'});
+      traitement.belongsTo(models.prestataire, {foreignKey: 'id_prestataire', targetKey: 'id'});
+      traitement.belongsTo(models.type_traitement, {foreignKey: 'id_type_traitement', targetKey: 'id'});
   }
 
   return traitement;

@@ -11,7 +11,7 @@ mySqlConnect = function() {
                 max: 20,
                 min: 0,
                 idle: 10000
-            }
+            },
         });
     return sequelize;
 };

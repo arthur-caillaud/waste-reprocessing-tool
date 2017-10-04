@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     date: {
       type: DataTypes.DATE,
@@ -36,7 +37,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'transport'
+    tableName: 'transport',
+    timestamps: false
   });
 
   transport.associate = function(models) {
