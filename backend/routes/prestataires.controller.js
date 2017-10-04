@@ -62,8 +62,10 @@ function getPrestataireByName (req, res) {
 };
 
 function getIndicatorsForClient (req, res) {
+
+    //to be completed
     client = req.body.clientName;
-    
+
 }
 
 
