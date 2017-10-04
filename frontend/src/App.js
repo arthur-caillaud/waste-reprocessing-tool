@@ -10,6 +10,8 @@ import { Glyphicon } from 'react-bootstrap';
 
 import { Col, Row } from 'react-bootstrap';
 
+import './styles/navBar.css';
+
 class App extends Component {
   constructor() {
     super();
@@ -28,8 +30,8 @@ class App extends Component {
       <div>
         <BrowserRouter>
           <div>
-            <Row>
-              <Col sm={2} hidden={!this.state.navBar}>
+            <Row className="row-eq-height">
+              <Col sm={2} hidden={!this.state.navBar} className="navBar">
                 <Col sm={10}> <SiteNavbar/> </Col>
                 <Col sm={2}>
                   <Button bsStyle="primary" onClick={() => this.toggleNavBar()}>
