@@ -2,18 +2,21 @@
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 100%;
+  padding-bottom: 90%;
   vertical-align: middle;
+  align-content: center;
   overflow: hidden;
 }
 
 .svg-content {
   display: inline-block;
   position: absolute;
-  background-color: grey;
+  background-color: white;
+  width: 80%;
+  padding-bottom: 30%;
   border: 1px solid;
   top: 0;
-  left: 0;
+  left: 10%;
 }
 
 .mock-container {
