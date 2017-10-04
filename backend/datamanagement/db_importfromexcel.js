@@ -17,15 +17,15 @@ var type_traitement = models.type_traitement;
 
 //
 toQualification = function(code_dr){
-    if (code_dr.slice(0,1) == 'D'){
-        return "Elimination"
+    if (typeof code_dr == "string"){
+        if (code_dr.slice(0,1) == 'D'){
+            return "Elimination"
+        }
+        if (code_dr.slice(0,1) == 'R'){
+            return "Recyclage"
+        }
     }
-    if (code_dr.slice(0,1) == 'R'){
-        return "Recyclage"
-    }
-    else {
-        return null;
-    }
+    return null;
 }
 toSequelizeDate = function(excelDate){
     if (excelDate){
@@ -51,9 +51,15 @@ toQuantiteeEstimee = function(estimeeBool){
     }
     return null
 }
+toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
+    if (indicateurNationalValorisation == "Oui"){
+
+    }
+}
 
 convertRowIntoDechetSequelize = function(excelRow){
     var newDechet = {
+        codeinterne: excelRow[8],
         libelle: excelRow[9],
         code_europeen: excelRow[10],
         categorie: excelRow[11],
@@ -62,18 +68,27 @@ convertRowIntoDechetSequelize = function(excelRow){
     };
 
     var dechetObservable = Rx.Observable.create(obs => {
-        dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
-        .spread((dechet, created) => {
-            if (created){
-                console.log("Successfully created new dechet:");
-                console.log(dechet);
+        try{
+            if (newDechet.libelle){
+                dechet.findOrCreate({where: newDechet})
+                .spread((dechet, created) => {
+                    if (created){
+                        console.log("Successfully created new dechet");
+                    }
+                    obs.onNext(dechet);
+                });
             }
-            obs.onNext(dechet);
-        })
+            else {
+                obs.onNext(null);
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        }
     });
-
     return dechetObservable;
 };
+
 convertRowIntoSiteSequelize = function(excelRow){
     var newSite = {
         site_production: excelRow[16],
@@ -83,56 +98,81 @@ convertRowIntoSiteSequelize = function(excelRow){
     };
 
     var siteObservable = Rx.Observable.create(obs => {
-        site.findOrCreate({where: {nom: excelRow[15]}, defaults: newSite})
-        .spread((site, created) => {
-            if (created){
-                console.log("Successfully created new site:");
-                console.log(site);
+        try {
+            if(excelRow[15]){
+                site.findOrCreate({where: {nom: excelRow[15]}, defaults: newSite})
+                .spread((site, created) => {
+                    if (created){
+                        console.log("Successfully created new site");
+                    }
+                    obs.onNext(site);
+                })
             }
-            obs.onNext(site)
-        })
+            else{
+                obs.onNext(null);
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        }
     });
-
     return siteObservable;
 };
+
 convertRowIntoPrestataireSequelize = function(excelRow){
     var newPrestataireInter = {
         nom: excelRow[30],
         localisation: excelRow[31]
     };
-
     var newPrestataireFinal = {
         nom: excelRow[42],
         localisation: excelRow[43]
     };
 
     var prestataireObservable = Rx.Observable.create((obs) => {
-        prestataire.findOrCreate({where: {siret: excelRow[32],}, defaults: newPrestataireInter})
-        .spread((prestataireInter, created) => {
-            if (created){
-                console.log("Successfully created new prestataire:");
-                console.log(prestataireInter);
+        try{
+            if(excelRow[32]){
+                prestataire.findOrCreate({where: {siret: excelRow[32],}, defaults: newPrestataireInter})
+                .spread((prestataireInter, created) => {
+                    if (created){
+                        console.log("Successfully created new prestataire");
+                    }
+                    obs.onNext({
+                        prestataireInter: prestataireInter,
+                        prestataireFinal: null
+                    })
+                })
             }
-            obs.onNext({
-                prestataireInter: prestataireInter,
-                prestataireFinal: null
-            })
-        })
-        prestataire.findOrCreate({where: {siret: excelRow[44],}, defaults: newPrestataireFinal})
-        .spread((prestataireFinal, created) => {
-            if(created){
-                console.log("Successfully created new prestataire");
-                console.log(prestataireFinal);
+            else {
+                obs.onNext({
+                    prestataireInter_isNull: true
+                });
             }
-            obs.onNext({
-                prestataireInter: null,
-                prestataireFinal: prestataireFinal
-            })
-        })
+            if(excelRow[44]){
+                prestataire.findOrCreate({where: {siret: excelRow[44],}, defaults: newPrestataireFinal})
+                .spread((prestataireFinal, created) => {
+                    if(created){
+                        console.log("Successfully created new prestataire");
+                    }
+                    obs.onNext({
+                        prestataireInter: null,
+                        prestataireFinal: prestataireFinal
+                    });
+                });
+            }
+            else {
+                obs.onNext({
+                    prestataireFinal_isNull: true
+                });
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        }
     });
-
     return prestataireObservable;
 };
+
 convertRowIntoTypeTraitementSequelize = function(excelRow){
     var typeTraitementPrevu = {
         code_edf: excelRow[7],
@@ -148,84 +188,123 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
     };
 
     var typeTraitementObservable = Rx.Observable.create(obs => {
-        type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, defaults: typeTraitementPrevu})
-        .spread((typeTraitementPrevu, created) => {
-            console.log(typeTraitementPrevu);
-            if (created){
-                console.log("Successfully created new type_traitement:");
+        try{
+            if(excelRow[6]){
+                type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, defaults: typeTraitementPrevu})
+                .spread((typeTraitementPrevu, created) => {
+                    if (created){
+                        console.log("Successfully created new type_traitement");
+                    }
+                    obs.onNext({
+                        typeTraitementPrevu: typeTraitementPrevu,
+                        typeTraitementInter: null,
+                        typeTraitementFinal: null
+                    })
+                })
             }
-            obs.onNext({
-                typeTraitementPrevu: typeTraitementPrevu,
-                typeTraitementInter: null,
-                typeTraitementFinal: null
-            })
-        })
-        type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
-        .spread((typeTraitementFinal, created) => {
-            console.log(typeTraitementFinal);
-            if (created){
-                console.log("Successfully created new type_traitement:");
+            else{
+                obs.onNext({
+                    typeTraitementPrevu_isNull: true
+                });
             }
-            obs.onNext({
-                typeTraitementPrevu: null,
-                typeTraitementInter: null,
-                typeTraitementFinal: typeTraitementFinal
-            })
-        })
-        type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
-        .spread((typeTraitementInter, created) => {
-            if (created){
-                console.log("Successfully created new type_traitement:");
-                console.log(typeTraitementInter);
+            if(excelRow[48]){
+                type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
+                .spread((typeTraitementFinal, created) => {
+                    if (created){
+                        console.log("Successfully created new type_traitement:");
+                    }
+                    obs.onNext({
+                        typeTraitementPrevu: null,
+                        typeTraitementInter: null,
+                        typeTraitementFinal: typeTraitementFinal
+                    })
+                })
             }
-            obs.onNext({
-                typeTraitementPrevu: null,
-                typeTraitementInter: typeTraitementInter,
-                typeTraitementFinal: null
-            })
-        })
+            else {
+                obs.onNext({
+                    typeTraitementFinal_isNull: true
+                });
+            }
+            if(excelRow[36]){
+                type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
+                .spread((typeTraitementInter, created) => {
+                    if (created){
+                        console.log("Successfully created new type_traitement:");
+                    }
+                    obs.onNext({
+                        typeTraitementPrevu: null,
+                        typeTraitementInter: typeTraitementInter,
+                        typeTraitementFinal: null
+                    })
+                })
+            }
+            else{
+                obs.onNext({
+                    typeTraitementInter_isNull: true
+                });
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        }
     });
 
     return typeTraitementObservable;
 }
-convertRowIntoTransporteurSequelize = function(excelRow){
-    console.log("Building TransporteurObservable...");
-    var transporteurObservable = Rx.Observable.create((obs) => {
-        newTransporteur1 = {
-            nom: excelRow[22],
-            localisation: excelRow[23]
-        };
-        newTransporteur2 = {
-            nom: excelRow[37],
-            localisation: excelRow[39]
-        }
-        transporteur.findOrCreate({where: {siret: excelRow[26]}, defaults: newTransporteur1})
-        .spread((transporteur1, created) => {
-            if(created){
-                console.log("Successfully created new transporteur:");
-                console.log(transporteur1);
-            }
-            obs.onNext({
-                transporteur1: transporteur1,
-                transporteur2: null
-            });
-        });
 
-        transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
-        .spread((transporteur2, created) => {
-            if(created){
-                console.log("Successfully created new transporteur:");
-                console.log(transporteur2);
+convertRowIntoTransporteurSequelize = function(excelRow){
+    var transporteurObservable = Rx.Observable.create((obs) => {
+        try{
+            newTransporteur1 = {
+                nom: excelRow[22],
+                localisation: excelRow[23]
+            };
+            newTransporteur2 = {
+                nom: excelRow[37],
+                localisation: excelRow[39]
             }
-            obs.onNext({
-                transporteur1: null,
-                transporteur2: transporteur2
-            });
-        });
+            if(excelRow[26]){
+                transporteur.findOrCreate({where: {siret: excelRow[26]}, defaults: newTransporteur1})
+                .spread((transporteur1, created) => {
+                    if(created){
+                        console.log("Successfully created new transporteur");
+                    }
+                    obs.onNext({
+                        transporteur1: transporteur1,
+                        transporteur2: null
+                    });
+                });
+            }
+            else{
+                obs.onNext({
+                    transporteur1_isNull: true
+                });
+            }
+            if(excelRow[40]){
+                transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
+                .spread((transporteur2, created) => {
+                    if(created){
+                        console.log("Successfully created new transporteur");
+                    }
+                    obs.onNext({
+                        transporteur1: null,
+                        transporteur2: transporteur2
+                    });
+                });
+            }
+            else{
+                obs.onNext({
+                    transporteur2_isNull: true
+                });
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        };
     });
-    console.log("Successfully built transporteurObservable");
     return transporteurObservable;
-}
+};
+
 convertRowIntoTransportSequelize = function(excelRow){
     var transport1 = {
         date: toSequelizeDate(excelRow[20]),
@@ -241,45 +320,59 @@ convertRowIntoTransportSequelize = function(excelRow){
         immatriculation: null,
         adr: null
     };
-
-    console.log("Building transportObservable...");
     var transportObservable = Rx.Observable.create(obs => {
-        var transporteurObservable = convertRowIntoTransporteurSequelize(excelRow);
-        transporteurObservable.subscribe({
-            onNext: function(value){
-                if(value.transporteur1){
-                    transport.findOrCreate({where: transport1, defaults: {id_transporteur: value.transporteur1.id}})
-                    .spread((transport1, created) => {
-                        if(created){
-                            console.log("Successfully created new transport:");
-                            console.log(transport1);
-                        }
-                        obs.onNext({
-                            transport1: transport1,
-                            transport2: null
+        try{
+            var transporteurObservable = convertRowIntoTransporteurSequelize(excelRow);
+            transporteurObservable.subscribe({
+                onNext: function(value){
+                    if(value.transporteur1){
+                        transport.findOrCreate({where: transport1, defaults: {id_transporteur: value.transporteur1.dataValues.id}})
+                        .spread((transport1, created) => {
+                            if(created){
+                                console.log("Successfully created new transport");
+                            }
+                            obs.onNext({
+                                transport1: transport1,
+                                transport2: null
+                            })
                         })
-                    })
-                }
-                if(value.transporteur2){
-                    transport.findOrCreate({where: transport2, defaults: {id_transporteur: value.transporteur2.id}})
-                    .spread((transport2, created) => {
-                        if(created){
-                            console.log("Successfully created new transport:");
-                            console.log(transport2);
-                        }
+                    }
+                    if(value.transporteur1_isNull){
                         obs.onNext({
-                            transport1: null,
-                            transport2: transport2
+                            transport1_isNull: true
                         })
-                    })
+                    }
+                    if(value.transporteur2){
+                        transport.findOrCreate({where: transport2, defaults: {id_transporteur: value.transporteur2.dataValues.id}})
+                        .spread((transport2, created) => {
+                            if(created){
+                                console.log("Successfully created new transport");
+                            }
+                            obs.onNext({
+                                transport1: null,
+                                transport2: transport2
+                            })
+                        })
+                    }
+                    if(value.transporteur2_isNull){
+                        obs.onNext({
+                            transport2_isNull: true
+                        })
+                    }
+                },
+                onError: err => {
+                    console.error(err);
                 }
-            }
-        })
+            })
+        }
+        catch(Exception){
+            obs.onError(Exception)
+        }
     });
-    console.log("Successfully built transportObservable");
 
     return transportObservable;
 }
+
 convertRowIntoTraitementSequelize = function(excelRow){
     var traitementInter = {
         date_priseencharge: toSequelizeDate(excelRow[33]),
@@ -290,88 +383,174 @@ convertRowIntoTraitementSequelize = function(excelRow){
         date_traitement: toSequelizeDate(excelRow[47])
     };
 
-    console.log("Building traitementObservable...");
-    var traitementObservable = Rx.Observable.create(obs => {
-        var typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
-        var prestataireObservable = convertRowIntoPrestataireSequelize(excelRow);
-        typeTraitementObservable.subscribe({
-            onNext: function(value){
-                if(value.typeTraitementInter){
-                    traitementInter.id_type_traitement = value.typeTraitementInter.id;
-                    if(traitementInter.id_prestataire){
-                        traitement.findOrCreate({where: traitementInter})
-                        .spread((traitementInter, created) => {
-                            if(created){
-                                console.log("Successfully created new traitement:");
-                                console.log(traitementInter);
-                            }
-                            obs.onNext({
-                                traitementInter: traitementInter,
-                                traitementFinal: null
+    try{
+        var traitementObservable = Rx.Observable.create(obs => {
+            var typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
+            var prestataireObservable = convertRowIntoPrestataireSequelize(excelRow);
+            typeTraitementObservable.subscribe({
+                onNext: value => {
+                    if(value.typeTraitementInter){
+                        traitementInter.id_type_traitement = value.typeTraitementInter.dataValues.id;
+                        if(traitementInter.id_prestataire){
+                            traitement.findOrCreate({where: traitementInter})
+                            .spread((traitementInter, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: traitementInter,
+                                    traitementFinal: null
+                                })
                             })
-                        })
+                        }
                     }
-                }
-                if(value.typeTraitementFinal){
-                    traitementFinal.id_type_traitement = value.typeTraitementFinal.id;
-                    if(traitementFinal.id_prestataire){
-                        traitement.findOrCreate({where: traitementFinal})
-                        .spread((traitementFinal, created) => {
-                            if(created){
-                                console.log("Successfully created new traitement:");
-                                console.log(traitementFinal);
-                            }
-                            obs.onNext({
-                                traitementInter: null,
-                                traitementFinal: traitementFinal
+                    if(value.typeTraitementInter_isNull){
+                        traitementInter.id_type_traitement = null;
+                        if(traitementInter.id_prestataire){
+                            traitement.findOrCreate({where: traitementInter})
+                            .spread((traitementInter, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: traitementInter,
+                                    traitementFinal: null
+                                })
                             })
-                        })
-                    }
-                }
-            }
-        });
-        prestataireObservable.subscribe({
-            onNext: function(value){
-                if(value.prestataireInter){
-                    traitementInter.id_prestataire = value.prestataireInter.id;
-                    if (traitementInter.id_type_traitement){
-                        traitement.findOrCreate({where: traitementInter})
-                        .spread((traitementInter, created) => {
-                            if(created){
-                                console.log("Successfully created new traitement:");
-                                console.log(traitementInter);
-                            }
+                        }
+                        if(traitementInter.id_prestataire === null){
                             obs.onNext({
-                                traitementInter: traitementInter,
-                                traitementFinal: null
+                                traitementInter_isNull: true
                             })
-                        })
+                        }
                     }
-                }
-                if(value.prestataireFinal){
-                    traitementFinal.id_prestataire = value.prestataireFinal.id;
-                    if(traitementFinal.id_type_traitement){
-                        traitementFinal.findOrCreate({where: traitementFinal})
-                        .spread((traitementFinal, created) => {
-                            if(created){
-                                console.log("Successfully created new traitement:");
-                                console.log(traitementFinal);
-                            }
+                    if(value.typeTraitementFinal){
+                        traitementFinal.id_type_traitement = value.typeTraitementFinal.dataValues.id;
+                        if(traitementFinal.id_prestataire){
+                            traitement.findOrCreate({where: traitementFinal})
+                            .spread((traitementFinal, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: null,
+                                    traitementFinal: traitementFinal
+                                })
+                            })
+                        }
+                    }
+                    if(value.typeTraitementFinal_isNull){
+                        traitementFinal.id_type_traitement = null;
+                        if(traitementFinal.id_prestataire){
+                            traitement.findOrCreate({where: traitementFinal})
+                            .spread((traitementFinal, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: null,
+                                    traitementFinal: traitementFinal
+                                })
+                            })
+                        }
+                        if(traitementFinal.id_prestataire === null){
                             obs.onNext({
-                                traitementInter: null,
-                                traitementFinal: traitementFinal
+                                traitementFinal_isNull: true
                             })
-                        })
+                        }
                     }
+                },
+                onError: err => {
+                    console.error(err);
                 }
-            }
-        });
-    })
-    console.log("Successfully built traitementObservable");
+            });
+            prestataireObservable.subscribe({
+                onNext: function(value){
+                    if(value.prestataireInter){
+                        traitementInter.id_prestataire = value.prestataireInter.dataValues.id;
+                        if (traitementInter.id_type_traitement){
+                            traitement.findOrCreate({where: traitementInter})
+                            .spread((traitementInter, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: traitementInter,
+                                    traitementFinal: null
+                                })
+                            })
+                        }
+                    }
+                    if(value.prestataireInter_isNull){
+                        traitementInter.id_prestataire = null;
+                        if (traitementInter.id_type_traitement){
+                            traitement.findOrCreate({where: traitementInter})
+                            .spread((traitementInter, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: traitementInter,
+                                    traitementFinal: null
+                                })
+                            })
+                        }
+                        if(traitementInter.id_type_traitement === null){
+                            obs.next({
+                                traitementInter_isNull: true
+                            })
+                        }
+                    }
+                    if(value.prestataireFinal){
+                        traitementFinal.id_prestataire = value.prestataireFinal.dataValues.id;
+                        if(traitementFinal.id_type_traitement){
+                            traitement.findOrCreate({where: traitementFinal})
+                            .spread((traitementFinal, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: null,
+                                    traitementFinal: traitementFinal
+                                })
+                            })
+                        }
+                    }
+                    if(value.prestataireFinal_isNull){
+                        traitementFinal.id_prestataire = null;
+                        if (traitementFinal.id_type_traitement){
+                            traitement.findOrCreate({where: traitementFinal})
+                            .spread((traitementFinal, created) => {
+                                if(created){
+                                    console.log("Successfully created new traitement");
+                                }
+                                obs.onNext({
+                                    traitementInter: null,
+                                    traitementFinal: traitementFinal
+                                })
+                            })
+                        }
+                        if(traitementFinal.id_type_traitement === null){
+                            obs.next({
+                                traitementFinal_isNull: true
+                            })
+                        }
+                    }
+                },
+                onError: err => {
+                    console.error(err);
+                }
+            });
+        })
+    }
+    catch(Exception){
+        obs.onError(Exception)
+    }
     return traitementObservable;
 }
+
 convertRowIntoBordereauSequelize = function(excelRow){
-    var bordereau = {
+    var newBordereau = {
         num_bordereau: excelRow[1],
         cas: excelRow[2],
         nom_emetteur: excelRow[3],
@@ -383,20 +562,18 @@ convertRowIntoBordereauSequelize = function(excelRow){
         quantitee_estimee: toQuantiteeEstimee(excelRow[29])
     }
 
-    const findOrCreateBordereau = function(){
-        if(bordereau.id_dechet || bordereau.id_site || bordereau.id_transport_1 || bordereau.id_transport_2 || bordereau.id_traitement_final || bordereau.id_traitement_prevu || bordereau.id_traitement_inter){
-            bordereau.findOrCreate({where: bordereau})
+    const findOrCreateBordereau = function(obs){
+        if(newBordereau.id_dechet !== undefined || newBordereau.id_site !== undefined || newBordereau.id_transport_1 !== undefined || newBordereau.id_transport_2 !== undefined || newBordereau.id_traitement_final !== undefined || newBordereau.id_traitement_prevu !== undefined || newBordereau.id_traitement_inter !== undefined ){
+            bordereau.findOrCreate({where: newBordereau})
             .spread((bordereau, created) => {
                 if (created){
                     console.log("Successfully created new bordereau");
-                    console.log(bordereau);
                 }
                 obs.onNext(bordereau);
             })
         }
     }
 
-    console.log("Building bordereauObservable...");
     var bordereauObservable = Rx.Observable.create(obs => {
         var traitementObservable = convertRowIntoTraitementSequelize(excelRow);
         var dechetObservable = convertRowIntoDechetSequelize(excelRow);
@@ -408,45 +585,96 @@ convertRowIntoBordereauSequelize = function(excelRow){
             traitementObservable.subscribe({
                 onNext: value => {
                     if(value.traitementInter){
-                        bordereau.id_traitement_inter = value.traitementInter.id;
-                        findOrCreateBordereau();
+                        newBordereau.id_traitement_inter = value.traitementInter.dataValues.id;
+                        findOrCreateBordereau(obs);
                     }
                     if(value.traitementFinal){
-                        bordereau.id_traitement_final = value.traitementFinal.id;
-                        findOrCreateBordereau();
+                        newBordereau.id_traitement_final = value.traitementFinal.dataValues.id;
+                        findOrCreateBordereau(obs);
                     }
+                    if(value.traitementInter_isNull){
+                        newBordereau.id_traitement_inter = null;
+                        findOrCreateBordereau(obs);
+                    }
+                    if(value.traitementFinal_isNull){
+                        newBordereau.id_traitement_final = null;
+                        findOrCreateBordereau(obs);
+                    }
+                },
+                onError: err => {
+                    console.error(err);
                 }
             });
             dechetObservable.subscribe({
                 onNext: value => {
-                    bordereau.id_dechet = value.id;
-                    findOrCreateBordereau();
+                    if(value){
+                        newBordereau.id_dechet = value.dataValues.id;
+                        findOrCreateBordereau(obs);
+                    }
+                    if(value === null){
+                        newBordereau.id_dechet = null;
+                        findOrCreateBordereau(obs);
+                    }
+                },
+                onError: err => {
+                    console.error(err);
+                },
+                onCompleted: () => {
                 }
             });
             transportObservable.subscribe({
                 onNext: value => {
                     if(value.transport1){
-                        bordereau.id_transport_1 = value.transport1.id;
-                        findOrCreateBordereau();
+                        newBordereau.id_transport_1 = value.transport1.dataValues.id;
+                        findOrCreateBordereau(obs);
+                    }
+                    if(value.transport1_isNull){
+                        newBordereau.id_transport_1 = null;
+                        findOrCreateBordereau(obs);
                     }
                     if(value.transport2){
-                        bordereau.id_transport_2 = value.transport2.id;
-                        findOrCreateBordereau();
+                        newBordereau.id_transport_2 = value.transport2.dataValues.id;
+                        findOrCreateBordereau(obs);
                     }
+                    if(value.transport2_isNull){
+                        newBordereau.id_transport_2 = null;
+                    }
+                },
+                onError: err => {
+                    console.error(err);
                 }
             });
             siteObservable.subscribe({
                 onNext: value => {
-                    bordereau.id_site = value.id;
-                    findOrCreateBordereau();
+                    if(value){
+                        newBordereau.id_site = value.id;
+                        findOrCreateBordereau(obs);
+                    }
+                    if(value === null){
+                        newBordereau.id_site = null;
+                        findOrCreateBordereau(obs);
+                    }
+                },
+                onError: err => {
+                    console.error(err);
+                },
+                onCompleted: () => {
+
                 }
             });
             typeTraitementObservable.subscribe({
                 onNext: value => {
                     if(value.typeTraitementPrevu){
-                        bordereau.id_traitement_prevu = value.typeTraitementPrevu.id;
-                        findOrCreateBordereau();
+                        newBordereau.id_traitement_prevu = value.typeTraitementPrevu.dataValues.id;
+                        findOrCreateBordereau(obs);
                     }
+                    if(value.typeTraitementPrevu_isNull){
+                        newBordereau.id_traitement_prevu = null;
+                        findOrCreateBordereau(obs);
+                    }
+                },
+                onError: err => {
+                    console.error(err);
                 }
             });
         }
@@ -454,82 +682,8 @@ convertRowIntoBordereauSequelize = function(excelRow){
             obs.onError(Exception)
         }
     });
-    console.log("Successfully built bordereauObservable");
-
     return bordereauObservable;
 }
-
-/*
-_old_convertRowIntoSequelize = function(excelRow) {
-    //The input is a json read from an xlsx file using readXlsx function
-    //The output is a ready to be pushed in the mySql db
-
-    jsonBordereau = {};
-    jsonBordereau.numeroBordereau = excelRow[1];
-    jsonBordereau.cas = excelRow[2];
-    jsonBordereau.nomEmetteur = excelRow[3];
-    jsonBordereau.etatBordereau = excelRow[4];
-    jsonBordereau.modeSuivi = excelRow[5];
-    jsonBordereau.codeFiliereDRPrevu = excelRow[6];
-    jsonBordereau.codeFiliereEDFPrevu = excelRow[7];
-    jsonBordereau.dechet = {
-        codeInterneDechet: excelRow[8],
-        libelleDechet: excelRow[9],
-        codeEuropeenDechet: excelRow[10],
-        categorieDechet: excelRow[11],
-        indicateurNationalValorisation: excelRow[12],
-        famille: excelRow[13],
-        referenceDossier: excelRow[14]
-    };
-    jsonBordereau.producteur = {
-        entiteProductrice: excelRow[15],
-        site: excelRow[16],
-        uniteDependance: excelRow[17],
-        UPDependance: excelRow[18],
-        metierDependance: excelRow[19]
-    };
-    jsonBordereau.transporteur1 = {
-        dateTransport: excelRow[20],
-        modeTransport: excelRow[21],
-        nom: excelRow[22],
-        localisation: excelRow[23],
-        recepisse: excelRow[24],
-        immatriculationVehicule: excelRow[25],
-        siret: excelRow[26],
-        adr: excelRow[27],
-        quantiteTransportee: excelRow[28],
-        estimeeBool: excelRow[29]
-    };
-    jsonBordereau.traitementIntermediaire = {
-        nom: excelRow[30],
-        localisation: excelRow[31],
-        siret: excelRow[32],
-        datePriseEnCharge: excelRow[33],
-        dateTraitement: excelRow[34],
-        codeFiliereDR: excelRow[35],
-        codeFiliereEDF: excelRow[36]
-    };
-    jsonBordereau.transporteur2 = {
-        nom: excelRow[37],
-        modeTransport: excelRow[38],
-        localisation: excelRow[39],
-        siret: excelRow[40],
-        recepisse: excelRow[41],
-    };
-    jsonBordereau.traitementFinal = {
-        nom: excelRow[42],
-        localisation: excelRow[43],
-        siret: excelRow[44],
-        datePriseEnCharge: excelRow[45],
-        quantite: excelRow[46],
-        dateTraitement: excelRow[47],
-        codeFiliereDR: excelRow[48],
-        codeFiliereEDF: excelRow[49],
-        qualificationTraitement: excelRow[50]
-    };
-    return (new dataSchemas.Bordereau(jsonBordereau));
-};
-*/
 
 readXlsx = function (filepath) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
@@ -546,7 +700,18 @@ readXlsx = function (filepath) {
                 console.log("Start reading excel file...")
                 workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
                     if(rowNumber > config.excel.STARTING_ROW){
-                        jsonExcel.push(row.values);
+                        var newRow = [null];
+                        row.values.forEach(cell => {
+                            var newCell = cell;
+                            if (typeof cell == "string"){
+                                newCell = cell.trim();
+                            }
+                            if (cell == ""){
+                                newCell = null;
+                            }
+                            newRow.push(newCell);
+                        })
+                        jsonExcel.push(newRow);
                     }
                 });
                 obs.onNext(jsonExcel);
@@ -556,9 +721,8 @@ readXlsx = function (filepath) {
                 obs.onError(error);
             })
     });
-
     return readObservable;
-}
+};
 writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
@@ -596,7 +760,7 @@ writeIntoBdd = function(excelName) {
     .catch(err => {
         console.error('Database connection lost or unable to start');
     });
-}
+};
 
 //Export du service
 
@@ -608,5 +772,26 @@ module.exports = service;*/
 
 
 //Phase d'essai
+
+/*readXlsx(config.excel.DATA_DIR + "dataedfmars.xlsx").subscribe({
+    onNext: excel => {
+        convertRowIntoDechetSequelize(excel[3]).subscribe({
+            onNext: value => {
+                console.log(value);
+            },
+            onCompleted: {
+            },
+            onError: error => {
+                console.error(error);
+            }
+        });
+    },
+    onError: err => {
+        console.error(err);
+    },
+    onCompleted: () => {
+        console.log("completed");
+    }
+})*/
 
 writeIntoBdd("dataedfmars.xlsx");
