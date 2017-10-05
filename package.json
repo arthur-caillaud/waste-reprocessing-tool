@@ -3,11 +3,23 @@
   "version": "1.0.0",
   "description": "L'outil développé vise à piloter l'optimisation du retraitement des déchets de site d'EDF en France.",
   "main": "index.js",
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "scripts": {
-    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/* --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml; echo SWAG"
+    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/* --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml; echo SWAG"
   },
   "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
+    "ignore-styles": "^5.0.1",
+    "mocha": "^4.0.0",
     "mocha-junit-reporter": "^1.15.0",
     "redux": "^3.7.2",
     "should": "^13.1.0",
