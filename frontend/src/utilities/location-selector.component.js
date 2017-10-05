@@ -27,7 +27,7 @@ class LocationSelector extends Component {
     var i = 0;
     var locationsList = [];
     for (i=0; i<this.state.locations.length; i++) {
-      if (i != this.state.selected) {
+      if (i !== this.state.selected) {
         locationsList.push(<ListGroupItem>{this.state.locations[i]}</ListGroupItem>);
       }
     }

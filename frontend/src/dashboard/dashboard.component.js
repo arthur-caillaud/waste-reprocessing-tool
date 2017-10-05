@@ -18,11 +18,13 @@ class Dashboard extends Component {
         <div>
           <Grid fluid>
             <Row className="show-grid">
-              <Col sm={3}> <Gauge number="1" /> </Col>
-              <Col sm={3}> <Gauge number="2" /> </Col>
-              <Col sm={3}> <Gauge number="3" /> </Col>
+              <Col sm={3}> <Gauge title="Valorisation Globale"/> </Col>
+              <Col sm={3}> <Gauge title="Valorisation Liste Verte"/> </Col>
+              <Col sm={3}> <Gauge title="Volume Déchets"/> </Col>
               <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>
+
+
             <Row className="show-grid">
               <Col sm={9}>
                 <Row>
