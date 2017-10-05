@@ -35,4 +35,35 @@ function getAllEcartsDePesee(tolerance){
             obs.onError(err);
         })
     })
-}
+};
+
+function getAllIncoherencesFilieres(){
+    var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
+        bordereau.findAll({
+            include: [{
+                model: traitement,
+                required: true
+            }]
+        })
+        .then(bordereaux => {
+            let bordereauxAvecIncoherencesFilieres = [];
+            bordereaux.forEach(bordereau => {
+                let traitementPrevu = bordereau.dataValues.id_traitement_prevu;
+                let traitementFinal = bordereau.dataValues.traitement.id_type_traitement;
+                if(traitementPrevu != traitementFinal){
+                    bordereauxAvecIncoherencesFilieres.push(bordereau);
+                }
+            })
+            obs.onNext(bordereauxAvecIncoherencesFilieres);
+        })
+        .catch(err => {
+            obs.onError(err)
+        })
+    })
+    return getAllIncoherencesFilieresObservable;
+};
+
+var service = {}
+service.getAllEcartsDePesee = getAllEcartsDePesee;
+service.getAllIncoherencesFilieres = getAllIncoherencesFilieres;
+module.exports = service;
