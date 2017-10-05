@@ -746,28 +746,28 @@ writeIntoBdd = function(excelName) {
         var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName);
         console.log("readXlsxObservable built");
         readXlsxObservable.subscribe({
-                onNext: (jsonExcel) => {
-                    console.log("Successfully loaded excel data in RAM");
-                    jsonExcel.forEach(row => {
-                        var bordereauObservable = convertRowIntoBordereauSequelize(row);
-                        bordereauObservable.subscribe({
-                            onNext: bordereau => {
-                                console.log("Successfully pushed excel whole row into database");
-                            },
-                            onError: error => {
-                                console.error("Error thrown by bordereauObservable", error);
-                            },
-                        })
-                    });
-                },
-                onError: error => {
-                    console.error("Error in writeIntoBdd")
-                    console.error(error);
-                },
-                onCompleted: () => {
-                    console.log("readXlsx completed");
-                }
-            })
+            onNext: (jsonExcel) => {
+                console.log("Successfully loaded excel data in RAM");
+                jsonExcel.forEach(row => {
+                    var bordereauObservable = convertRowIntoBordereauSequelize(row);
+                    bordereauObservable.subscribe({
+                        onNext: bordereau => {
+                            console.log("Successfully pushed excel whole row into database");
+                        },
+                        onError: error => {
+                            console.error("Error thrown by bordereauObservable", error);
+                        },
+                    })
+                });
+            },
+            onError: error => {
+                console.error("Error in writeIntoBdd")
+                console.error(error);
+            },
+            onCompleted: () => {
+                console.log("readXlsx completed");
+            }
+        })
     })
     .catch(err => {
         console.error('Database connection lost or unable to start');

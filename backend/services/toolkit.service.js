@@ -60,14 +60,6 @@ function getSiteArchitecture(){
     return getSiteArchitectureObservable;
 }
 
-getSiteArchitecture().subscribe({
-    onNext: siteArchitecture => {
-        console.log(siteArchitecture);
-    },
-    onError: err => {
-        console.error(err);
-    },
-    onCompleted: () => {}
-});
-
 var service = {}
+service.getSiteArchitecture = getSiteArchitecture;
+module.exports = service;
