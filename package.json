@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/* --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml; echo SWAG"
+    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/frontend/* --require ./test/test_helper.js --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml; echo SWAG"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -19,6 +19,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "chai": "^4.1.2",
     "ignore-styles": "^5.0.1",
+    "jsdom": "^11.3.0",
     "mocha": "^4.0.0",
     "mocha-junit-reporter": "^1.15.0",
     "redux": "^3.7.2",
