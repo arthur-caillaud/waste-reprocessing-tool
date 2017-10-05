@@ -697,7 +697,7 @@ var convertRowIntoBordereauSequelize = function(excelRow){
     return bordereauObservable;
 }
 
-var readXlsx = function (filepath) {
+export var readXlsx = (filepath) => {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //Warning : function only supports .XLSX files
 
@@ -735,7 +735,7 @@ var readXlsx = function (filepath) {
     });
     return readObservable;
 };
-var writeIntoBdd = function(excelName) {
+export var writeIntoBdd = (excelName) => {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
 
