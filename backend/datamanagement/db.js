@@ -27,7 +27,7 @@ mySqlConnect = function() {
     return sequelize;
 };
 
-mysqlDisconnect = function(){
+var mysqlDisconnect = function(){
     sequelize.close();
 };
 
