@@ -3,7 +3,7 @@ var Sequelize = require('sequelize');
 var config = require('../config.json');
 var Rx = require('rx');
 
-mySqlConnect = function() {
+var mySqlConnect = function() {
     const sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
             host: config.mysql.url,
             dialect: 'mysql',
@@ -16,11 +16,11 @@ mySqlConnect = function() {
     return sequelize;
 };
 
-mysqlDisconnect = function(){
+var mysqlDisconnect = function(){
     sequelize.close();
 };
 
-service = {}
+var service = {};
 service.mySqlConnect = mySqlConnect;
 service.mysqlDisconnect = mysqlDisconnect;
 module.exports = service;
