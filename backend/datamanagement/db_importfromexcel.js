@@ -14,6 +14,7 @@ var traitement = models.traitement;
 var transport = models.transport;
 var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
+var referentiel_dechet = models.referentiel_dechet;
 
 //
 toQualification = function(code_dr){
@@ -55,6 +56,18 @@ toQuantiteeEstimee = function(estimeeBool){
     }
     return null
 }
+toDangereux = function(code_europeen){
+    if (code_europeen.slice(8,9) == '*'){
+        return 1
+    }
+    return 0
+};
+toListeVerte = function(liste_verte){
+    if(liste_verte == 'v'){
+        return 1;
+    }
+    return 0;
+};
 toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
     if (indicateurNationalValorisation == "Oui"){
         return 1
@@ -68,6 +81,7 @@ toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
 convertRowIntoDechetSequelize = function(excelRow){
     var newDechet = {
         codeinterne: excelRow[8],
+        is_dangereux: toDangereux(excelRow[10]),
         libelle: excelRow[9],
         code_europeen: excelRow[10],
         categorie: excelRow[11],
@@ -697,6 +711,99 @@ convertRowIntoBordereauSequelize = function(excelRow){
     return bordereauObservable;
 }
 
+convertRowIntoReferentielDechetSequelize = function(excelRow){
+    var jsonRow = {
+        codeinterne: excelRow[3],
+        is_listeverte: toListeVerte(excelRow[5]),
+        is_dangereux: toDangereux(excelRow[8]),
+        gestion_r1: excelRow[9],
+        gestion_r2: excelRow[10],
+        gestion_r3: excelRow[11],
+        gestion_r4: excelRow[12],
+        gestion_r5: excelRow[13],
+        gestion_r6: excelRow[14],
+        gestion_r7: excelRow[15],
+        gestion_r8: excelRow[16],
+        gestion_r9: excelRow[17],
+        gestion_r10: excelRow[18],
+        gestion_r11: excelRow[19],
+        gestion_r12: excelRow[20],
+        gestion_r13: excelRow[21],
+        gestion_d5: excelRow[22],
+        gestion_d8: excelRow[23],
+        gestion_d9: excelRow[24],
+        gestion_d10: excelRow[25],
+        gestion_d13: excelRow[26],
+        gestion_d14: excelRow[27],
+        gestion_d15: excelRow[28]
+    }
+
+    var codeDictionnaire = {
+        'R1': 9,
+        'R2': 10,
+        'R3': 11,
+        'R4': 12,
+        'R5': 13,
+        'R6': 14,
+        'R7': 15,
+        'R8': 16,
+        'R9': 17,
+        'R10': 18,
+        'R11': 19,
+        'R12': 20,
+        'R13': 21,
+        'D5': 22,
+        'D8': 23,
+        'D9': 24,
+        'D10': 25,
+        'D13': 26,
+        'D14': 27,
+        'D15': 28,
+    }
+
+    var referentielDechetObservable = Rx.Observable.create(obs => {
+        try{
+            if (jsonRow.codeinterne){
+                dechet.findOne({where: {codeinterne: jsonRow.codeinterne}})
+                .then(dechet => {
+                    if(dechet){
+                        dechet.updateAttributes({
+                            is_dangereux: jsonRow.is_dangereux,
+                            is_listeverte: jsonRow.is_listeverte
+                        }).then(dechet => {
+                            console.log(dechet);
+                            Object.keys(codeDictionnaire).forEach(code_dr => {
+                                type_traitement.findOne({where: {code_dr : code_dr}})
+                                .then(type_traitement => {
+                                    if(type_traitement){
+                                        var newReferentielDechet = {
+                                            id_dechet: dechet.dataValues.id,
+                                            id_type_traitement: code_dr,
+                                            gestion: jsonRow[codeDictionnaire[code_dr]]
+                                        }
+                                        referentiel_dechet.findOrCreate({where : newReferentielDechet})
+                                        .spread((referentiel_dechet, created) => {
+                                            if(created){
+                                                console.log("New referentiel_dechet successfully created.")
+                                            }
+                                            obs.onNext(referentiel_dechet);
+                                            obs.onCompleted();
+                                        })
+                                    }
+                                })
+                            })
+                        })
+                    }
+                })
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        }
+    });
+    return referentielDechetObservable;
+}
+
 readXlsx = function (filepath) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
@@ -735,33 +842,31 @@ readXlsx = function (filepath) {
     });
     return readObservable;
 };
-readReferentielDechetXlsx = function (filepath) {
+writeReferentielDechetIntoBdd = function (filepath) {
     var workBook = new excel.Workbook();
-    var jsonExcel = [];
 
-    var readObservable = Rx.Observable.create(obs => {
-        // Using directly the filepath, NOT APPENDING ANYTHING
-        workBook.xlsx.readFile(filepath)
+    workBook.xlsx.readFile(filepath)
         .then(() => {
             // use workbook
             console.log("Start reading excel file...")
             workBook.getWorksheet(config.excel.REFERENTIELDECHET_SHEET).eachRow((row,rowNumber) => {
                 if(rowNumber >= config.excel.REFERENTIELDECHET_STARTING_ROW){
-                    var newRow = [null];
-                    row.values.forEach(cell => {
-                        var newCell = cell;
-                        if (typeof cell == "string"){
-                            newCell = cell.trim();
+                    var referentielDechetObservable = convertRowIntoReferentielDechetSequelize(row);
+                    referentielDechetObservable.subscribe({
+                        onNext: referentiel_dechet => {
+                            console.log(referentiel_dechet);
+                        },
+                        onCompleted: () => {
+                            nextRow = true;
                         }
-                        if (cell == ""){
-                            newCell = null;
-                        }
-                        newRow.push(newCell);
                     })
-                    jsonExcel.push(newRow);
                 }
             });
-}
+        })
+        .catch(err => {
+            console.error(err);
+        });
+};
 writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
@@ -801,4 +906,5 @@ writeIntoBdd = function(excelName) {
     });
 };
 
-writeIntoBdd("dataedfmars.xlsx");
+//writeIntoBdd("dataedfmars.xlsx");
+writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");

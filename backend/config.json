@@ -3,7 +3,7 @@
         "DATA_DIR": "./data/",
         "STARTING_ROW": 3,
         "MAIN_SHEET": 1,
-        "REFERENTIELDECHET_SHEET": 13,
+        "REFERENTIELDECHET_SHEET": 1,
         "REFERENTIELDECHET_STARTING_ROW": 9
     },
     "mysql": {
