@@ -57,6 +57,7 @@ toQuantiteeEstimee = function(estimeeBool){
     return null
 }
 toDangereux = function(code_europeen){
+    console.log("code europeen", code_europeen);
     if (code_europeen.slice(8,9) == '*'){
         return 1
     }
@@ -713,31 +714,31 @@ convertRowIntoBordereauSequelize = function(excelRow){
 
 convertRowIntoReferentielDechetSequelize = function(excelRow){
     var jsonRow = {
-        codeinterne: excelRow[3],
-        is_listeverte: toListeVerte(excelRow[5]),
-        is_dangereux: toDangereux(excelRow[8]),
-        gestion_r1: excelRow[9],
-        gestion_r2: excelRow[10],
-        gestion_r3: excelRow[11],
-        gestion_r4: excelRow[12],
-        gestion_r5: excelRow[13],
-        gestion_r6: excelRow[14],
-        gestion_r7: excelRow[15],
-        gestion_r8: excelRow[16],
-        gestion_r9: excelRow[17],
-        gestion_r10: excelRow[18],
-        gestion_r11: excelRow[19],
-        gestion_r12: excelRow[20],
-        gestion_r13: excelRow[21],
-        gestion_d5: excelRow[22],
-        gestion_d8: excelRow[23],
-        gestion_d9: excelRow[24],
-        gestion_d10: excelRow[25],
-        gestion_d13: excelRow[26],
-        gestion_d14: excelRow[27],
-        gestion_d15: excelRow[28]
+        codeinterne: excelRow.getCell(1)+excelRowgetCell(2),
+        is_listeverte: toListeVerte(excelRow.getCell(5)),
+        is_dangereux: toDangereux(excelRow.getCell(8)),
+        gestion_r1: excelRow.getCell(9),
+        gestion_r2: excelRow.getCell(10),
+        gestion_r3: excelRow.getCell(11),
+        gestion_r4: excelRow.getCell(12),
+        gestion_r5: excelRow.getCell(13),
+        gestion_r6: excelRow.getCell(14),
+        gestion_r7: excelRow.getCell(15),
+        gestion_r8: excelRow.getCell(16),
+        gestion_r9: excelRow.getCell(17),
+        gestion_r10: excelRow.getCell(18),
+        gestion_r11: excelRow.getCell(19),
+        gestion_r12: excelRow.getCell(20),
+        gestion_r13: excelRow.getCell(21),
+        gestion_d5: excelRow.getCell(22),
+        gestion_d8: excelRow.getCell(23),
+        gestion_d9: excelRow.getCell(24),
+        gestion_d10: excelRow.getCell(25),
+        gestion_d13: excelRow.getCell(26),
+        gestion_d14: excelRow.getCell(27),
+        gestion_d15: excelRow.getCell(28)
     }
-
+    console.log(jsonRow);
     var codeDictionnaire = {
         'R1': 9,
         'R2': 10,
@@ -787,7 +788,6 @@ convertRowIntoReferentielDechetSequelize = function(excelRow){
                                                 console.log("New referentiel_dechet successfully created.")
                                             }
                                             obs.onNext(referentiel_dechet);
-                                            obs.onCompleted();
                                         })
                                     }
                                 })
@@ -804,7 +804,7 @@ convertRowIntoReferentielDechetSequelize = function(excelRow){
     return referentielDechetObservable;
 }
 
-readXlsx = function (filepath) {
+readXlsx = function (filepath, sheetNumber, startingRow) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
 
@@ -816,9 +816,9 @@ readXlsx = function (filepath) {
         workBook.xlsx.readFile(filepath)
             .then(() => {
                 // use workbook
-                console.log("Start reading excel file...")
-                workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
-                    if(rowNumber >= config.excel.STARTING_ROW){
+                console.log("Start reading excel file...");
+                workBook.getWorksheet(sheetNumber).eachRow(function(row,rowNumber) {
+                    if(rowNumber >= startingRow){
                         var newRow = [null];
                         row.values.forEach(cell => {
                             var newCell = cell;
@@ -843,29 +843,40 @@ readXlsx = function (filepath) {
     return readObservable;
 };
 writeReferentielDechetIntoBdd = function (filepath) {
-    var workBook = new excel.Workbook();
-
-    workBook.xlsx.readFile(filepath)
-        .then(() => {
-            // use workbook
-            console.log("Start reading excel file...")
-            workBook.getWorksheet(config.excel.REFERENTIELDECHET_SHEET).eachRow((row,rowNumber) => {
-                if(rowNumber >= config.excel.REFERENTIELDECHET_STARTING_ROW){
+    var sequelize = db.mySqlConnect();
+    sequelize.authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+        var readXlsxObservable = readXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
+        console.log("readXlsxObservable built");
+        readXlsxObservable.subscribe({
+            onNext: (jsonExcel) => {
+                console.log("Successfully loaded excel data in RAM");
+                jsonExcel.forEach(row => {
                     var referentielDechetObservable = convertRowIntoReferentielDechetSequelize(row);
                     referentielDechetObservable.subscribe({
                         onNext: referentiel_dechet => {
                             console.log(referentiel_dechet);
                         },
-                        onCompleted: () => {
-                            nextRow = true;
+                        onError: err => {
+                            console.error("Error thrown by referentielDechetObservable");
+                            console.error(err)
                         }
-                    })
-                }
-            });
+                    });
+                });
+            },
+            onError: error => {
+                console.error("Error in writeReferentielDechetIntoBdd")
+                console.error(error);
+            },
+            onCompleted: () => {
+                console.log("readXlsx completed");
+            }
         })
-        .catch(err => {
-            console.error(err);
-        });
+    })
+    .catch(err => {
+        console.error('Database connection lost or unable to start');
+    });
 };
 writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
@@ -875,7 +886,7 @@ writeIntoBdd = function(excelName) {
     sequelize.authenticate()
     .then(() => {
         console.log('Connection has been established successfully.');
-        var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName);
+        var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
         console.log("readXlsxObservable built");
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
