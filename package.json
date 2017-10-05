@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/frontend/* --require ./test/test_helper.js --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml; echo SWAG"
+    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/frontend/* --require ./test/test_helper.js --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml;"
   },
   "devDependencies": {
     "babel": "^6.23.0",
