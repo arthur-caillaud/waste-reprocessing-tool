@@ -16,7 +16,7 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 
 //
-toQualification = function(code_dr){
+var toQualification = function(code_dr){
     if (code_dr.slice(0,1) == 'D'){
         return "Elimination"
     }
@@ -27,13 +27,13 @@ toQualification = function(code_dr){
         return null;
     }
 }
-toSequelizeDate = function(excelDate){
+var toSequelizeDate = function(excelDate){
     if (excelDate){
         return (new Date(excelDate.toString().slice(6,10),excelDate.toString().slice(3,5),excelDate.toString().slice(0,2)));
     }
     return null;
 }
-toBordereauFinished = function(etatBordereau){
+var toBordereauFinished = function(etatBordereau){
     if (etatBordereau == 'T'){
         return 1
     }
@@ -42,7 +42,7 @@ toBordereauFinished = function(etatBordereau){
     }
     return null;
 }
-toQuantiteeEstimee = function(estimeeBool){
+var toQuantiteeEstimee = function(estimeeBool){
     if(estimeeBool == "E"){
         return 1
     }
@@ -52,7 +52,7 @@ toQuantiteeEstimee = function(estimeeBool){
     return null
 }
 
-convertRowIntoDechetSequelize = function(excelRow){
+var convertRowIntoDechetSequelize = function(excelRow){
     var newDechet = {
         libelle: excelRow[9],
         code_europeen: excelRow[10],
@@ -74,7 +74,7 @@ convertRowIntoDechetSequelize = function(excelRow){
 
     return dechetObservable;
 };
-convertRowIntoSiteSequelize = function(excelRow){
+var convertRowIntoSiteSequelize = function(excelRow){
     var newSite = {
         site_production: excelRow[16],
         unite_dependance: excelRow[17],
@@ -95,7 +95,7 @@ convertRowIntoSiteSequelize = function(excelRow){
 
     return siteObservable;
 };
-convertRowIntoPrestataireSequelize = function(excelRow){
+var convertRowIntoPrestataireSequelize = function(excelRow){
     var newPrestataireInter = {
         nom: excelRow[30],
         localisation: excelRow[31]
@@ -133,7 +133,7 @@ convertRowIntoPrestataireSequelize = function(excelRow){
 
     return prestataireObservable;
 };
-convertRowIntoTypeTraitementSequelize = function(excelRow){
+var convertRowIntoTypeTraitementSequelize = function(excelRow){
     var typeTraitementPrevu = {
         code_edf: excelRow[7],
         qualification: toQualification(excelRow[6])
@@ -188,7 +188,7 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
 
     return typeTraitementObservable;
 }
-convertRowIntoTransporteurSequelize = function(excelRow){
+var convertRowIntoTransporteurSequelize = function(excelRow){
     console.log("Building TransporteurObservable...");
     var transporteurObservable = Rx.Observable.create((obs) => {
         newTransporteur1 = {
@@ -226,7 +226,7 @@ convertRowIntoTransporteurSequelize = function(excelRow){
     console.log("Successfully built transporteurObservable");
     return transporteurObservable;
 }
-convertRowIntoTransportSequelize = function(excelRow){
+var convertRowIntoTransportSequelize = function(excelRow){
     var transport1 = {
         date: toSequelizeDate(excelRow[20]),
         mode: excelRow[21],
@@ -280,7 +280,7 @@ convertRowIntoTransportSequelize = function(excelRow){
 
     return transportObservable;
 }
-convertRowIntoTraitementSequelize = function(excelRow){
+var convertRowIntoTraitementSequelize = function(excelRow){
     var traitementInter = {
         date_priseencharge: toSequelizeDate(excelRow[33]),
         date_traitement: toSequelizeDate(excelRow[34])
@@ -370,7 +370,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
     console.log("Successfully built traitementObservable");
     return traitementObservable;
 }
-convertRowIntoBordereauSequelize = function(excelRow){
+var convertRowIntoBordereauSequelize = function(excelRow){
     var bordereau = {
         num_bordereau: excelRow[1],
         cas: excelRow[2],
@@ -531,7 +531,7 @@ _old_convertRowIntoSequelize = function(excelRow) {
 };
 */
 
-readXlsx = function (filepath) {
+var readXlsx = function (filepath) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //Warning : function only supports .XLSX files
 
@@ -559,7 +559,7 @@ readXlsx = function (filepath) {
 
     return readObservable;
 }
-writeIntoBdd = function(excelName) {
+var writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
 
