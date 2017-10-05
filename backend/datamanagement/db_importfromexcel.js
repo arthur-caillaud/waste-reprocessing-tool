@@ -699,7 +699,7 @@ convertRowIntoBordereauSequelize = function(excelRow){
 
 readXlsx = function (filepath) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
-    //Warning : function only supports .XLSX files
+    //WARNING: function only supports .XLSX files
 
     var workBook = new excel.Workbook();
     var jsonExcel = [];
@@ -711,7 +711,7 @@ readXlsx = function (filepath) {
                 // use workbook
                 console.log("Start reading excel file...")
                 workBook.getWorksheet(config.excel.MAIN_SHEET).eachRow(function(row,rowNumber) {
-                    if(rowNumber > config.excel.STARTING_ROW){
+                    if(rowNumber >= config.excel.STARTING_ROW){
                         var newRow = [null];
                         row.values.forEach(cell => {
                             var newCell = cell;
@@ -735,6 +735,33 @@ readXlsx = function (filepath) {
     });
     return readObservable;
 };
+readReferentielDechetXlsx = function (filepath) {
+    var workBook = new excel.Workbook();
+    var jsonExcel = [];
+
+    var readObservable = Rx.Observable.create(obs => {
+        // Using directly the filepath, NOT APPENDING ANYTHING
+        workBook.xlsx.readFile(filepath)
+        .then(() => {
+            // use workbook
+            console.log("Start reading excel file...")
+            workBook.getWorksheet(config.excel.REFERENTIELDECHET_SHEET).eachRow((row,rowNumber) => {
+                if(rowNumber >= config.excel.REFERENTIELDECHET_STARTING_ROW){
+                    var newRow = [null];
+                    row.values.forEach(cell => {
+                        var newCell = cell;
+                        if (typeof cell == "string"){
+                            newCell = cell.trim();
+                        }
+                        if (cell == ""){
+                            newCell = null;
+                        }
+                        newRow.push(newCell);
+                    })
+                    jsonExcel.push(newRow);
+                }
+            });
+}
 writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model

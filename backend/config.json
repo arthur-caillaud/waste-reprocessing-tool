@@ -1,8 +1,10 @@
 {
     "excel": {
         "DATA_DIR": "./data/",
-        "STARTING_ROW": 2,
-        "MAIN_SHEET": 1
+        "STARTING_ROW": 3,
+        "MAIN_SHEET": 1,
+        "REFERENTIELDECHET_SHEET": 13,
+        "REFERENTIELDECHET_STARTING_ROW": 9
     },
     "mysql": {
         "url": "91.134.242.69",

@@ -40,6 +40,7 @@ module.exports = function(sequelize, DataTypes) {
 
     dechet.associate = function(models){
          dechet.hasMany(models.bordereau, {foreignKey: 'id_dechet', foreignKeyConstraint: true, sourceKey: 'id'});
+         dechet.hasMany(models.referentiel_dechet, {foreignKey: 'id_dechet', foreignKeyConstraint: true, sourceKey: 'id'})
     };
 
     return dechet;
