@@ -14,7 +14,7 @@ var transport = models.transport;
 var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 
-mySqlConnect = function() {
+var mySqlConnect = function() {
     const sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
             host: config.mysql.url,
             dialect: 'mysql',
@@ -31,7 +31,7 @@ var mysqlDisconnect = function(){
     sequelize.close();
 };
 
-mySqlWipeData = function(){
+var mySqlWipeData = function(){
     /*
     TRUNCATE TABLE 'bordereau';
     TRUNCATE TABLE 'dechet';
@@ -44,7 +44,7 @@ mySqlWipeData = function(){
     */
 }
 
-service = {}
+var service = {};
 service.mySqlConnect = mySqlConnect;
 service.mysqlDisconnect = mysqlDisconnect;
 module.exports = service;
