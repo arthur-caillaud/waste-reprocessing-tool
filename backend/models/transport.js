@@ -3,7 +3,7 @@
 module.exports = function(sequelize, DataTypes) {
   var transport = sequelize.define('transport', {
     id: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER(8).UNSIGNED,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
 
   transport.associate = function(models) {
       transport.belongsTo(models.transporteur, {foreignKey: 'id_transporteur', targetKey: 'id'});
-      transport.belongsTo(models.bordereau, {foreignKey: 'id_transport_1', targetKey: 'id'});
+      transport.hasOne(models.bordereau, {foreignKey: 'id_transport_1', targetKey: 'id'});
   };
   return transport;
 };

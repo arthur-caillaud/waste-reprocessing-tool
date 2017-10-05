@@ -3,7 +3,7 @@
 module.exports = function(sequelize, DataTypes) {
     var traitement = sequelize.define('traitement', {
     id: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER(8).UNSIGNED,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
