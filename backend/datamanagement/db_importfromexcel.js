@@ -16,7 +16,6 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 
 //
-<<<<<<< HEAD
 var toQualification = function(code_dr){
     if (code_dr.slice(0,1) == 'D'){
         return "Elimination"
@@ -26,16 +25,6 @@ var toQualification = function(code_dr){
     }
     else {
         return null;
-=======
-toQualification = function(code_dr){
-    if (typeof code_dr == "string"){
-        if (code_dr.slice(0,1) == 'D'){
-            return "Elimination"
-        }
-        if (code_dr.slice(0,1) == 'R'){
-            return "Recyclage"
-        }
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     }
     return null;
 }
@@ -100,12 +89,7 @@ var convertRowIntoDechetSequelize = function(excelRow){
     });
     return dechetObservable;
 };
-<<<<<<< HEAD
 var convertRowIntoSiteSequelize = function(excelRow){
-=======
-
-convertRowIntoSiteSequelize = function(excelRow){
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     var newSite = {
         site_production: excelRow[16],
         unite_dependance: excelRow[17],
@@ -134,12 +118,7 @@ convertRowIntoSiteSequelize = function(excelRow){
     });
     return siteObservable;
 };
-<<<<<<< HEAD
 var convertRowIntoPrestataireSequelize = function(excelRow){
-=======
-
-convertRowIntoPrestataireSequelize = function(excelRow){
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     var newPrestataireInter = {
         nom: excelRow[30],
         localisation: excelRow[31]
@@ -192,12 +171,7 @@ convertRowIntoPrestataireSequelize = function(excelRow){
     });
     return prestataireObservable;
 };
-<<<<<<< HEAD
 var convertRowIntoTypeTraitementSequelize = function(excelRow){
-=======
-
-convertRowIntoTypeTraitementSequelize = function(excelRow){
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     var typeTraitementPrevu = {
         code_edf: excelRow[7],
         qualification: toQualification(excelRow[6])
@@ -275,13 +249,8 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
 
     return typeTraitementObservable;
 }
-<<<<<<< HEAD
 var convertRowIntoTransporteurSequelize = function(excelRow){
     console.log("Building TransporteurObservable...");
-=======
-
-convertRowIntoTransporteurSequelize = function(excelRow){
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     var transporteurObservable = Rx.Observable.create((obs) => {
         try{
             newTransporteur1 = {
@@ -332,14 +301,8 @@ convertRowIntoTransporteurSequelize = function(excelRow){
         };
     });
     return transporteurObservable;
-<<<<<<< HEAD
 }
 var convertRowIntoTransportSequelize = function(excelRow){
-=======
-};
-
-convertRowIntoTransportSequelize = function(excelRow){
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     var transport1 = {
         date: toSequelizeDate(excelRow[20]),
         mode: excelRow[21],
@@ -406,12 +369,7 @@ convertRowIntoTransportSequelize = function(excelRow){
 
     return transportObservable;
 }
-<<<<<<< HEAD
 var convertRowIntoTraitementSequelize = function(excelRow){
-=======
-
-convertRowIntoTraitementSequelize = function(excelRow){
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     var traitementInter = {
         date_priseencharge: toSequelizeDate(excelRow[33]),
         date_traitement: toSequelizeDate(excelRow[34])
@@ -586,14 +544,8 @@ convertRowIntoTraitementSequelize = function(excelRow){
     }
     return traitementObservable;
 }
-<<<<<<< HEAD
 var convertRowIntoBordereauSequelize = function(excelRow){
     var bordereau = {
-=======
-
-convertRowIntoBordereauSequelize = function(excelRow){
-    var newBordereau = {
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
         num_bordereau: excelRow[1],
         cas: excelRow[2],
         nom_emetteur: excelRow[3],
@@ -728,83 +680,7 @@ convertRowIntoBordereauSequelize = function(excelRow){
     return bordereauObservable;
 }
 
-<<<<<<< HEAD
-/*
-_old_convertRowIntoSequelize = function(excelRow) {
-    //The input is a json read from an xlsx file using readXlsx function
-    //The output is a ready to be pushed in the mySql db
-
-    jsonBordereau = {};
-    jsonBordereau.numeroBordereau = excelRow[1];
-    jsonBordereau.cas = excelRow[2];
-    jsonBordereau.nomEmetteur = excelRow[3];
-    jsonBordereau.etatBordereau = excelRow[4];
-    jsonBordereau.modeSuivi = excelRow[5];
-    jsonBordereau.codeFiliereDRPrevu = excelRow[6];
-    jsonBordereau.codeFiliereEDFPrevu = excelRow[7];
-    jsonBordereau.dechet = {
-        codeInterneDechet: excelRow[8],
-        libelleDechet: excelRow[9],
-        codeEuropeenDechet: excelRow[10],
-        categorieDechet: excelRow[11],
-        indicateurNationalValorisation: excelRow[12],
-        famille: excelRow[13],
-        referenceDossier: excelRow[14]
-    };
-    jsonBordereau.producteur = {
-        entiteProductrice: excelRow[15],
-        site: excelRow[16],
-        uniteDependance: excelRow[17],
-        UPDependance: excelRow[18],
-        metierDependance: excelRow[19]
-    };
-    jsonBordereau.transporteur1 = {
-        dateTransport: excelRow[20],
-        modeTransport: excelRow[21],
-        nom: excelRow[22],
-        localisation: excelRow[23],
-        recepisse: excelRow[24],
-        immatriculationVehicule: excelRow[25],
-        siret: excelRow[26],
-        adr: excelRow[27],
-        quantiteTransportee: excelRow[28],
-        estimeeBool: excelRow[29]
-    };
-    jsonBordereau.traitementIntermediaire = {
-        nom: excelRow[30],
-        localisation: excelRow[31],
-        siret: excelRow[32],
-        datePriseEnCharge: excelRow[33],
-        dateTraitement: excelRow[34],
-        codeFiliereDR: excelRow[35],
-        codeFiliereEDF: excelRow[36]
-    };
-    jsonBordereau.transporteur2 = {
-        nom: excelRow[37],
-        modeTransport: excelRow[38],
-        localisation: excelRow[39],
-        siret: excelRow[40],
-        recepisse: excelRow[41],
-    };
-    jsonBordereau.traitementFinal = {
-        nom: excelRow[42],
-        localisation: excelRow[43],
-        siret: excelRow[44],
-        datePriseEnCharge: excelRow[45],
-        quantite: excelRow[46],
-        dateTraitement: excelRow[47],
-        codeFiliereDR: excelRow[48],
-        codeFiliereEDF: excelRow[49],
-        qualificationTraitement: excelRow[50]
-    };
-    return (new dataSchemas.Bordereau(jsonBordereau));
-};
-*/
-
 var readXlsx = function (filepath) {
-=======
-readXlsx = function (filepath) {
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //Warning : function only supports .XLSX files
 
@@ -841,13 +717,8 @@ readXlsx = function (filepath) {
             })
     });
     return readObservable;
-<<<<<<< HEAD
 }
 var writeIntoBdd = function(excelName) {
-=======
-};
-writeIntoBdd = function(excelName) {
->>>>>>> 779abd29c32a178bc45776425cd05805a418169a
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
 
