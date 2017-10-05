@@ -5,7 +5,7 @@ import GaugeJSX from './jsxelements/gauge1.jsx';
 
 
 const styles = {
-  width   : 200,
+  width   : 150,
   height  : 200,
   padding : 2,
 

@@ -8,35 +8,40 @@ class GaugeJSX extends Component {
         this.state = {
             width: props.width,
             height: props.height,
+            outerRadius: (props.width/2)-10,
+            innerRadius:(props.width/2)-22,
         }
     }
     componentDidMount() {
         var percent =0;
 
 
-        var outerRadius=(this.state.width/2)-10;
-        var innerRadius=outerRadius-12;
-
+        var scale = d3.scale.linear()
+                            .domain([0, 100])
+                            .range([1/4*Math.PI, 7/4*Math.PI])
 
         var color = ['#ec1561','#2a3a46','#202b33'];
 
+        //This is the background arc
         var arc=d3.svg.arc()
-                .innerRadius(innerRadius)
-                .outerRadius(outerRadius)
-                .startAngle((1/4)*Math.PI)
-                .endAngle((7/4)*Math.PI);
+                .innerRadius(this.state.innerRadius)
+                .outerRadius(this.state.outerRadius)
+                .startAngle(function(d){return scale(0)})
+                .endAngle(function(d){return scale(100)});
 
         //The circle is following this
         var arcDummy=d3.svg.arc()
-                .innerRadius((outerRadius-innerRadius)/2+innerRadius)
-                .outerRadius((outerRadius-innerRadius)/2+innerRadius)
-                .startAngle(1/4*Math.PI);
+                .innerRadius((this.state.outerRadius-this.state.innerRadius)/2+this.state.innerRadius)
+                .outerRadius((this.state.outerRadius-this.state.innerRadius)/2+this.state.innerRadius)
+                .startAngle(function(d){return scale(0)})
+                .endAngle(function(d){return scale(100)});
+
 
 
         var arcLine=d3.svg.arc()
-                .innerRadius(innerRadius)
-                .outerRadius(outerRadius)
-                .startAngle(1/4*Math.PI);
+                .innerRadius(this.state.innerRadius)
+                .outerRadius(this.state.outerRadius)
+                .startAngle(function(d){return scale(0)})
 
             var svg = d3.select("#chart")
                 .append("svg")
@@ -100,7 +105,7 @@ class GaugeJSX extends Component {
         var arcTweenOld=function(transition, percent,oldValue) {
             transition.attrTween("d", function (d) {
 
-                var newAngle=(percent/100)*(2*Math.PI);
+                var newAngle=scale(percent);
 
                 var interpolate = d3.interpolate(d.endAngle, newAngle);
 
@@ -120,7 +125,7 @@ class GaugeJSX extends Component {
                 });
             };
 
-        var oldValue=0;
+        var oldValue=100;
 
         var animate=function(){
             pathForeground.transition()
