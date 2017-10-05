@@ -1,4 +1,5 @@
-var assert = require('assert');
+var chai = require('chai');
+var assert = chai.assert;
 var router = require('../../backend/routes/prestataires.controller');
 var service = require('../../backend/services/prestataire.service');
 var Excel = require('../../backend/datamanagement/db_importfromexcel');
@@ -22,7 +23,7 @@ describe("Should correctly find clients in database", function(t) {
 
         it("should be an Observable", (done) => {
             try {
-                assert.isFunction(service.getAllClients().subscribe);
+                assert.isFunction(service.getAllPrestataires().subscribe);
                 done();
             }
             catch(err) {
@@ -32,7 +33,7 @@ describe("Should correctly find clients in database", function(t) {
 
         it("should finish without error", (done) => {
             try {
-                service.getAllClients().subscribe(
+                service.getAllPrestataires().subscribe(
                     (result) => {
                         assert.isNotNull(result);
                         done();
@@ -51,7 +52,7 @@ describe("Should correctly find clients in database", function(t) {
             // var expectedResult = [
             //     ["test","nord",12345,1]
             // ];
-            service.getAllClients().subscribe((result) => {
+            service.getAllPrestataires().subscribe((result) => {
                 try {
                     assert.equal(JSON.stringify(expectedResult), JSON.stringify(result));
                     done();
