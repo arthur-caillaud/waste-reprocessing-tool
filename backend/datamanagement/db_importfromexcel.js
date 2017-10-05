@@ -28,10 +28,14 @@ toQualification = function(code_dr){
     return null;
 }
 toSequelizeDate = function(excelDate){
+    return excelDate
+    date = null;
     if (excelDate){
-        return (new Date(excelDate.toString().slice(6,10),excelDate.toString().slice(3,5),excelDate.toString().slice(0,2)));
+        console.log("excelDate", excelDate);
+        date = excelDate.toString().slice(11,15) + '-' + excelDate.toString().slice(5,7) + '-' + excelDate.toString().slice(8,10);
     }
-    return null;
+    console.log("sequelizeDate", date);
+    return date;
 }
 toBordereauFinished = function(etatBordereau){
     if (etatBordereau == 'T'){
@@ -53,8 +57,12 @@ toQuantiteeEstimee = function(estimeeBool){
 }
 toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
     if (indicateurNationalValorisation == "Oui"){
-
+        return 1
     }
+    if (indicateurNationalValorisation == "Non"){
+        return 0
+    }
+    return null;
 }
 
 convertRowIntoDechetSequelize = function(excelRow){
@@ -63,7 +71,7 @@ convertRowIntoDechetSequelize = function(excelRow){
         libelle: excelRow[9],
         code_europeen: excelRow[10],
         categorie: excelRow[11],
-        indicateur_national_valorisation: excelRow[12],
+        indicateur_national_valorisation: toIndicateurNationalValorisation(excelRow[12]),
         famille: excelRow[13]
     };
 
@@ -75,11 +83,15 @@ convertRowIntoDechetSequelize = function(excelRow){
                     if (created){
                         console.log("Successfully created new dechet");
                     }
-                    obs.onNext(dechet);
+                    obs.onNext({
+                        dechet: dechet
+                    });
                 });
             }
             else {
-                obs.onNext(null);
+                obs.onNext({
+                    dechet_isNull: true
+                });
             }
         }
         catch(Exception){
@@ -91,16 +103,16 @@ convertRowIntoDechetSequelize = function(excelRow){
 
 convertRowIntoSiteSequelize = function(excelRow){
     var newSite = {
-        site_production: excelRow[16],
-        unite_dependance: excelRow[17],
-        up_dependance: excelRow[18],
-        metier_dependance: excelRow[19]
+        site_production: (typeof excelRow[16] == "string" ? excelRow[16].toUpperCase() : excelRow[16]),
+        unite_dependance: (typeof excelRow[17] == "string" ? excelRow[17].toUpperCase() : excelRow[17]),
+        up_dependance: (typeof excelRow[18] == "string" ? excelRow[18].toUpperCase() : excelRow[18]),
+        metier_dependance: (typeof excelRow[19] == "string" ? excelRow[19].toUpperCase() : excelRow[19])
     };
 
     var siteObservable = Rx.Observable.create(obs => {
         try {
             if(excelRow[15]){
-                site.findOrCreate({where: {nom: excelRow[15]}, defaults: newSite})
+                site.findOrCreate({where: {nom: (typeof excelRow[15] == "string" ? excelRow[15].toUpperCase() : excelRow[15])}, defaults: newSite})
                 .spread((site, created) => {
                     if (created){
                         console.log("Successfully created new site");
@@ -121,12 +133,12 @@ convertRowIntoSiteSequelize = function(excelRow){
 
 convertRowIntoPrestataireSequelize = function(excelRow){
     var newPrestataireInter = {
-        nom: excelRow[30],
-        localisation: excelRow[31]
+        nom: (typeof excelRow[30] == "string" ? excelRow[30].toUpperCase() : excelRow[30]),
+        localisation: (typeof excelRow[31] == "string" ? excelRow[31].toUpperCase() : excelRow[31])
     };
     var newPrestataireFinal = {
-        nom: excelRow[42],
-        localisation: excelRow[43]
+        nom: (typeof excelRow[42] == "string" ? excelRow[42].toUpperCase() : excelRow[42]),
+        localisation: (typeof excelRow[43] == "string" ? excelRow[43].toUpperCase() : excelRow[43])
     };
 
     var prestataireObservable = Rx.Observable.create((obs) => {
@@ -557,13 +569,13 @@ convertRowIntoBordereauSequelize = function(excelRow){
         bordereau_finished: toBordereauFinished(excelRow[4]),
         mode_suivi: excelRow[5],
         ref_dossier: excelRow[14],
-        quantitee_transportee: excelRow[28],
-        quantitee_finale: excelRow[46],
+        quantitee_transportee: parseFloat((excelRow[28]).toFixed(5)),
+        quantitee_finale: parseFloat((excelRow[46]).toFixed(5)),
         quantitee_estimee: toQuantiteeEstimee(excelRow[29])
     }
 
     const findOrCreateBordereau = function(obs){
-        if(newBordereau.id_dechet !== undefined || newBordereau.id_site !== undefined || newBordereau.id_transport_1 !== undefined || newBordereau.id_transport_2 !== undefined || newBordereau.id_traitement_final !== undefined || newBordereau.id_traitement_prevu !== undefined || newBordereau.id_traitement_inter !== undefined ){
+        if(newBordereau.id_dechet !== undefined && newBordereau.id_site !== undefined && newBordereau.id_transport_1 !== undefined && newBordereau.id_transport_2 !== undefined && newBordereau.id_traitement_final !== undefined && newBordereau.id_traitement_prevu !== undefined && newBordereau.id_traitement_inter !== undefined ){
             bordereau.findOrCreate({where: newBordereau})
             .spread((bordereau, created) => {
                 if (created){
@@ -607,11 +619,11 @@ convertRowIntoBordereauSequelize = function(excelRow){
             });
             dechetObservable.subscribe({
                 onNext: value => {
-                    if(value){
-                        newBordereau.id_dechet = value.dataValues.id;
+                    if(value.dechet){
+                        newBordereau.id_dechet = value.dechet.dataValues.id;
                         findOrCreateBordereau(obs);
                     }
-                    if(value === null){
+                    if(value.dechet_isNull){
                         newBordereau.id_dechet = null;
                         findOrCreateBordereau(obs);
                     }
@@ -761,37 +773,5 @@ writeIntoBdd = function(excelName) {
         console.error('Database connection lost or unable to start');
     });
 };
-
-//Export du service
-
-/*var service = {}
-service.readXlsx = readXlsx;
-service.writeBordereauIntoBDD = writeBordereauIntoBdd;
-service.convertRowIntoSequelize = convertRowIntoSequelize;
-module.exports = service;*/
-
-
-//Phase d'essai
-
-/*readXlsx(config.excel.DATA_DIR + "dataedfmars.xlsx").subscribe({
-    onNext: excel => {
-        convertRowIntoDechetSequelize(excel[3]).subscribe({
-            onNext: value => {
-                console.log(value);
-            },
-            onCompleted: {
-            },
-            onError: error => {
-                console.error(error);
-            }
-        });
-    },
-    onError: err => {
-        console.error(err);
-    },
-    onCompleted: () => {
-        console.log("completed");
-    }
-})*/
 
 writeIntoBdd("dataedfmars.xlsx");

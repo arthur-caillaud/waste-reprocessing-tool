@@ -16,14 +16,14 @@ function RenderPrestatairesPage(req, res) {
     res.render("renvoyer la page vision prestataires");
 };
 
-function getPrestatairesCloseToClient(req, res) {
+function getPrestatairesCloseToPrestataire(req, res) {
 /*
     Note that this function expects req.body to be filled with a json.strinkgify using
     the fetch module.
 */
-    client = req.body.clientName;
+    prestataire = req.body.prestataireName;
     distance = req.body.distance;
-    var getCloseClientsObserver = {
+    var getClosePrestatairesObserver = {
         onError: function(error) {
             console.log(error);
             res.status(400).send(error);
@@ -32,7 +32,7 @@ function getPrestatairesCloseToClient(req, res) {
             res.json(listePrestataires);
         }
     }
-    prestataireService.getClientsCloseToClient(client, distance).subscribe(getCloseClientsObserver);
+    prestataireService.getPrestatairesCloseToPrestataire(prestataire, distance).subscribe(getClosePrestatairesObserver);
 };
 
 function getAllPrestataires (req, res) {
@@ -58,23 +58,23 @@ function getPrestataireByName (req, res) {
             res.json(listePrestataires);
         }
     }
-    prestataireService.getPrestataireByName(req.params.clientName).subscribe(getPrestataireObserver);
+    prestataireService.getPrestataireByName(req.params.prestataireName).subscribe(getPrestataireObserver);
 };
 
-function getIndicatorsForClient (req, res) {
+function getIndicatorsForPrestataire (req, res) {
 
     //to be completed
-    client = req.body.clientName;
+    prestataire = req.body.prestataireName;
 
 }
 
 
 //routes to above functions
-router.get('/getPrestatairesCloseToClient', getPrestatairesCloseToClient);
+router.get('/getPrestatairesCloseToPrestataire', getPrestatairesCloseToPrestataire);
 router.get('/getPrestataires', getAllPrestataires);
-router.get('/getPrestataire/:clientName', getPrestataireByName);
+router.get('/getPrestataire/:prestataireName', getPrestataireByName);
 router.get('/', RenderPrestatairesPage);
-router.get('/getIndicatorsForClient', getIndicatorsForClient);
+router.get('/getIndicatorsForPrestataire', getIndicatorsForPrestataire);
 
 //Exporting module
 module.exports = router;

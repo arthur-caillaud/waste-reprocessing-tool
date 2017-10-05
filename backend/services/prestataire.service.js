@@ -4,16 +4,16 @@ var service = {};
 var sequelize = require('sequelize');
 
 var models = require('../models/');
-var Client = models.prestataire;
+var Prestataire = models.prestataire;
 var Distance = models.distance;
 
-function getAllClients() {
+function getAllPrestataires() {
     /* This function creates an Observable and returns it. It searches for all
-    clients */
-    var getAllClientsObservable = Rx.Observable.create(function (obs) {
-            Client.findAll()
-            .then(function(clients){
-                obs.onCompleted(clients);
+    prestataires */
+    var getAllPrestatairesObservable = Rx.Observable.create(function (obs) {
+            Prestataire.findAll()
+            .then(function(prestataires){
+                obs.onCompleted(prestataires);
             })
             .catch (function(error) {
                 obs.onError(error);
@@ -21,67 +21,67 @@ function getAllClients() {
 
 
     });
-    return getAllClientsObservable;
+    return getAllPrestatairesObservable;
 }
 
-function getClientByName(clientName){
+function getPrestataireByName(prestataireName){
 
     /* This function creates an Observable and returns it. It should
-    search for all the Clients that have a name containing ClientName
+    search for all the Prestataires that have a name containing PrestataireName
     */
-    var getClientByNameObservable = Rx.Observable.create(function (obs) {
-        Client.findAll({
+    var getPrestataireByNameObservable = Rx.Observable.create(function (obs) {
+        Prestataire.findAll({
             where: {
-                nom: {$like: '%clientName%'}
+                nom: {$like: '%prestataireName%'}
             }
         })
-        .then(function(clients) {
-            obs.onCompleted(clients);
+        .then(function(prestataires) {
+            obs.onCompleted(prestataires);
         })
         .catch (function(error) {
             obs.onError(error);
         });
     });
-    return getClientByNameObservable;
+    return getPrestataireByNameObservable;
 
 };
 
-function getClientsCloseToClient(clientName, givenDistance) {
+function getPrestatairesCloseToPrestataire(prestataireName, givenDistance) {
     /* This function creates an Observable and returns it. It should searches
-    for all the Clients that are close enough to the selected Client
+    for all the Prestataires that are close enough to the selected Prestataire
     */
-    var getCloseClientsObservable = Rx.Observable.create(function(obs) {
+    var getClosePrestatairesObservable = Rx.Observable.create(function(obs) {
         Distance.findAll({
             where: {
                 $or: [
                     {
-                        prestataire1: {$like: '%clientName%'}
+                        prestataire1: {$like: '%prestataireName%'}
                     },
                     {
-                        prestataire2: {$like: '%clientName%'},
+                        prestataire2: {$like: '%prestataireName%'},
                     }
                 ],
                 distance: {$lte: givenDistance}
             }
         })
-        .then(function(clients) {
+        .then(function(prestataires) {
             /*
             careful, this sends back objects looking like
-            {clientName, ClosePrestataire, Distance}
+            {prestataireName, ClosePrestataire, Distance}
             */
-            obs.onCompleted(clients);
+            obs.onCompleted(prestataires);
         })
         .catch(function(error) {
             obs.onError(error);
         });
     });
-    return getCloseClientsObservable;
+    return getClosePrestatairesObservable;
 };
 
 
 //All exported functionalities
-service.getAllClients = getAllClients;
-service.getClientByName = getClientByName;
-service.getClientsCloseToClient = getClientsCloseToClient;
+service.getAllPrestataires = getAllPrestataires;
+service.getPrestataireByName = getPrestataireByName;
+service.getPrestatairesCloseToPrestataire = getPrestatairesCloseToPrestataire;
 
 module.exports = service;
