@@ -9,9 +9,16 @@
   padding-top: 0.2%;
   padding-bottom: 0.2%;
   flex-direction: row;
+  overflow: hidden;
+  position: static;
 }
 
 .location-selector {
   display: inline-block;
   vertical-align: top;
+}
+
+.location-list {
+  position: relative;
+  top: -10%;
 }

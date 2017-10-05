@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Glyphicon } from 'react-bootstrap';
+import { Glyphicon, Popover, OverlayTrigger } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
 import '../styles/location-selection.css'
@@ -22,7 +22,6 @@ class LocationSelector extends Component {
 
   render() {
 
-    console.log(this.state);
     // create location list to be displayed
     var i = 0;
     var locationsList = [];
@@ -32,21 +31,28 @@ class LocationSelector extends Component {
       }
     }
 
+    const list = (
+      <Popover id="list" title="Choisissez un lieu">
+        <ListGroup>
+          { locationsList }
+        </ListGroup>
+      </Popover>
+    );
+
+    if (this.state.listHidden) {
+      var button = (<Glyphicon glyph='triangle-right' onClick={() => this.displayList()}/>);
+    }
+    else {
+      var button = (<Glyphicon glyph='triangle-bottom' onClick={() => this.displayList()}/>);
+    }
+
     return (
       <div className="location-selector">
-      {this.state.locations[this.state.selected]}
-      <span hidden={ !this.state.listHidden }>
-        <Glyphicon onClick={() => {this.displayList()}} glyph='triangle-right'/>
-      </span>
-      <span hidden={ this.state.listHidden }>
-        <Glyphicon hidden="true" onClick={() => {this.displayList()}} glyph='triangle-bottom'/>
-      </span>
-      <div hidden={ this.state.listHidden }>
-        <ListGroup>
-          {locationsList}
-        </ListGroup>
+        {this.state.locations[this.state.selected]}
+        <OverlayTrigger onClick={() => this.displayList()} trigger="click" placement="bottom" overlay={list}>
+          {button}
+        </OverlayTrigger>
       </div>
-    </div>
     )
   }
 }
