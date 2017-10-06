@@ -26,4 +26,20 @@ describe("Server",function(){
     }
   });
 
+  it("should return 404 for an unexisting route", () => {
+    try {
+      server
+        .get("/dummy/adress/that/does/not/exist")
+        .expect("Content-type", /text/)
+        .expect(404)
+        .end((err, res) => {
+          assert.equal(res.status, 404);
+          done();
+        });
+    }
+    catch (err) {
+      done(err);
+    }
+  })
+
 });
