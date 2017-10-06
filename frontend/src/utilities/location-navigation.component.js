@@ -16,7 +16,9 @@ class LocationNavigation extends Component {
     var globalSites = ["DPEH"];
     var units1 = ["Unité de production Centre", "mock2", "mock3"];
     var units2 = ["GEH Limoge", "mock4", "mock5"];
-    var sites = ["Groupement de Maulte-Taurio", "mock6", "mock7"];
+    var sites = ["Groupement de Maulte-Taurio", "mock6", "mock7",
+   "mock6", "mock7", "mock6", "mock7", "mock6", "mock7", "mock6", "mock7",
+   "mock6", "mock7", "mock6", "mock7"];
 
     this.state = {
       currentValues: [0, 0, 0, 0],

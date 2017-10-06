@@ -7,7 +7,12 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var prestataires = require('./routes/prestataires.controller')
+var bordereaux = require('./routes/bordereaux.controller');
+var prestataires = require('./routes/prestataires.controller');
+var prestatairesNew = require('./routes/prestataires-new.controller');
+var dechets = require('./routes/dechets.controller');
+
+var config = require('./config.json');
 
 var app = express();
 
@@ -29,7 +34,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
+app.use('/bordereaux', bordereaux);
+app.use('/dechets', dechets);
 app.use('/prestataires', prestataires);
+app.use('/prestataires/new', prestataires);
 
 
 
@@ -41,7 +49,20 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-app.listen(4000);
+// allow access-controll headers
+app.use(function(req, res, next) {
+  // allow for cross-referencing
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // allow different requests
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  next();
+});
+
+// run the server on the provided port on config.json file
+var port = config.server.listen_port;
+app.listen(port);
+console.log("server running on port " + port);
 
 // error handler
 app.use(function(err, req, res, next) {
