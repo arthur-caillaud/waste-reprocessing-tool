@@ -1,23 +1,24 @@
-var excel = require('exceljs');
-var Rx = require ('rx');
-var config = require('../config.json');
-var Sequelize = require('sequelize');
-var db = require('./db.js');
+const excel = require('exceljs');
+const Rx = require ('rx');
+const config = require('../config.json');
+const Sequelize = require('sequelize');
+const db = require('./db.js');
+const forEach = require('async-foreach').forEach;
 
 //Import data models
-var models = require('../models/');
-var bordereau = models.bordereau;
-var dechet = models.dechet;
-var prestataire = models.prestataire;
-var site = models.site;
-var traitement = models.traitement;
-var transport = models.transport;
-var transporteur = models.transporteur;
-var type_traitement = models.type_traitement;
-var referentiel_dechet = models.referentiel_dechet;
+const models = require('../models/');
+const bordereau = models.bordereau;
+const dechet = models.dechet;
+const prestataire = models.prestataire;
+const site = models.site;
+const traitement = models.traitement;
+const transport = models.transport;
+const transporteur = models.transporteur;
+const type_traitement = models.type_traitement;
+const referentiel_dechet = models.referentiel_dechet;
 
-//
-toQualification = function(code_dr){
+//Functions used converting raw excel data in fully pushable sequelize data
+const toQualification = function(code_dr){
     if (typeof code_dr == "string"){
         if (code_dr.slice(0,1) == 'D'){
             return "Elimination"
@@ -28,7 +29,7 @@ toQualification = function(code_dr){
     }
     return null;
 }
-toSequelizeDate = function(excelDate){
+const toSequelizeDate = function(excelDate){
     return excelDate
     date = null;
     if (excelDate){
@@ -36,7 +37,7 @@ toSequelizeDate = function(excelDate){
     }
     return date;
 }
-toBordereauFinished = function(etatBordereau){
+const toBordereauFinished = function(etatBordereau){
     if (etatBordereau == 'T'){
         return 1
     }
@@ -45,7 +46,7 @@ toBordereauFinished = function(etatBordereau){
     }
     return null;
 }
-toQuantiteeEstimee = function(estimeeBool){
+const toQuantiteeEstimee = function(estimeeBool){
     if(estimeeBool == "E"){
         return 1
     }
@@ -54,19 +55,19 @@ toQuantiteeEstimee = function(estimeeBool){
     }
     return null
 }
-toDangereux = function(code_europeen){
+const toDangereux = function(code_europeen){
     if (code_europeen.slice(8,9) == '*'){
         return 1
     }
     return 0
 };
-toListeVerte = function(liste_verte){
+const toListeVerte = function(liste_verte){
     if(liste_verte == 'v'){
         return 1;
     }
     return 0;
 };
-toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
+const toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
     if (indicateurNationalValorisation == "Oui"){
         return 1
     }
@@ -76,7 +77,8 @@ toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
     return null;
 }
 
-convertRowIntoDechetSequelize = function(excelRow){
+//Observables function used to convert a whole excelRow into a sequelize object and push it into database
+const convertRowIntoDechetSequelize = function(excelRow){
     var newDechet = {
         codeinterne: excelRow[8],
         is_dangereux: toDangereux(excelRow[10]),
@@ -113,7 +115,7 @@ convertRowIntoDechetSequelize = function(excelRow){
     return dechetObservable;
 };
 
-convertRowIntoSiteSequelize = function(excelRow){
+const convertRowIntoSiteSequelize = function(excelRow){
     var newSite = {
         site_production: (typeof excelRow[16] == "string" ? excelRow[16].toUpperCase() : excelRow[16]),
         unite_dependance: (typeof excelRow[17] == "string" ? excelRow[17].toUpperCase() : excelRow[17]),
@@ -143,7 +145,7 @@ convertRowIntoSiteSequelize = function(excelRow){
     return siteObservable;
 };
 
-convertRowIntoPrestataireSequelize = function(excelRow){
+const convertRowIntoPrestataireSequelize = function(excelRow){
     var newPrestataireInter = {
         nom: (typeof excelRow[30] == "string" ? excelRow[30].toUpperCase() : excelRow[30]),
         localisation: (typeof excelRow[31] == "string" ? excelRow[31].toUpperCase() : excelRow[31])
@@ -197,7 +199,7 @@ convertRowIntoPrestataireSequelize = function(excelRow){
     return prestataireObservable;
 };
 
-convertRowIntoTypeTraitementSequelize = function(excelRow){
+const convertRowIntoTypeTraitementSequelize = function(excelRow){
     var typeTraitementPrevu = {
         code_edf: excelRow[7],
         qualification: toQualification(excelRow[6])
@@ -276,7 +278,7 @@ convertRowIntoTypeTraitementSequelize = function(excelRow){
     return typeTraitementObservable;
 }
 
-convertRowIntoTransporteurSequelize = function(excelRow){
+const convertRowIntoTransporteurSequelize = function(excelRow){
     var transporteurObservable = Rx.Observable.create((obs) => {
         try{
             newTransporteur1 = {
@@ -329,7 +331,7 @@ convertRowIntoTransporteurSequelize = function(excelRow){
     return transporteurObservable;
 };
 
-convertRowIntoTransportSequelize = function(excelRow){
+const convertRowIntoTransportSequelize = function(excelRow){
     var transport1 = {
         date: toSequelizeDate(excelRow[20]),
         mode: excelRow[21],
@@ -397,7 +399,7 @@ convertRowIntoTransportSequelize = function(excelRow){
     return transportObservable;
 }
 
-convertRowIntoTraitementSequelize = function(excelRow){
+const convertRowIntoTraitementSequelize = function(excelRow){
     var traitementInter = {
         date_priseencharge: toSequelizeDate(excelRow[33]),
         date_traitement: toSequelizeDate(excelRow[34])
@@ -573,7 +575,7 @@ convertRowIntoTraitementSequelize = function(excelRow){
     return traitementObservable;
 }
 
-convertRowIntoBordereauSequelize = function(excelRow){
+const convertRowIntoBordereauSequelize = function(excelRow){
     var newBordereau = {
         num_bordereau: excelRow[1],
         cas: excelRow[2],
@@ -594,6 +596,7 @@ convertRowIntoBordereauSequelize = function(excelRow){
                     console.log("Successfully created new bordereau");
                 }
                 obs.onNext(bordereau);
+                obs.onCompleted();
             })
         }
     }
@@ -709,7 +712,7 @@ convertRowIntoBordereauSequelize = function(excelRow){
     return bordereauObservable;
 }
 
-convertRowIntoReferentielDechetSequelize = function(excelRow){
+const convertRowIntoReferentielDechetSequelize = function(excelRow){
     var jsonRow = {
         codeinterne: excelRow[1]+(excelRow[2]? excelRow[2] : ""),
         is_listeverte: toListeVerte(excelRow[5]),
@@ -789,7 +792,8 @@ convertRowIntoReferentielDechetSequelize = function(excelRow){
     return referentielDechetObservable;
 }
 
-readXlsx = function (filepath, sheetNumber, startingRow) {
+//Function used to read the data extracted from the Ogive EDF database
+const readXlsx = function (filepath, sheetNumber, startingRow) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
 
@@ -827,7 +831,9 @@ readXlsx = function (filepath, sheetNumber, startingRow) {
     });
     return readObservable;
 };
-readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) {
+
+//Function used to read the Referentiel Dechet excel sheet which provides the liste verte and reglementation
+const readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
 
@@ -858,7 +864,8 @@ readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) {
     });
     return readObservable;
 };
-writeReferentielDechetIntoBdd = function (filepath) {
+
+const writeReferentielDechetIntoBdd = function (filepath) {
     var sequelize = db.mySqlConnect();
     sequelize.authenticate()
     .then(() => {
@@ -894,7 +901,8 @@ writeReferentielDechetIntoBdd = function (filepath) {
         console.error('Database connection lost or unable to start');
     });
 };
-writeIntoBdd = function(excelName) {
+
+const writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
 
@@ -907,8 +915,12 @@ writeIntoBdd = function(excelName) {
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
                 console.log("Successfully loaded excel data in RAM");
-                jsonExcel.forEach(row => {
-                    var bordereauObservable = convertRowIntoBordereauSequelize(row);
+                const allDone = (notAborted, arr) => {
+                    console.log("done", notAborted, arr);
+                }
+                forEach(jsonExcel, (bordereau, rowNumber) => {
+                    done = this.async();
+                    let bordereauObservable = convertRowIntoBordereauSequelize(bordereau);
                     bordereauObservable.subscribe({
                         onNext: bordereau => {
                             console.log("Successfully pushed excel whole row into database");
@@ -916,15 +928,19 @@ writeIntoBdd = function(excelName) {
                         onError: error => {
                             console.error("Error thrown by bordereauObservable", error);
                         },
-                    })
-                });
+                        onCompleted: () => {
+                            done();
+                        }
+                    });
+                    done();
+                }, allDone);
             },
             onError: error => {
                 console.error("Error in writeIntoBdd")
                 console.error(error);
             },
             onCompleted: () => {
-                console.log("readXlsx completed");
+                console.log("Successfully read whole excel");
             }
         })
     })
@@ -933,17 +949,6 @@ writeIntoBdd = function(excelName) {
     });
 };
 
-//writeIntoBdd("dataedfmars.xlsx");
-writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-/*readReferentielDechetXlsx("./data/liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW)
-.subscribe({
-    onNext: excel => {
-        console.log(excel);
-    },
-    onCompleted: () => {
-
-    },
-    onError: err => {
-        console.error(err)
-    }
-})*/
+//TEST PHASE
+//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+writeIntoBdd("dataedfmars.xlsx");
