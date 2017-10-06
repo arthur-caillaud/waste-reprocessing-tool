@@ -2,6 +2,7 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
+const Op = sequelize.Op;
 
 //Import required local modules
 var models = require('../models/');
@@ -14,6 +15,7 @@ var traitement = models.traitement;
 var transport = models.transport;
 var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
+var referentiel_dechet = models.referentiel_dechet;
 
 function getAllEcartsDePesee(tolerance){
     var getAllEcartsDePeseeObservable = Rx.Observable.create(obs => {
@@ -62,6 +64,37 @@ function getAllIncoherencesFilieres(){
     })
     return getAllIncoherencesFilieresObservable;
 };
+
+function getAllFilieresInterdites(){
+    var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
+        bordereau.findAll({
+            include: [
+            {
+                model: dechet,
+                required: true,
+                include: {
+                    model: referentiel_dechet,
+                    required: true,
+                    where: {
+                        gestion: 'r'
+                    }
+                }
+            },
+            {
+                model: traitement,
+                required: true
+            }],
+            where: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement'))
+        }).
+        then(bordereauxAvecFilieresInterdites => {
+            obs.onNext(bordereaux);
+        }).
+        catch(err => {
+            obs.onError(err)
+        })
+    });
+    return getAllFilieresInterditesObservable;
+}
 
 var service = {}
 service.getAllEcartsDePesee = getAllEcartsDePesee;

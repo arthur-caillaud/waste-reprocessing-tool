@@ -32,10 +32,8 @@ toSequelizeDate = function(excelDate){
     return excelDate
     date = null;
     if (excelDate){
-        console.log("excelDate", excelDate);
         date = excelDate.toString().slice(11,15) + '-' + excelDate.toString().slice(5,7) + '-' + excelDate.toString().slice(8,10);
     }
-    console.log("sequelizeDate", date);
     return date;
 }
 toBordereauFinished = function(etatBordereau){
@@ -57,7 +55,6 @@ toQuantiteeEstimee = function(estimeeBool){
     return null
 }
 toDangereux = function(code_europeen){
-    console.log("code europeen", code_europeen);
     if (code_europeen.slice(8,9) == '*'){
         return 1
     }
@@ -714,30 +711,10 @@ convertRowIntoBordereauSequelize = function(excelRow){
 
 convertRowIntoReferentielDechetSequelize = function(excelRow){
     var jsonRow = {
-        codeinterne: excelRow.getCell(1)+excelRowgetCell(2),
-        is_listeverte: toListeVerte(excelRow.getCell(5)),
-        is_dangereux: toDangereux(excelRow.getCell(8)),
-        gestion_r1: excelRow.getCell(9),
-        gestion_r2: excelRow.getCell(10),
-        gestion_r3: excelRow.getCell(11),
-        gestion_r4: excelRow.getCell(12),
-        gestion_r5: excelRow.getCell(13),
-        gestion_r6: excelRow.getCell(14),
-        gestion_r7: excelRow.getCell(15),
-        gestion_r8: excelRow.getCell(16),
-        gestion_r9: excelRow.getCell(17),
-        gestion_r10: excelRow.getCell(18),
-        gestion_r11: excelRow.getCell(19),
-        gestion_r12: excelRow.getCell(20),
-        gestion_r13: excelRow.getCell(21),
-        gestion_d5: excelRow.getCell(22),
-        gestion_d8: excelRow.getCell(23),
-        gestion_d9: excelRow.getCell(24),
-        gestion_d10: excelRow.getCell(25),
-        gestion_d13: excelRow.getCell(26),
-        gestion_d14: excelRow.getCell(27),
-        gestion_d15: excelRow.getCell(28)
-    }
+        codeinterne: excelRow[1]+(excelRow[2]? excelRow[2] : ""),
+        is_listeverte: toListeVerte(excelRow[5]),
+        is_dangereux: toDangereux(excelRow[8]),
+    };
     console.log(jsonRow);
     var codeDictionnaire = {
         'R1': 9,
@@ -760,7 +737,7 @@ convertRowIntoReferentielDechetSequelize = function(excelRow){
         'D13': 26,
         'D14': 27,
         'D15': 28,
-    }
+    };
 
     var referentielDechetObservable = Rx.Observable.create(obs => {
         try{
@@ -779,19 +756,27 @@ convertRowIntoReferentielDechetSequelize = function(excelRow){
                                     if(type_traitement){
                                         var newReferentielDechet = {
                                             id_dechet: dechet.dataValues.id,
-                                            id_type_traitement: code_dr,
-                                            gestion: jsonRow[codeDictionnaire[code_dr]]
+                                            id_type_traitement: type_traitement.dataValues.id,
+                                            gestion: excelRow[codeDictionnaire[code_dr]]
+                                        };
+                                        if(newReferentielDechet.gestion){
+                                            referentiel_dechet.findOrCreate({where : newReferentielDechet})
+                                            .spread((referentiel_dechet, created) => {
+                                                if(created){
+                                                    console.log("New referentiel_dechet successfully created.")
+                                                }
+                                                obs.onNext(referentiel_dechet);
+                                            });
                                         }
-                                        referentiel_dechet.findOrCreate({where : newReferentielDechet})
-                                        .spread((referentiel_dechet, created) => {
-                                            if(created){
-                                                console.log("New referentiel_dechet successfully created.")
-                                            }
-                                            obs.onNext(referentiel_dechet);
-                                        })
                                     }
                                 })
-                            })
+                                .catch(err => {
+                                    obs.onError(err)
+                                });
+                            });
+                        })
+                        .catch(err => {
+                            obs.onError(err)
                         })
                     }
                 })
@@ -842,12 +827,43 @@ readXlsx = function (filepath, sheetNumber, startingRow) {
     });
     return readObservable;
 };
+readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) {
+    //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
+    //WARNING: function only supports .XLSX files
+
+    var workBook = new excel.Workbook();
+    var jsonExcel = [];
+
+    var readObservable = Rx.Observable.create(obs => {
+        // Using directly the filepath, NOT APPENDING ANYTHING
+        workBook.xlsx.readFile(filepath)
+            .then(() => {
+                // use workbook
+                console.log("Start reading excel file...");
+                workBook.getWorksheet(sheetNumber).eachRow(function(row,rowNumber) {
+                    if(rowNumber >= startingRow){
+                        newRow = [null];
+                        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+                            newRow.push(cell.value);
+                        });
+                        jsonExcel.push(newRow);
+                    }
+                });
+                obs.onNext(jsonExcel);
+                obs.onCompleted();
+            })
+            .catch(error => {
+                obs.onError(error);
+            })
+    });
+    return readObservable;
+};
 writeReferentielDechetIntoBdd = function (filepath) {
     var sequelize = db.mySqlConnect();
     sequelize.authenticate()
     .then(() => {
         console.log('Connection has been established successfully.');
-        var readXlsxObservable = readXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
+        var readXlsxObservable = readReferentielDechetXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
         console.log("readXlsxObservable built");
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
@@ -856,11 +872,11 @@ writeReferentielDechetIntoBdd = function (filepath) {
                     var referentielDechetObservable = convertRowIntoReferentielDechetSequelize(row);
                     referentielDechetObservable.subscribe({
                         onNext: referentiel_dechet => {
-                            console.log(referentiel_dechet);
+                            console.log("Successfully pushed referentiel_dechet into database")
                         },
                         onError: err => {
                             console.error("Error thrown by referentielDechetObservable");
-                            console.error(err)
+                            console.error(err);
                         }
                     });
                 });
@@ -919,3 +935,15 @@ writeIntoBdd = function(excelName) {
 
 //writeIntoBdd("dataedfmars.xlsx");
 writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+/*readReferentielDechetXlsx("./data/liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW)
+.subscribe({
+    onNext: excel => {
+        console.log(excel);
+    },
+    onCompleted: () => {
+
+    },
+    onError: err => {
+        console.error(err)
+    }
+})*/

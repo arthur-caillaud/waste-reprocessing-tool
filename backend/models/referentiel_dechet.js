@@ -23,8 +23,11 @@ module.exports = function(sequelize, DataTypes) {
                 model: 'type_traitement',
                 key: 'id'
             }
-        }
         },
+        gestion: {
+            type: DataTypes.CHAR(1),
+            allowNull: true
+        }},
         {
             tableName: 'referentiel_dechet',
             timestamps: false
