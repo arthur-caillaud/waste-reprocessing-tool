@@ -32,7 +32,7 @@ class LocationSelector extends Component {
     }
 
     const list = (
-      <Popover id="list" title="Choisissez un lieu">
+      <Popover className="location-list" id="list" title="Choisissez un lieu">
         <ListGroup>
           { locationsList }
         </ListGroup>

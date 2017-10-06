@@ -19,6 +19,6 @@
 }
 
 .location-list {
-  position: relative;
-  top: -10%;
+  height: 15%;
+  overflow: scroll;
 }
