@@ -18,7 +18,7 @@ anything concerning the trashes
 
 /**
   * @api {GET} /dechets Recherche tous les déchets
-  * @apiGroup Déchets
+  * @apiGroup Dechets
   * @apiVersion 1.0.0
   *
   * @apiExample {curl} Exemple
@@ -37,7 +37,7 @@ function getAllDechets(req, res) {
 
 /**
   * @api {GET} /dechets/:id Recherche un déchet selon son id
-  * @apiGroup Déchets
+  * @apiGroup Dechets
   * @apiVersion 1.0.0
   * @apiParam {number} id Id du déchet recherché
   *
