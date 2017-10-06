@@ -12,23 +12,23 @@ are written in the services being called in this controller
 
 /*
 Only two functions are needed: you don't need to create, modify or delete
-anything concerning the bordereaux
+anything concerning the trashes
 */
 
 
 /**
-  * @api {GET} /bordereaux Recherche tous les bordereaux
-  * @apiGroup Bordereaux
+  * @api {GET} /dechets Recherche tous les déchets
+  * @apiGroup Déchets
   * @apiVersion 1.0.0
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/bordereaux
+  *   curl -i http://localhost:4000/api/dechets
   *
-  * @apiSuccess {JSONString[]} bordereaux Liste des bordereaux corresponant
+  * @apiSuccess {JSONString[]} dechets Liste des dechets corresponant
   * à la recherche
-  * @apiError BordereauxNotFound Impossible de trouver de bordereaux
+  * @apiError DechetsNotFound Impossible de trouver de déchets
   */
-function getAllBordereaux(req, res) {
+function getAllDechets(req, res) {
     // currently only returns a 200 code with dummy data
     var dummyResponse = {"message": "OK"};
     res.json(dummyResponse);
@@ -36,18 +36,18 @@ function getAllBordereaux(req, res) {
 
 
 /**
-  * @api {GET} /bordereaux/:id Recherche un bordereau selon son id
-  * @apiGroup Bordereaux
+  * @api {GET} /dechets/:id Recherche un déchet selon son id
+  * @apiGroup Déchets
   * @apiVersion 1.0.0
-  * @apiParam {number} id Id du bordereau recherché
+  * @apiParam {number} id Id du déchet recherché
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/bordereaux/42
+  *   curl -i http://localhost:4000/api/dechets/42
   *
-  * @apiSuccess {JSONString} bordereau Bordereau recherché
-  * @apiError BordereauNotFound Bordereau recherché inexistant
+  * @apiSuccess {JSONString} dechet Déchet recherché
+  * @apiError DechetNotFound Déchet recherché inexistant
   */
-function getBordereau(req, res) {
+function getDechet(req, res) {
   // currently only returns a 200 code with dummy data
   // the data will contain the id that was requested
   var id = req.params.id;
@@ -57,7 +57,7 @@ function getBordereau(req, res) {
 
 
 // routes to the functions
-router.get('/', getAllBordereaux);
-router.get('/:id', getBordereau);
+router.get('/', getAllDechets);
+router.get('/:id', getDechet);
 
 module.exports = router;

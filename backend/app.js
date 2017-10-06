@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var bordereaux = require('./routes/bordereaux.controller');
 var prestataires = require('./routes/prestataires.controller');
+var dechets = require('./routes/dechets.controller');
 
 var config = require('./config.json');
 
@@ -31,8 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/bordereaux', bordereaux);
 
+app.use('/bordereaux', bordereaux);
+app.use('/dechets', dechets);
 app.use('/prestataires', prestataires);
 
 

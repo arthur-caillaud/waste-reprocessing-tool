@@ -8,7 +8,7 @@ var server = supertest.agent("http://localhost:4000");
 describe("Server",function(){
 
   // #1 should return home page
-  it("should return home page",function(done){
+  it("should return home page",() => {
     // calling home page
     try {
       server
