@@ -41,6 +41,16 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+// allow access-controll headers
+app.use(function(req, res, next) {
+  // allow for cross-referencing
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  // allow different requests
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  next();
+});
+
 app.listen(4000);
 
 // error handler
