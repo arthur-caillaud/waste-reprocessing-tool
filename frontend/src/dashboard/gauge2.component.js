@@ -1,7 +1,6 @@
 import React, { Component, } from 'react';
-import d3 from 'd3';
 import '../styles/containers.css';
-import GaugeJSX from './jsxelements/gauge2.jsx';
+
 
 
 const styles = {
@@ -20,7 +19,7 @@ class Gauge extends Component {
         return (
             <div>
                 <h2>{this.props.title}</h2>
-                
+
           </div>
       )
 
