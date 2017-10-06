@@ -7,7 +7,9 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var prestataires = require('./routes/prestataires.controller')
+var prestataires = require('./routes/prestataires.controller');
+
+var config = require('./config.json');
 
 var app = express();
 
@@ -51,7 +53,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.listen(4000);
+var port = config.server.listen_port;
+app.listen(port);
 
 // error handler
 app.use(function(err, req, res, next) {
