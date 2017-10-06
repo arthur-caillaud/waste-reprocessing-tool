@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var bordereaux = require('./routes/bordereaux');
+var bordereaux = require('./routes/bordereaux.controller');
 var prestataires = require('./routes/prestataires.controller');
 
 var config = require('./config.json');

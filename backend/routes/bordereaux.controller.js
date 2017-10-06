@@ -24,7 +24,9 @@ are written in the services being called in this controller
   * @apiError BordereauxNotFound Impossible de trouver de bordereaux
   */
 function getAllBordereaux(req, res) {
-
+    // currently only returns a 200 code with dummy data
+    var dummyResponse = {"message": "OK"};
+    res.json(dummyResponse);
 }
 
 
@@ -41,5 +43,16 @@ function getAllBordereaux(req, res) {
   * @apiError BordereauNotFound Bordereau recherché inexistant
   */
 function getBordereau(req, res) {
-
+  // currently only returns a 200 code with dummy data
+  // the data will contain the id that was requested
+  var id = req.params.id;
+  var dummyResponse = {"message": "OK", "id": id};
+  res.json(dummyResponse);
 }
+
+
+// routes to the functions
+router.get('/', getAllBordereaux);
+router.get('/:id', getBordereau);
+
+module.exports = router;
