@@ -770,6 +770,7 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
                                                     console.log("New referentiel_dechet successfully created.")
                                                 }
                                                 obs.onNext(referentiel_dechet);
+                                                obs.onCompleted();
                                             });
                                         }
                                     }
@@ -878,23 +879,25 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                 console.log("Successfully loaded excel data in RAM");
                 let tasksArray = [];
                 jsonExcel.forEach(row => {
-                    task = function(callback){
+                    let task = function(callback){
                         let referentielDechetObservable = convertRowIntoReferentielDechetSequelize(row);
                         referentielDechetObservable.subscribe({
                             onNext: referentiel_dechet => {
                                 console.log("Successfully pushed referentiel_dechet into database");
-                                callback(null,referentiel_dechet);
                             },
                             onError: err => {
                                 console.error("Error thrown by referentielDechetObservable");
                                 console.error(err);
                                 callback(err,null);
+                            },
+                            onCompleted: () => {
+                                callback(null,true);
                             }
                         });
-                    }
+                    };
                     tasksArray.push(task);
-                async.parallel(tasksArray);
                 });
+                async.series(tasksArray);
             },
             onError: error => {
                 console.error("Error in writeReferentielDechetIntoBdd")
@@ -942,7 +945,7 @@ const writeIntoBdd = function(excelName) {
                     };
                     tasksArray.push(task);
                 });
-                async.parallel(tasksArray);
+                async.series(tasksArray);
             },
             onError: error => {
                 console.error("Error in writeIntoBdd")
@@ -959,5 +962,5 @@ const writeIntoBdd = function(excelName) {
 };
 
 //TEST PHASE
-//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-writeIntoBdd("dataedfmars.xlsx");
+writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+//writeIntoBdd("dataedfmars.xlsx");
