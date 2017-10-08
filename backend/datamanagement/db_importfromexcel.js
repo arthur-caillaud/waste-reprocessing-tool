@@ -4,6 +4,7 @@ const config = require('../config.json');
 const Sequelize = require('sequelize');
 const db = require('./db.js');
 const forEach = require('async-foreach').forEach;
+const async = require('async');
 
 //Import data models
 const models = require('../models/');
@@ -576,7 +577,7 @@ const convertRowIntoTraitementSequelize = function(excelRow){
 }
 
 const convertRowIntoBordereauSequelize = function(excelRow){
-    var newBordereau = {
+    let newBordereau = {
         num_bordereau: excelRow[1],
         cas: excelRow[2],
         nom_emetteur: excelRow[3],
@@ -601,12 +602,12 @@ const convertRowIntoBordereauSequelize = function(excelRow){
         }
     }
 
-    var bordereauObservable = Rx.Observable.create(obs => {
-        var traitementObservable = convertRowIntoTraitementSequelize(excelRow);
-        var dechetObservable = convertRowIntoDechetSequelize(excelRow);
-        var transportObservable = convertRowIntoTransportSequelize(excelRow);
-        var siteObservable = convertRowIntoSiteSequelize(excelRow);
-        var typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
+    let bordereauObservable = Rx.Observable.create(obs => {
+        let traitementObservable = convertRowIntoTraitementSequelize(excelRow);
+        let dechetObservable = convertRowIntoDechetSequelize(excelRow);
+        let transportObservable = convertRowIntoTransportSequelize(excelRow);
+        let siteObservable = convertRowIntoSiteSequelize(excelRow);
+        let typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
 
         try{
             traitementObservable.subscribe({
@@ -713,13 +714,13 @@ const convertRowIntoBordereauSequelize = function(excelRow){
 }
 
 const convertRowIntoReferentielDechetSequelize = function(excelRow){
-    var jsonRow = {
+    let jsonRow = {
         codeinterne: excelRow[1]+(excelRow[2]? excelRow[2] : ""),
         is_listeverte: toListeVerte(excelRow[5]),
         is_dangereux: toDangereux(excelRow[8]),
     };
     console.log(jsonRow);
-    var codeDictionnaire = {
+    const codeDictionnaire = {
         'R1': 9,
         'R2': 10,
         'R3': 11,
@@ -742,7 +743,7 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
         'D15': 28,
     };
 
-    var referentielDechetObservable = Rx.Observable.create(obs => {
+    let referentielDechetObservable = Rx.Observable.create(obs => {
         try{
             if (jsonRow.codeinterne){
                 dechet.findOne({where: {codeinterne: jsonRow.codeinterne}})
@@ -797,10 +798,10 @@ const readXlsx = function (filepath, sheetNumber, startingRow) {
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
 
-    var workBook = new excel.Workbook();
-    var jsonExcel = [];
+    let workBook = new excel.Workbook();
+    let jsonExcel = [];
 
-    var readObservable = Rx.Observable.create(obs => {
+    let readObservable = Rx.Observable.create(obs => {
         // Using directly the filepath, NOT APPENDING ANYTHING
         workBook.xlsx.readFile(filepath)
             .then(() => {
@@ -808,9 +809,9 @@ const readXlsx = function (filepath, sheetNumber, startingRow) {
                 console.log("Start reading excel file...");
                 workBook.getWorksheet(sheetNumber).eachRow(function(row,rowNumber) {
                     if(rowNumber >= startingRow){
-                        var newRow = [null];
+                        let newRow = [null];
                         row.values.forEach(cell => {
-                            var newCell = cell;
+                            let newCell = cell;
                             if (typeof cell == "string"){
                                 newCell = cell.trim();
                             }
@@ -837,10 +838,10 @@ const readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) 
     //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
 
-    var workBook = new excel.Workbook();
-    var jsonExcel = [];
+    let workBook = new excel.Workbook();
+    let jsonExcel = [];
 
-    var readObservable = Rx.Observable.create(obs => {
+    let readObservable = Rx.Observable.create(obs => {
         // Using directly the filepath, NOT APPENDING ANYTHING
         workBook.xlsx.readFile(filepath)
             .then(() => {
@@ -866,26 +867,33 @@ const readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) 
 };
 
 const writeReferentielDechetIntoBdd = function (filepath) {
-    var sequelize = db.mySqlConnect();
+    const sequelize = db.mySqlConnect();
     sequelize.authenticate()
     .then(() => {
         console.log('Connection has been established successfully.');
-        var readXlsxObservable = readReferentielDechetXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
+        let readXlsxObservable = readReferentielDechetXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
         console.log("readXlsxObservable built");
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
                 console.log("Successfully loaded excel data in RAM");
+                let tasksArray = [];
                 jsonExcel.forEach(row => {
-                    var referentielDechetObservable = convertRowIntoReferentielDechetSequelize(row);
-                    referentielDechetObservable.subscribe({
-                        onNext: referentiel_dechet => {
-                            console.log("Successfully pushed referentiel_dechet into database")
-                        },
-                        onError: err => {
-                            console.error("Error thrown by referentielDechetObservable");
-                            console.error(err);
-                        }
-                    });
+                    task = function(callback){
+                        let referentielDechetObservable = convertRowIntoReferentielDechetSequelize(row);
+                        referentielDechetObservable.subscribe({
+                            onNext: referentiel_dechet => {
+                                console.log("Successfully pushed referentiel_dechet into database");
+                                callback(null,referentiel_dechet);
+                            },
+                            onError: err => {
+                                console.error("Error thrown by referentielDechetObservable");
+                                console.error(err);
+                                callback(err,null);
+                            }
+                        });
+                    }
+                    tasksArray.push(task);
+                async.parallel(tasksArray);
                 });
             },
             onError: error => {
@@ -906,34 +914,35 @@ const writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
 
-    var sequelize = db.mySqlConnect();
+    const sequelize = db.mySqlConnect();
     sequelize.authenticate()
     .then(() => {
         console.log('Connection has been established successfully.');
-        var readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
+        let readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
         console.log("readXlsxObservable built");
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
                 console.log("Successfully loaded excel data in RAM");
-                const allDone = (notAborted, arr) => {
-                    console.log("done", notAborted, arr);
-                }
-                forEach(jsonExcel, (bordereau, rowNumber) => {
-                    done = this.async();
-                    let bordereauObservable = convertRowIntoBordereauSequelize(bordereau);
-                    bordereauObservable.subscribe({
-                        onNext: bordereau => {
-                            console.log("Successfully pushed excel whole row into database");
-                        },
-                        onError: error => {
-                            console.error("Error thrown by bordereauObservable", error);
-                        },
-                        onCompleted: () => {
-                            done();
-                        }
-                    });
-                    done();
-                }, allDone);
+                let tasksArray = [];
+                jsonExcel.forEach(bordereau => {
+                    let task = function(callback){
+                        let bordereauObservable = convertRowIntoBordereauSequelize(bordereau);
+                        bordereauObservable.subscribe({
+                            onNext: bordereau => {
+                                console.log("Successfully pushed excel whole row into database");
+                            },
+                            onError: error => {
+                                console.error("Error thrown by bordereauObservable", error);
+                                callback(error,null)
+                            },
+                            onCompleted: () => {
+                                callback(null,true);
+                            }
+                        });
+                    };
+                    tasksArray.push(task);
+                });
+                async.parallel(tasksArray);
             },
             onError: error => {
                 console.error("Error in writeIntoBdd")
