@@ -6,6 +6,14 @@ module.exports = function(sequelize, DataTypes) {
           type: DataTypes.CHAR(4),
           allowNull: true
         },
+        is_listeverte: {
+          type: DataTypes.INTEGER(1),
+          allowNull: true
+        },
+        is_dangereux: {
+          type: DataTypes.INTEGER(1),
+          allowNull: true
+        },
         libelle: {
           type: DataTypes.STRING(255),
           allowNull: true
@@ -40,6 +48,7 @@ module.exports = function(sequelize, DataTypes) {
 
     dechet.associate = function(models){
          dechet.hasMany(models.bordereau, {foreignKey: 'id_dechet', foreignKeyConstraint: true, sourceKey: 'id'});
+         dechet.hasMany(models.referentiel_dechet, {foreignKey: 'id_dechet', foreignKeyConstraint: true, sourceKey: 'id'})
     };
 
     return dechet;
