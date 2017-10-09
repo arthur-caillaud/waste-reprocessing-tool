@@ -12,7 +12,6 @@ function errorHandler(error, callback) {
         // All other errors that are not currently defined
         var status = 500; // TODO modify to adapt to various possible errors
         var message = "internal server error";
-        console.error(error);
     }
     callback({status: status, message: message});
 }

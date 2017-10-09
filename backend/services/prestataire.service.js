@@ -13,7 +13,6 @@ function getAllPrestataires(queryParameters) {
      * Args: queryParameters, parameters for the query, in the following form:
      * {attributes: string[], where: {fieldA: string, ...}, order: string[]}
      */
-     console.log(queryParameters);
      if (Object.keys(queryParameters).length>0) { // checks if queryParams have actually been provided
          // modifies the fields in the 'where' statement to put everything in lower
          var where = {};
@@ -24,7 +23,6 @@ function getAllPrestataires(queryParameters) {
          queryParameters.where = where;
      }
 
-    console.log(queryParameters);
     var getAllPrestatairesObservable = Rx.Observable.create((observer) => {
         Prestataire.findAll(queryParameters)
             .then((prestataires) => {

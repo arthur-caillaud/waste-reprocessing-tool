@@ -11,29 +11,22 @@ to database communication. The functions dealing directly with Sequalize
 are written in the services being called in this controller
 */
 
-// Function dedicated to handle various errors
-// Returns the error status and the message to be displayed
-function errorHandler(error, callback) {
-  if (error == "Resource not found") {
-    var status = 404;
-    var message = "Resource not found";
-  }
-  else {
-    // All other errors that are not currently defined
-    var status = 500; // TODO modify to adapt to various possible errors
-    var message = "internal server error";
-    console.error(error);
-  }
-  callback({status: status, message: message});
-}
-
 /**
   * @api {GET} /prestataires Recherche tous les prestataires
   * @apiGroup Prestataires
   * @apiVersion 1.1.0
   *
-  * @apiExample {curl} Exemple
+  * @apiParam (queryParam) {string} [nom] Noms des prestataires
+  * @apiParam (queryParam) {number} [id] Id des prestataires
+  * @apiParam (queryParam) {string} [localisation] Localisation des prestataires
+  * @apiParam (queryParam) {string} [siret] SIRET des prestataires
+  * @apiParam (queryParam) {string} [order] Tri de la liste des résultats
+  * @apiParam (queryParam) {string[]} [fields] Sélection des champs
+  *
+  * @apiExample {curl} Exemple sans argument
   *   curl -i http://localhost:4000/api/prestataires
+  * @apiExample {curl} Exemple avec arguments
+  *   curl -i http://localhost:4000/api/prestataires/?fields=id,nom&order=-nom&localisation=paris
   *
   * @apiSuccess {JSONString[]} prestataires Liste des prestataires
   * correspondant à la recherche
@@ -48,7 +41,7 @@ function getAllPrestataires(req, res) {
         res.json(data);
     };
       var error = (error) => {
-        errorHandler(error, (errorPacket) => {
+        utilities.errorHandler(error, (errorPacket) => {
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
