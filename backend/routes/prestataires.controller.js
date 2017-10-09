@@ -10,12 +10,26 @@ to database communication. The functions dealing directly with Sequalize
 are written in the services being called in this controller
 */
 
-
-//To Implement
+/**
+  * @api {GET} /prestataires Recherche tous les prestataires
+  * @apiVersion 1.0.0
+  * @apiDeprecated use now version 1.1.0
+  * @apiGroup Prestataires
+  */
+//TODO To Implement
 function RenderPrestatairesPage(req, res) {
     res.render("renvoyer la page vision prestataires");
 };
 
+
+/**
+  * @api {GET} /getPrestatairesCloseToPrestataire Recherche les prestataires à proximité
+  * @apiVersion 1.0.0
+  * @apiDeprecated use now version 1.1.0
+  * @apiGroup Prestataires
+  * @apiParam (Body) {JSONString} prestataireName Nom du prestataire au centre de
+  *                                               la recherche
+  */
 function getPrestatairesCloseToPrestataire(req, res) {
 /*
     Note that this function expects req.body to be filled with a json.strinkgify using
@@ -35,6 +49,13 @@ function getPrestatairesCloseToPrestataire(req, res) {
     prestataireService.getPrestatairesCloseToPrestataire(prestataire, distance).subscribe(getClosePrestatairesObserver);
 };
 
+
+/**
+  * @api {GET} /getPrestataires Récupère tous les prestataires
+  * @apiVersion 1.0.0
+  * @apiDeprecated use now version 1.1.0
+  * @apiGroup Prestataires
+  */
 function getAllPrestataires (req, res) {
     var getAllObserver = {
         onError: function (error) {
@@ -48,6 +69,14 @@ function getAllPrestataires (req, res) {
     prestataireService.getAllPrestataires().subscribe(getAllObserver);
 };
 
+
+/**
+  * @api {GET} /getPrestataire/:prestataireName Récupère les prestataires selon leur nom
+  * @apiVersion 1.0.0
+  * @apiDeprecated use now version 1.1.0
+  * @apiGroup Prestataires
+  * @apiParam (Paramètres) {String} prestataireName Nom du prestataire
+  */
 function getPrestataireByName (req, res) {
     var getPrestataireObserver = {
         onError: function (error) {
@@ -61,6 +90,15 @@ function getPrestataireByName (req, res) {
     prestataireService.getPrestataireByName(req.params.prestataireName).subscribe(getPrestataireObserver);
 };
 
+
+/**
+  * @api {GET} /getIndicatorsForPrestataire Récupères les indicateurs pour un prestataire
+  *
+  * @apiVersion 1.0.0
+  * @apiDeprecated use now version 1.1.0
+  * @apiGroup Prestataires
+  * @apiParam (Body) {JSONString} prestataireName Nom du prestataire
+  */
 function getIndicatorsForPrestataire (req, res) {
 
     //to be completed

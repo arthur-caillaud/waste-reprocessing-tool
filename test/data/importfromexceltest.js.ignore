@@ -1,11 +1,11 @@
 var chai = require('chai');
 var assert = chai.assert;
-var Excel = require('../backend/datamanagement/db_importfromexcel');
+var Excel = require('../../backend/datamanagement/db_importfromexcel');
 
 describe("Data importing from Excel", function(t) {
 
   // Path starting from the ./backend folder
-  var filepath = "./test/data/importfromexceltestdata.xlsx";
+  var filepath = "./importfromexceltestdata.xlsx";
   // Dummy function to ignore events
   const noop = () => {};
 

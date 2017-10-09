@@ -1,0 +1,23 @@
+{
+  "name": "Backend REST API",
+  "version": "1.0.0",
+  "description": "Documentation pour l'API REST du serveur Backend",
+  "title": "API REST Backend",
+  "url" : "https://localhost:4000",
+  "header": {
+    "title": "backend-doc-header",
+    "filename": "header.md"
+  },
+  "footer": {
+    "title": "backend-doc-footer",
+    "filename": "footer.md"
+  },
+  "order": [
+    "GetUser",
+    "PostUser"
+  ],
+  "template": {
+  	"withCompare": false,
+  	"withGenerator": false
+  }
+}

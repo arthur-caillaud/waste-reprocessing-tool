@@ -5,10 +5,10 @@ var server = supertest.agent("http://localhost:4000");
 
 // UNIT test begin
 
-describe("SAMPLE unit test",function(){
+describe("Server",function(){
 
   // #1 should return home page
-  it("should return home page",function(done){
+  it("should return home page",() => {
     // calling home page
     try {
       server
@@ -25,5 +25,21 @@ describe("SAMPLE unit test",function(){
       done(err);
     }
   });
+
+  it("should return 404 for an unexisting route", () => {
+    try {
+      server
+        .get("/dummy/adress/that/does/not/exist")
+        .expect("Content-type", /text/)
+        .expect(404)
+        .end((err, res) => {
+          assert.equal(res.status, 404);
+          done();
+        });
+    }
+    catch (err) {
+      done(err);
+    }
+  })
 
 });

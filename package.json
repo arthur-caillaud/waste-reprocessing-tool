@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha ./test/frontend/* --require ./test/test_helper.js --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml;"
+    "test": "> ./test/test_reports.xml; ./node_modules/.bin/mocha --recursive ./test/ --require ./test/test_helper.js --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=./test/test_reports.xml;"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -38,5 +38,20 @@
     "url": "git@gitlab.centralesupelec.fr:2015caillauda/akkaxedf.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "apidoc": {
+    "name": "Backend REST API",
+    "version": "1.1.0",
+    "description": "Documentation pour l'API REST du serveur Backend",
+    "title": "API REST Backend",
+    "url" : "http://localhost:4000/api",
+    "order": [
+      "GetUser",
+      "PostUser"
+    ],
+    "template": {
+    	"withCompare": true,
+    	"withGenerator": false
+    }
+  }
 }
