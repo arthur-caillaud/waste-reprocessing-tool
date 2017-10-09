@@ -33,7 +33,6 @@ class LocationSearch extends Component {
         var resArray = [];
         var typeArray = ["Metier","UP de dépendance","Unité de dépendance","Site"];
         for(var i = 0; i<data.length; i++){
-            console.log(i);
             data[i].forEach(location => {
                 if (this.searchInWord(input,location)){
                     resArray.push({
