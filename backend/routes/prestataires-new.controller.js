@@ -71,7 +71,7 @@ function getPrestataire(req, res) {
         res.json(data);
     };
     var error = (error) => {
-        errorHandler(error, (errorPacket) => {
+        utilities.errorHandler(error, (errorPacket) => {
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
