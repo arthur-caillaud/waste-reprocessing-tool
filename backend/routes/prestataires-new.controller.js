@@ -3,12 +3,29 @@ var express = require('express');
 var router = express.Router();
 var Rx = require('rx');
 var prestataireService = require('../services/prestataire.service');
+var utilities = require('../utilities/routes.js');
 
 /*
 This is a controller entirely dedicated to error handling when it comes
 to database communication. The functions dealing directly with Sequalize
 are written in the services being called in this controller
 */
+
+// Function dedicated to handle various errors
+// Returns the error status and the message to be displayed
+function errorHandler(error, callback) {
+  if (error == "Resource not found") {
+    var status = 404;
+    var message = "Resource not found";
+  }
+  else {
+    // All other errors that are not currently defined
+    var status = 500; // TODO modify to adapt to various possible errors
+    var message = "internal server error";
+    console.error(error);
+  }
+  callback({status: status, message: message});
+}
 
 /**
   * @api {GET} /prestataires Recherche tous les prestataires
@@ -23,9 +40,21 @@ are written in the services being called in this controller
   * @apiError PrestatairesNotFound Impossible de trouver les prestataires
   */
 function getAllPrestataires(req, res) {
-  // currently only returns a 200 code with dummy data
-  var dummyResponse = {"message": "OK"};
-  res.json(dummyResponse);
+    // Returns all the prestataires, currently returns a 500 error code when
+    // an error is raised
+    var parsedArgs;
+    utilities.queryParser('prestataire', req.query, (result) => {parsedArgs = result});
+    var next = (data) => {
+        res.json(data);
+    };
+      var error = (error) => {
+        errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+    var complete = () => {};
+    var observer = Rx.Observer.create(next, error, complete);
+    var subscription = prestataireService.getAllPrestataires(parsedArgs).subscribe(observer);
 }
 
 /**
@@ -39,9 +68,23 @@ function getAllPrestataires(req, res) {
   * @apiError PrestataireNotFound Prestataire introuvable
   */
 function getPrestataire(req, res) {
-  // currently only returns a 200 code with dummy data
-  // the data will contain the id that was requested
   var id = req.params.id;
-  var dummyResponse = {"message": "OK", "id": id};
-  res.json(dummyResponse);
+  var next = (data) => {
+    res.json(data);
+  };
+  var error = (error) => {
+    errorHandler(error, (errorPacket) => {
+      res.status(errorPacket.status).send(errorPacket.message);
+    });
+  };
+  var complete = () => {};
+  var observer = Rx.Observer.create(next, error, complete);
+  var subscription = prestataireService.getPrestataireById(id).subscribe(observer);
 }
+
+// Routes to functions
+router.get('/', getAllPrestataires);
+router.get('/:id', getPrestataire);
+
+//exporting router
+module.exports = router;

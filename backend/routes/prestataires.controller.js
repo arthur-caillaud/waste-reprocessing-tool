@@ -18,7 +18,7 @@ are written in the services being called in this controller
   */
 //TODO To Implement
 function RenderPrestatairesPage(req, res) {
-    res.render("renvoyer la page vision prestataires");
+    res.json("renvoyer la page vision prestataires");
 };
 
 
@@ -62,7 +62,8 @@ function getAllPrestataires (req, res) {
             console.log(error);
             res.status(400).send(error);
         },
-        onCompleted: function(listePrestataires) {
+        onCompleted: (listePrestataires) => {
+          console.log(listePrestataires);
             res.json(listePrestataires);
         }
     }
@@ -80,7 +81,7 @@ function getAllPrestataires (req, res) {
 function getPrestataireByName (req, res) {
     var getPrestataireObserver = {
         onError: function (error) {
-            console.log(error);
+            console.log("error");
             res.status(400).send(error);
         },
         onCompleted: function(listePrestataires) {
