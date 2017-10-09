@@ -7,10 +7,12 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
 var bordereaux = require('./routes/bordereaux.controller');
 var prestataires = require('./routes/prestataires.controller');
 var prestatairesNew = require('./routes/prestataires-new.controller');
 var dechets = require('./routes/dechets.controller');
+var sites = require('./routes/sites.controller');
 
 var config = require('./config.json');
 
@@ -38,6 +40,7 @@ app.use('/bordereaux', bordereaux);
 app.use('/dechets', dechets);
 app.use('/prestataires/new', prestatairesNew);
 app.use('/prestataires', prestataires);
+app.use('/sites', sites);
 
 
 
