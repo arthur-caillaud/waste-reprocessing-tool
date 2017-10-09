@@ -2,6 +2,7 @@
 // For now: error handler and a query parameters parser
 
 var utilities = {};
+var config = require("../config/queries.json");
 
 function errorHandler(error, callback) {
     if (error == "Resource not found") {
@@ -30,9 +31,7 @@ function queryParser(type, args, callback) {
 
     // parse the search parameters
     // array of all searchable fields
-    const searchFields = {
-      prestataire: ['id', 'nom', 'localisation', 'siret'],
-    };
+    const searchFields = config.availableFields;
     var where = {};
     for (var searchIndex in searchFields[type]) {
         // only checks if possible fields are present in the query
