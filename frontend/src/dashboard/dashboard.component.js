@@ -15,7 +15,6 @@ class Dashboard extends Component {
       <div>
         <div>
           <LocationNavigation/>
-          <h2>Dashboard</h2>
         </div>
         <div>
           <Grid fluid>

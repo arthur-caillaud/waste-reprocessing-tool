@@ -1,6 +1,9 @@
 .dashboard-tile{
     position: relative;
     background-color: #E6E6E6;
+    width: 100%;
+    padding-bottom: 100%;
+    margin-bottom: 15%;
 }
 
 .dashboard-tile:hover{
@@ -9,34 +12,51 @@
 }
 
 .dashboard-tile .title{
+    position: absolute;
     text-align: center;
+    bottom: 3%;
+    width: 100%;
 }
 
-.dashboard-tile .value{
+.dashboard-tile .valueTitle{
+    position: absolute;
     text-align: center;
-    font-size: 4.5em;
+    display: block;
+    margin: auto;
+    width: 100%;
+    bottom: 29%;
+}
+
+.dashboard-tile .valueTitle .value {
+    font-size: 5em;
+}
+
+.dashboard-tile .valueTitle .percentage{
+    font-size: 2.5em;
 }
 
 .dashboard-tile .notifValue{
     position: absolute;
-    top: -10px;
-    right: -10px;
+    top: -5%;
+    right: -5%;
     border-radius: 50%;
     background-color: red;
     color: white;
-    width: 30px;
-    height: 30px;
+    width: 20%;
+    height: 20%;
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.8em;
+    vertical-align: middle;
 }
 
 .dashboard-tile .notifValue:hover {
     background-color: #E60000;
 }
 
-.dashboard-tile .arrow{
+.valueTitle .arrow{
     position: absolute;
-    font-size: 140%;
+    font-size: 130%;
+    bottom: 20%;
 }
 
 .dashboard-tile .arrow-up{
