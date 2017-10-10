@@ -16,6 +16,6 @@
         "database": "db",
         "poolsize": 20,
         "minimumpoolsize": 0,
-        "connectionduration": 60000
+        "connectionduration": 100000
     }
 }
