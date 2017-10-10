@@ -30,9 +30,11 @@ anything concerning the dashboard
   * de 0 : central à 4 : site)
   * @apiParam (queryArgs) {string} name nom du lieu voulu dans sa hierarchie
   * (facultatif dans le cas d'une hierarchie 1 (niveau central))
+  * @apiParam (queryParam) {number} tolerance niveau de tolérance pour les écarts
+  * de pesée
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/dashboard/2/42
+  *   curl -i http://localhost:4000/api/dashboard/2/42?tolerance=12
   *
   * @apiSuccess {JSONString} dashboard Informations nécessaires à la construction
   * de la dashboard sur le site voulu
@@ -44,9 +46,10 @@ function getDashboard(req, res, next) {
   // checks if the args are in range
   var level = req.params.level;
   var name = req.params.name; //undefined if not provided
+  var tolerance = req.query.tolerance
 
   // when we check if name, we actually check if it is defined
-  if (level<0 || level>4 || (level>1 && !(name))) {
+  if (level<0 || level>4 || (level>1 && !(name)) || !(tolerance)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {
           res.status(errorPacket.status).send(errorPacket.message);
       });
@@ -93,10 +96,11 @@ function getNecessarySites(req, res, next) {
 function processDashboardData(req, res) {
     // list of all the sites that will be used
     var sites = req.locals;
+    var tolerance = req.query.tolerance;
     var idArray = [];
 
     var result = {};
-    var loopsToDo = 3;
+    var loopsToDo = 4;
 
     for (var i=0; i<sites.length; i++) {
         idArray.push(sites[i].id);
@@ -120,10 +124,13 @@ function processDashboardData(req, res) {
     var observerIncoherences = Rx.Observer.create(onNext, error, complete);
     var observerEcarts = Rx.Observer.create(onNext, error, complete);
     var observerInterdites = Rx.Observer.create(onNext, error, complete);
+    var observerRetards = Rx.Observer.create(onNext, error, complete);
+
 
     DashboardService.getAllIncoherencesFilieres(idArray).subscribe(observerIncoherences);
-    DashboardService.getAllEcartsDePesee(0, idArray).subscribe(observerEcarts);
+    DashboardService.getAllEcartsDePesee(tolerance, idArray).subscribe(observerEcarts);
     DashboardService.getAllFilieresInterdites(idArray).subscribe(observerInterdites);
+    DashboardService.getAllRetards(idArray).subscribe(observerRetards);
 
 }
 

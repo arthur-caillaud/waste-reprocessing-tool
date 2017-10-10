@@ -108,6 +108,35 @@ function getAllFilieresInterdites(idArray){
         })
     });
     return getAllFilieresInterditesObservable;
+};
+
+function getAllRetards(idArray) {
+
+    var date = new Date();
+    const maxDelay = 30 * 60 * 60 * 1000;
+
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.findAll({
+            include: [{
+                model: traitement,
+                where: {
+                    date_priseencharge: {$lt: (date - maxDelay)}
+                }
+            }],
+            where: {
+                id_site: {$in: idArray},
+                bordereau_finished: false
+            }
+        })
+        .then((bordereaux) => {
+            obs.onNext([bordereaux, "retards"]);
+            obs.onCompleted();
+        })
+        .catch((err) => {
+            obs.onError(err);
+        })
+    });
+    return observable;
 }
 
 var service = {};
@@ -115,5 +144,6 @@ var service = {};
 service.getAllEcartsDePesee = getAllEcartsDePesee;
 service.getAllIncoherencesFilieres = getAllIncoherencesFilieres;
 service.getAllFilieresInterdites = getAllFilieresInterdites;
+service.getAllRetards = getAllRetards;
 
 module.exports = service;
