@@ -14,16 +14,23 @@ class GaugeJSX extends Component {
             height: props.height,
             outerRadius: (props.width/2)-10,
             innerRadius:(props.width/2)-22,
+            value: 88,
+            valueBefore: 90,
 
         }
     }
-    componentDidMount() {
+
+    getInfoForNewSite() {
+
+    }
+    
+    drawJauge() {
         /*
         This is the place we initialize the value of this year's Liste Verte
         and last Year
         */
-        var value = 88;
-        var valueBefore = 90;
+        var value = this.state.value;
+        var valueBefore = this.state.valueBefore;
 
         /*
         Here we select the div which id is chart and add to it a <svg>
@@ -144,17 +151,29 @@ class GaugeJSX extends Component {
 
 
             });
+    }
 
+    redrawJauge() {
+        const svgDoc = d3.select("#chart");
+        svgDoc.remove();
+        this.drawJauge();
+    };
 
-}
+    componentDidMount() {
+        this.drawJauge()
+    };
+
+    componentDidUpdate() {
+        this.redrawJauge();
+    };
 
     render() {
 
         return (
             <div id="chart" class="chart-container">
-            </div>
-    )
+            </div>)
     }
+
 }
 
 export default GaugeJSX;
