@@ -137,6 +137,17 @@ function getAllRetards(idArray) {
         })
     });
     return observable;
+};
+
+function getTotalVolume(idArray) {
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.sum('quantitee_finale', {
+            where: {
+                id_site: {$in: idArray},
+            },
+
+        })
+    })
 }
 
 var service = {};
