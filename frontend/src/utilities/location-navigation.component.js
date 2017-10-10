@@ -43,7 +43,7 @@ class LocationNavigation extends Component {
     var unit1 = <LocationSelector locations={this.state.units1} selected={this.state.currentValues[1]} />;
     var unit2 = <LocationSelector locations={this.state.units2} selected={this.state.currentValues[2]} />;
     var site = <LocationSelector locations={this.state.sites} selected={this.state.currentValues[3]} />;
-    var glyphiconSearch = (<Glyphicon glyph="search" onClick={()=>this.toggleSearchMode()} />);
+    var glyphiconSearch = (<Glyphicon glyph="search" className="searchGlass" onClick={()=>this.toggleSearchMode()} />);
 
     if(!this.state.searchMode){
         return (
@@ -57,16 +57,14 @@ class LocationNavigation extends Component {
         );
     }
     else{
-        console.log("Rendering searchbar");
         var searchBar = (<LocationSearch
             globalSites={this.state.globalSites}
             units1={this.state.units1}
             units2={this.state.units2}
             sites={this.state.sites}
         />);
-
         return(
-          <div>
+          <div className="searchBar">
             {searchBar}
             {glyphiconSearch}
           </div>

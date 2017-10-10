@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { Glyphicon, Popover, OverlayTrigger } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import '../styles/location-search.css'
-
 class LocationSearchContainer extends Component {
     constructor(props) {
         super();
@@ -15,11 +13,8 @@ class LocationSearchContainer extends Component {
 
     render() {
         var searchContainer = [];
-        console.log("Rendering searchContainer");
-        if(this.state.data){
-            console.log("Found data")
-            console.log("Data", this.state.data);
-            this.state.data.forEach(searchResult => {
+        if(this.props.data){
+            this.props.data.forEach(searchResult => {
                 searchContainer.push(
                     <ListGroupItem header={searchResult.value}>
                     {searchResult.type}
@@ -27,7 +22,6 @@ class LocationSearchContainer extends Component {
                 );
             })
         };
-        console.log(searchContainer);
         return (
             <ListGroup>
               {searchContainer}

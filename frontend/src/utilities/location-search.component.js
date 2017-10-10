@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { Glyphicon, Popover, OverlayTrigger } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import '../styles/location-search.css'
-
 import LocationSearchContainer from './location-searchcontainer.component'
 
 class LocationSearch extends Component {
@@ -21,7 +19,7 @@ class LocationSearch extends Component {
         var inputLen = input.length;
         var wordLen = word.length;
         if(inputLen <= wordLen){
-            if (word.slice(0,inputLen) === input){
+            if (word.toLowerCase().slice(0,inputLen) === input.toLowerCase()){
                 return true;
             }
         }
@@ -32,17 +30,18 @@ class LocationSearch extends Component {
         var data = this.state.data;
         var resArray = [];
         var typeArray = ["Metier","UP de dépendance","Unité de dépendance","Site"];
-        for(var i = 0; i<data.length; i++){
-            data[i].forEach(location => {
-                if (this.searchInWord(input,location)){
-                    resArray.push({
-                        type: typeArray[i],
-                        value: location,
-                    })
-                }
-            });
-        };
-        console.log(resArray);
+        if(input.length > 0){
+            for(var i = 0; i<data.length; i++){
+                data[i].forEach(location => {
+                    if (this.searchInWord(input,location)){
+                        resArray.push({
+                            type: typeArray[i],
+                            value: location,
+                        })
+                    }
+                });
+            };
+        }
         this.setState({searchContainerData: resArray});
     }
 
