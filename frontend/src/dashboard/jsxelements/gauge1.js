@@ -14,16 +14,14 @@ class GaugeJSX extends Component {
             height: props.height,
             outerRadius: (props.width/2)-10,
             innerRadius:(props.width/2)-22,
-            value: 88,
-            valueBefore: 90,
+            value: props.value,
+            valueBefore: props.valueBefore,
 
         }
     }
 
-    getInfoForNewSite() {
 
-    }
-    
+
     drawJauge() {
         /*
         This is the place we initialize the value of this year's Liste Verte
