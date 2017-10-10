@@ -1,16 +1,48 @@
 .location-selection-zone {
-  border: 1px solid;
-  border-radius: 5px;
-  width: 70%;
-  text-align: center;
-  vertical-align: top;
-  margin: auto;
-  margin-top: 1%;
-  padding-top: 0.2%;
-  padding-bottom: 0.2%;
-  flex-direction: row;
-  overflow: hidden;
-  position: static;
+    position: relative !important;
+    border: 1px solid;
+    border-radius: 5px;
+    width: 70%;
+    text-align: center;
+    vertical-align: top;
+    margin: auto;
+    margin-top: 1%;
+    flex-direction: row;
+    overflow: hidden;
+    position: static;
+    height: 30px;
+}
+
+.searchBar{
+    position: relative;
+    margin: auto;
+    vertical-align: top;
+    margin-top: 1%;
+    width: 70%;
+    height: 30px;
+}
+
+span.searchGlass{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.searchMode{
+    display: block;
+    width: 100%;
+}
+
+.list-group{
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    text-align: left;
+}
+
+.list-group-item:hover{
+    cursor: pointer;
+    background-color: #F0F0F0;
 }
 
 .location-selector {
