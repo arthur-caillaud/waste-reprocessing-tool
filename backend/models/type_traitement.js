@@ -26,8 +26,9 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   type_traitement.associate = function(models) {
-      type_traitement.hasMany(models.bordereau, {foreignKey: 'id_traitement_final', sourceKey: 'id'});
+      type_traitement.hasMany(models.bordereau, {foreignKey: 'id_traitement_prevu', sourceKey: 'id'});
       type_traitement.hasMany(models.traitement, {foreignKey: 'id_type_traitement', sourceKey: 'id'});
+      type_traitement.hasMany(models.referentiel_dechet, {foreignKey: 'id_type_traitement', sourceKey: 'id'})
   }
   return type_traitement;
 };

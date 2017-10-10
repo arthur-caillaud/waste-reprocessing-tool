@@ -19,9 +19,9 @@ var mySqlConnect = function() {
             host: config.mysql.url,
             dialect: 'mysql',
             pool: {
-                max: 20,
-                min: 0,
-                idle: 10000
+                max: config.mysql.poolsize,
+                min: config.mysql.minimumpoolsize,
+                idle: config.mysql.connectionduration
             },
         });
     return sequelize;

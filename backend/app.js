@@ -36,8 +36,9 @@ app.use('/users', users);
 
 app.use('/bordereaux', bordereaux);
 app.use('/dechets', dechets);
+app.use('/prestataires/new', prestatairesNew);
 app.use('/prestataires', prestataires);
-app.use('/prestataires/new', prestataires);
+
 
 
 

@@ -1,0 +1,21 @@
+{
+    "availableFields": {
+        "prestataire": [
+            "id",
+            "nom",
+            "localisation",
+            "siret"
+        ],
+        "dechet": [
+            "codeinterne",
+            "is_listeverte",
+            "is_dangereux",
+            "libelle",
+            "code_europeen",
+            "categorie",
+            "indicateur_national_valorisation",
+            "famille",
+            "id"
+        ]
+    }
+}
