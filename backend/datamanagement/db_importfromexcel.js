@@ -888,10 +888,14 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                             onError: err => {
                                 console.error("Error thrown by referentielDechetObservable");
                                 console.error(err);
-                                callback(err,null);
+                                process.nextTick(() => {
+                                    callback(null, true);
+                                });
                             },
                             onCompleted: () => {
-                                callback(null,true);
+                                process.nextTick(() => {
+                                    callback(null, true);
+                                });
                             }
                         });
                     };
@@ -936,10 +940,14 @@ const writeIntoBdd = function(excelName) {
                             },
                             onError: error => {
                                 console.error("Error thrown by bordereauObservable", error);
-                                callback(error,null)
+                                process.nextTick(() => {
+                                    callback(null, true);
+                                });
                             },
                             onCompleted: () => {
-                                callback(null,true);
+                                process.nextTick(() => {
+                                    callback(null, true);
+                                });
                             }
                         });
                     };
@@ -962,5 +970,5 @@ const writeIntoBdd = function(excelName) {
 };
 
 //TEST PHASE
-writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-//writeIntoBdd("dataedfmars.xlsx");
+//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+writeIntoBdd("dataedfmars.xlsx");
