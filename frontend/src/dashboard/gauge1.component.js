@@ -4,9 +4,10 @@ import GaugeJSX from './jsxelements/gauge1.js';
 
 
 const styles = {
-  width   : 150,
+  width   : 200,
   height  : 200,
   padding : 2,
+  value: 87,
 
 };
 
