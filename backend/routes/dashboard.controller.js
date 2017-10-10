@@ -95,15 +95,15 @@ function processDashboardData(req, res) {
     var sites = req.locals;
     var idArray = [];
 
+    var result = {};
+    var loopsToDo = 3;
+
     for (var i=0; i<sites.length; i++) {
         idArray.push(sites[i].id);
     }
 
-    console.log(idArray);
-
     var onNext = (data) => {
-        console.log(data);
-        res.json(data);
+        result[data[1]] = data[0];
     };
     var error = (error) => {
         utilities.errorHandler(error, (errorPacket) => {
@@ -111,10 +111,20 @@ function processDashboardData(req, res) {
         });
     };
     var complete = () => {
+        loopsToDo -= 1;
+        if (loopsToDo == 0) {
+            res.json(result);
+        }
     };
 
-    var observer = Rx.Observer.create(onNext, error, complete);
-    var subscription = DashboardService.getAllIncoherencesFilieres(idArray).subscribe(observer);
+    var observerIncoherences = Rx.Observer.create(onNext, error, complete);
+    var observerEcarts = Rx.Observer.create(onNext, error, complete);
+    var observerInterdites = Rx.Observer.create(onNext, error, complete);
+
+    DashboardService.getAllIncoherencesFilieres(idArray).subscribe(observerIncoherences);
+    DashboardService.getAllEcartsDePesee(0, idArray).subscribe(observerEcarts);
+    DashboardService.getAllFilieresInterdites(idArray).subscribe(observerInterdites);
+
 }
 
 

@@ -2,9 +2,6 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
-const Op = sequelize.Op;
-
-console.log(sequelize.Op);
 
 //Import required local modules
 var models = require('../models/');
@@ -22,36 +19,36 @@ var referentiel_dechet = models.referentiel_dechet;
 function getAllEcartsDePesee(tolerance, idArray) {
     const query = {
         where: {
-            id_site: {[Op.in]: idArray}
+            id_site: {$in: idArray}
         }
-    }
+    };
     var getAllEcartsDePeseeObservable = Rx.Observable.create(obs => {
         bordereau.findAll(query)
-        .then(bordereaux => {
-            let bordereauxAvecEcartDePesee = [];
-            bordereaux.forEach(bordereau => {
-                let quantiteeFinale = bordereau.dataValues.quantitee_finale;
-                let quantiteeTransportee = bordereau.dataValues.quantitee_transportee;
-                let ecartDePesee = Math.abs(quantiteeTransportee - quantiteeFinale);
-                if(ecartDePesee >= tolerance){
-                    bordereauxAvecEcartDePesee.push(bordereau.dataValues);
-                }
+            .then(bordereaux => {
+                let bordereauxAvecEcartDePesee = [];
+                bordereaux.forEach(bordereau => {
+                    let quantiteeFinale = bordereau.dataValues.quantitee_finale;
+                    let quantiteeTransportee = bordereau.dataValues.quantitee_transportee;
+                    let ecartDePesee = Math.abs(quantiteeTransportee - quantiteeFinale);
+                    if(ecartDePesee > tolerance){
+                        bordereauxAvecEcartDePesee.push(bordereau.dataValues);
+                    }
+                })
+                obs.onNext([bordereauxAvecEcartDePesee, "ecarts_pesee"]);
+                obs.onCompleted();
             })
-            obs.onNext(bordereauxAvecEcartDePesee);
-            obs.onCompleted();
-        })
-        .catch(err => {
-            obs.onError(err);
-        })
-    })
-};
+            .catch(err => {
+                obs.onError(err);
+            });
+    });
+    return getAllEcartsDePeseeObservable;
+}
 
-function getAllIncoherencesFilieres(idArray){
-    console.log(Op);
+function getAllIncoherencesFilieres(idArray) {
     var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
             where: {
-                id_site: {[Op.in]: idArray}
+                id_site: {$in: idArray}
             },
             include: [{
                 model: traitement,
@@ -59,7 +56,6 @@ function getAllIncoherencesFilieres(idArray){
             }]
         })
         .then(bordereaux => {
-            console.log("bordereaux: " + bordereaux);
             let bordereauxAvecIncoherencesFilieres = [];
             bordereaux.forEach(bordereau => {
                 let traitementPrevu = bordereau.dataValues.id_traitement_prevu;
@@ -67,8 +63,9 @@ function getAllIncoherencesFilieres(idArray){
                 if(traitementPrevu != traitementFinal){
                     bordereauxAvecIncoherencesFilieres.push(bordereau);
                 }
-            })
-            obs.onNext(bordereauxAvecIncoherencesFilieres);
+            });
+            obs.onNext([bordereauxAvecIncoherencesFilieres, "incoherences_filieres"]);
+            obs.onCompleted();
         })
         .catch(err => {
             obs.onError(err)
@@ -78,16 +75,6 @@ function getAllIncoherencesFilieres(idArray){
 };
 
 function getAllFilieresInterdites(idArray){
-    const traitement = sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement'));
-
-    if (query.where) {
-        query.where.traitement = traitement;
-    }
-    else {
-        query.where = {
-            traitement: traitement
-        };
-    }
 
     var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
@@ -109,11 +96,12 @@ function getAllFilieresInterdites(idArray){
             }],
             where: {
                 traitement: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
-                id_site: {[Op.in]: idArray}
+                id_site: {$in: idArray}
             }
         }).
         then(bordereauxAvecFilieresInterdites => {
-            obs.onNext(bordereaux);
+            obs.onNext([bordereauxAvecFilieresInterdites, "filieres_interdites"]);
+            obs.onCompleted();
         }).
         catch(err => {
             obs.onError(err)
@@ -122,7 +110,10 @@ function getAllFilieresInterdites(idArray){
     return getAllFilieresInterditesObservable;
 }
 
-var service = {}
+var service = {};
+
 service.getAllEcartsDePesee = getAllEcartsDePesee;
 service.getAllIncoherencesFilieres = getAllIncoherencesFilieres;
+service.getAllFilieresInterdites = getAllFilieresInterdites;
+
 module.exports = service;
