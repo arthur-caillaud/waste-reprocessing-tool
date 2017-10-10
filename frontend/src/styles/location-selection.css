@@ -28,6 +28,10 @@ span.searchGlass{
     top: 5px;
 }
 
+span.searchGlass:hover{
+    cursor: pointer;
+}
+
 .searchMode{
     display: block;
     width: 100%;

@@ -1,0 +1,48 @@
+.dashboard-tile{
+    position: relative;
+    background-color: #E6E6E6;
+}
+
+.dashboard-tile:hover{
+    cursor: pointer;
+    background-color: #DCDCDC;
+}
+
+.dashboard-tile .title{
+    text-align: center;
+}
+
+.dashboard-tile .value{
+    text-align: center;
+    font-size: 4.5em;
+}
+
+.dashboard-tile .notifValue{
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.dashboard-tile .notifValue:hover {
+    background-color: #E60000;
+}
+
+.dashboard-tile .arrow{
+    position: absolute;
+    font-size: 140%;
+}
+
+.dashboard-tile .arrow-up{
+    color: red;
+}
+
+.dashboard-tile .arrow-down{
+    color: green;
+}
