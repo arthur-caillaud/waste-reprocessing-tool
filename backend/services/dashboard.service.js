@@ -4,6 +4,8 @@ var service = {};
 var sequelize = require('sequelize');
 const Op = sequelize.Op;
 
+console.log(sequelize.Op);
+
 //Import required local modules
 var models = require('../models/');
 var db = require('../datamanagement/db.js');
@@ -17,9 +19,14 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
 
-function getAllEcartsDePesee(tolerance){
+function getAllEcartsDePesee(tolerance, idArray) {
+    const query = {
+        where: {
+            id_site: {[Op.in]: idArray}
+        }
+    }
     var getAllEcartsDePeseeObservable = Rx.Observable.create(obs => {
-        bordereau.findAll()
+        bordereau.findAll(query)
         .then(bordereaux => {
             let bordereauxAvecEcartDePesee = [];
             bordereaux.forEach(bordereau => {
@@ -39,15 +46,20 @@ function getAllEcartsDePesee(tolerance){
     })
 };
 
-function getAllIncoherencesFilieres(){
+function getAllIncoherencesFilieres(idArray){
+    console.log(Op);
     var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
+            where: {
+                id_site: {[Op.in]: idArray}
+            },
             include: [{
                 model: traitement,
                 required: true
             }]
         })
         .then(bordereaux => {
+            console.log("bordereaux: " + bordereaux);
             let bordereauxAvecIncoherencesFilieres = [];
             bordereaux.forEach(bordereau => {
                 let traitementPrevu = bordereau.dataValues.id_traitement_prevu;
@@ -65,7 +77,18 @@ function getAllIncoherencesFilieres(){
     return getAllIncoherencesFilieresObservable;
 };
 
-function getAllFilieresInterdites(){
+function getAllFilieresInterdites(idArray){
+    const traitement = sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement'));
+
+    if (query.where) {
+        query.where.traitement = traitement;
+    }
+    else {
+        query.where = {
+            traitement: traitement
+        };
+    }
+
     var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
             include: [
@@ -84,7 +107,10 @@ function getAllFilieresInterdites(){
                 model: traitement,
                 required: true
             }],
-            where: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement'))
+            where: {
+                traitement: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
+                id_site: {[Op.in]: idArray}
+            }
         }).
         then(bordereauxAvecFilieresInterdites => {
             obs.onNext(bordereaux);
