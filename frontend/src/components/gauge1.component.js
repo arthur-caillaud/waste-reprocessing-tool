@@ -1,12 +1,7 @@
 import React, { Component, } from 'react';
-<<<<<<< HEAD:frontend/src/components/gauge1.component.js
-import '../styles/containers.css';
-import GaugeJSX from './gauge1.js';
-=======
 import '../styles/gauge.css';
 import * as d3 from 'd3';
 import * as d3ColorChrom from 'd3-scale-chromatic';
->>>>>>> 102e9692443cae036e05f99daa818bfadeb857f9:frontend/src/dashboard/gauge1.component.js
 
 
 function getChartSize(el) {
@@ -32,7 +27,7 @@ class Gauge extends Component {
             .select("svg")
             .attr("width", getChartSize("#chart")[0])
             .attr("height", getChartSize("#chart")[1])
-        
+
 
 
     }
