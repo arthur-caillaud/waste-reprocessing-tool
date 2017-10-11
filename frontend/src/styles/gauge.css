@@ -7,7 +7,17 @@
     background-color: #E6E6E6;
 
 }
-#chart {
+#leftgauge {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#middlegauge {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#rightgauge {
     position: absolute;
     width: 100%;
     height: 100%;
