@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('dashboard', {
+  var dashboard = sequelize.define('dashboard', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -75,4 +75,10 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'dashboard'
   });
+
+  dashboard.associate = function(models) {
+      dashboard.belongsTo(models.site, {foreignKey: 'id_site', targetKey: 'id'});
+  }
+
+  return dashboard;
 };
