@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import MainRouter from './utilities/router.component';
 import SiteNavbar from './utilities/navbar.component';
+import SearchBar from './utilities/location-navigation.component';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
@@ -44,7 +45,10 @@ class App extends Component {
                    <Glyphicon glyph="menu-right"/>
                 </Button>
               </Col>
-              <Col sm={10}> <MainRouter /> </Col>
+              <Col sm={10}>
+                  <SearchBar />
+                  <MainRouter />
+              </Col>
             </Row>
           </div>
         </BrowserRouter>

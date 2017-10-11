@@ -6,7 +6,6 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
-import LocationNavigation from '../utilities/location-navigation.component';
 import TrashSearchBar from './search-trash.component';
 
 class Trash extends Component {
@@ -20,7 +19,6 @@ class Trash extends Component {
     return (
       <div>
         <div>
-          <LocationNavigation/>
           <h2>Vision déchet</h2>
         </div>
         <div>
