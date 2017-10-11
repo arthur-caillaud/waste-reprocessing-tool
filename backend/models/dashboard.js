@@ -8,14 +8,6 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    nom: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    },
-    niveau: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false
-    },
     ecarts_pesee: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
