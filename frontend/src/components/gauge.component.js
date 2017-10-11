@@ -18,17 +18,14 @@ class Gauge extends Component {
             valueBefore: props.valueBefore,
             width: 0,
             height: 0,
+            id: props.id,
         }
     }
 
     handleResize() {
-        var svgDoc = d3.select("#chart")
-            .attr("align","center")
-            .select("svg")
-            .attr("width", getChartSize("#chart")[0])
-            .attr("height", getChartSize("#chart")[1])
-
-
+        var svgDoc = d3.select("svg")
+            .attr("width", getChartSize("svg")[0])
+            .attr("height", getChartSize("svg")[1])
 
     }
 
@@ -40,8 +37,8 @@ class Gauge extends Component {
         var value = this.state.value;
         var valueBefore = this.state.valueBefore;
         var margin = {top: 20, right: 20, bottom: 50, left: 10},
-            width = getChartSize("#chart")[0] - margin.left - margin.right,
-            height = getChartSize("#chart")[1] - margin.top - margin.bottom;
+            width = getChartSize("#"+this.props.id)[0] - margin.left - margin.right,
+            height = getChartSize("#"+this.props.id)[1] - margin.top - margin.bottom;
 
 
 
@@ -49,7 +46,7 @@ class Gauge extends Component {
         Here we select the div which id is chart and add to it a <svg>
         We also choose it's attributes
         */
-        var svgDoc = d3.select("#chart")
+        var svgDoc = d3.select("#"+this.props.id)
             .attr("align","center")
             .append("svg")
             .attr("width", width)
@@ -168,8 +165,7 @@ class Gauge extends Component {
     }
 
     redrawJauge() {
-        const svgDoc = d3.select("#chart");
-        svgDoc.remove();
+        d3.select("#"+this.props.id).select("svg").remove("svg")
         this.drawJauge();
     };
 
@@ -180,7 +176,8 @@ class Gauge extends Component {
     };
 
     componentDidUpdate() {
-        this.redrawJauge();
+
+        this.handleResize();
     };
 
     componentWillUnmount() {
@@ -191,7 +188,7 @@ class Gauge extends Component {
         return (
             <div className="jauge-container">
                 <h2>{this.props.title}</h2>
-            <div id="chart" className="chart-container"></div>
+            <div id={this.props.id} className="chart-container"></div>
 
           </div>
       )
