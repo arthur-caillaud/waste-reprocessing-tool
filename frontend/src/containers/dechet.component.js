@@ -9,6 +9,7 @@ import Zone from '../graphics/zone.component';
 import DechetSearchBar from '../components/search.component';
 
 class Dechet extends Component {
+    
   render() {
     var i = 0;
     var list = [];

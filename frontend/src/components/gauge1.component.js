@@ -1,6 +1,6 @@
 import React, { Component, } from 'react';
 import '../styles/containers.css';
-import GaugeJSX from './jsxelements/gauge1.js';
+import GaugeJSX from './gauge1.js';
 
 
 const styles = {

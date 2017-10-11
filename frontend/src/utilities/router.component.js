@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Prestataire from '../containers/prestaire.component';
+import Prestataire from '../containers/prestataire.component';
 import Dashboard from '../containers/dashboard.component';
 import Dechet from '../containers/dechet.component';
 
