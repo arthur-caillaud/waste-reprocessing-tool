@@ -2,7 +2,6 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
-const Op = sequelize.Op;
 
 //Import required local modules
 var models = require('../models/');
@@ -17,31 +16,40 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
 
-function getAllEcartsDePesee(tolerance){
+function getAllEcartsDePesee(tolerance, idArray) {
+    const query = {
+        where: {
+            id_site: {$in: idArray}
+        }
+    };
     var getAllEcartsDePeseeObservable = Rx.Observable.create(obs => {
-        bordereau.findAll()
-        .then(bordereaux => {
-            let bordereauxAvecEcartDePesee = [];
-            bordereaux.forEach(bordereau => {
-                let quantiteeFinale = bordereau.dataValues.quantitee_finale;
-                let quantiteeTransportee = bordereau.dataValues.quantitee_transportee;
-                let ecartDePesee = Math.abs(quantiteeTransportee - quantiteeFinale);
-                if(ecartDePesee >= tolerance){
-                    bordereauxAvecEcartDePesee.push(bordereau.dataValues);
-                }
+        bordereau.findAll(query)
+            .then(bordereaux => {
+                let bordereauxAvecEcartDePesee = [];
+                bordereaux.forEach(bordereau => {
+                    let quantiteeFinale = bordereau.dataValues.quantitee_finale;
+                    let quantiteeTransportee = bordereau.dataValues.quantitee_transportee;
+                    let ecartDePesee = Math.abs(quantiteeTransportee - quantiteeFinale);
+                    if(ecartDePesee > tolerance){
+                        bordereauxAvecEcartDePesee.push(bordereau.dataValues);
+                    }
+                })
+                obs.onNext([bordereauxAvecEcartDePesee, "ecarts_pesee"]);
+                obs.onCompleted();
             })
-            obs.onNext(bordereauxAvecEcartDePesee);
-            obs.onCompleted();
-        })
-        .catch(err => {
-            obs.onError(err);
-        })
-    })
-};
+            .catch(err => {
+                obs.onError(err);
+            });
+    });
+    return getAllEcartsDePeseeObservable;
+}
 
-function getAllIncoherencesFilieres(){
+function getAllIncoherencesFilieres(idArray) {
     var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
+            where: {
+                id_site: {$in: idArray}
+            },
             include: [{
                 model: traitement,
                 required: true
@@ -55,8 +63,9 @@ function getAllIncoherencesFilieres(){
                 if(traitementPrevu != traitementFinal){
                     bordereauxAvecIncoherencesFilieres.push(bordereau);
                 }
-            })
-            obs.onNext(bordereauxAvecIncoherencesFilieres);
+            });
+            obs.onNext([bordereauxAvecIncoherencesFilieres, "incoherences_filieres"]);
+            obs.onCompleted();
         })
         .catch(err => {
             obs.onError(err)
@@ -65,7 +74,8 @@ function getAllIncoherencesFilieres(){
     return getAllIncoherencesFilieresObservable;
 };
 
-function getAllFilieresInterdites(){
+function getAllFilieresInterdites(idArray){
+
     var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
             include: [
@@ -84,19 +94,70 @@ function getAllFilieresInterdites(){
                 model: traitement,
                 required: true
             }],
-            where: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement'))
+            where: {
+                traitement: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
+                id_site: {$in: idArray}
+            }
         }).
         then(bordereauxAvecFilieresInterdites => {
-            obs.onNext(bordereaux);
+            obs.onNext([bordereauxAvecFilieresInterdites, "filieres_interdites"]);
+            obs.onCompleted();
         }).
         catch(err => {
             obs.onError(err)
         })
     });
     return getAllFilieresInterditesObservable;
+};
+
+function getAllRetards(idArray) {
+
+    var date = new Date();
+    const maxDelay = 30 * 60 * 60 * 1000;
+
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.findAll({
+            include: [{
+                model: traitement,
+                where: {
+                    date_priseencharge: {$lt: (date - maxDelay)}
+                }
+            }],
+            where: {
+                id_site: {$in: idArray},
+                bordereau_finished: false
+            }
+        })
+        .then((bordereaux) => {
+            obs.onNext([bordereaux, "retards"]);
+            obs.onCompleted();
+        })
+        .catch((err) => {
+            obs.onError(err);
+        })
+    });
+    return observable;
+};
+
+function getTotalVolume(idArray) {
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.sum('quantitee_finale', {
+            where: {
+                id_site: {$in: idArray},
+            },
+
+        })
+        .then((sum) => {
+
+        })
+    })
 }
 
-var service = {}
+var service = {};
+
 service.getAllEcartsDePesee = getAllEcartsDePesee;
 service.getAllIncoherencesFilieres = getAllIncoherencesFilieres;
+service.getAllFilieresInterdites = getAllFilieresInterdites;
+service.getAllRetards = getAllRetards;
+
 module.exports = service;

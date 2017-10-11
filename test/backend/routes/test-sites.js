@@ -4,14 +4,14 @@ var assert = chai.assert;
 
 var server = supertest.agent("http://localhost:4000");
 
-// TODO change URL when the API will use the new adresses
+describe("Sites Routes", () => {
 
-describe("Bordereaux Routes", () => {
 
-    describe("GET /bordereaux", () => {
+
+    describe("GET /sites", () => {
 
         it("should return a 200 status code", (done) => {
-            server.get("/bordereaux")
+            server.get("/sites")
                 .then((response) => {
                     assert.equal(response.status, 200);
                     done();
@@ -27,10 +27,10 @@ describe("Bordereaux Routes", () => {
     })
 
 
-    describe("GET prestataires/:id", () => {
+    describe("GET sites/:id", () => {
 
         it("should return a 200 status code", (done) => {
-            server.get("/bordereaux/1")
+            server.get("/sites/1")
                 .then((response) => {
                     assert.equal(response.status, 200);
                     done();
@@ -40,17 +40,16 @@ describe("Bordereaux Routes", () => {
                 });
         });
 
-        // TODO: add the function when the service is created
-        // it("should return a 404 status code for non-existing value", (done) => {
-        //     server.get("/prestataires/new/0")
-        //         .then((response) => {
-        //             assert.equal(response.status, 404);
-        //             done();
-        //         })
-        //         .catch((err) => {
-        //             done(err);
-        //         })
-        // })
+        it("should return a 404 status code for non-existing value", (done) => {
+            server.get("/sites/0")
+                .then((response) => {
+                    assert.equal(response.status, 404);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                })
+        })
 
         it("should return the correct data", () => {
             // TODO as the data must be studied to be tested

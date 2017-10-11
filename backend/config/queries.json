@@ -16,6 +16,14 @@
             "indicateur_national_valorisation",
             "famille",
             "id"
+        ],
+        "site": [
+            "nom",
+            "site_production",
+            "unite_dependance",
+            "up_dependance",
+            "metier_dependance",
+            "id"
         ]
     }
 }

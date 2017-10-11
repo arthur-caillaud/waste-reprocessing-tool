@@ -9,10 +9,15 @@ function errorHandler(error, callback) {
         var status = 404;
         var message = "Resource not found";
     }
+    else if (error == "Invalid arguments") {
+        var status = 400;
+        var message = "Invalid arguments";
+    }
     else {
         // All other errors that are not currently defined
         var status = 500; // TODO modify to adapt to various possible errors
-        var message = "internal server error";
+        console.log(error);
+        var message = error;
     }
     callback({status: status, message: message});
 }
