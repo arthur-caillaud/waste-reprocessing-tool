@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import * as ArrowUp from 'react-icons/lib/go/arrow-up';
 import * as ArrowDown from 'react-icons/lib/go/arrow-down';
-import '../styles/dashboard.tile.css';
+import '../styles/tile.css';
 
 class Tile extends Component {
 

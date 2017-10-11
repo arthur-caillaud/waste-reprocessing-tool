@@ -28,11 +28,11 @@
 }
 
 .dashboard-tile .valueTitle .value {
-    font-size: 5em;
+    font-size: 500%;
 }
 
 .dashboard-tile .valueTitle .percentage{
-    font-size: 2.5em;
+    font-size: 250%;
 }
 
 .dashboard-tile .notifValue{
