@@ -70,7 +70,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         .subscribe(observerEcarts);
 
     var observerIncoherences = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getAllIncoherencesFilieres([siteId], 0, beginDate, endDate, "incoherences_filieres")
+    DashboardService.getAllIncoherencesFilieres([siteId], 0, beginDate, endDate, "incoherences_filieres_norm")
         .subscribe(observerIncoherences);
 
     var observerIncoherencesDD = Rx.Observer.create(onNext, onError, onCompleted);

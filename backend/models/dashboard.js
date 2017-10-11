@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  var dashboard = sequelize.define('dashboard', {
+  return sequelize.define('dashboard', {
     id: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -13,17 +13,17 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '0'
     },
-    incoherences_filieres: {
+    incoherences_filieres_norm: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: '0'
     },
-    filieres_interdites: {
+    filieres_interdites_norm: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: '0'
     },
-    retards: {
+    retards_norm: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: '0'
@@ -75,10 +75,4 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     tableName: 'dashboard'
   });
-
-  dashboard.associate = function(models) {
-      dashboard.belongsTo(models.site, {foreignKey: 'id_site', targetKey: 'id'});
-  }
-
-  return dashboard;
 };
