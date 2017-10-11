@@ -54,7 +54,8 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     computedValues.id_site = siteId;
 
     var onNext = (data) => {
-        computedValues[data[1]] = data[0];
+        // an array is returned, we just need the length
+        computedValues[data[1]] = data[0].length;
     };
     var onError = (error) => {
         console.log(error);

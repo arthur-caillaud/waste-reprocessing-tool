@@ -40,8 +40,7 @@ function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create(obs => {
         bordereau.findAll(query)
             .then(bordereaux => {
-                obs.onNext([bordereaux.length, label]);
-                console.log(bordereaux.length);
+                obs.onNext([bordereaux, label]);
                 obs.onCompleted();
             })
             .catch(err => {
