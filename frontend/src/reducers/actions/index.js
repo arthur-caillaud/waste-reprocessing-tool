@@ -2,7 +2,7 @@
  * ACTION TYPES
  */
 export const CHANGE_SCALE = 'CHANGE_SCALE';
-export const CHANGE_PAGE = 'CHANGE_PAGE';
+export const CHANGE_URL = 'CHANGE_URL';
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 export const DISPLAY_TILE_INFOS = 'DISPLAY_TILE_INFOS';
@@ -31,7 +31,7 @@ export function changeScale(scale){
 
 export function changePage(url){
     return {
-        type: CHANGE_PAGE,
+        type: CHANGE_URL,
         url
     }
 }
