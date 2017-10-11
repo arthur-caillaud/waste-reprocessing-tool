@@ -16,44 +16,65 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
 
-function getAllEcartsDePesee(tolerance, idArray) {
+function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
     const query = {
+        include: [
+            {
+                model: traitement,
+                where: {
+                    date_priseencharge: {
+                        $lt: endDate,
+                        $gte: beginDate,
+                    }
+                }
+            }
+        ],
         where: {
-            id_site: {$in: idArray}
+            id_site: {$in: idArray},
+            $or: [
+                sequelize.where(sequelize.literal('quantitee_finale - quantitee_transportee'), '>', tolerance),
+                sequelize.where(sequelize.literal('quantitee_transportee - quantitee_finale'), '>', tolerance)
+            ]
         }
     };
-    var getAllEcartsDePeseeObservable = Rx.Observable.create(obs => {
+    var observable = Rx.Observable.create(obs => {
         bordereau.findAll(query)
             .then(bordereaux => {
-                let bordereauxAvecEcartDePesee = [];
-                bordereaux.forEach(bordereau => {
-                    let quantiteeFinale = bordereau.dataValues.quantitee_finale;
-                    let quantiteeTransportee = bordereau.dataValues.quantitee_transportee;
-                    let ecartDePesee = Math.abs(quantiteeTransportee - quantiteeFinale);
-                    if(ecartDePesee > tolerance){
-                        bordereauxAvecEcartDePesee.push(bordereau.dataValues);
-                    }
-                })
-                obs.onNext([bordereauxAvecEcartDePesee, "ecarts_pesee"]);
+                obs.onNext([bordereaux.length, label]);
+                console.log(bordereaux.length);
                 obs.onCompleted();
             })
             .catch(err => {
                 obs.onError(err);
             });
     });
-    return getAllEcartsDePeseeObservable;
+    return observable;
 }
 
-function getAllIncoherencesFilieres(idArray) {
+function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, label) {
     var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
             where: {
                 id_site: {$in: idArray}
             },
-            include: [{
-                model: traitement,
-                required: true
-            }]
+            include: [
+                {
+                    model: traitement,
+                    required: true,
+                    where: {
+                        date_priseencharge: {
+                            $lt: endDate,
+                            $gte: beginDate,
+                        }
+                    },
+                },
+                {
+                    model: dechet,
+                    where: {
+                        is_dangereux: dangereux
+                    }
+                }
+        ]
         })
         .then(bordereaux => {
             let bordereauxAvecIncoherencesFilieres = [];
@@ -64,7 +85,7 @@ function getAllIncoherencesFilieres(idArray) {
                     bordereauxAvecIncoherencesFilieres.push(bordereau);
                 }
             });
-            obs.onNext([bordereauxAvecIncoherencesFilieres, "incoherences_filieres"]);
+            obs.onNext([bordereauxAvecIncoherencesFilieres, label]);
             obs.onCompleted();
         })
         .catch(err => {
@@ -74,33 +95,45 @@ function getAllIncoherencesFilieres(idArray) {
     return getAllIncoherencesFilieresObservable;
 };
 
-function getAllFilieresInterdites(idArray){
+function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label){
 
     var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
             include: [
-            {
-                model: dechet,
-                required: true,
-                include: {
-                    model: referentiel_dechet,
+                {
+                    model: dechet,
                     required: true,
                     where: {
-                        gestion: 'r'
+                        is_dangereux: dangereux
+                    },
+                    include: {
+                        model: referentiel_dechet,
+                        required: true,
+                        where: {
+                            gestion: 'r'
+                        }
                     }
-                }
-            },
-            {
-                model: traitement,
-                required: true
-            }],
+                },
+                {
+                    model: traitement,
+                    where: {
+                        date_priseencharge: {
+                            $lt: endDate,
+                            $gte: beginDate,
+                        }
+                    }
+                },
+                {
+                    model: traitement,
+                    required: true
+                }],
             where: {
                 traitement: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
                 id_site: {$in: idArray}
             }
         }).
         then(bordereauxAvecFilieresInterdites => {
-            obs.onNext([bordereauxAvecFilieresInterdites, "filieres_interdites"]);
+            obs.onNext([bordereauxAvecFilieresInterdites, label]);
             obs.onCompleted();
         }).
         catch(err => {
@@ -110,26 +143,39 @@ function getAllFilieresInterdites(idArray){
     return getAllFilieresInterditesObservable;
 };
 
-function getAllRetards(idArray) {
+function getAllRetards(idArray, dangereux, date, label) {
 
-    var date = new Date();
-    const maxDelay = 30 * 60 * 60 * 1000;
+    if (dangereux==1) {
+        var maxDelay = 30 * 60 * 60 * 1000;
+    }
+    else {
+        var maxDelay = 60 * 60 * 60 * 1000;
+    }
+
 
     var observable = Rx.Observable.create((obs) => {
+        console.log("maxDelay " + maxDelay);
         bordereau.findAll({
-            include: [{
-                model: traitement,
-                where: {
-                    date_priseencharge: {$lt: (date - maxDelay)}
+            include: [
+                {
+                    model: traitement,
+                    where: {
+                        date_priseencharge: {$lt: (date - maxDelay)}
+                }},
+                {
+                    model: dechet,
+                    where: {
+                        is_dangereux: dangereux
+                    }
                 }
-            }],
+                ],
             where: {
                 id_site: {$in: idArray},
                 bordereau_finished: false
             }
         })
         .then((bordereaux) => {
-            obs.onNext([bordereaux, "retards"]);
+            obs.onNext([bordereaux, label]);
             obs.onCompleted();
         })
         .catch((err) => {
@@ -139,18 +185,34 @@ function getAllRetards(idArray) {
     return observable;
 };
 
-function getTotalVolume(idArray) {
+function getTotalVolume(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
         bordereau.sum('quantitee_finale', {
+            include: [
+                {
+                    model: traitement,
+                    where: {
+                        date_priseencharge: {
+                            $lt: endDate,
+                            $gte: beginDate,
+                        }
+                    }
+                }
+            ],
             where: {
                 id_site: {$in: idArray},
             },
 
         })
         .then((sum) => {
-
+            obs.onNext([bordereaux, label]);
+            obs.onCompleted();
         })
-    })
+        .catch((err) => {
+            obs.onError(err);
+        });
+    });
+    return observable;
 }
 
 var service = {};
@@ -159,5 +221,6 @@ service.getAllEcartsDePesee = getAllEcartsDePesee;
 service.getAllIncoherencesFilieres = getAllIncoherencesFilieres;
 service.getAllFilieresInterdites = getAllFilieresInterdites;
 service.getAllRetards = getAllRetards;
+service.getTotalVolume = getTotalVolume;
 
 module.exports = service;
