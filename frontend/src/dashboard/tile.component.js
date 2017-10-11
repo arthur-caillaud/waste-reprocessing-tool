@@ -13,7 +13,6 @@ class Tile extends Component {
       value: props.value,
       isGrowing: props.isGrowing,
       notifValue: props.notifValue,
-      height: props.height,
       icon: props.icon,
     };
   }

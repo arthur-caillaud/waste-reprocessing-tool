@@ -1,23 +1,13 @@
 .svg-container {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  padding-bottom: 90%;
-  vertical-align: middle;
-  align-content: center;
-  overflow: hidden;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
 }
 
-.svg-content {
-  display: inline-block;
-  position: absolute;
-  background-color: white;
-  width: 80%;
-  padding-bottom: 30%;
-  border: 1px solid;
-  top: 0;
-  left: 10%;
-}
+
 
 .mock-container {
   display: inline-block;
