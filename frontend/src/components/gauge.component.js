@@ -22,12 +22,7 @@ class Gauge extends Component {
         }
     }
 
-    handleResize() {
-        var svgDoc = d3.select("svg")
-            .attr("width", getChartSize("svg")[0])
-            .attr("height", getChartSize("svg")[1])
 
-    }
 
     drawJauge() {
         /*
@@ -170,10 +165,17 @@ class Gauge extends Component {
     };
 
     componentDidMount() {
-        window.addEventListener('resize',this.handleResize)
+
         this.drawJauge()
+        window.addEventListener('resize',this.handleResize())
 
     };
+    handleResize() {
+        var svgDoc = d3.select("#"+this.props.id)
+            .attr("width", getChartSize("svg")[0] - 30)
+            .attr("height", getChartSize("svg")[1] - 60)
+
+    }
 
     componentDidUpdate() {
 
