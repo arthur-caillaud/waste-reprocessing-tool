@@ -10,6 +10,7 @@ export const DISPLAY_TILE_NOTIFINFOS = 'DISPLAY_TILE_NOTIFINFOS';
 export const DISPLAY_GAUGE_INFOS = 'DISPLAY_GAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
+export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
 /*
  * other constants
@@ -82,5 +83,12 @@ export function removeGraphTag(tag){
     return {
         type: REMOVE_GRAPH_TAG,
         tag
+    }
+}
+
+export function toggleLateralMenu(isVisible){
+    return {
+        type: TOGGLE_LATERALMENU,
+        isVisible
     }
 }

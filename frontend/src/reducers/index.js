@@ -9,10 +9,11 @@ import {
     DISPLAY_GAUGE_INFOS,
     ADD_GRAPH_TAG,
     REMOVE_GRAPH_TAG,
+    TOGGLE_LATERALMENU,
     GraphTypes
 } from './actions'
 
-function displayInfos(state = {title: "", defaultBody: "Afficher d'avantage d'informations"}, action){
+function infosPanelOptions(state = {title: "", defaultBody: "Afficher d'avantage d'informations"}, action){
     switch (action.type){
         case DISPLAY_TILE_INFOS:
             return Object.assign({}, state, action.tile);
@@ -33,17 +34,27 @@ function graphOptions(state = {type: GraphTypes.HISTOGRAM_GRAPH, input: '', tags
             return Object.assign({}, state, {type: action.graphType});
         case ADD_GRAPH_TAG:
             return Object.assign({}, state, {tags: [...state.tags, action.tag]});
+        case REMOVE_GRAPH_TAG:
+            var newTagsArray = [];
+            state.tags.forEach(tag => {
+                if(action.tag !== tag){
+                    newTagsArray.push(tag)
+                }
+            });
+            return Object.assign({}, state, {tags: newTagsArray});
         default:
             return state;
     }
 }
 
-function pageOptions(state = {url: '/', scale: {level: 0, name: ''}}, action){
+function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, lateralmenuIsVisible: true}, action){
     switch (action.type) {
         case CHANGE_URL:
             return Object.assign({}, state, {url: action.url});
         case CHANGE_SCALE:
             return Object.assign({}, state, {scale: action.scale});
+        case TOGGLE_LATERALMENU:
+            return Object.assign({}, state, {lateralmenuIsVisible: !state.lateralmenuIsVisible});
         default:
             return state;
     }
@@ -52,7 +63,7 @@ function pageOptions(state = {url: '/', scale: {level: 0, name: ''}}, action){
 const akkaApp = combineReducers({
     pageOptions,
     graphOptions,
-    displayInfos
+    infosPanelOptions
 })
 
 export default akkaApp
