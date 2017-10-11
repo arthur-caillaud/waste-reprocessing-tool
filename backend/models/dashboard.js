@@ -54,7 +54,27 @@ module.exports = function(sequelize, DataTypes) {
     date: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: '0000-00-00'
+      defaultValue: '2016-01-01'
+    },
+    incoherences_filieres_dd: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    filieres_interdites_dd: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    retards_dd: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    details: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
     }
   }, {
     tableName: 'dashboard'
