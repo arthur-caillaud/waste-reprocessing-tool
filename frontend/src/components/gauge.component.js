@@ -14,8 +14,8 @@ class Gauge extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 87,
-            valueBefore: 90,
+            value: props.value,
+            valueBefore: props.valueBefore,
             width: 0,
             height: 0,
         }

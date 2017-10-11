@@ -13,9 +13,9 @@ class Dashboard extends Component {
         <div>
           <Grid fluid>
             <Row className="show-grid">
-              <Col sm={3}> <Gauge title="Valorisation Globale"/> </Col>
-              <Col sm={3}> <Gauge title="Valorisation Liste Verte"/> </Col>
-              <Col sm={3}> <Gauge title="Volume Déchets"/> </Col>
+              <Col sm={3}> <Gauge title="Valorisation Globale" value={80} valueBefore={85}/> </Col>
+              <Col sm={3}> <Gauge title="Valorisation Liste Verte" value={87} valueBefore={85}/> </Col>
+              <Col sm={3}> <Gauge title="Volume Déchets" value={35} valueBefore={30}/> </Col>
               <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>
 
