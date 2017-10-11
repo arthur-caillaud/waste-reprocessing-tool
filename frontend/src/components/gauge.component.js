@@ -187,7 +187,7 @@ class Gauge extends Component {
       render() {
         return (
             <div className="jauge-container">
-                <h2>{this.props.title}</h2>
+                <h2 className="gauge-title">{this.props.title}</h2>
             <div id={this.props.id} className="chart-container"></div>
 
           </div>
