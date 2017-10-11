@@ -6,9 +6,10 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
-import ClientSearchBar from './search-client.component';
+import DechetSearchBar from '../components/search.component';
 
-class Client extends Component {
+class Dechet extends Component {
+    
   render() {
     var i = 0;
     var list = [];
@@ -19,14 +20,14 @@ class Client extends Component {
     return (
       <div>
         <div>
-          <h2>Vision prestataire</h2>
+          <h2>Vision déchet</h2>
         </div>
         <div>
           <Grid fluid>
             <Row>
               <Col sm={2}>
                 <Row>
-                  <ClientSearchBar/>
+                  <DechetSearchBar/>
                 </Row>
                 <Row>
                   <ListGroup>
@@ -36,17 +37,17 @@ class Client extends Component {
               </Col>
               <Col sm={10}>
                 <Row>
-                  <Col sm={9}><h2>VEOLIA</h2></Col>
-                  <Col sm={1}>A</Col>
+                  <Col sm={9}><h2>EMBALLAGE PAPIER/CARTON</h2></Col>
+                  {/* <Col sm={1}>A</Col>
                   <Col sm={1}>B</Col>
-                  <Col sm={1}>C</Col>
+                  <Col sm={1}>C</Col> */}
                 </Row>
                 <Row>
                   <Zone />
                 </Row>
                 <Row>
                   <Col sm={3}>
-                    <ClientSearchBar/>
+                    <DechetSearchBar/>
                   </Col>
                   <Col sm={9}>
                     <Button>Tag 1</Button>
@@ -63,4 +64,4 @@ class Client extends Component {
   }
 }
 
-export default Client;
+export default Dechet;
