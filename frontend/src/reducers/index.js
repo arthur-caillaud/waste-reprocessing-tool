@@ -12,15 +12,18 @@ import {
     GraphTypes
 } from './actions'
 
-const initialState = {
-    pageUrl: '/',
-    navScale: {
-        hierarchyLevel: 0,
-        value: null
+function displayInfos(state = {title: "", defaultBody: "Afficher d'avantage d'informations"}, action){
+    switch (action.type){
+        case DISPLAY_TILE_INFOS:
+            return Object.assign({}, state, action.tile);
+        case DISPLAY_GAUGE_INFOS:
+            return Object.assign({}, state, action.gauge);
+        case DISPLAY_TILE_NOTIFINFOS:
+            return Object.assign({}, state, action.tilenotifs);
     }
 }
 
-function akkaApp(state = initialState, action){
+function akkaApp(state = {}, action){
     switch (action.type){
         case CHANGE_PAGE:
             return Object.assign({}, state, {

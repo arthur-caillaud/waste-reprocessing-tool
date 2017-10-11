@@ -57,10 +57,10 @@ export function displayTileInfos(tile){
     }
 }
 
-export function displayTileNotifInfos(tile){
+export function displayTileNotifInfos(tileNotifs){
     return {
         type: DISPLAY_TILE_NOTIFINFOS,
-        tile
+        tileNotifs
     }
 }
 
