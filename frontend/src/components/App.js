@@ -2,16 +2,16 @@ import React from 'react'
 import { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import MainRouter from './utilities/router.component';
-import LateralMenu from './components/lateralmenu.component';
-import SearchBar from './components/searchbar.component';
+import MainRouter from '../utilities/router.component';
+import LateralMenu from './lateralmenu.component';
+import SearchBar from './searchbar.component';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
 
 import { Col, Row } from 'react-bootstrap';
 
-import './styles/lateralmenu.css';
+import '../styles/lateralmenu.css';
 
 class App extends Component {
   constructor() {
