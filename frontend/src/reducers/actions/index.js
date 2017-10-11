@@ -36,23 +36,51 @@ export function changePage(url){
     }
 }
 
-export function changePrestataire(prestataire){
+export function changeGraphInput(prestataire){
     return {
         type: CHANGE_GRAPH_INPUT,
         prestataire
     }
 }
 
-export function toggleTileInfos(tile){
+export function changeGraphType(graphType){
+    return {
+        type: CHANGE_GRAPH_TYPE,
+        graphType
+    }
+}
+
+export function displayTileInfos(tile){
     return {
         type: DISPLAY_TILE_INFOS,
         tile
     }
 }
 
-export function addTagForGraph(tag){
+export function displayTileNotifInfos(tile){
+    return {
+        type: DISPLAY_TILE_NOTIFINFOS,
+        tile
+    }
+}
+
+export function displayGaugeInfos(gauge){
+    return {
+        type: DISPLAY_GAUGE_INFOS,
+        gauge
+    }
+}
+
+export function addGraphTag(tag){
     return {
         type: ADD_GRAPH_TAG,
+        tag
+    }
+}
+
+export function removeGraphTag(tag){
+    return {
+        type: REMOVE_GRAPH_TAG,
         tag
     }
 }
