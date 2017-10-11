@@ -147,6 +147,9 @@ function getTotalVolume(idArray) {
             },
 
         })
+        .then((sum) => {
+
+        })
     })
 }
 
