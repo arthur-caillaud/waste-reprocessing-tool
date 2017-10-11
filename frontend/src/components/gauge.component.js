@@ -54,8 +54,8 @@ class Gauge extends Component {
             .attr("transform", "translate(" + (width+ margin.left + margin.right)/2 + "," + (height + margin.top + margin.bottom)/2 + ")rotate(180)"
              );
 
-        //This FUNCTION permits to scale 0 to 100% onto a domain that represent the jauge.
-        //Without it, the jauge goes from 0 to 100 in a full circle.
+        //This FUNCTION permits to scale 0 to 100% onto a domain that represent the gauge.
+        //Without it, the gauge goes from 0 to 100 in a full circle.
         var scale = d3.scaleLinear()
                             .domain([0, 100])
                             .range([1/5*Math.PI, 9/5*Math.PI])
@@ -106,7 +106,7 @@ class Gauge extends Component {
         for each object in data, so here, two paths.
         These paths follow the class arc defined earlier.
         We define their inner and outer radius, but not starting and ending angle. If we did, we would have, on page opening,
-        the two jauges already created, and then they would move, which is not what we want.
+        the two gauges already created, and then they would move, which is not what we want.
 
         The transition() part sets the movement.
         .attrTween means it's custom. "d" is the attribute we modify, it is "d" for draw. it means that we put the pen on the paper.
@@ -187,7 +187,7 @@ class Gauge extends Component {
 
       render() {
         return (
-            <div className="jauge-container">
+            <div className="gauge-container">
                 <h2 className="gauge-title">{this.props.title}</h2>
             <div id={this.props.id} className="chart-container"></div>
 
