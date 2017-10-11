@@ -3,8 +3,8 @@ import { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import MainRouter from './utilities/router.component';
-import SiteNavbar from './utilities/navbar.component';
-import SearchBar from './utilities/location-navigation.component';
+import LateralMenu from './components/lateralmenu.component';
+import SearchBar from './components/searchbar.component';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
@@ -33,7 +33,7 @@ class App extends Component {
           <div>
             <Row className="row-eq-height">
               <Col sm={2} hidden={!this.state.navBar} className="navBar">
-                <Col sm={10}> <SiteNavbar/> </Col>
+                <Col sm={10}> <LateralMenu/> </Col>
                 <Col sm={2}>
                   <Button bsStyle="primary" onClick={() => this.toggleNavBar()}>
                      <Glyphicon glyph="menu-left"/>

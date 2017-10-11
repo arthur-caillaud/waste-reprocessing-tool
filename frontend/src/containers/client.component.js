@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
-import ClientSearchBar from './search-client.component';
+import ClientSearchBar from '../components/search.component';
 
 class Client extends Component {
   render() {
