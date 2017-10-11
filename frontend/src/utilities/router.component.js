@@ -1,17 +1,17 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Client from '../client/client.component';
-import Dashboard from '../dashboard/dashboard.component';
-import Trash from '../trash/trash.component';
+import Prestataire from '../containers/prestaire.component';
+import Dashboard from '../containers/dashboard.component';
+import Dechet from '../containers/dechet.component';
 
 
 const MainRouter = () => (
   <main-router>
     <Switch>
       <Route exact path='/' component={Dashboard}/>
-      <Route path='/client' component={Client}/>
-      <Route path='/trash' component={Trash}/>
+      <Route path='/prestataire' component={Prestataire}/>
+      <Route path='/dechet' component={Dechet}/>
     </Switch>
   </main-router>
 )

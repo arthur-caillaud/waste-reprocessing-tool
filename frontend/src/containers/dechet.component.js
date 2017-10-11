@@ -6,9 +6,9 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
-import TrashSearchBar from './search-trash.component';
+import DechetSearchBar from '../components/search.component';
 
-class Trash extends Component {
+class Dechet extends Component {
   render() {
     var i = 0;
     var list = [];
@@ -26,7 +26,7 @@ class Trash extends Component {
             <Row>
               <Col sm={2}>
                 <Row>
-                  <TrashSearchBar/>
+                  <DechetSearchBar/>
                 </Row>
                 <Row>
                   <ListGroup>
@@ -46,7 +46,7 @@ class Trash extends Component {
                 </Row>
                 <Row>
                   <Col sm={3}>
-                    <TrashSearchBar/>
+                    <DechetSearchBar/>
                   </Col>
                   <Col sm={9}>
                     <Button>Tag 1</Button>
@@ -63,4 +63,4 @@ class Trash extends Component {
   }
 }
 
-export default Trash;
+export default Dechet;
