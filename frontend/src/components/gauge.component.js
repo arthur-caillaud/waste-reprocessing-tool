@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 
 
 
+
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
         let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
@@ -196,5 +197,7 @@ class Gauge extends Component {
 
       }
 }
+
+
 
 export default Gauge;
