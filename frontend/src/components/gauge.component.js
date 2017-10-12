@@ -1,12 +1,14 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
-import * as d3ColorChrom from 'd3-scale-chromatic';
+
+
 
 
 function getChartSize(el) {
-        let width = parseInt(d3.select(el).style('width'));
-        let height = parseInt(d3.select(el).style('height'));
+    var margin = {top: 40, right: 20, bottom: 40, left: 20};
+        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
 
         return  [width,height];
     }
@@ -16,18 +18,11 @@ class Gauge extends Component {
         this.state = {
             value: props.value,
             valueBefore: props.valueBefore,
-            width: 0,
-            height: 0,
             id: props.id,
         }
     }
 
-    handleResize() {
-        var svgDoc = d3.select("svg")
-            .attr("width", getChartSize("svg")[0])
-            .attr("height", getChartSize("svg")[1])
 
-    }
 
     drawJauge() {
         /*
@@ -36,9 +31,9 @@ class Gauge extends Component {
         */
         var value = this.state.value;
         var valueBefore = this.state.valueBefore;
-        var margin = {top: 20, right: 20, bottom: 50, left: 10},
-            width = getChartSize("#"+this.props.id)[0] - margin.left - margin.right,
-            height = getChartSize("#"+this.props.id)[1] - margin.top - margin.bottom;
+        var margin = {top: 20, right: 20, bottom: 40, left: 20};
+        var width = getChartSize("#"+this.props.id)[0];
+        var height = getChartSize("#"+this.props.id)[1];
 
 
 
@@ -49,19 +44,19 @@ class Gauge extends Component {
         var svgDoc = d3.select("#"+this.props.id)
             .attr("align","center")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height)
+            .attr("width", width+ margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
 
         /*
         Then we append a <g> element and translate it to the middle of the <svg>
         */
 
         var g = svgDoc.append("g")
-            .attr("transform", "translate(" + width/2 + "," + height/2 + ")rotate(180)"
+            .attr("transform", "translate(" + (width+ margin.left + margin.right)/2 + "," + (height + margin.top + margin.bottom)/2 + ")rotate(180)"
              );
 
-        //This FUNCTION permits to scale 0 to 100% onto a domain that represent the jauge.
-        //Without it, the jauge goes from 0 to 100 in a full circle.
+        //This FUNCTION permits to scale 0 to 100% onto a domain that represent the gauge.
+        //Without it, the gauge goes from 0 to 100 in a full circle.
         var scale = d3.scaleLinear()
                             .domain([0, 100])
                             .range([1/5*Math.PI, 9/5*Math.PI])
@@ -77,14 +72,14 @@ class Gauge extends Component {
         */
         var data = [
             {
-                innerRadius: (width/2) -22,
-                outerRadius: (width/2) -10,
+                innerRadius: (width/2) - margin.top - 15,
+                outerRadius: (width/2)- margin.top,
                 startAngle: scale(0),
                 endAngle: scale(value)
             },
             {
-                innerRadius: (width/2) -30,
-                outerRadius: (width/2)-24,
+                innerRadius: (width/2) -margin.top-10 - margin.bottom/2,
+                outerRadius: (width/2)-margin.top - margin.bottom/2,
                 startAngle: scale(0),
                 endAngle: scale(valueBefore)
             }
@@ -112,7 +107,7 @@ class Gauge extends Component {
         for each object in data, so here, two paths.
         These paths follow the class arc defined earlier.
         We define their inner and outer radius, but not starting and ending angle. If we did, we would have, on page opening,
-        the two jauges already created, and then they would move, which is not what we want.
+        the two gauges already created, and then they would move, which is not what we want.
 
         The transition() part sets the movement.
         .attrTween means it's custom. "d" is the attribute we modify, it is "d" for draw. it means that we put the pen on the paper.
@@ -170,10 +165,17 @@ class Gauge extends Component {
     };
 
     componentDidMount() {
-        window.addEventListener('resize',this.handleResize)
+
         this.drawJauge()
+        window.addEventListener('resize',this.handleResize())
 
     };
+    handleResize() {
+        var svgDoc = d3.select("#"+this.props.id)
+            .attr("width", getChartSize("#"+this.props.id)[0] - 30)
+            .attr("height", getChartSize("#"+this.props.id)[1] - 60)
+
+    }
 
     componentDidUpdate() {
 
@@ -186,8 +188,8 @@ class Gauge extends Component {
 
       render() {
         return (
-            <div className="jauge-container">
-                <h2>{this.props.title}</h2>
+            <div className="gauge-container">
+                <h2 className="gauge-title">{this.props.title}</h2>
             <div id={this.props.id} className="chart-container"></div>
 
           </div>
@@ -195,5 +197,7 @@ class Gauge extends Component {
 
       }
 }
+
+
 
 export default Gauge;
