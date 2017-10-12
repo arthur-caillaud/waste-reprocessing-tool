@@ -6,10 +6,10 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
-import DechetSearchBar from '../components/search.component';
+import DechetSearchBar from './search.component';
 
 class Dechet extends Component {
-    
+
   render() {
     var i = 0;
     var list = [];
