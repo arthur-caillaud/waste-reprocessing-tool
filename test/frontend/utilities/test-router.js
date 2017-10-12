@@ -46,8 +46,8 @@ describe('MainRouter', () => {
       const exact = routes[0].props.exact;
 
       expect(route1).to.equal('/');
-      expect(route2).to.equal('/client');
-      expect(route3).to.equal('/trash');
+      expect(route2).to.equal('/prestataire');
+      expect(route3).to.equal('/dechet');
       expect(exact).to.equal(true);
     });
 });
