@@ -15,6 +15,8 @@ var dechets = require('./routes/dechets.controller');
 var sites = require('./routes/sites.controller');
 var dashboard = require('./routes/dashboard.controller');
 
+var preCompute = require('./datamanagement/pre_computing');
+
 var config = require('./config.json');
 
 var app = express();
