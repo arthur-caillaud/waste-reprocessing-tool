@@ -98,6 +98,12 @@ class Gauge extends Component {
         var format = d3.format("d");
         var arc = d3.arc()
 
+        var percentage = g.append('text')
+                .style("fill", function (d) { return color(d); })
+                .style('font-size', '10px')
+                .attr('text-anchor', 'middle')
+                .attr('dx', -28)
+                .attr('dy', -3)
         /*
         Important part.
         g.selectAll will select all the arcs created
@@ -154,9 +160,22 @@ class Gauge extends Component {
                           return color(t*value)
                       }
                     })
-
-
             });
+        percentage
+          .transition()
+              .duration(2500)
+              .on("start", function() {
+                  d3.active(this)
+                    .tween("text", function(){
+                        var that = d3.select(this);
+                        return function(t) {that.text('%')}
+                    })
+                    .styleTween("fill", function() {
+                        return function(t) {
+                            return color(t*value)
+                        }
+                    })
+        })
     }
 
     redrawJauge() {
