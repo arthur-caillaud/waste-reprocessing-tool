@@ -68,9 +68,9 @@ app.use(function(req, res, next) {
 });
 
 // run the server on the provided port on config.json file
-var port = config.server.listen_port;
-app.listen(port);
-console.log("server running on port " + port);
+// var port = config.server.listen_port;
+// app.listen(port);
+// console.log("server running on port " + port);
 
 // error handler
 app.use(function(err, req, res, next) {
