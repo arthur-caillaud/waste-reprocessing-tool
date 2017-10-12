@@ -57,7 +57,7 @@ const toQuantiteeEstimee = function(estimeeBool){
     return null
 }
 const toDangereux = function(code_europeen){
-    if (code_europeen.slice(8,9) == '*'){
+    if (typeof code_europeen === "string" && code_europeen.slice(8,9) == '*'){
         return 1
     }
     return 0
@@ -719,7 +719,6 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
         is_listeverte: toListeVerte(excelRow[5]),
         is_dangereux: toDangereux(excelRow[8]),
     };
-    console.log(jsonRow);
     const codeDictionnaire = {
         'R1': 9,
         'R2': 10,
@@ -757,6 +756,7 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
                             Object.keys(codeDictionnaire).forEach(code_dr => {
                                 type_traitement.findOne({where: {code_dr : code_dr}})
                                 .then(type_traitement => {
+                                    console.log(type_traitement);
                                     if(type_traitement){
                                         var newReferentielDechet = {
                                             id_dechet: dechet.dataValues.id,
@@ -764,6 +764,7 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
                                             gestion: excelRow[codeDictionnaire[code_dr]]
                                         };
                                         if(newReferentielDechet.gestion){
+                                            console.log(newReferentielDechet);
                                             referentiel_dechet.findOrCreate({where : newReferentielDechet})
                                             .spread((referentiel_dechet, created) => {
                                                 if(created){
@@ -773,6 +774,12 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
                                                 obs.onCompleted();
                                             });
                                         }
+                                        else {
+                                            obs.onCompleted();
+                                        }
+                                    }
+                                    else {
+                                        obs.onCompleted();
                                     }
                                 })
                                 .catch(err => {
@@ -783,6 +790,9 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
                         .catch(err => {
                             obs.onError(err)
                         })
+                    }
+                    else {
+                        obs.onCompleted();
                     }
                 })
             }
@@ -858,7 +868,6 @@ const readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) 
                     }
                 });
                 obs.onNext(jsonExcel);
-                obs.onCompleted();
             })
             .catch(error => {
                 obs.onError(error);
@@ -884,16 +893,19 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                         referentielDechetObservable.subscribe({
                             onNext: referentiel_dechet => {
                                 console.log("Successfully pushed referentiel_dechet into database");
+                                console.log(referentiel_dechet);
                             },
                             onError: err => {
                                 console.error("Error thrown by referentielDechetObservable");
                                 console.error(err);
                                 process.nextTick(() => {
+                                    console.log("Next tick");
                                     callback(null, true);
                                 });
                             },
                             onCompleted: () => {
                                 process.nextTick(() => {
+                                    console.log("Next tick");
                                     callback(null, true);
                                 });
                             }
@@ -970,5 +982,5 @@ const writeIntoBdd = function(excelName) {
 };
 
 //TEST PHASE
-//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-writeIntoBdd("dataedfmars.xlsx");
+writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+//writeIntoBdd("dataedfmars.xlsx");
