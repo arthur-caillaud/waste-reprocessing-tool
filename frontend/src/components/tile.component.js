@@ -43,11 +43,11 @@ class Tile extends Component {
   }
 
   render() {
-      var notifCircle = this.state.notifValue > 0 ? <span className="notifValue" onClick={this.props.onNotifClick}>{this.state.notifValue}</span> : null;
+      var notifCircle = this.state.notifValue > 0 ? <span className="notifValue" onClick={this.props.onNotifClick(this.props.id)}>{this.state.notifValue}</span> : null;
       var value = this.forgetPercentage(this.state.value);
 
       return (
-        <div ref="tile" className="dashboard-tile" onClick={this.props.onTileClick}>
+        <div ref="tile" className="dashboard-tile" onClick={this.props.onTileClick(this.props.id)}>
           {notifCircle}
           {value}
           <h5 className="title"> {this.state.title}</h5>
