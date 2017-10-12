@@ -13,24 +13,11 @@ class Dashboard extends Component {
         <div>
           <Grid fluid>
             <Row className="show-grid">
-<<<<<<< HEAD:frontend/src/containers/dashboard.component.js
+
               <Col sm={3}> <Gauge id="leftgauge" title="Valorisation Globale" value={80} valueBefore={85}/> </Col>
               <Col sm={3}> <Gauge id= "middlegauge" title="Valorisation Liste Verte" value={87} valueBefore={85}/> </Col>
               <Col sm={3}> <Gauge id="rightgauge" title="Volume Déchets" value={35} valueBefore={30}/> </Col>
-=======
-<<<<<<< HEAD:frontend/src/components/dashboard.component.js
-              <Col sm={3}> <Gauge id="leftgauge" title="Valorisation Globale" value={80} valueBefore={85}/> </Col>
-              <Col sm={3}> <Gauge id= "middlegauge" title="Valorisation Liste Verte" value={87} valueBefore={85}/> </Col>
-              <Col sm={3}> <Gauge id="rightgauge" title="Volume Déchets" value={35} valueBefore={30}/> </Col>
-=======
-              <Col sm={3}> <Gauge title="Valorisation Globale" value={80} valueBefore={85}/> </Col>
-              <Col sm={3}> <Gauge title="Valorisation Liste Verte" value={87} valueBefore={85}/> </Col>
-              <Col sm={3}> <Gauge title="Volume Déchets" value={35} valueBefore={30}/> </Col>
-              <Col sm={3}> <Gauge id="leftgauge" title="Valorisation Globale"/> </Col>
-              <Col sm={3}> <Gauge id= "middlegauge" title="Valorisation Liste Verte"/> </Col>
-              <Col sm={3}> <Gauge id="rightgauge" title="Volume Déchets"/> </Col>
->>>>>>> e568192165ef44c6aae6562f487205fd932e9b30:frontend/src/containers/dashboard.component.js
->>>>>>> e748d4ad57d68ad09e919b7a4192a5fda0e174f9:frontend/src/components/dashboard.component.js
+
               <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>
 
