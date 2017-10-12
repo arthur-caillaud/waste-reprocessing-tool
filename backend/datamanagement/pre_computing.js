@@ -77,11 +77,22 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     };
     var onCompleted = () => {
         if (loopsToDo == 0) {
-            console.log(computedValues.dataValues);
-            console.log(volumeLVerte);
             computedValues["taux_valorisation_total"] /= computedValues["volume_total"];
             computedValues["taux_valorisation_l_verte"] /= volumeLVerte;
             console.log(computedValues.dataValues);
+            // to be modified, corrects an error in the database
+            if (isNaN(computedValues["taux_valorisation_l_verte"])) {
+                console.log("yolo");
+                computedValues["taux_valorisation_l_verte"] = 0;
+            }
+            console.log(computedValues.dataValues);
+            computedValues.save()
+                .then((value) => {
+                    console.log("done");
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
         }
     };
 
