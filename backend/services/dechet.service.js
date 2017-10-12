@@ -19,7 +19,7 @@ function getAllDechets(queryParameters) {
              const val = queryParameters.where[key];
              where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
          }
-         queryParameters.where = where;
+         queryParameters.where = where; 
      }
 
      var observable = Rx.Observable.create((observer) => {

@@ -898,6 +898,7 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                             onError: err => {
                                 console.error("Error thrown by referentielDechetObservable");
                                 console.error(err);
+<<<<<<< HEAD
                                 process.nextTick(() => {
                                     console.log("Next tick");
                                     callback(null, true);
@@ -908,6 +909,12 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                                     console.log("Next tick");
                                     callback(null, true);
                                 });
+=======
+                                callback(err,null);
+                            },
+                            onCompleted: () => {
+                                callback(null,true);
+>>>>>>> 8f685e8d12f7ba22e4a48aee886e948408708d2e
                             }
                         });
                     };
@@ -952,14 +959,10 @@ const writeIntoBdd = function(excelName) {
                             },
                             onError: error => {
                                 console.error("Error thrown by bordereauObservable", error);
-                                process.nextTick(() => {
-                                    callback(null, true);
-                                });
+                                callback(error,null)
                             },
                             onCompleted: () => {
-                                process.nextTick(() => {
-                                    callback(null, true);
-                                });
+                                callback(null,true);
                             }
                         });
                     };
@@ -983,4 +986,8 @@ const writeIntoBdd = function(excelName) {
 
 //TEST PHASE
 writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+<<<<<<< HEAD
 //writeIntoBdd("dataedfmars.xlsx");
+=======
+writeIntoBdd("dataedfmars.xlsx");
+>>>>>>> 8f685e8d12f7ba22e4a48aee886e948408708d2e
