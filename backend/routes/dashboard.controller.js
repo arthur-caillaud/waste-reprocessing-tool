@@ -130,7 +130,7 @@ function processDashboardData(req, res) {
     DashboardService.getAllIncoherencesFilieres(idArray).subscribe(observerIncoherences);
     DashboardService.getAllEcartsDePesee(tolerance, idArray).subscribe(observerEcarts);
     DashboardService.getAllFilieresInterdites(idArray).subscribe(observerInterdites);
-    DashboardService.getAllRetards(idArray).subscribe(observerRetards);
+    DashboardService.getAllRetards(idArray, false).subscribe(observerRetards);
 
 }
 
