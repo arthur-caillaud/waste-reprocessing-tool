@@ -135,6 +135,18 @@ function processDashboardData(req, res) {
 
 }
 
+/**
+  * @api {GET} /architecture/ Récupère l'architecture globale de l'organisation
+  * de tous les sites possibles
+  * @apiGroup Dashboard
+  * @apiVersion 1.0.0
+  *
+  * @apiExample {curl} Exemple
+  *   curl -i http://localhost:4000/api/dashboard/dashboard
+  *
+  * @apiSuccess {JSONString} dashboard Architecture du site
+  * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
+  */
 function getArchitecture(req, res) {
 
     var onNext = (data) => {
