@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Zone from '../graphics/zone.component';
-import PrestataireSearchBar from '../components/search.component';
+import PrestataireSearchBar from './search.component';
 
 class Prestataire extends Component {
   render() {

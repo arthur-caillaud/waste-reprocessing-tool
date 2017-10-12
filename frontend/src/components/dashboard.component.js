@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 
 import { Row, Col, Grid } from 'react-bootstrap';
 
-import Gauge from '../components/gauge.component';
-import Info from '../components/info.component';
-import Tile from '../components/tile.component';
+import Gauge from './gauge.component';
+import Info from './info.component';
+import Tile from './tile.component';
 
 class Dashboard extends Component {
   render() {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Prestataire from '../containers/prestataire.component';
-import Dashboard from '../containers/dashboard.component';
-import Dechet from '../containers/dechet.component';
+import Prestataire from '../components/prestataire.component';
+import Dashboard from '../components/dashboard.component';
+import Dechet from '../components/dechet.component';
 
 
 const MainRouter = () => (
