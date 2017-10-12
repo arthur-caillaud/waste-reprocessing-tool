@@ -1,7 +1,7 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
-import * as d3ColorChrom from 'd3-scale-chromatic';
+
 
 
 function getChartSize(el) {
