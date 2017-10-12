@@ -35,6 +35,7 @@ module.exports = function(sequelize, DataTypes) {
 
   site.associate = function(models){
       site.hasMany(models.bordereau, {foreignKey: 'id_site', sourceKey: 'id'});
+      site.hasMany(models.dashboard, {foreignKey: 'id_site', sourceKey: 'id'});
   };
 
   return site;
