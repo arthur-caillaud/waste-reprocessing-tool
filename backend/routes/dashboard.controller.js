@@ -7,6 +7,7 @@ var utilities = require('../utilities/routes');
 var prestataireService = require('../services/prestataire.service');
 var DashboardService = require('../services/dashboard.service');
 var SitesService = require('../services/sites.service');
+var ToolkitService = require('../services/toolkit.service');
 
 
 /*
@@ -134,8 +135,25 @@ function processDashboardData(req, res) {
 
 }
 
+function getArchitecture(req, res) {
+
+    var onNext = (data) => {
+        res.json(data);
+    };
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+    var onCompleted = () => {
+    };
+    var observer = Rx.Observer.create(onNext, onError, onCompleted);
+    ToolkitService.getSiteArchitecture().subscribe(observer);
+}
+
 
 // routes to the functions
+router.get('/architecture', getArchitecture);
 router.get('/:level/:name', getDashboard);
 router.get('/:level', getDashboard);
 router.get('/:level/:name', getNecessarySites);
