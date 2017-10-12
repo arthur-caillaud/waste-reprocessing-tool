@@ -64,6 +64,9 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
                         date_priseencharge: {
                             $lt: endDate,
                             $gte: beginDate,
+                        },
+                        id_type_traitement: {
+                            $ne: sequelize.col('bordereau.id_traitement_prevu')
                         }
                     },
                 },
@@ -76,15 +79,7 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
         ]
         })
         .then(bordereaux => {
-            let bordereauxAvecIncoherencesFilieres = [];
-            bordereaux.forEach(bordereau => {
-                let traitementPrevu = bordereau.dataValues.id_traitement_prevu;
-                let traitementFinal = bordereau.dataValues.traitement.id_type_traitement;
-                if(traitementPrevu != traitementFinal){
-                    bordereauxAvecIncoherencesFilieres.push(bordereau);
-                }
-            });
-            obs.onNext([bordereauxAvecIncoherencesFilieres, label]);
+            obs.onNext([bordereaux, label]);
             obs.onCompleted();
         })
         .catch(err => {
@@ -121,10 +116,6 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
                             $gte: beginDate,
                         }
                     }
-                },
-                {
-                    model: traitement,
-                    required: true
                 }],
             where: {
                 traitement: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
@@ -190,26 +181,154 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
             include: [
                 {
                     model: traitement,
+                    attributes: [],
                     where: {
                         date_priseencharge: {
                             $lt: endDate,
-                            $gte: beginDate,
+                            $gte: beginDate
                         }
                     }
                 }
             ],
             where: {
-                id_site: {$in: idArray},
-            },
-
+                id_site: {$in: idArray}
+            }
         })
         .then((sum) => {
-            obs.onNext([bordereaux, label]);
+            obs.onNext([sum, label]);
             obs.onCompleted();
         })
         .catch((err) => {
             obs.onError(err);
         });
+    });
+    return observable;
+};
+
+
+function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.sum('quantitee_finale', {
+            include: [
+                {
+                    model: traitement,
+                    attributes: [],
+                    where: {
+                        date_priseencharge: {
+                            $lt: endDate,
+                            $gte: beginDate
+                        }
+                    }
+                },
+                {
+                    model: dechet,
+                    attributes: [],
+                    where: {
+                        is_listeverte: 1
+                    }
+                }
+            ],
+            where: {
+                id_site: {$in: idArray}
+            }
+        })
+        .then((sum) => {
+            console.log(sum);
+            obs.onNext([sum, label]);
+            obs.onCompleted();
+        })
+        .catch((err) => {
+            obs.onError(err);
+        });
+    });
+    return observable;
+};
+
+function getValorisationTotale(idArray, beginDate, endDate, label) {
+    var query = {
+        include: [
+            {
+                model: traitement,
+                attributes: [],
+                where: {
+                    id: sequelize.where(sequelize.col('bordereau.id_traitement_final'), sequelize.col('traitement.id')),
+                    date_priseencharge: {
+                        $lt: endDate,
+                        $gte: beginDate
+                    }
+                },
+                include: [
+                    {
+                        model: type_traitement,
+                        attributes: [],
+                        where: {
+                            qualification: "Recyclage"
+                        }
+                    }
+                ]
+            },
+        ],
+        where: {
+            id_site: {$in: idArray}
+        }
+    };
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.sum('quantitee_finale', query)
+            .then((sum) => {
+                obs.onNext([sum, label]);
+                obs.onCompleted();
+            })
+            .catch((err) => {
+                obs.onError(err);
+            });
+    });
+    return observable;
+}
+
+function getValorisationVerte(idArray, beginDate, endDate, label) {
+    var query = {
+        include: [
+            {
+                model: traitement,
+                attributes: [],
+                where: {
+                    id: sequelize.where(sequelize.col('bordereau.id_traitement_final'), sequelize.col('traitement.id')),
+                    date_priseencharge: {
+                        $lt: endDate,
+                        $gte: beginDate
+                    }
+                },
+                include: [
+                    {
+                        model: type_traitement,
+                        attributes: [],
+                        where: {
+                            qualification: "Recyclage"
+                        }
+                    }
+                ]
+            },
+            {
+                model: dechet,
+                attributes: [],
+                where: {
+                    is_listeverte: 1
+                }
+            }
+        ],
+        where: {
+            id_site: {$in: idArray}
+        }
+    };
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.sum('quantitee_finale', query)
+            .then((sum) => {
+                obs.onNext([sum, label]);
+                obs.onCompleted();
+            })
+            .catch((err) => {
+                obs.onError(err);
+            });
     });
     return observable;
 }
@@ -221,5 +340,8 @@ service.getAllIncoherencesFilieres = getAllIncoherencesFilieres;
 service.getAllFilieresInterdites = getAllFilieresInterdites;
 service.getAllRetards = getAllRetards;
 service.getTotalVolume = getTotalVolume;
+service.getValorisationTotale = getValorisationTotale;
+service.getValorisationVerte = getValorisationVerte;
+service.getTotalVolumeVerte = getTotalVolumeVerte;
 
 module.exports = service;

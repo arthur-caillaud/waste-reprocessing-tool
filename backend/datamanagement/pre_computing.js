@@ -44,7 +44,8 @@ function computeDates(year, month, tolerance, siteId, callback) {
 // computes all the data for a given site identified by its id in the database
 function computeForSite(beginDate, endDate, tolerance, siteId) {
 
-    var loopsToDo = 1;
+    var loopsToDo = 11;
+    var volumeLVerte = 0;
 
     // creates a new dashboard element to be filled
     // all values are to their default value of 0
@@ -52,30 +53,81 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     var computedValues = new dashboard();
     computedValues.date = endDate;
     computedValues.id_site = siteId;
+    // date that will be used in the delays calculation
+    var date = new Date();
 
-    var onNext = (data) => {
+    var onNextArray = (data) => {
         // an array is returned, we just need the length
         computedValues[data[1]] = data[0].length;
+        loopsToDo -= 1;
     };
+    var onNextNumber = (data) => {
+        // here, a number is returned
+        if (data[1]=="volume_verte") {
+            volumeLVerte = data[0];
+        }
+        else {
+            computedValues[data[1]] = data[0];
+        }
+        loopsToDo -= 1;
+    }
     var onError = (error) => {
         console.log(error);
         throw error;
     };
     var onCompleted = () => {
-        console.log(computedValues.dataValues);
+        if (loopsToDo == 0) {
+            console.log(computedValues.dataValues);
+            console.log(volumeLVerte);
+            computedValues["taux_valorisation_total"] /= computedValues["volume_total"];
+            computedValues["taux_valorisation_l_verte"] /= volumeLVerte;
+            console.log(computedValues.dataValues);
+        }
     };
 
-    var observerEcarts = Rx.Observer.create(onNext, onError, onCompleted);
+    var observerEcarts = Rx.Observer.create(onNextArray, onError, onCompleted);
     DashboardService.getAllEcartsDePesee(tolerance, [siteId], beginDate, endDate, "ecarts_pesee")
         .subscribe(observerEcarts);
 
-    var observerIncoherences = Rx.Observer.create(onNext, onError, onCompleted);
+    var observerIncoherences = Rx.Observer.create(onNextArray, onError, onCompleted);
     DashboardService.getAllIncoherencesFilieres([siteId], 0, beginDate, endDate, "incoherences_filieres_norm")
         .subscribe(observerIncoherences);
 
-    var observerIncoherencesDD = Rx.Observer.create(onNext, onError, onCompleted);
+    var observerIncoherencesDD = Rx.Observer.create(onNextArray, onError, onCompleted);
     DashboardService.getAllIncoherencesFilieres([siteId], 1, beginDate, endDate, "incoherences_filieres_dd")
         .subscribe(observerIncoherencesDD);
+
+    var observerFilieresInterdites = Rx.Observer.create(onNextArray, onError, onCompleted);
+    DashboardService.getAllFilieresInterdites([siteId], 0, beginDate, endDate, "filieres_interdites_norm")
+        .subscribe(observerFilieresInterdites);
+
+    var observerFilieresInterditesDD = Rx.Observer.create(onNextArray, onError, onCompleted);
+    DashboardService.getAllFilieresInterdites([siteId], 1, beginDate, endDate, "filieres_interdites_dd")
+        .subscribe(observerFilieresInterditesDD);
+
+    var observerRetards = Rx.Observer.create(onNextArray, onError, onCompleted);
+    DashboardService.getAllRetards([siteId], 0, date, "retards_norm")
+        .subscribe(observerRetards);
+
+    var observerRetardsDD = Rx.Observer.create(onNextArray, onError, onCompleted);
+    DashboardService.getAllRetards([siteId], 1, date, "retards_dd")
+        .subscribe(observerRetardsDD);
+
+    var observerVolume = Rx.Observer.create(onNextNumber, onError, onCompleted);
+    DashboardService.getTotalVolume([siteId], beginDate, endDate, "volume_total")
+        .subscribe(observerVolume);
+
+    var observerVolumeVerte = Rx.Observer.create(onNextNumber, onError, onCompleted);
+    DashboardService.getTotalVolumeVerte([siteId], beginDate, endDate, "volume_verte")
+        .subscribe(observerVolumeVerte);
+
+    var observerValorisationTot = Rx.Observer.create(onNextNumber, onError, onCompleted);
+    DashboardService.getValorisationTotale([siteId], beginDate, endDate, "taux_valorisation_total")
+        .subscribe(observerValorisationTot);
+
+    var observerValorisationVerte = Rx.Observer.create(onNextNumber, onError, onCompleted);
+    DashboardService.getValorisationVerte([siteId], beginDate, endDate, "taux_valorisation_l_verte")
+        .subscribe(observerValorisationVerte);
 
 }
 

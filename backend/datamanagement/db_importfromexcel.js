@@ -963,4 +963,4 @@ const writeIntoBdd = function(excelName) {
 
 //TEST PHASE
 writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-//writeIntoBdd("dataedfmars.xlsx");
+writeIntoBdd("dataedfmars.xlsx");
