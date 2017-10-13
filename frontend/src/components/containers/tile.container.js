@@ -13,11 +13,10 @@ const mapDispatchToProps = dispatch => {
   return {
       onTileClick: id => {
           displayTileInfos(id);
-      }
+      },
       onNotifClick: id => {
           displayTileNotifInfos(id);
       }
-    }
   }
 }
 

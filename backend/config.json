@@ -14,8 +14,8 @@
         "user": "root",
         "password": "arthurpierreaurelien",
         "database": "db",
-        "poolsize": 20,
+        "poolsize": 1,
         "minimumpoolsize": 0,
-        "connectionduration": 100000
+        "connectionduration": 10
     }
 }

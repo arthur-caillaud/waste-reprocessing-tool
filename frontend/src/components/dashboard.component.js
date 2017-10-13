@@ -4,7 +4,7 @@ import { Row, Col, Grid } from 'react-bootstrap';
 
 import Gauge from './gauge.component';
 import Info from './info.component';
-import Tile from './tile.component';
+import Tile from './containers/tile.container';
 
 class Dashboard extends Component {
   render() {

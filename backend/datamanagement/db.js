@@ -15,7 +15,8 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 
 var mySqlConnect = function() {
-    const sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
+    var sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
+            logging: false,
             host: config.mysql.url,
             dialect: 'mysql',
             pool: {
