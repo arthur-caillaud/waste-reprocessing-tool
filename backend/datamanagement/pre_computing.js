@@ -137,11 +137,9 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
 // given a container and a set of bordereaux, computes the desired values and
 // fill the container with them
 
-function preCompute() {
+function preComputeForDate(year, month) {
 
     // prepare data
-    var year = 2017;
-    var month = 2;
     var tolerance = 0;
 
     var idArray = [];
@@ -166,4 +164,39 @@ function preCompute() {
 }
 
 // tests the function
+function preCompute() {
+
+    // oldest possible year
+    const firstYear = 2017;
+    const firstMonth = 1;
+
+    // gets the current date
+    var date = new Date();
+    var currentMonth = date.getMonth();
+    var currentYear = date.getFullYear();
+
+    console.log(currentYear + ':' + currentMonth);
+
+    var year;
+    var month;
+
+    for (year=firstYear; year<=currentYear; year++) {
+        console.log("yolo");
+        // if we are on the last year, only get to the current month
+        if (year == currentYear) {
+            for (var month=1; month<=currentMonth; month++) {
+                console.log("computing for " + year + ":" + month);
+                preComputeForDate(year, month);
+            }
+        }
+        // else go to december
+        else {
+            for (month=1; month<13; month++) {
+                console.log("computing for " + year + ":" + month);
+                preComputeForDate(year, month);
+            }
+        }
+    }
+}
+
 preCompute();
