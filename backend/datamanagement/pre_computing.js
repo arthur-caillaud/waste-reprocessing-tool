@@ -20,25 +20,32 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
 
     console.log("computing for site " + siteId);
 
+    /** We have to compute 12 asynchronous values. At each iteration, we decrease
+        the counter. When it is at 0, we are sure that every processing is done
+        We then can exit the function safely and save the result
+    */
     var loopsToDo = 12;
-    var bordereaux; //useful to know if it is an empty set.
 
-    // creates a new dashboard element to be filled
-    // all values are to their default value of 0
-    // values will be incremented by the function
+    // create the Dashboard element thzat will store all pre computed values
     var computedValues = new dashboard();
+
+    // set the date and siteId for our entry
+    // NOTE: a couple (date, id_site) is necessarily unique
     computedValues.date = endDate;
     computedValues.id_site = siteId;
-    // date that will be used in the delays calculation
-    var date = new Date();
+
 
     var onNextArray = (data) => {
-        // an array is returned, we just need the length
+        // this function is used when an observer returns an array.
+        // we usually only need its length
+        // EXAMPLE: number of delays: we would get all delays, we only need to
+        // know how many we have.
         computedValues[data[1]] = data[0].length;
         loopsToDo -= 1;
     };
     var onNextNumber = (data) => {
-
+        // this function is used when an observer returns a number or a string
+        // here we can immediately use the value returned
         computedValues[data[1]] = data[0];
         loopsToDo -= 1;
     }
@@ -48,20 +55,25 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     };
     var onCompleted = () => {
         if (loopsToDo == 0) {
-            // if no bordereaux: does not divide by 0
+            // adds a comment to the entry when the bordereau list is empty
             if (computedValues["bordereaux"] == 0) {
                 computedValues["details"] += "Aucun bordereau sur la période considérée;";
             }
             else {
+                // adds a comment if no waste in green list is present for the entry
                 if (computedValues["volume_l_verte"] == 0) {
                     computedValues["details"] += "Aucun déchet en liste verte;";
                 }
             }
+            // tries to save the entry in the database
             computedValues.save()
                 .then((value) => {
                     console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Created");
                 })
                 .catch((err) => {
+                    // this error is raised if the entry already exists
+                    // if it exists, the couple (date, id_site) would already be
+                    // present, and it must be unique
                     if (err="SequelizeUniqueConstraintError") {
                         // if entry already exists, update it instead
                         DashboardService.updateEntry(computedValues)
@@ -80,6 +92,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         }
     };
 
+    // create all the observer that will be used and start them
     var observerEcarts = Rx.Observer.create(onNextArray, onError, onCompleted);
     DashboardService.getAllEcartsDePesee(tolerance, [siteId], beginDate, endDate, "ecarts_pesee")
         .subscribe(observerEcarts);
@@ -130,19 +143,25 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
 
 }
 
+
+
 // given a container and a set of bordereaux, computes the desired values and
 // fill the container with them
 
 function preComputeForDate(year, month) {
 
     // prepare data
+    // TODO: use a config file for the tolerance, and not use 0.
     var tolerance = 0;
 
+    // this array will contain all the ids of sites in the database
     var idArray = [];
+
     var observerId = Rx.Observer.create(
         (id) => {
+            // when given the list of ids, put only them in the array
             id.forEach((site) => {
-                idArray.push(site.dataValues.id);
+                idArray.push(site["id"]);
             });
         },
         (error) => {
@@ -150,27 +169,36 @@ function preComputeForDate(year, month) {
             throw error;
         },
         () => {
+            // for each value in the array, computes the datas for the given date
+            // in the corresponding site
             idArray.forEach((id) => {
                 utilities.computeDates(year, month, tolerance, id, computeForSite);
             })
 
         }
     );
+    // with the query provided, we can restrict the fields given to only id
     SitesService.getAllSites({attributes: ['id']}).subscribe(observerId);
 }
 
-// tests the function
+
+
+// this function will make all the preComputing for every site from a given
+// date to a max date
+// IDEA: put the max date to current date (the case for now)
 function preCompute() {
 
     // oldest possible year
+    // TODO: put that value in a config file
     const firstYear = 2017;
     const firstMonth = 1;
 
-    // gets the current date
+    // gets the current date tu be used as last date
     var date = new Date();
     var currentMonth = date.getMonth();
     var currentYear = date.getFullYear();
 
+    // DEPRECATED: used to specify earlier last date for testing purposes
     // currentMonth = 1;
     // currentYear = 2017;
 
@@ -193,4 +221,5 @@ function preCompute() {
     }
 }
 
+// lauch the function when the script is called (it will only be called for that)
 preCompute();
