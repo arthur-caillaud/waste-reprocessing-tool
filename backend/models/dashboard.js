@@ -33,12 +33,17 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '0'
     },
-    taux_valorisation_total: {
+    volume_l_verte: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: '0'
     },
-    taux_valorisation_l_verte: {
+    valorisation_totale: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      defaultValue: '0'
+    },
+    valorisation_l_verte: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
       defaultValue: '0'
