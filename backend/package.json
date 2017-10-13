@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "rm ../test/test_reports.xml; ./node_modules/.bin/mocha ../test/* --require ignore-styles --compilers js:babel-core/register --reporter mocha-junit-reporter --reporter-options mochaFile=../test/test_reports.xml"
+    "test": "NODE_ENV=test node ./bin/www"
   },
   "directories": {
     "test": "test"
