@@ -7,11 +7,12 @@
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "91.134.242.69",
-    "dialect": "mysql"
+    "username": "backend",
+    "password": "password",
+    "database": "db_test",
+    "host": "localhost",
+    "dialect": "mysql",
+    "logging": false
   },
   "production": {
     "username": "root",
