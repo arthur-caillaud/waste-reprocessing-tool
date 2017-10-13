@@ -38,13 +38,8 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         loopsToDo -= 1;
     };
     var onNextNumber = (data) => {
-        // here, a number is returned
-        if (data[1]=="bordereaux") {
-            bordereaux = data[0];
-        }
-        else {
-            computedValues[data[1]] = data[0];
-        }
+
+        computedValues[data[1]] = data[0];
         loopsToDo -= 1;
     }
     var onError = (error) => {
@@ -54,7 +49,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     var onCompleted = () => {
         if (loopsToDo == 0) {
             // if no bordereaux: does not divide by 0
-            if (bordereaux == 0) {
+            if (computedValues["bordereaux"] == 0) {
                 computedValues["details"] += "Aucun bordereau sur la période considérée;";
             }
             else {

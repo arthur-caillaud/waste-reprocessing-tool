@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
-    },
+  },
     ecarts_pesee: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -76,7 +76,11 @@ module.exports = function(sequelize, DataTypes) {
     id_site: {
       type: DataTypes.INTEGER(11),
       allowNull: false
-    }
+  },
+      bordereaux: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false
+      }
   }, {
     tableName: 'dashboard',
     timestamps: false
