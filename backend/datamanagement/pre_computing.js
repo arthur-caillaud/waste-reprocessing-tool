@@ -62,7 +62,18 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
                     console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Done");
                 })
                 .catch((err) => {
-                    console.error(err);
+                    if (err="SequelizeUniqueConstraintError") {
+                        // if entry already exists, update it instead
+                        DashboardService.updateEntry(computedValues)
+                            .subscribe(Rx.Observer.create(
+                                () => {},
+                                (error) => {console.log(error);},
+                                () => {}
+                            ));
+                    }
+                    else {
+                        console.log(err);
+                    }
                 })
         }
     };

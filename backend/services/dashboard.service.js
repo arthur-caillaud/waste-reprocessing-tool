@@ -404,6 +404,33 @@ function getDataForSites(idArray, date) {
     return observable;
 }
 
+function updateEntry(newEntry) {
+    var query = {
+        where: {
+            id_site: newEntry["id_site"],
+            date: newEntry["date"]
+        }
+    };
+
+    var observable = Rx.Observable.create((observer) => {
+        dashboard.findOne(query)
+            .then((entry) => {
+                entry.update(newEntry)
+                    .then(() => {
+                        observer.onNext();
+                        observer.onCompleted();
+                    })
+                    .catch((error) => {
+                        observer.onError(error);
+                    })
+            })
+            .catch((error) => {
+                observer.onError(error)
+            })
+    })
+    return observable;
+}
+
 var service = {};
 
 service.getAllEcartsDePesee = getAllEcartsDePesee;
@@ -415,6 +442,7 @@ service.getValorisationTotale = getValorisationTotale;
 service.getValorisationVerte = getValorisationVerte;
 service.getTotalVolumeVerte = getTotalVolumeVerte;
 service.countBordereaux = countBordereaux;
-service.getDataForSites = getDataForSites; 
+service.getDataForSites = getDataForSites;
+service.updateEntry = updateEntry;
 
 module.exports = service;
