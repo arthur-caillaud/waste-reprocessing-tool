@@ -24,6 +24,11 @@
             "up_dependance",
             "metier_dependance",
             "id"
+        ],
+        "bordereau": [
+            "id",
+            "num_bordereau",
+            "id_site"
         ]
     }
 }

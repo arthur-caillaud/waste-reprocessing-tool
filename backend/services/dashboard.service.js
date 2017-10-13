@@ -15,6 +15,7 @@ var transport = models.transport;
 var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
+var dashboard = models.dashboard;
 
 function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
     const query = {
@@ -194,6 +195,9 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
             }
         })
         .then((sum) => {
+            if (isNaN(sum)) {
+                sum = 0;
+            }
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
@@ -232,6 +236,9 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
             }
         })
         .then((sum) => {
+            if (isNaN(sum)) {
+                sum = 0;
+            }
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
@@ -273,6 +280,9 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
         bordereau.sum('quantitee_finale', query)
             .then((sum) => {
+                if (isNaN(sum)) {
+                    sum = 0;
+                }
                 obs.onNext([sum, label]);
                 obs.onCompleted();
             })
@@ -321,11 +331,74 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
         bordereau.sum('quantitee_finale', query)
             .then((sum) => {
+                if (isNaN(sum)) {
+                    sum = 0;
+                }
                 obs.onNext([sum, label]);
                 obs.onCompleted();
             })
             .catch((err) => {
                 obs.onError(err);
+            });
+    });
+    return observable;
+}
+
+
+function countBordereaux(idArray, beginDate, endDate, label) {
+    /* This function creates an Observable and returns it. It counts all bordereaux
+     * Args: queryParameters, parameters for the query, in the following form:
+     * {attributes: string[], where: {fieldA: string, ...}, order: string[]}
+     */
+     var query = {
+         include: [
+             {
+                 model: traitement,
+                 attributes: [],
+                 where: {
+                     id: sequelize.where(sequelize.col('bordereau.id_traitement_final'), sequelize.col('traitement.id')),
+                     date_priseencharge: {
+                         $lt: endDate,
+                         $gte: beginDate
+                     }
+                 }
+             }
+         ],
+         where: {
+             id_site: {$in: idArray}
+         }
+     }
+
+    var observable = Rx.Observable.create((observer) => {
+        bordereau.count(query)
+            .then((n) => {
+                observer.onNext([n, label]);
+                observer.onCompleted();
+            })
+            .catch ((error) => {
+                observer.onError(error);
+            });
+    });
+    return observable;
+}
+
+
+function getDataForSites(idArray, date) {
+    var query = {
+        where: {
+            id_site: {$in: idArray},
+            date: date
+        }
+    };
+
+    var observable = Rx.Observable.create((observer) => {
+        dashboard.findAll(query)
+            .then((elements) => {
+                observer.onNext(elements);
+                observer.onCompleted();
+            })
+            .catch ((error) => {
+                observer.onError(error);
             });
     });
     return observable;
@@ -341,5 +414,7 @@ service.getTotalVolume = getTotalVolume;
 service.getValorisationTotale = getValorisationTotale;
 service.getValorisationVerte = getValorisationVerte;
 service.getTotalVolumeVerte = getTotalVolumeVerte;
+service.countBordereaux = countBordereaux;
+service.getDataForSites = getDataForSites; 
 
 module.exports = service;

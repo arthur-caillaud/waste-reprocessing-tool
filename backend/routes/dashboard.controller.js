@@ -2,7 +2,9 @@
 var express = require('express');
 var router = express.Router();
 var Rx = require('rx');
+
 var utilities = require('../utilities/routes');
+var dates = require('../utilities/dates');
 
 var prestataireService = require('../services/prestataire.service');
 var DashboardService = require('../services/dashboard.service');
@@ -33,6 +35,8 @@ anything concerning the dashboard
   * (facultatif dans le cas d'une hierarchie 1 (niveau central))
   * @apiParam (queryParam) {number} tolerance niveau de tolérance pour les écarts
   * de pesée
+  * @apiParam (queryParam) {number} year année choisie
+  * @apiParam (queryParam) {number} month mois choisi
   *
   * @apiExample {curl} Exemple
   *   curl -i http://localhost:4000/api/dashboard/2/42?tolerance=12
@@ -47,10 +51,12 @@ function getDashboard(req, res, next) {
   // checks if the args are in range
   var level = req.params.level;
   var name = req.params.name; //undefined if not provided
-  var tolerance = req.query.tolerance
+  var tolerance = req.query.tolerance;
+  var year = req.query.year;
+  var month = req.query.month;
 
   // when we check if name, we actually check if it is defined
-  if (level<0 || level>4 || (level>1 && !(name)) || !(tolerance)) {
+  if (level<0 || level>4 || (level>1 && !(name)) || !(tolerance) || !(year) || !(month)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {
           res.status(errorPacket.status).send(errorPacket.message);
       });
@@ -108,30 +114,29 @@ function processDashboardData(req, res) {
     }
 
     var onNext = (data) => {
-        result[data[1]] = data[0];
+        res.json(data);
     };
-    var error = (error) => {
+    var onError = (error) => {
         utilities.errorHandler(error, (errorPacket) => {
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
-    var complete = () => {
-        loopsToDo -= 1;
-        if (loopsToDo == 0) {
-            res.json(result);
-        }
-    };
+    var onCompleted = () => {};
 
-    var observerIncoherences = Rx.Observer.create(onNext, error, complete);
-    var observerEcarts = Rx.Observer.create(onNext, error, complete);
-    var observerInterdites = Rx.Observer.create(onNext, error, complete);
-    var observerRetards = Rx.Observer.create(onNext, error, complete);
+    const year = req.query.year;
+    var month = req.query.month;
+
+    if (month<10) {
+        month = "0" + month;
+    }
+
+    const date = year + '-' + month + '-01';
+    console.log(date);
+
+    var observer = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getDataForSites(idArray, date).subscribe(observer);
 
 
-    DashboardService.getAllIncoherencesFilieres(idArray).subscribe(observerIncoherences);
-    DashboardService.getAllEcartsDePesee(tolerance, idArray).subscribe(observerEcarts);
-    DashboardService.getAllFilieresInterdites(idArray).subscribe(observerInterdites);
-    DashboardService.getAllRetards(idArray, false).subscribe(observerRetards);
 
 }
 
@@ -166,10 +171,13 @@ function getArchitecture(req, res) {
 
 // routes to the functions
 router.get('/architecture', getArchitecture);
+
 router.get('/:level/:name', getDashboard);
 router.get('/:level', getDashboard);
+
 router.get('/:level/:name', getNecessarySites);
 router.get('/:level', getNecessarySites);
+
 router.get('/:level/:name', processDashboardData);
 router.get('/:level', processDashboardData);
 

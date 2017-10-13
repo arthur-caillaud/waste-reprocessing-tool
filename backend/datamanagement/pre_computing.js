@@ -27,6 +27,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     // values will be incremented by the function
     var computedValues = new dashboard();
     computedValues.date = endDate;
+    console.log(endDate);
     computedValues.id_site = siteId;
     // date that will be used in the delays calculation
     var date = new Date();
@@ -50,7 +51,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         loopsToDo -= 1;
     }
     var onError = (error) => {
-        console.log(error);
+        // console.log(error);
         throw error;
     };
     var onCompleted = () => {
@@ -78,7 +79,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
                     console.log("done");
                 })
                 .catch((err) => {
-                    console.error(err);
+                    // console.error(err);
                 })
         }
     };
@@ -151,7 +152,7 @@ function preCompute() {
             });
         },
         (error) => {
-            console.log(error);
+            // console.log(error);
             throw error;
         },
         () => {

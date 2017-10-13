@@ -44,7 +44,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '0'
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       defaultValue: '2016-01-01'
     },
