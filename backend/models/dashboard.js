@@ -29,22 +29,22 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '0'
     },
     volume_total: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
     volume_l_verte: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
     valorisation_totale: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
     valorisation_l_verte: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
