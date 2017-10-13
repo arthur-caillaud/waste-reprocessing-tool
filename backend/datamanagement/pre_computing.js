@@ -15,6 +15,30 @@ var BordereauxService = require('../services/bordereaux.service');
 
 var utilities = require('../utilities/dates');
 
+
+// function only used to give feedback when operations are done with a site
+function printFeedback(siteId, beginDate, endDate, status) {
+
+    // special characters for setting the color in the console
+    const FgGreen = "\x1b[32m";
+    const FgYellow = "\x1b[33m";
+    const Reset = "\x1b[0m";
+    const Bright = "\x1b[1m";
+
+    var message = "From " + Bright + beginDate + Reset;
+    message += " to " + Bright + endDate + Reset;
+    message += " on site " + Bright + siteId + Reset;
+    message += " | status: ";
+    if (status == "created") {
+        message += FgGreen + "Created";
+    }
+    else {
+        message += FgYellow + "Updated";
+    }
+    message += Reset;
+    console.log(message);
+}
+
 // computes all the data for a given site identified by its id in the database
 function computeForSite(beginDate, endDate, tolerance, siteId) {
 
@@ -33,6 +57,9 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     // NOTE: a couple (date, id_site) is necessarily unique
     computedValues.date = endDate;
     computedValues.id_site = siteId;
+
+    // we use today's date to compute delays
+    const date = new Date();
 
 
     var onNextArray = (data) => {
@@ -68,7 +95,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
             // tries to save the entry in the database
             computedValues.save()
                 .then((value) => {
-                    console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Created");
+                    printFeedback(siteId, beginDate, endDate, "created");
                 })
                 .catch((err) => {
                     // this error is raised if the entry already exists
@@ -81,7 +108,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
                                 () => {},
                                 (error) => {console.log(error);},
                                 () => {
-                                    console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Updated");
+                                    printFeedback(siteId, beginDate, endDate, "updated");
                                 }
                             ));
                     }
@@ -173,7 +200,7 @@ function preComputeForDate(year, month) {
             // in the corresponding site
             idArray.forEach((id) => {
                 utilities.computeDates(year, month, tolerance, id, computeForSite);
-            })
+            });
 
         }
     );
