@@ -59,7 +59,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
             }
             computedValues.save()
                 .then((value) => {
-                    console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Done");
+                    console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Created");
                 })
                 .catch((err) => {
                     if (err="SequelizeUniqueConstraintError") {
@@ -68,7 +68,9 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
                             .subscribe(Rx.Observer.create(
                                 () => {},
                                 (error) => {console.log(error);},
-                                () => {}
+                                () => {
+                                    console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Updated");
+                                }
                             ));
                     }
                     else {
