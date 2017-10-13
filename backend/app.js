@@ -15,7 +15,8 @@ var dechets = require('./routes/dechets.controller');
 var sites = require('./routes/sites.controller');
 var dashboard = require('./routes/dashboard.controller');
 
-var preCompute = require('./datamanagement/pre_computing');
+// for now, we ignore the file as it will probably be launched externally
+// var preCompute = require('./datamanagement/pre_computing');
 
 var config = require('./config.json');
 
