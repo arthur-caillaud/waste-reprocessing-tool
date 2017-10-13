@@ -144,7 +144,6 @@ function getAllRetards(idArray, dangereux, date, label) {
 
 
     var observable = Rx.Observable.create((obs) => {
-        console.log("maxDelay " + maxDelay);
         bordereau.findAll({
             include: [
                 {
@@ -233,7 +232,6 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
             }
         })
         .then((sum) => {
-            console.log(sum);
             obs.onNext([sum, label]);
             obs.onCompleted();
         })

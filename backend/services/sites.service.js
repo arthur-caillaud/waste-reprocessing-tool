@@ -12,7 +12,7 @@ function getAllSites(queryParameters) {
      * Args: queryParameters, parameters for the query, in the following form:
      * {attributes: string[], where: {fieldA: string, ...}, order: string[]}
      */
-     if (Object.keys(queryParameters).length>0) { // checks if queryParams have actually been provided
+     if (Object.keys(queryParameters).length>0 && typeof queryParameters.where != "undefined") { // checks if queryParams have actually been provided
          // modifies the fields in the 'where' statement to put everything in lower
          var where = {};
          for (const key of Object.keys(queryParameters.where)) {

@@ -7,8 +7,10 @@ var models = require('../models/');
 var bordereau = models.bordereau;
 var dashboard = models.dashboard;
 var traitement = models.traitement;
+var site = models.site;
 
 var DashboardService = require('../services/dashboard.service');
+var SitesService = require('../services/sites.service');
 
 
 // returns the first and last date of the selected month
@@ -79,20 +81,18 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         if (loopsToDo == 0) {
             computedValues["taux_valorisation_total"] /= computedValues["volume_total"];
             computedValues["taux_valorisation_l_verte"] /= volumeLVerte;
-            console.log(computedValues.dataValues);
             // to be modified, corrects an error in the database
             if (isNaN(computedValues["taux_valorisation_l_verte"])) {
-                console.log("yolo");
                 computedValues["taux_valorisation_l_verte"] = 0;
             }
             console.log(computedValues.dataValues);
-            computedValues.save()
-                .then((value) => {
-                    console.log("done");
-                })
-                .catch((err) => {
-                    console.error(err);
-                })
+            // computedValues.save()
+            //     .then((value) => {
+            //         console.log("done");
+            //     })
+            //     .catch((err) => {
+            //         console.error(err);
+            //     })
         }
     };
 
@@ -146,15 +146,31 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
 // fill the container with them
 
 function preCompute() {
-    // will later get all the id
-    var id = 3;
 
     // prepare data
     var year = 2017;
     var month = 2;
     var tolerance = 0;
 
-    computeDates(year, month, tolerance, id, computeForSite);
+    var idArray = [];
+    var observerId = Rx.Observer.create(
+        (id) => {
+            id.forEach((site) => {
+                idArray.push(site.dataValues.id);
+            });
+        },
+        (error) => {
+            console.log(error);
+            throw error;
+        },
+        () => {
+            idArray.forEach((id) => {
+                computeDates(year, month, tolerance, id, computeForSite);
+            })
+
+        }
+    );
+    SitesService.getAllSites({attributes: ['id']}).subscribe(observerId);    
 }
 
 // tests the function
