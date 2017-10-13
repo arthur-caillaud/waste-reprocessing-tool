@@ -39,6 +39,8 @@ function printFeedback(siteId, beginDate, endDate, status) {
     console.log(message);
 }
 
+
+
 // computes all the data for a given site identified by its id in the database
 function computeForSite(beginDate, endDate, tolerance, siteId) {
 
