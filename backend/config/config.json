@@ -11,7 +11,8 @@
     "password": "password",
     "database": "db_test",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "production": {
     "username": "root",
