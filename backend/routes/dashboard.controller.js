@@ -131,7 +131,6 @@ function processDashboardData(req, res) {
     }
 
     const date = year + '-' + month + '-01';
-    console.log(date);
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getDataForSites(idArray, date).subscribe(observer);
