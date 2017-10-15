@@ -7,45 +7,21 @@ var models = require('../models/');
 var bordereau = models.bordereau;
 var dashboard = models.dashboard;
 var traitement = models.traitement;
+var site = models.site;
 
 var DashboardService = require('../services/dashboard.service');
+var SitesService = require('../services/sites.service');
+var BordereauxService = require('../services/bordereaux.service');
 
-
-// returns the first and last date of the selected month
-// year and month are to be given as numbers
-function computeDates(year, month, tolerance, siteId, callback) {
-    // throw and error if invalid date provided
-    if (month%1!=0 || year%1!=0 || month<1 || month>12) {
-        throw "Invalid date format \n expected yyyy, mm (example 2017, 03)";
-    }
-
-    if (month==12) {
-        var endYear = year + 1;
-        var endMonth = 1;
-    }
-    else {
-        var endYear = year;
-        var endMonth = month + 1;
-    }
-
-    if (month<10) {
-        month = "0" + month;
-    }
-    if (endMonth<10) {
-        endMonth = "0" + endMonth;
-    }
-
-    const beginDate = year + '-' + month + '-01';
-    const endDate = endYear + '-' + endMonth + '-01';
-
-    return callback(beginDate, endDate, tolerance, siteId);
-}
+var utilities = require('../utilities/dates');
 
 // computes all the data for a given site identified by its id in the database
 function computeForSite(beginDate, endDate, tolerance, siteId) {
 
-    var loopsToDo = 11;
-    var volumeLVerte = 0;
+    console.log("computing for site " + siteId);
+
+    var loopsToDo = 12;
+    var bordereaux; //useful to know if it is an empty set.
 
     // creates a new dashboard element to be filled
     // all values are to their default value of 0
@@ -62,13 +38,8 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         loopsToDo -= 1;
     };
     var onNextNumber = (data) => {
-        // here, a number is returned
-        if (data[1]=="volume_verte") {
-            volumeLVerte = data[0];
-        }
-        else {
-            computedValues[data[1]] = data[0];
-        }
+
+        computedValues[data[1]] = data[0];
         loopsToDo -= 1;
     }
     var onError = (error) => {
@@ -77,18 +48,18 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
     };
     var onCompleted = () => {
         if (loopsToDo == 0) {
-            computedValues["taux_valorisation_total"] /= computedValues["volume_total"];
-            computedValues["taux_valorisation_l_verte"] /= volumeLVerte;
-            console.log(computedValues.dataValues);
-            // to be modified, corrects an error in the database
-            if (isNaN(computedValues["taux_valorisation_l_verte"])) {
-                console.log("yolo");
-                computedValues["taux_valorisation_l_verte"] = 0;
+            // if no bordereaux: does not divide by 0
+            if (computedValues["bordereaux"] == 0) {
+                computedValues["details"] += "Aucun bordereau sur la période considérée;";
             }
-            console.log(computedValues.dataValues);
+            else {
+                if (computedValues["volume_l_verte"] == 0) {
+                    computedValues["details"] += "Aucun déchet en liste verte;";
+                }
+            }
             computedValues.save()
                 .then((value) => {
-                    console.log("done");
+                    console.log("site " + siteId + " from " + beginDate + " to " + endDate + ": Done");
                 })
                 .catch((err) => {
                     console.error(err);
@@ -129,33 +100,84 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
         .subscribe(observerVolume);
 
     var observerVolumeVerte = Rx.Observer.create(onNextNumber, onError, onCompleted);
-    DashboardService.getTotalVolumeVerte([siteId], beginDate, endDate, "volume_verte")
+    DashboardService.getTotalVolumeVerte([siteId], beginDate, endDate, "volume_l_verte")
         .subscribe(observerVolumeVerte);
 
     var observerValorisationTot = Rx.Observer.create(onNextNumber, onError, onCompleted);
-    DashboardService.getValorisationTotale([siteId], beginDate, endDate, "taux_valorisation_total")
+    DashboardService.getValorisationTotale([siteId], beginDate, endDate, "valorisation_totale")
         .subscribe(observerValorisationTot);
 
     var observerValorisationVerte = Rx.Observer.create(onNextNumber, onError, onCompleted);
-    DashboardService.getValorisationVerte([siteId], beginDate, endDate, "taux_valorisation_l_verte")
+    DashboardService.getValorisationVerte([siteId], beginDate, endDate, "valorisation_l_verte")
         .subscribe(observerValorisationVerte);
+
+    var observerCounter = Rx.Observer.create(onNextNumber, onError, onCompleted);
+    DashboardService.countBordereaux([siteId], beginDate, endDate, "bordereaux")
+        .subscribe(observerCounter);
 
 }
 
 // given a container and a set of bordereaux, computes the desired values and
 // fill the container with them
 
-function preCompute() {
-    // will later get all the id
-    var id = 3;
+function preComputeForDate(year, month) {
 
     // prepare data
-    var year = 2017;
-    var month = 2;
     var tolerance = 0;
 
-    computeDates(year, month, tolerance, id, computeForSite);
+    var idArray = [];
+    var observerId = Rx.Observer.create(
+        (id) => {
+            id.forEach((site) => {
+                idArray.push(site.dataValues.id);
+            });
+        },
+        (error) => {
+            console.log(error);
+            throw error;
+        },
+        () => {
+            idArray.forEach((id) => {
+                utilities.computeDates(year, month, tolerance, id, computeForSite);
+            })
+
+        }
+    );
+    SitesService.getAllSites({attributes: ['id']}).subscribe(observerId);
 }
 
 // tests the function
+function preCompute() {
+
+    // oldest possible year
+    const firstYear = 2017;
+    const firstMonth = 1;
+
+    // gets the current date
+    var date = new Date();
+    var currentMonth = date.getMonth();
+    var currentYear = date.getFullYear();
+
+    // currentMonth = 1;
+    // currentYear = 2017;
+
+    var year;
+    var month;
+
+    for (year=firstYear; year<=currentYear; year++) {
+        // if we are on the last year, only get to the current month
+        if (year == currentYear) {
+            for (var month=1; month<=currentMonth; month++) {
+                preComputeForDate(year, month);
+            }
+        }
+        // else go to december
+        else {
+            for (month=1; month<13; month++) {
+                preComputeForDate(year, month);
+            }
+        }
+    }
+}
+
 preCompute();

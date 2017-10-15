@@ -4,11 +4,11 @@ var service = {};
 var sequelize = require('sequelize');
 
 var models = require('../models/');
-var Site = models.site;
+var Bordereau = models.bordereau;
 
-function getAllSites(queryParameters) {
+function getAllBordereaux(queryParameters) {
     /* This function creates an Observable and returns it. It searches for all
-     * sites
+     * bordereaux
      * Args: queryParameters, parameters for the query, in the following form:
      * {attributes: string[], where: {fieldA: string, ...}, order: string[]}
      */
@@ -23,9 +23,9 @@ function getAllSites(queryParameters) {
      }
 
     var observable = Rx.Observable.create((observer) => {
-        Site.findAll(queryParameters)
-            .then((prestataires) => {
-                observer.onNext(prestataires);
+        Bordereau.count(queryParameters)
+            .then((bordereaux) => {
+                observer.onNext(bordereaux);
                 observer.onCompleted();
             })
             .catch ((error) => {
@@ -35,16 +35,16 @@ function getAllSites(queryParameters) {
     return observable;
 }
 
-function getSiteById(id) {
+function getBordereauById(id) {
   /* This function creates an Observable and returns it. It should get a
-   * single Site with the corresponding id given in parameters
+   * single Bordereau with the corresponding id given in parameters
    * If not found, an error will be raised and handled in the response
    */
    var observable = Rx.Observable.create((observer) => {
-      Site.findById(id)
-          .then((site) => {
-              if (site) {
-                  observer.onNext(site);
+      Bordereau.findById(id)
+          .then((bordereau) => {
+              if (bordereau) {
+                  observer.onNext(bordereau);
                   observer.onCompleted();
               }
               else {
@@ -62,7 +62,7 @@ function getSiteById(id) {
 
 
 //All exported functionalities
-service.getAllSites = getAllSites;
-service.getSiteById = getSiteById;
+service.getAllBordereaux = getAllBordereaux;
+service.getBordereauById = getBordereauById;
 
 module.exports = service;

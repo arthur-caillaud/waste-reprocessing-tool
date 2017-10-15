@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var Sequelize = require('sequelize');
-var config = require('../config.json');
+var config = require('../config/config.json');
 var Rx = require('rx');
 
 //Import data models
@@ -15,7 +15,8 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 
 var mySqlConnect = function() {
-    const sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
+    var sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
+            logging: config.test.logging,
             host: config.mysql.url,
             dialect: 'mysql',
             pool: {
@@ -27,8 +28,9 @@ var mySqlConnect = function() {
     return sequelize;
 };
 
-var mysqlDisconnect = function(){
+var mysqlDisconnect = function(sequelize){
     sequelize.close();
+    console.log("Disconnected");
 };
 
 var mySqlWipeData = function(){

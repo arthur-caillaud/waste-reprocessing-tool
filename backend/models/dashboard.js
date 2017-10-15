@@ -7,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true,
       autoIncrement: true
-    },
+  },
     ecarts_pesee: {
       type: DataTypes.INTEGER(11),
       allowNull: false,
@@ -29,22 +29,27 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '0'
     },
     volume_total: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
-    taux_valorisation_total: {
-      type: DataTypes.INTEGER(11),
+    volume_l_verte: {
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
-    taux_valorisation_l_verte: {
-      type: DataTypes.INTEGER(11),
+    valorisation_totale: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    valorisation_l_verte: {
+      type: DataTypes.DECIMAL,
       allowNull: false,
       defaultValue: '0'
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
       defaultValue: '2016-01-01'
     },
@@ -71,7 +76,11 @@ module.exports = function(sequelize, DataTypes) {
     id_site: {
       type: DataTypes.INTEGER(11),
       allowNull: false
-    }
+  },
+      bordereaux: {
+        type: DataTypes.INTEGER(11),
+        allowNull: false
+      }
   }, {
     tableName: 'dashboard',
     timestamps: false
