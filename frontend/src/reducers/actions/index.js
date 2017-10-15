@@ -11,6 +11,7 @@ export const DISPLAY_GAUGE_INFOS = 'DISPLAY_GAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
+export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
 
 /*
  * other constants
@@ -90,5 +91,13 @@ export function toggleLateralMenu(isVisible){
     return {
         type: TOGGLE_LATERALMENU,
         isVisible
+    }
+}
+
+export function updateLeftGauge(values) {
+    // values is an object containing value and valueBefore
+    return {
+        type: CHANGE_LEFTGAUGE_INPUT,
+        values
     }
 }

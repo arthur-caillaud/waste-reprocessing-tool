@@ -42,6 +42,8 @@ class LocationSearch extends Component {
                 });
             };
         }
+
+        //appeler le dispatch 
         this.setState({searchContainerData: resArray});
     }
 

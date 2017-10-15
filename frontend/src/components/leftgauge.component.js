@@ -1,7 +1,8 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
-
+import { connect } from "react-redux"
+import * as actions from '../reducers/actions'
 
 
 
@@ -12,28 +13,32 @@ function getChartSize(el) {
 
         return  [width,height];
     }
-class Gauge extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: props.value,
-            valueBefore: props.valueBefore,
-            id: props.id,
-        }
-    }
+
+var valueAnteG = 0;
+var valueBeforeAnteG = 0;
 
 
+class LeftGauged3 extends Component {
 
     drawJauge() {
         /*
         This is the place we initialize the value of this year's Liste Verte
         and last Year
         */
-        var value = this.state.value;
-        var valueBefore = this.state.valueBefore;
+
+
+        var value = this.props.value;
+        var valueBefore = this.props.valueBefore;
+        var valueAnte = this.props.valueAnte;
+        var valueBeforeAnte = this.props.valueBeforeAnte;
         var margin = {top: 20, right: 20, bottom: 40, left: 20};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
+        /*
+        Here we just save previous state
+        */
+        valueAnteG = this.props.value
+        valueBeforeAnteG = this.props.valueBefore
 
 
 
@@ -75,13 +80,15 @@ class Gauge extends Component {
                 innerRadius: (width/2) - margin.top - 15,
                 outerRadius: (width/2)- margin.top,
                 startAngle: scale(0),
-                endAngle: scale(value)
+                endAngle: scale(value),
+                valueAnte: scale(valueAnte)
             },
             {
                 innerRadius: (width/2) -margin.top-10 - margin.bottom/2,
                 outerRadius: (width/2)-margin.top - margin.bottom/2,
                 startAngle: scale(0),
-                endAngle: scale(valueBefore)
+                endAngle: scale(valueBefore),
+                valueAnte: scale(valueBeforeAnte)
             }
         ]
 
@@ -122,63 +129,75 @@ class Gauge extends Component {
         takes it's value in data, following the start variable's model
         d3.interpolate does exactly what it says, it continuously interpolate start and end. arc(interpolate) makes the path follow arc.
         */
-        g.selectAll("path.arc")
-            .data(data)
-            .enter().append("path")
-                .attr("innerRadius", function(d) {return d.innerRadius})
-                .attr("outerRadius", function(d) {return d.outerRadius})
-
-                .attr("class", arc)
-                .transition().duration(2500)
-                .attrTween("d", function(d) {
-                    var start = {startAngle: scale(0), endAngle: scale(0)};
-                    var interpolate = d3.interpolate(start, d)
-                    return function (t) {
-                        return arc(interpolate(t));
-                    };
-                })
-                .styleTween("fill", function() {
-                    return function(t) {
-                        return color(t*value)
-                    }
-                  })
 
 
+        function doTransition() {
+            g.selectAll("path.arc")
+                .data(data)
+                .enter().append("path")
+                    .attr("innerRadius", function(d) {return d.innerRadius})
+                    .attr("outerRadius", function(d) {return d.outerRadius})
+                    .attr("startAngle", scale(0))
+                    .attr("endAngle", scale(0))
 
-        middleTextCount
-          .transition()
-            .duration(2500)
-            .on("start", function () {
-              d3.active(this)
-                  .tween("text", function() {
-                    var that = d3.select(this),
-                        i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
-                    return function(t) { that.text(format(i(t))); };
-                  })
-                  .styleTween("fill", function() {
-                      return function(t) {
-                          return color(t*value)
-                      }
-                    })
-            });
-        percentage
-          .transition()
-              .duration(2500)
-              .on("start", function() {
-                  d3.active(this)
-                    .tween("text", function(){
-                        var that = d3.select(this);
-                        return function(t) {that.text('%')}
+                    .attr("class", arc)
+                    .transition().duration(2500)
+                    .attrTween("d", function(d) {
+
+                        var start = {startAngle: scale(0), endAngle: d.valueAnte};
+
+                        var interpolate = d3.interpolate(start, d)
+                        return function (t) {
+                            return arc(interpolate(t));
+                        };
                     })
                     .styleTween("fill", function() {
+                        var interpolate = d3.interpolateRgb(color(valueAnte), color(value))
                         return function(t) {
-                            return color(t*value)
+                            return interpolate(t)
                         }
+                      })
+
+            middleTextCount
+              .transition()
+                .duration(2500)
+                .on("start", function () {
+                  d3.active(this)
+                      .tween("text", function() {
+                        var that = d3.select(this),
+                            i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
+                        return function(t) { that.text(format(i(t))); };
+                      })
+                      .styleTween("fill", function() {
+                          var interpolate = d3.interpolateRgb(color(valueAnte), color(value))
+                          return function(t) {
+                              return interpolate(t)
+                          }
+                        })
+                });
+            percentage
+              .transition()
+                  .duration(2500)
+                  .on("start", function() {
+                      d3.active(this)
+                        .tween("text", function(){
+                            var that = d3.select(this);
+                            return function(t) {that.text('%')}
+                        })
+                        .styleTween("fill", function() {
+                            var interpolate = d3.interpolateRgb(color(valueAnte), color(value))
+                            return function(t) {
+                                return interpolate(t)
+                            }
+                          })
                     })
-        })
-    }
+            }
+
+        doTransition()
+        }
 
     redrawJauge() {
+
         d3.select("#"+this.props.id).select("svg").remove("svg")
         this.drawJauge();
     };
@@ -186,29 +205,22 @@ class Gauge extends Component {
     componentDidMount() {
 
         this.drawJauge()
-        window.addEventListener('resize',this.handleResize())
+
 
     };
-    handleResize() {
-        var svgDoc = d3.select("#"+this.props.id)
-            .attr("width", getChartSize("#"+this.props.id)[0] - 30)
-            .attr("height", getChartSize("#"+this.props.id)[1] - 60)
 
-    }
 
     componentDidUpdate() {
+        this.redrawJauge();
 
-        this.handleResize();
     };
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
-    }
 
       render() {
+
         return (
             <div className="gauge-container">
-                <h2 className="gauge-title">{this.props.title}</h2>
+                <h2 className="gauge-title">Valorisation Globale</h2>
             <div id={this.props.id} className="chart-container"></div>
 
           </div>
@@ -217,6 +229,33 @@ class Gauge extends Component {
       }
 }
 
+function mapStateToProps(state) {
+    console.log(state.updateGauge.value)
+    return {
+        value: state.updateGauge.value,
+        valueBefore: state.updateGauge.valueBefore,
+        valueAnte: state.updateGauge.valueAnte,
+        valueBeforeAnte: state.updateGauge.valueBeforeAnte
 
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
+        value: Math.random()*100,
+        valueBefore:Math.random()*100,
+        valueAnte: valueAnteG,
+        valueBeforeAnte: valueBeforeAnteG
+    }))
 
-export default Gauge;
+    }
+}
+
+const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
+    return(
+        <div onClick={showMoreInfos}>
+            <LeftGauged3 id="leftgauge" value={value} valueBefore={valueBefore} valueAnte={valueAnte} valueBeforeAnte={valueBeforeAnte}/>
+        </div>
+    )
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LeftGauge);
