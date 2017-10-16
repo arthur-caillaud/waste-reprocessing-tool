@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 
 import { Row, Col, Grid } from 'react-bootstrap';
 
-import Gauge from './gauge.component';
+import LeftGauge from './leftgauge.component';
+import MiddleGauge from './middlegauge.component';
+import RightGauge from './rightgauge.component';
 import Info from './info.component';
 import Tile from './tile.component';
 
@@ -14,9 +16,9 @@ class Dashboard extends Component {
           <Grid fluid>
             <Row className="show-grid">
 
-              <Col sm={3}> <Gauge id="leftgauge" title="Valorisation Globale" value={80} valueBefore={85}/> </Col>
-              <Col sm={3}> <Gauge id= "middlegauge" title="Valorisation Liste Verte" value={87} valueBefore={85}/> </Col>
-              <Col sm={3}> <Gauge id="rightgauge" title="Volume Déchets" value={35} valueBefore={30}/> </Col>
+              <Col sm={3}> <LeftGauge/> </Col>
+              <Col sm={3}> <MiddleGauge/> </Col>
+              <Col sm={3}> <RightGauge/> </Col>
 
               <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>

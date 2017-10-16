@@ -2,27 +2,27 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import akkaApp from './reducers'
+import akkaApp from './reducers/index.js'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker';
 
-let store = createStore(akkaApp/*, anEventualInitialState*/);
+window.store = createStore(akkaApp/*, anEventualInitialState*/);
 
-render(
+render((
 
-    <Provider store={store}>
+    <Provider store={window.store}>
         <App />
-    </Provider>,
+    </Provider>),
     document.getElementById('root')
 );
 
 // Log the initial state
-console.log("Store",store.getState());
+console.log("Store",window.store.getState());
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-let unsubscribe = store.subscribe(() =>
-  console.log(store.getState())
+let unsubscribe = window.store.subscribe(() =>
+  console.log(window.store.getState())
 );
 
 registerServiceWorker();

@@ -7,13 +7,14 @@ import {
     DISPLAY_TILE_INFOS,
     DISPLAY_TILE_NOTIFINFOS,
     DISPLAY_GAUGE_INFOS,
+    CHANGE_LEFTGAUGE_INPUT,
     ADD_GRAPH_TAG,
     REMOVE_GRAPH_TAG,
     TOGGLE_LATERALMENU,
     GraphTypes
 } from './actions'
 
-function infosPanelOptions(state = {title: "", defaultBody: "Afficher d'avantage d'informations"}, action){
+function infosPanelOptions(state = {title: "eoufghz", defaultBody: "Afficher d'avantage d'informations"}, action){
     switch (action.type){
         case DISPLAY_TILE_INFOS:
             return Object.assign({}, state, action.tile);
@@ -60,10 +61,25 @@ function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, lateralmenu
     }
 }
 
+function updateGauge(state= {value: 0, valueBefore: 0, valueAnte:0, valueBeforeAnte:0}, action) {
+    switch(action.type) {
+        case 'CHANGE_LEFTGAUGE_INPUT':
+            return Object.assign({}, state, {
+                value: action.values.value,
+                valueBefore: action.values.valueBefore,
+                valueAnte: action.values.valueAnte,
+                valueBeforeAnte: action.values.valueBeforeAnte
+            });
+        default:
+            return state;
+    }
+}
+
 const akkaApp = combineReducers({
     pageOptions,
     graphOptions,
-    infosPanelOptions
+    infosPanelOptions,
+    updateGauge
 })
 
 export default akkaApp
