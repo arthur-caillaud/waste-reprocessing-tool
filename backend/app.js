@@ -43,8 +43,8 @@ app.use('/users', users);
 
 app.use('/bordereaux', bordereaux);
 app.use('/dechets', dechets);
-app.use('/prestataires/new', prestatairesNew);
-app.use('/prestataires', prestataires);
+app.use('/prestataires', prestatairesNew);
+app.use('/old/prestataires', prestataires);
 app.use('/sites', sites);
 app.use('/dashboard', dashboard);
 app.use('/graphs', graphs);
