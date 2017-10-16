@@ -165,7 +165,7 @@ class LeftGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
+                            i = d3.interpolateNumber(valueAnte, value);
                         return function(t) { that.text(format(i(t))); };
                       })
                       .styleTween("fill", function() {
