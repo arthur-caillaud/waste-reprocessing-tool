@@ -5,8 +5,8 @@ import { Button } from 'react-bootstrap';
 
 import { array } from '../utilities/text-generator.component';
 
-import Zone from '../graphics/zone.component';
 import PrestataireSearchBar from './search.component';
+import Histogram from '../components/histogram.component';
 
 class Prestataire extends Component {
   render() {
@@ -33,7 +33,7 @@ class Prestataire extends Component {
               </Col>
               <Col sm={10}>
                 <Row>
-                  <Zone />
+                  <Histogram title="VEOLIA" id="prestataire-hist" />
                 </Row>
               </Col>
             </Row>
