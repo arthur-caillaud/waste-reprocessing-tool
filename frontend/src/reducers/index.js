@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import {
     CHANGE_SCALE,
     CHANGE_URL,
+    REQUEST_SITE_CHANGE,
     CHANGE_GRAPH_INPUT,
     CHANGE_GRAPH_TYPE,
     DISPLAY_TILE_INFOS,

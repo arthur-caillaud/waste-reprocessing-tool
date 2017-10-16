@@ -222,7 +222,6 @@ class LeftGauged3 extends Component {
             <div className="gauge-container">
                 <h2 className="gauge-title">Valorisation Globale</h2>
             <div id={this.props.id} className="chart-container"></div>
-
           </div>
       )
 
@@ -230,7 +229,6 @@ class LeftGauged3 extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state.updateGauge.value)
     return {
         value: state.updateGauge.value,
         valueBefore: state.updateGauge.valueBefore,

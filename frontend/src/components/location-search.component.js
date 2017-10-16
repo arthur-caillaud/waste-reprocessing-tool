@@ -43,22 +43,23 @@ class LocationSearch extends Component {
             };
         }
 
-        //appeler le dispatch 
+        //appeler le dispatch
         this.setState({searchContainerData: resArray});
     }
 
     render() {
 
         var input = <input type="text" className="location-selection-zone searchMode" onKeyUp={(e) => this.searchInData(e.target.value)}/>
-        var searchContainter = <LocationSearchContainer data={this.state.searchContainerData} />;
+        var searchContainer = <LocationSearchContainer data={this.state.searchContainerData} />;
 
         return(
         <div>
           {input}
-          {searchContainter}
+          {searchContainer}
         </div>
         );
     }
 }
+
 
 export default LocationSearch
