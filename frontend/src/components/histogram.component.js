@@ -21,7 +21,7 @@ class Histogram extends Component {
         // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
         // each object in valuesArray is stack of N columns labelled with Object.title
         var valuesArray = [{
-            title: 'Taux de valorisation',
+            title: 'Taux de valorisation global',
             keys: ['VEOLIA','GLOBAL','REGIONAL'],
             values: [78,82,73]
         },{
@@ -35,7 +35,7 @@ class Histogram extends Component {
         },{
             title: "Aluminium",
             keys: ['VEOLIA','GLOBAL','REGIONAL'],
-            values: [10,65,66]
+            values: [10,65,90]
         }];
         // We also save the previous state for dynamic transitions
         var old_valuesArray = valuesArray;
@@ -73,7 +73,7 @@ class Histogram extends Component {
         .rangeRound([height, 0]);
 
         var z = d3.scaleOrdinal()
-        .range(["#3E87B2", "#FFFB19", "#ff8c00", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+        .range(["#69FFFA", "#54E8B9", "#5CFF9E", "#54C6E8", "#5CAEFF", "#43E8B0", "#49FF8E"]);
 
         var bundleLabels = valuesArray.map(bundle => {
             return bundle.title;
@@ -88,6 +88,27 @@ class Histogram extends Component {
         x1.domain(keys).rangeRound([0, x0.bandwidth()]);
 
         y.domain([0,100]).nice();
+
+        var legend = g.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .attr("text-anchor", "end")
+          .selectAll("g")
+          .data(keys)
+          .enter().append("g")
+            .attr("transform", (d, i) => { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", width - 19)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", z);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9.5)
+            .attr("dy", "0.32vw")
+            .text(function(d) { return d; });
 
         //Creating collumn bundles
         g.append('g')
@@ -130,26 +151,6 @@ class Histogram extends Component {
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
 
-        var legend = g.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
-            .attr("text-anchor", "end")
-          .selectAll("g")
-          .data(keys)
-          .enter().append("g")
-            .attr("transform", (d, i) => { return "translate(0," + i * 20 + ")"; });
-
-        legend.append("rect")
-            .attr("x", width - 19)
-            .attr("width", 19)
-            .attr("height", 19)
-            .attr("fill", z);
-
-        legend.append("text")
-            .attr("x", width - 24)
-            .attr("y", 9.5)
-            .attr("dy", "0.32vw")
-            .text(function(d) { return d; });
     };
 
     redrawHistogram() {
