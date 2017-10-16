@@ -47,7 +47,7 @@ class LocationNavigation extends Component {
 
     if(!this.state.searchMode){
         return (
-          <div className="location-selection-zone">
+          <div className="searchbar-container location-selection-zone">
             {globalSite}
             {unit1}
             {unit2}
@@ -64,7 +64,7 @@ class LocationNavigation extends Component {
             sites={this.state.sites}
         />);
         return(
-          <div className="searchBar">
+          <div className="searchbar-container">
             {searchBar}
             {glyphiconSearch}
           </div>

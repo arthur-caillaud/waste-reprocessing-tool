@@ -4,14 +4,13 @@ import * as d3 from 'd3';
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
-
-        return  ({
-            width: width,
-            height: height
-        });
-}
+    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    return  ({
+        width: width,
+        height: height
+    });
+};
 
 class Histogram extends Component {
 
@@ -45,7 +44,7 @@ class Histogram extends Component {
         var svgDoc = d3.select("#"+this.props.id)
             .attr("align","center")
             .append("svg")
-            .attr("width", width+ margin.left + margin.right)
+            .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom);
 
         /*
@@ -82,9 +81,9 @@ class Histogram extends Component {
             return d.title;
         }));
 
-        x1.domain(keys).rangeRound([0, x0.bandWidth()]);
+        x1.domain(keys).rangeRound([0, x0.bandwidth()]);
 
-        y.domain([0,100]);
+        y.domain([0,100]).nice();
 
         //Creating collumn bundles
         g.append('g')
@@ -124,6 +123,16 @@ class Histogram extends Component {
         this.redrawHistogram();
     };
 
+    render() {
+        return (
+        <div>
+            <h2 className="histogram-title">{this.props.title}</h2>
+            <div className="histogram-container">
+                <div id={this.props.id} className="chart-container"></div>
+            </div>
+        </div>
+        );
+    };
 }
 
 export default Histogram;

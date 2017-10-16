@@ -8,10 +8,9 @@ import * as actions from '../reducers/actions'
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
-
-        return  [width,height];
+    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    return  [width,height];
     }
 
 var valueAnteG = 0;
@@ -216,7 +215,7 @@ class LeftGauged3 extends Component {
     };
 
 
-      render() {
+    render() {
 
         return (
             <div className="gauge-container">
@@ -226,7 +225,7 @@ class LeftGauged3 extends Component {
           </div>
       )
 
-      }
+  };
 }
 
 function mapStateToProps(state) {

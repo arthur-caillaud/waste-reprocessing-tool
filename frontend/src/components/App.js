@@ -11,7 +11,7 @@ import { Glyphicon } from 'react-bootstrap';
 
 import { Col, Row } from 'react-bootstrap';
 
-import '../styles/lateralmenu.css';
+import '../styles/general.css';
 
 class App extends Component {
   constructor() {
@@ -46,8 +46,8 @@ class App extends Component {
                 </Button>
               </Col>
               <Col sm={10}>
-                  <SearchBar />
-                  <MainRouter />
+                  <SearchBar/>
+                  <MainRouter/>
               </Col>
             </Row>
           </div>

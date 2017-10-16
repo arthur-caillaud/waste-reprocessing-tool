@@ -12,3 +12,11 @@
   display: -ms-flexbox;
   display:         flex;
 }
+
+.searchbar-container{
+    height: 10vh;
+}
+
+.main-app{
+    height: 90vh;
+}

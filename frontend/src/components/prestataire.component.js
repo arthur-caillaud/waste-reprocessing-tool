@@ -36,23 +36,12 @@ class Prestataire extends Component {
               </Col>
               <Col sm={10}>
                 <Row>
-                  <Col sm={9}><h2>VEOLIA</h2></Col>
                   <Col sm={1}>A</Col>
                   <Col sm={1}>B</Col>
                   <Col sm={1}>C</Col>
                 </Row>
                 <Row>
                   <Zone />
-                </Row>
-                <Row>
-                  <Col sm={3}>
-                    <PrestataireSearchBar/>
-                  </Col>
-                  <Col sm={9}>
-                    <Button>Tag 1</Button>
-                    <Button>Tag 2</Button>
-                    <Button>Tag 3</Button>
-                  </Col>
                 </Row>
               </Col>
             </Row>

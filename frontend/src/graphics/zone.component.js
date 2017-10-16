@@ -7,10 +7,8 @@ class Zone extends Component {
 
   render() {
     return (
-      <div className="mock-container">
-        <Histogram title="VEOLIA" id="prestataire-hist" />
-      </div>
-    )
+    <Histogram title="VEOLIA" id="prestataire-hist" />
+    );
   }
 }
 
