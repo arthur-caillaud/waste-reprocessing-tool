@@ -14,10 +14,12 @@ var prestatairesNew = require('./routes/prestataires-new.controller');
 var dechets = require('./routes/dechets.controller');
 var sites = require('./routes/sites.controller');
 var dashboard = require('./routes/dashboard.controller');
+var graphs = require('./routes/graphs.controller');
 
-var preCompute = require('./datamanagement/pre_computing');
+// for now, we ignore the file as it will probably be launched externally
+// var preCompute = require('./datamanagement/pre_computing');
 
-var config = require('./config.json');
+// var config = require('./config.json');
 
 var app = express();
 
@@ -45,6 +47,7 @@ app.use('/prestataires/new', prestatairesNew);
 app.use('/prestataires', prestataires);
 app.use('/sites', sites);
 app.use('/dashboard', dashboard);
+app.use('/graphs', graphs);
 
 
 
