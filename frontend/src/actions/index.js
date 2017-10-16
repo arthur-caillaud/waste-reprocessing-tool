@@ -95,7 +95,7 @@ export function toggleLateralMenu(isVisible){
 }
 
 export function updateLeftGauge(values) {
-    // values is an object containing value and valueBefore
+    // values is an object containing value and valueBefore, valueAnte and valueBeforeAnte
     return {
         type: CHANGE_LEFTGAUGE_INPUT,
         values

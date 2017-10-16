@@ -12,7 +12,7 @@ import {
     REMOVE_GRAPH_TAG,
     TOGGLE_LATERALMENU,
     GraphTypes
-} from './actions'
+} from '../actions'
 
 function infosPanelOptions(state = {title: "eoufghz", defaultBody: "Afficher d'avantage d'informations"}, action){
     switch (action.type){

@@ -2,7 +2,7 @@ import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
 import { connect } from "react-redux"
-import * as actions from '../reducers/actions'
+import * as actions from '../actions'
 
 
 
