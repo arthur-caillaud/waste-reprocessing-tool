@@ -3,7 +3,7 @@ import '../styles/histogram.css';
 import * as d3 from 'd3';
 
 function getChartSize(el) {
-    var margin = {top: 40, right: 20, bottom: 40, left: 20};
+    var margin = {top: 40, right: 40, bottom: 40, left: 40};
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
     console.log("width",width);
     let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
@@ -41,7 +41,7 @@ class Histogram extends Component {
         var old_valuesArray = valuesArray;
         var width = getChartSize("#"+this.props.id).width;
         var height = getChartSize("#"+this.props.id).height;
-        var margin = {top: 20, right: 20, bottom: 40, left: 20};
+        var margin = {top: 40, right: 40, bottom: 40, left: 40};
 
         /*
         Here we select the div which id is chart and add to it a <svg>
@@ -58,10 +58,6 @@ class Histogram extends Component {
         */
         var g = svgDoc.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var color = d3.scaleLinear()
-            .domain([0, 33, 66, 100])
-            .range(["red", "#CC5500", "#ED7F10", "green"]);
-
         /*
         Building axis
         */
@@ -75,6 +71,9 @@ class Histogram extends Component {
 
         var y = d3.scaleLinear()
         .rangeRound([height, 0]);
+
+        var z = d3.scaleOrdinal()
+        .range(["#3E87B2", "#FFFB19", "#ff8c00", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
         var bundleLabels = valuesArray.map(bundle => {
             return bundle.title;
@@ -112,7 +111,7 @@ class Histogram extends Component {
             .attr("y", function(d) { return y(d.value); })
             .attr("width", x1.bandwidth())
             .attr("height", function(d) { return height - y(d.value); })
-            .attr("fill", function(d) { return color(d.value); });
+            .attr("fill", function(d) { return z(d.key); });
 
         g.append("g")
             .attr("class", "axis")
@@ -130,6 +129,27 @@ class Histogram extends Component {
                 .attr("font-weight", "bold")
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
+
+        var legend = g.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .attr("text-anchor", "end")
+          .selectAll("g")
+          .data(keys)
+          .enter().append("g")
+            .attr("transform", (d, i) => { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", width - 19)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", z);
+
+        legend.append("text")
+            .attr("x", width - 24)
+            .attr("y", 9.5)
+            .attr("dy", "0.32vw")
+            .text(function(d) { return d; });
     };
 
     redrawHistogram() {
