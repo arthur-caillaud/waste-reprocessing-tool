@@ -194,7 +194,7 @@ class LeftGauged3 extends Component {
             }
 
         doTransition()
-        }
+    }
 
     redrawJauge() {
 
