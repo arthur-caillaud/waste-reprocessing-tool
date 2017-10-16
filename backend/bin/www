@@ -8,11 +8,17 @@ var app = require('../app');
 var debug = require('debug')('backend:server');
 var http = require('http');
 
+var config = require('../config/config.json');
+
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '4000');
+// run the server on the provided port on config.json file
+var port = config.server.listen_port;
+console.log("server running on port " + port);
+
+var port = normalizePort(process.env.PORT || port);
 app.set('port', port);
 
 /**

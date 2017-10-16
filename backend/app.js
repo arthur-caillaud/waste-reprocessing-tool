@@ -19,8 +19,6 @@ var graphs = require('./routes/graphs.controller');
 // for now, we ignore the file as it will probably be launched externally
 // var preCompute = require('./datamanagement/pre_computing');
 
-// var config = require('./config.json');
-
 var app = express();
 
 // view engine setup
@@ -70,10 +68,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-// run the server on the provided port on config.json file
-// var port = config.server.listen_port;
-// app.listen(port);
-// console.log("server running on port " + port);
 
 // error handler
 app.use(function(err, req, res, next) {
