@@ -26,6 +26,31 @@ anything concerning the graphs
 
 
 /**
+  * @api {GET} /dashboard/:prestataire/:dechet Recherche les informations nécessaires pour
+  * construire les graphes en fonction des déchets et prestataires
+  * @apiGroup Graphs
+  * @apiVersion 1.0.0
+  * @apiParam (queryArgs) {number} prestataireId id du prestataire considéré
+  * @apiParam (queryArgs) {number} dechetId id du déchet considéré
+
+  * @apiParam (queryParam) {string} [beginDate] première date voulue (format yyyy-mm-dd)
+  * @apiParam (queryParam) {string} [endDate] première date voulue (format yyyy-mm-dd)
+  * @apiParam (queryParam) {number} [level] niveau voulu dans la hierarchie (allant
+  * de 0 : central à 4 : site) default: 0
+  * @apiParam (queryParam) {string} [name] nom du lieu voulu dans sa hierarchie
+  * (facultatif dans le cas d'une hierarchie 1 (niveau central))
+  *
+  * @apiExample {curl} Exemple
+  *   curl -i http://localhost:4000/api/graphs/49/3
+  * @apiExample {curl} Exemple avec arguments
+  *   curl -i http://localhost:4000/api/graphs/49/3/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
+  *
+  * @apiSuccess {JSONString} data Informations nécessaires à la construction
+  * du graphe voulu
+  * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
+  */
+
+/**
 This function is first called upon request. It verifies that all necessary
 arguments are provided and returns an error if not the case
 If the request is correct, the next function will be called
@@ -85,6 +110,7 @@ function verifyParameters(req, res, next) {
 
 
 
+// We still need to get the necessary sites to be used in the request
 function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
