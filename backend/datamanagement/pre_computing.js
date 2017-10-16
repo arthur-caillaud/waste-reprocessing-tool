@@ -22,6 +22,7 @@ function printFeedback(siteId, beginDate, endDate, status) {
     // special characters for setting the color in the console
     const FgGreen = "\x1b[32m";
     const FgYellow = "\x1b[33m";
+    const FgCyan = "\x1b[36m"
     const Reset = "\x1b[0m";
     const Bright = "\x1b[1m";
 
@@ -32,8 +33,11 @@ function printFeedback(siteId, beginDate, endDate, status) {
     if (status == "created") {
         message += FgGreen + "Created";
     }
-    else {
+    else if (status == "updated"){
         message += FgYellow + "Updated";
+    }
+    else {
+        message += FgCyan + "Computing";
     }
     message += Reset;
     console.log(message);
@@ -44,7 +48,7 @@ function printFeedback(siteId, beginDate, endDate, status) {
 // computes all the data for a given site identified by its id in the database
 function computeForSite(beginDate, endDate, tolerance, siteId) {
 
-    console.log("computing for site " + siteId);
+    printFeedback(siteId, beginDate, endDate, "computing");
 
     /** We have to compute 12 asynchronous values. At each iteration, we decrease
         the counter. When it is at 0, we are sure that every processing is done
