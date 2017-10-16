@@ -15,6 +15,8 @@ var BordereauxService = require('../services/bordereaux.service');
 
 var utilities = require('../utilities/dates');
 
+// TODO faire async, comme dans le script d'Arthur
+
 
 // function only used to give feedback when operations are done with a site
 function printFeedback(siteId, beginDate, endDate, status) {

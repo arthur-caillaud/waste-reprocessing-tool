@@ -4,7 +4,10 @@
     "password": "arthurpierreaurelien",
     "database": "db",
     "host": "91.134.242.69",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "poolsize": 1000,
+    "minimumpoolsize": 10,
+    "connectionduration": 10000000
   },
   "test": {
     "username": "backend",
@@ -36,8 +39,8 @@
        "user": "root",
        "password": "arthurpierreaurelien",
        "database": "db",
-       "poolsize": 10,
+       "poolsize": 100,
        "minimumpoolsize": 0,
-       "connectionduration": 1000
+       "connectionduration": 100000
    }
 }
