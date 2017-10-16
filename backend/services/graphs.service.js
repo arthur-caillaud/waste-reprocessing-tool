@@ -25,22 +25,19 @@ var dashboard = models.dashboard;
     in the database
 */
 
-function getQuantity(idPrestataire, idDechet, beginDate, endDate, label) {
-    var beginDate = "2017-02-02";
-    var endDate = "2017-01-01";
-    console.log(endDate);
+function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) {
+    var beginDate = "2017-01-01";
+    var endDate = "2017-11-01";
+
     const query = {
+        attributes: [],
+        where: {
+            id_dechet: idDechet
+        },
         include: [
             {
-                model: dechet,
-                fields: [],
-                where: {
-                    id: idDechet
-                }
-            },
-            {
                 model: traitement,
-                fields: [],
+                attributes: [],
                 where: {
                     date_priseencharge: {
                         $lte: endDate,
@@ -50,7 +47,7 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, label) {
                 include: [
                     {
                         model: prestataire,
-                        fields: [],
+                        attributes: [],
                         where: {
                             id: idPrestataire
                         }
@@ -59,6 +56,10 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, label) {
             }
         ]
     };
+
+    if (typeof sites != "undefined") {
+        query["where"]["id_site"] = {$in: idArray};
+    }
 
     var observable = Rx.Observable.create(obs => {
         bordereau.sum('quantitee_finale', query)
@@ -77,19 +78,13 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, label) {
 }
 
 
-function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, label) {
+function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, label, idArray) {
     const query = {
+        attributes: [],
         include: [
             {
-                model: dechet,
-                fields: [],
-                where: {
-                    id: idDechet
-                }
-            },
-            {
                 model: traitement,
-                fields: [],
+                attributes: [],
                 where: {
                     date_priseencharge: {
                         $lte: endDate,
@@ -99,21 +94,29 @@ function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, label)
                 include: [
                     {
                         model: type_traitement,
+                        attributes: [],
                         where: {
                             qualification: "Recyclage"
                         }
                     },
                     {
                         model: prestataire,
-                        fields: [],
+                        attributes: [],
                         where: {
                             id: idPrestataire
                         }
                     },
                 ]
             }
-        ]
+        ],
+        where: {
+            id_dechet: idDechet
+        }
     };
+
+    if (typeof sites != "undefined") {
+        query["where"]["id_site"] = {$in: idArray};
+    }
 
     var observable = Rx.Observable.create(obs => {
         bordereau.sum('quantitee_finale', query)
