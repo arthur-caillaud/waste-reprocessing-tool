@@ -1,5 +1,6 @@
 import React, { Component, } from 'react';
 
+import Histogram from '../components/histogram.component';
 import '../styles/containers.css';
 
 class Zone extends Component {
@@ -7,9 +8,7 @@ class Zone extends Component {
   render() {
     return (
       <div className="mock-container">
-        <svg className="mock-content">
-
-        </svg>
+        <Histogram title="VEOLIA" id="prestataire-hist" />
       </div>
     )
   }

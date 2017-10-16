@@ -239,6 +239,7 @@ function mapStateToProps(state) {
 
     }
 };
+
 function mapDispatchToProps(dispatch) {
     return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
         value: Math.random()*100,
@@ -248,7 +249,7 @@ function mapDispatchToProps(dispatch) {
     }))
 
     }
-}
+};
 
 const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
     return(

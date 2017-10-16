@@ -19,11 +19,24 @@ class Histogram extends Component {
         var histogramTitle = this.props.title;
         // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
         // each object in valuesArray is stack of N columns labelled with Object.title
-        var valuesArray = this.props.valuesArray;
+        var valuesArray = [{
+            title: 'Taux de valorisation',
+            keys: ['VEOLIA','GLOBAL','REGIONAL'],
+            values: [78,82,73]
+        },{
+            title: 'Fer et acier',
+            keys: ['VEOLIA','GLOBAL','REGIONAL'],
+            values: [54,65,43]
+        },{
+            title: 'Carton',
+            keys: ['VEOLIA','GLOBAL','REGIONAL'],
+            values: [90,95,86]
+        }];
         // We also save the previous state for dynamic transitions
-        var old_valuesArray = this.props.valuesArray;
+        var old_valuesArray = valuesArray;
         var width = getChartSize("#"+this.props.id).width;
         var height = getChartSize("#"+this.props.id).height;
+        var margin = {top: 20, right: 20, bottom: 40, left: 20};
 
         /*
         Here we select the div which id is chart and add to it a <svg>
@@ -44,7 +57,59 @@ class Histogram extends Component {
         var color = d3.scaleLinear()
             .domain([0, 33, 66, 100])
             .range(["red", "#CC5500", "#ED7F10", "green"]);
-    }
+
+        /*
+        Building axis
+        */
+
+        var x0 = d3.scaleBand()
+        .rangeRound([0, width])
+        .paddingInner(0.1);
+
+        var x1 = d3.scaleBand()
+        .padding(0.05);
+
+        var y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+
+        var bundleLabels = valuesArray.map(bundle => {
+            return bundle.title;
+        });
+
+        var keys = valuesArray[0].keys;
+
+        x0.domain(valuesArray.map(d => {
+            return d.title;
+        }));
+
+        x1.domain(keys).rangeRound([0, x0.bandWidth()]);
+
+        y.domain([0,100]);
+
+        //Creating collumn bundles
+        g.append('g')
+        .selectAll('g')
+        .data(valuesArray)
+        .enter()
+            .append('g')
+            .attr("transform", d => { return "translate(" + x0(d.title) + ",0)"; })
+        .selectAll('rect') //Creating each individual column
+        .data(d => {
+            return keys.map((key,index) => {
+                return ({
+                    key: key,
+                    value: d.values[index]
+                });
+            })
+        })
+        .enter()
+            .append('rect')
+            .attr("x", function(d) { return x1(d.key); })
+            .attr("y", function(d) { return y(d.value); })
+            .attr("width", x1.bandwidth())
+            .attr("height", function(d) { return height - y(d.value); })
+            .attr("fill", function(d) { return color(d.value); });
+    };
 
     redrawHistogram() {
         d3.select("#"+this.props.id).select("svg").remove("svg")
@@ -59,5 +124,6 @@ class Histogram extends Component {
         this.redrawHistogram();
     };
 
-    }
 }
+
+export default Histogram;
