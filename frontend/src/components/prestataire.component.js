@@ -19,9 +19,6 @@ class Prestataire extends Component {
     return (
       <div>
         <div>
-          <h2>Vision prestataire</h2>
-        </div>
-        <div>
           <Grid fluid>
             <Row>
               <Col sm={2}>
@@ -35,11 +32,6 @@ class Prestataire extends Component {
                 </Row>
               </Col>
               <Col sm={10}>
-                <Row>
-                  <Col sm={1}>A</Col>
-                  <Col sm={1}>B</Col>
-                  <Col sm={1}>C</Col>
-                </Row>
                 <Row>
                   <Zone />
                 </Row>

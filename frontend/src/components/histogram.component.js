@@ -5,7 +5,9 @@ import * as d3 from 'd3';
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+    console.log("width",width);
     let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    console.log("height",height);
     return  ({
         width: width,
         height: height
@@ -30,6 +32,10 @@ class Histogram extends Component {
             title: 'Carton',
             keys: ['VEOLIA','GLOBAL','REGIONAL'],
             values: [90,95,86]
+        },{
+            title: "Aluminium",
+            keys: ['VEOLIA','GLOBAL','REGIONAL'],
+            values: [10,65,66]
         }];
         // We also save the previous state for dynamic transitions
         var old_valuesArray = valuesArray;
@@ -50,8 +56,7 @@ class Histogram extends Component {
         /*
         Then we append a <g> element and translate it to the middle of the <svg>
         */
-        var g = svgDoc.append("g")
-        .attr("transform", "translate(" + (width+ margin.left + margin.right)/2 + "," + (height + margin.top + margin.bottom)/2 + ")");
+        var g = svgDoc.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var color = d3.scaleLinear()
             .domain([0, 33, 66, 100])
@@ -108,6 +113,23 @@ class Histogram extends Component {
             .attr("width", x1.bandwidth())
             .attr("height", function(d) { return height - y(d.value); })
             .attr("fill", function(d) { return color(d.value); });
+
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x0));
+
+        g.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(y).ticks(null, "s"))
+            .append("text")
+                .attr("x", 2)
+                .attr("y", y(y.ticks().pop()) + 0.5)
+                .attr("dy", "0.32em")
+                .attr("fill", "#000")
+                .attr("font-weight", "bold")
+                .attr("text-anchor", "start")
+                .text("Taux de valorisation (%)");
     };
 
     redrawHistogram() {
@@ -125,11 +147,8 @@ class Histogram extends Component {
 
     render() {
         return (
-        <div>
-            <h2 className="histogram-title">{this.props.title}</h2>
-            <div className="histogram-container">
-                <div id={this.props.id} className="chart-container"></div>
-            </div>
+        <div id="histogram-container">
+            <div id={this.props.id} className="chart-container"></div>
         </div>
         );
     };
