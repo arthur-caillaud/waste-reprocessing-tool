@@ -58,7 +58,7 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) 
     };
 
     if (typeof sites != "undefined") {
-        query["where"]["id_site"] = {$in: idArray};
+        query["where"]["id_site"] = {$in: sites};
     }
 
     var observable = Rx.Observable.create(obs => {
@@ -78,7 +78,7 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) 
 }
 
 
-function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, label, idArray) {
+function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) {
     const query = {
         attributes: [],
         include: [
@@ -115,7 +115,7 @@ function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, label,
     };
 
     if (typeof sites != "undefined") {
-        query["where"]["id_site"] = {$in: idArray};
+        query["where"]["id_site"] = {$in: sites};
     }
 
     var observable = Rx.Observable.create(obs => {

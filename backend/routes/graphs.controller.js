@@ -84,6 +84,51 @@ function verifyParameters(req, res, next) {
 }
 
 
+
+function getNecessarySites(req, res, next) {
+    // gets the corresponding sites to be used after
+    const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
+
+    const level = req.query.level;
+
+    if (level<0 || level>4 || (level>1 && !(name))) {
+        utilities.errorHandler("Invalid arguments", (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    }
+
+    const field = hierarchy[level];
+    const name = req.query.name;
+    var query = {};
+
+    if (typeof field != "undefined") {
+        if (req.params.level == 0) {
+            const where = {};
+        }
+        else {
+            var where = {};
+            where[field] = name;
+            query.where = where;
+        }
+    }
+
+    var onNext = (data) => {
+        req.locals["sites"] = data;
+    };
+    var error = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+    var complete = () => {
+        next();
+    };
+
+    var observer = Rx.Observer.create(onNext, error, complete);
+    var subscription = SitesService.getAllSites(query).subscribe(observer);
+}
+
+
 /**
 Now that we know that the args are valid, we can use this function to get the
 needed data
@@ -96,9 +141,15 @@ function getGraphsData(req, res) {
     const idDechet = req.params.dechet;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
+    const sites = req.locals.sites;
 
     var result = {};
     var loops = 2;
+
+    var idArray = [];
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
 
     var onNext = (data) => {
         result[data[1]] = data[0];
@@ -116,11 +167,11 @@ function getGraphsData(req, res) {
     };
 
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getQuantity(idPrestataire, idDechet, beginDate, endDate, "quantity")
+    GraphsService.getQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "quantity")
         .subscribe(observerQantity);
 
     var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, "recycled")
+    GraphsService.getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "recycled")
         .subscribe(observerRecycled);
 
 
@@ -130,6 +181,7 @@ function getGraphsData(req, res) {
 
 // routes association
 router.get('/:prestataire/:dechet', verifyParameters);
+router.get('/:prestataire/:dechet', getNecessarySites);
 router.get('/:prestataire/:dechet', getGraphsData);
 
 module.exports = router;
