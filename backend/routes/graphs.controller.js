@@ -90,6 +90,7 @@ function verifyParameters(req, res, next) {
     const currentDate = new Date();
     if (typeof beginDate == 'undefined') {
         var date = currentDate.getFullYear() + '-01-01';
+        var previousDate = (currentDate.getFullYear() - 1) + '01-01';
         dates["beginDate"] = date;
     }
     else {
@@ -103,6 +104,39 @@ function verifyParameters(req, res, next) {
     else {
         dates["endDate"] = endDate;
     }
+
+    var tempBeginDate = new Date(dates["beginDate"]);
+    var year = tempBeginDate.getFullYear();
+    year -= 1;
+    var month = tempBeginDate.getMonth();
+    month += 1;
+    if (month < 10) {
+        month = '0' + month;
+    }
+    var day = tempBeginDate.getDate();
+    if (day < 10) {
+        day = '0' + day;
+    }
+    var previousBeginDate = year + '-' + month + '-' + day;
+
+    var tempEndDate = new Date(dates["endDate"]);
+    var year = tempEndDate.getFullYear();
+    year -= 1;
+    var month = tempEndDate.getMonth();
+    month += 1;
+    if (month < 10) {
+        month = '0' + month;
+    }
+    var day = tempEndDate.getDate();
+    if (day < 10) {
+        day = '0' + day;
+    }
+    var previousEndDate = year + '-' + month + '-' + day;
+
+    dates["previousBeginDate"] = previousBeginDate;
+    dates["previousEndDate"] = previousEndDate;
+
+    console.log(dates);
 
     req.locals = dates;
     next();
@@ -167,10 +201,12 @@ function getGraphsData(req, res) {
     const idDechet = req.params.dechet;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
+    const previousBeginDate = req.locals.previousBeginDate;
+    const previousEndDate = req.locals.previousEndDate;
     const sites = req.locals.sites;
 
-    var result = {};
-    var loops = 2;
+    var result = {"current": {}, "previous": {}};
+    var loops = 4;
 
     var idArray = [];
     for (var i=0; i<sites.length; i++) {
@@ -178,7 +214,8 @@ function getGraphsData(req, res) {
     }
 
     var onNext = (data) => {
-        result[data[1]] = data[0];
+        console.log(data[0]);
+        result[data[2]][data[1]] = data[0];
     }
     var onCompleted = () => {
         loops -= 1;
@@ -192,13 +229,24 @@ function getGraphsData(req, res) {
         });
     };
 
+    console.log(previousBeginDate);
+    console.log(previousEndDate);
+
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "quantity")
+    GraphsService.getQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "quantity", "current")
         .subscribe(observerQantity);
 
+    var observerPreviousQantity = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getQuantity(idPrestataire, idDechet, previousBeginDate, previousEndDate, idArray, "quantity", "previous")
+        .subscribe(observerPreviousQantity);
+
     var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "recycled")
+    GraphsService.getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "recycled", "current")
         .subscribe(observerRecycled);
+
+    var observerPreviousRecycled = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getRecycledQuantity(idPrestataire, idDechet, previousBeginDate, previousEndDate, idArray, "recycled", "previous")
+        .subscribe(observerPreviousRecycled);
 
 
 
