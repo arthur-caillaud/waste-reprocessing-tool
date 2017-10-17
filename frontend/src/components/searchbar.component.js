@@ -4,15 +4,16 @@ import { connect } from "react-redux";
 import * as actions from '../actions';
 import akkaApp from '../reducers/index.js';
 
+
 import '../styles/searchbar.css'
 
 
 function getSuggestionValue(suggestion) {
-    return suggestion.name;
+    return suggestion.nom;
 }
 function renderSuggestion(suggestion) {
     return(
-        <span>{suggestion.name}</span>
+        <span>{suggestion.nom}</span>
     );
 }
 
@@ -34,6 +35,9 @@ function mapDispatchToProps(dispatch) {
         },
         onSuggestionsClearRequested() {
             dispatch(actions.clearSuggestions());
+        },
+        onSuggestionSelected(event, { suggestion }) {
+            dispatch(actions.updateSite(suggestion));
         }
     };
 }
@@ -49,10 +53,11 @@ class SearchBarElement extends Component {
             isLoading,
             onChange,
             onSuggestionsFetchRequested,
-            onSuggestionsClearRequested
+            onSuggestionsClearRequested,
+            onSuggestionSelected,
         } = this.props;
         const inputProps = {
-            placeholder: "Nationale",
+            placeholder: "Région/Site/...",
             value: value,
             onChange: onChange
         };
@@ -60,17 +65,18 @@ class SearchBarElement extends Component {
 
 
         return (
-            <div>
-                <div className="status">
-                </div>
+
+
                 <Autosuggest
+
                   suggestions={suggestions}
                   onSuggestionsFetchRequested={onSuggestionsFetchRequested}
                   onSuggestionsClearRequested={onSuggestionsClearRequested}
+                  onSuggestionSelected={onSuggestionSelected}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
                   inputProps={inputProps} />
-            </div>
+
 
         )
     }

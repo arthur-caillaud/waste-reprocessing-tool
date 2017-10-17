@@ -16,6 +16,7 @@ import {
     CLEAR_SUGGESTIONS,
     LOAD_SUGGESTIONS_BEGIN,
     MAYBE_UPDATE_SUGGESTIONS,
+    UPDATE_SITE,
     GraphTypes
 } from '../actions'
 
@@ -80,7 +81,7 @@ function updateGauge(state= {value: 0, valueBefore: 0, valueAnte:0, valueBeforeA
     }
 }
 
-function updateSearchBar(state = {value: '', suggestions: [], isLoading: false}, action) {
+function updateSearchBar(state = {value: '', suggestions: [], isLoading: false, site:'National'}, action) {
     switch (action.type) {
         case UPDATE_INPUT_VALUE:
             return Object.assign({}, state, {
@@ -95,6 +96,10 @@ function updateSearchBar(state = {value: '', suggestions: [], isLoading: false},
         case LOAD_SUGGESTIONS_BEGIN:
             return Object.assign({}, state, {
                 isLoading: true
+        });
+        case UPDATE_SITE:
+            return Object.assign({}, state, {
+                site: action.site
         });
 
         case MAYBE_UPDATE_SUGGESTIONS:

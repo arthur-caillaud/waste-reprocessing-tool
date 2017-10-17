@@ -23,6 +23,7 @@ export const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
 export const CLEAR_SUGGESTIONS = 'CLEAR_SUGGESTIONS';
 export const LOAD_SUGGESTIONS_BEGIN = 'LOAD_SUGGESTIONS_BEGIN';
 export const MAYBE_UPDATE_SUGGESTIONS = 'MAYBE_UPDATE_SUGGESTIONS';
+export const UPDATE_SITE = 'UPDATE_SITE';
 /*
  * other constants
  */
@@ -133,11 +134,18 @@ export function loadSuggestions(value) {
   return dispatch => {
       console.log("smthg happened")
     dispatch(loadSuggestionsBegin())
-    return fetch('http://localhost:4000/api/sites')
+    return fetch('http://localhost:4000/api/sites/?nom='+value)
         .then(response => response.json())
-        .then(json => dispatch(updateInputValue(value)))
+        .then(json => dispatch(maybeUpdateSuggestions(json, value)))
 
   };
+}
+
+export function updateSite(site) {
+    return {
+        type: UPDATE_SITE,
+        site
+    };
 }
 
 export function updateInputValue(value) {
