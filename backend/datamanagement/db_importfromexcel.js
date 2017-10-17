@@ -2,8 +2,7 @@ const excel = require('exceljs');
 const Rx = require ('rx');
 const config = require('../config/config.json');
 const Sequelize = require('sequelize');
-const db = require('./db.js');
-const forEach = require('async-foreach').forEach;
+const db = require('./db');
 const async = require('async');
 const Iconv = require('iconv').Iconv;
 
@@ -1060,19 +1059,33 @@ const writeIntoBdd = function(excelName) {
                             },
                             onError: error => {
                                 console.error("Error thrown by bordereauObservable", error);
-                                callback(error,null)
+                                process.nextTick(() => {
+                                    console.log("NO NEXT TICK");
+                                    callback(error, null);
+                                });
                             },
                             onCompleted: () => {
-                                callback(null,true);
+                                process.nextTick(() => {
+                                    console.log("Next tick");
+                                    callback(null, true);
+                                });
                             }
                         });
                     };
                     tasksArray.push(task);
                 });
+<<<<<<< HEAD
                 console.log("Starting importing data...");
                 async.series(tasksArray, (err,res) => {
                     console.log("Async tasks done");
                     db.mysqlDisconnect(sequelize);
+=======
+                console.log(tasksArray.length);
+                async.series(tasksArray, (err,res) => {
+                    console.log(err);
+                    console.log(res);
+                    console.log("All tasks have been handled.")
+>>>>>>> Jaimebienredux
                 });
             },
             onError: error => {
@@ -1082,7 +1095,7 @@ const writeIntoBdd = function(excelName) {
             onCompleted: () => {
                 console.log("Successfully read whole excel");
             }
-        })
+        });
     })
     .catch(err => {
         console.error('Database connection lost or unable to start');
@@ -1091,4 +1104,8 @@ const writeIntoBdd = function(excelName) {
 
 //TEST PHASE
 //writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+<<<<<<< HEAD
 writeIntoBdd("bigdatasample.xlsx");
+=======
+writeIntoBdd("dataedfmars.xlsx");
+>>>>>>> Jaimebienredux
