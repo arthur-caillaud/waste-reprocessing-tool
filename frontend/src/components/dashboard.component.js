@@ -6,7 +6,7 @@ import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
 import RightGauge from './rightgauge.component';
 import Info from './info.component';
-import Tile from './tile.component';
+import Tile from './containers/tile.container';
 
 class Dashboard extends Component {
   render() {

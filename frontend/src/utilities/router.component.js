@@ -13,13 +13,13 @@ import Dechet from '../components/dechet.component';
 const Root = () => (
 
       <Router>
-        <div>
+        <div className="main-app">
           <Route exact path='/' component={Dashboard}/>
           <Route path='/prestataire' component={Prestataire}/>
           <Route path='/dechet' component={Dechet}/>
         </div>
     </Router>
-  
+
 )
 
 export default Root

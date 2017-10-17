@@ -1,0 +1,21 @@
+{
+    "server": {
+        "listen_port": 4000
+    },
+    "excel": {
+        "DATA_DIR": "./data/",
+        "STARTING_ROW": 3,
+        "MAIN_SHEET": 1,
+        "REFERENTIELDECHET_SHEET": 11,
+        "REFERENTIELDECHET_STARTING_ROW": 9
+    },
+    "mysql": {
+        "url": "91.134.242.69",
+        "user": "root",
+        "password": "arthurpierreaurelien",
+        "database": "db",
+        "poolsize": 1,
+        "minimumpoolsize": 0,
+        "connectionduration": 10
+    }
+}

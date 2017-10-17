@@ -7,7 +7,16 @@
     overflow: hidden;
 }
 
+.searchbar {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 5%;
+}
 
+.mock-container {
+    width: 100%;
+    padding-bottom: 95%
+}
 
 .mock-container {
   display: inline-block;
