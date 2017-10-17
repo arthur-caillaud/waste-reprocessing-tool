@@ -2,7 +2,7 @@ var supertest = require("supertest");
 var chai = require("chai");
 var assert = chai.assert;
 
-var server = supertest.agent("http://localhost:4000");
+var server = supertest.agent("http://localhost:4000/api");
 
 // TODO change URL when the API will use the new adresses
 

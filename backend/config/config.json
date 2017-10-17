@@ -5,9 +5,7 @@
     "database": "db",
     "host": "91.134.242.69",
     "dialect": "mysql",
-    "poolsize": 1000,
-    "minimumpoolsize": 10,
-    "connectionduration": 10000000
+    "logging": false
   },
   "test": {
     "username": "backend",
