@@ -79,8 +79,11 @@ class Histogram extends Component {
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>Taux de valorisation</strong> <span style='color:red'>" + d.value + "%</span>";
-        });
+            return ("<div><div><strong>"+
+            d.key+
+            "</strong></div>"+
+            "Taux de valorisation <span style='color:red'>" + d.value + "%</span></div>"
+        )});
         svgDoc.call(tip);
 
         /*
@@ -98,7 +101,7 @@ class Histogram extends Component {
         .rangeRound([height, 0]);
 
         let z = d3.scaleOrdinal()
-        .range(["#69FFFA", "#54E8B9", "#5CFF9E", "#54C6E8", "#5CAEFF", "#43E8B0", "#49FF8E"]);
+        .range(["#6FD96C", "#9CE371", "#B3CC70", "#E3E071", "#D9CB6C", "#43E8B0", "#49FF8E"]);
 
         let bundleLabels = data.map(bundle => {
             return bundle.title;
@@ -132,6 +135,7 @@ class Histogram extends Component {
         })
         .enter()
             .append('rect')
+            .classed('hist-bar',true)
             .attr("x", function(d) { return x1(d.key); })
             .attr("y", function(d) { return y(d.value); })
             .attr("width", x1.bandwidth())
