@@ -16,11 +16,7 @@ var type_traitement = models.type_traitement;
 
 var mySqlConnect = function() {
     var sequelize = new Sequelize(config.mysql.database, config.mysql.user, config.mysql.password, {
-<<<<<<< HEAD
             logging: config.test.logging,
-=======
-            logging: false,
->>>>>>> Jaimebienredux
             host: config.mysql.url,
             dialect: 'mysql',
             pool: {

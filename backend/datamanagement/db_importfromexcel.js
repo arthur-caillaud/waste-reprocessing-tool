@@ -1074,18 +1074,10 @@ const writeIntoBdd = function(excelName) {
                     };
                     tasksArray.push(task);
                 });
-<<<<<<< HEAD
                 console.log("Starting importing data...");
                 async.series(tasksArray, (err,res) => {
                     console.log("Async tasks done");
                     db.mysqlDisconnect(sequelize);
-=======
-                console.log(tasksArray.length);
-                async.series(tasksArray, (err,res) => {
-                    console.log(err);
-                    console.log(res);
-                    console.log("All tasks have been handled.")
->>>>>>> Jaimebienredux
                 });
             },
             onError: error => {
@@ -1104,8 +1096,4 @@ const writeIntoBdd = function(excelName) {
 
 //TEST PHASE
 //writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-<<<<<<< HEAD
-writeIntoBdd("bigdatasample.xlsx");
-=======
 writeIntoBdd("dataedfmars.xlsx");
->>>>>>> Jaimebienredux

@@ -2,7 +2,7 @@ import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
 import { connect } from "react-redux"
-import * as actions from '../actions'
+import * as actions from '../reducers/actions'
 
 
 
@@ -164,7 +164,7 @@ class LeftGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(valueAnte, value);
+                            i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
                         return function(t) { that.text(format(i(t))); };
                       })
                       .styleTween("fill", function() {
@@ -221,6 +221,7 @@ class LeftGauged3 extends Component {
             <div className="gauge-container">
                 <h2 className="gauge-title">Valorisation Globale</h2>
             <div id={this.props.id} className="chart-container"></div>
+
           </div>
       )
 
@@ -228,6 +229,7 @@ class LeftGauged3 extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state.updateGauge.value)
     return {
         value: state.updateGauge.value,
         valueBefore: state.updateGauge.valueBefore,
