@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import '../styles/histogram.css';
 import * as d3 from 'd3';
+import * as d3tip from 'd3-tip';
 
 function getChartSize(el) {
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
@@ -73,6 +74,15 @@ class Histogram extends Component {
         */
         let g = svgDoc.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+        //We are adding the tips shown on :hover
+        var tip = d3tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+            return "<strong>Taux de valorisation</strong> <span style='color:red'>" + d.value + "%</span>";
+        });
+        svgDoc.call(tip);
+
         /*
         Building axis
         */
@@ -92,13 +102,6 @@ class Histogram extends Component {
 
         let bundleLabels = data.map(bundle => {
             return bundle.title;
-        });
-
-        var tip = d3.tip()
-        .attr('class', 'd3-tip')
-        .offset([-10, 0])
-        .html(function(d) {
-            return "<strong>Frequency©</strong> <span style='color:red'>" + d.frequency + "</span>";
         });
 
         const keys = data[0].keys;
@@ -133,7 +136,9 @@ class Histogram extends Component {
             .attr("y", function(d) { return y(d.value); })
             .attr("width", x1.bandwidth())
             .attr("height", function(d) { return height - y(d.value); })
-            .attr("fill", function(d) { return z(d.key); });
+            .attr("fill", function(d) { return z(d.key); })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
 
         //Transition to make column appear from bottom with their real values
         g.select("g").selectAll("g")
@@ -191,10 +196,6 @@ class Histogram extends Component {
                 .attr("font-weight", "bold")
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
-
-        //Transition to the graph with the real values
-
-
     };
 
     redrawHistogram() {
