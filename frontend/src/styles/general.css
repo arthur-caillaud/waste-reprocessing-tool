@@ -1,8 +1,13 @@
 .navBar {
   vertical-align: middle;
   padding-top: 10%;
+<<<<<<< HEAD
   padding-bottom: 33%;
   background-color: #3979CC;
+=======
+  padding-bottom: 0%;
+  background-color: #a5c7ff;
+>>>>>>> 955e63f09c9a9d75a5a2705073d7b426d49c3b90
 }
 
 .row-eq-height {
@@ -14,11 +19,17 @@
 }
 
 .searchbar-container{
-    position: absolute;
+
     height: 10vh;
 }
 
 .main-app{
     position: relative;
     height: 90vh;
+}
+
+.biggest-div {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
