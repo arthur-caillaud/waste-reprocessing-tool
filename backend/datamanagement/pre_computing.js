@@ -48,8 +48,44 @@ function printFeedback(siteId, beginDate, endDate, status) {
 
 
 
+function printDuration(duration) {
+    // gets the duration in milliseconds
+    var date = {
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0,
+    };
+    date.milliseconds = duration % 1000;
+    duration = (duration-date.milliseconds) / 1000;
+    date.seconds = duration % 60;
+    duration = (duration-date.seconds) / 60;
+    date.minutes = duration % 60;
+    duration = (duration-date.minutes) / 60;
+    date.hours = duration;
+
+    var result = "";
+    if (date.hours > 0) {
+        result += date.hours + "h ";
+    }
+    if (date.minutes > 0) {
+        result += date.minutes + "mins ";
+    }
+    if (date.seconds > 0) {
+        result += date.seconds + "s ";
+    }
+    if (date.milliseconds > 0) {
+        result += date.milliseconds + "ms";
+    }
+
+    console.log("Done in " + result);
+
+}
+
+
+
 // computes all the data for a given site identified by its id in the database
-function computeForSite(beginDate, endDate, tolerance, siteId) {
+function computeForSite(beginDate, endDate, tolerance, siteId, callback) {
 
     printFeedback(siteId, beginDate, endDate, "computing");
 
@@ -105,6 +141,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
             computedValues.save()
                 .then((value) => {
                     printFeedback(siteId, beginDate, endDate, "created");
+                    callback(null, null);
                 })
                 .catch((err) => {
                     // this error is raised if the entry already exists
@@ -118,6 +155,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
                                 (error) => {console.log(error);},
                                 () => {
                                     printFeedback(siteId, beginDate, endDate, "updated");
+                                    callback(null, null);
                                 }
                             ));
                     }
@@ -184,7 +222,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId) {
 // given a container and a set of bordereaux, computes the desired values and
 // fill the container with them
 
-function preComputeForDate(year, month) {
+function preComputeForDate(year, month, callback) {
 
     // prepare data
     // TODO: use a config file for the tolerance, and not use 0.
@@ -193,12 +231,14 @@ function preComputeForDate(year, month) {
     // this array will contain all the ids of sites in the database
     var idArray = [];
 
+    var tasksArray = [];
+
     var observerId = Rx.Observer.create(
         (id) => {
             // when given the list of ids, put only them in the array
             id.forEach((site) => {
                 idArray.push(site["id"]);
-            });
+            })
         },
         (error) => {
             console.log(error);
@@ -208,8 +248,12 @@ function preComputeForDate(year, month) {
             // for each value in the array, computes the datas for the given date
             // in the corresponding site
             idArray.forEach((id) => {
-                utilities.computeDates(year, month, tolerance, id, computeForSite);
-            });
+                var task = function(intermCallback) {
+                    utilities.computeDates(year, month, tolerance, id, computeForSite, intermCallback);
+                };
+                tasksArray.push(task);
+            })
+            async.series(tasksArray, (err, res) => {callback(null, null)})
 
         }
     );
@@ -223,6 +267,8 @@ function preComputeForDate(year, month) {
 // date to a max date
 // IDEA: put the max date to current date (the case for now)
 function preCompute() {
+
+    const begin = new Date()
 
     // oldest possible year
     // TODO: put that value in a config file
@@ -238,36 +284,41 @@ function preCompute() {
     // currentMonth = 1;
     // currentYear = 2017;
 
-    var year;
-    var month;
+    let year;
+    let month;
 
-    let tasksArray = [];
+    let varsArray = [];
 
     for (year=firstYear; year<=currentYear; year++) {
         // if we are on the last year, only get to the current month
         if (year == currentYear) {
-            for (var month=1; month<=currentMonth; month++) {
-                var task = function(callback) {
-                    preComputeForDate(year, month);
-                    callback(null, null);
-                }
-                tasksArray.push(task);
+            for (month=1; month<=currentMonth; month++) {
+                varsArray.push([year, month]);
             }
         }
         // else go to december
         else {
             for (month=1; month<13; month++) {
-                var task = function(callback) {
-                    preComputeForDate(year, month);
-                    callback(null, null);
-                }
-                tasksArray.push(task);
+                varsArray.push([year, month]);
             }
         }
     }
 
     // starting async operations
-    asynch.series(tasksArray, (err, res) => {});
+    var task = function(values, callback) {
+        const year = values[0];
+        const month = values[1];
+        preComputeForDate(year, month, callback);
+    };
+
+    async.mapSeries(varsArray, task, (err, result) => {
+        const end = new Date();
+        const duration = end - begin;
+
+        printDuration(duration);
+    });
+
+}
 
 // lauch the function when the script is called (it will only be called for that)
 preCompute();
