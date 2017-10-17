@@ -24,6 +24,79 @@ describe("Déchets Routes", () => {
         it("should return the correct data", () => {
             // TODO as the data must be studied to be tested
         })
+    });
+
+    describe("GET /dechets/?attributes=id,libelle", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/dechets?attributes=id,libelle")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    });
+
+    describe("GET /dechets/order=-id", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/dechets/?order=-id")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    });
+
+    describe("GET /dechets?id=1", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/dechets?id=1")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    });
+
+
+    describe("GET /dechets?is_dangereux=1", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/dechets?id_dangereux=1")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
     })
 
 

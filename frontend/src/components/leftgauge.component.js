@@ -8,10 +8,9 @@ import * as actions from '../actions'
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
-
-        return  [width,height];
+    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    return  [width,height];
     }
 
 var valueAnteG = 0;
@@ -165,7 +164,7 @@ class LeftGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(valueAnte, value);
+                            i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
                         return function(t) { that.text(format(i(t))); };
                       })
                       .styleTween("fill", function() {
@@ -194,7 +193,7 @@ class LeftGauged3 extends Component {
             }
 
         doTransition()
-        }
+    }
 
     redrawJauge() {
 
@@ -216,19 +215,21 @@ class LeftGauged3 extends Component {
     };
 
 
-      render() {
+    render() {
 
         return (
             <div className="gauge-container">
                 <h2 className="gauge-title">Valorisation Globale</h2>
             <div id={this.props.id} className="chart-container"></div>
+
           </div>
       )
 
-      }
+  };
 }
 
 function mapStateToProps(state) {
+    console.log(state.updateGauge.value)
     return {
         value: state.updateGauge.value,
         valueBefore: state.updateGauge.valueBefore,
@@ -237,6 +238,7 @@ function mapStateToProps(state) {
 
     }
 };
+
 function mapDispatchToProps(dispatch) {
     return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
         value: Math.random()*100,
@@ -246,7 +248,7 @@ function mapDispatchToProps(dispatch) {
     }))
 
     }
-}
+};
 
 const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
     return(

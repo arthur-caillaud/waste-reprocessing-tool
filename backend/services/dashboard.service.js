@@ -17,6 +17,20 @@ var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
 var dashboard = models.dashboard;
 
+
+/** All the get functions have exactly the same format:
+    First we create a query corresponding to the data we want to find
+    Then we create an observable object that will execute the request
+    in the database
+
+    For every function, we only consider a set of sites on a given date range
+    NOTE: when used by the pre_computing, only a single site is usually provided
+*/
+
+
+
+// this function looks for all the bordereau in which the difference between
+// the estimated quantity and the actual quantity is bigger than a max value
 function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
     const query = {
         include: [
@@ -51,6 +65,10 @@ function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
     return observable;
 }
 
+
+
+// this function looks for all the bordereau in which the actual treatment is
+// different to the required treatment (that was asked)
 function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, label) {
     var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
         bordereau.findAll({
@@ -90,6 +108,11 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
     return getAllIncoherencesFilieresObservable;
 };
 
+
+
+// this function looks for all the bordereaux in which the treatment applied to
+// the waste is forbidden (regardless of what was asked)
+// For instance: if oil is burnt or rejected into water (forbidden by law)
 function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label){
 
     var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
@@ -134,6 +157,12 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
     return getAllFilieresInterditesObservable;
 };
 
+
+
+// this function looks for all the bordereaux in which the difference between the
+// current date (passed in the arguments) and the moment when the bordereau was
+// received is bigger than a limit
+// NOTE: the limit depends on the type of waste (30 days if dangerous, 60 if not)
 function getAllRetards(idArray, dangereux, date, label) {
 
     if (dangereux==1) {
@@ -142,7 +171,6 @@ function getAllRetards(idArray, dangereux, date, label) {
     else {
         var maxDelay = 60 * 60 * 60 * 1000;
     }
-
 
     var observable = Rx.Observable.create((obs) => {
         bordereau.findAll({
@@ -175,6 +203,10 @@ function getAllRetards(idArray, dangereux, date, label) {
     return observable;
 };
 
+
+
+// this function looks for all the bordereaux and sums the total volume
+// processed. If no bordereau exists for the given site, returns 0
 function getTotalVolume(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
         bordereau.sum('quantitee_finale', {
@@ -209,6 +241,10 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
 };
 
 
+
+// this function looks for all the bordereaux  with wastes in the green list
+// and sums the total volume processed. If no bordereau exists for the given
+// site, returns 0
 function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
         bordereau.sum('quantitee_finale', {
@@ -249,6 +285,10 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
     return observable;
 };
 
+
+
+// this function looks for all the bordereaux and sums the total volume
+// recycled. If no bordereau exists for the given site, returns 0
 function getValorisationTotale(idArray, beginDate, endDate, label) {
     var query = {
         include: [
@@ -293,6 +333,11 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
     return observable;
 }
 
+
+
+// this function looks for all the bordereaux  with wastes in the green list
+// and sums the total volume recycled. If no bordereau exists for the given
+// site, returns 0
 function getValorisationVerte(idArray, beginDate, endDate, label) {
     var query = {
         include: [
@@ -345,6 +390,8 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
 }
 
 
+
+// this function counts all the bordereaux for a given site
 function countBordereaux(idArray, beginDate, endDate, label) {
     /* This function creates an Observable and returns it. It counts all bordereaux
      * Args: queryParameters, parameters for the query, in the following form:
@@ -383,6 +430,10 @@ function countBordereaux(idArray, beginDate, endDate, label) {
 }
 
 
+
+// this function returns an observable with all the elements in the table
+// matching the provided id and date.
+// NOTE: considering the constraints, it should return only one site (or 0)
 function getDataForSites(idArray, date) {
     var query = {
         where: {
@@ -404,6 +455,37 @@ function getDataForSites(idArray, date) {
     return observable;
 }
 
+
+
+// this function updates an existing entry in the dashboard table
+// we provide the new entry as parameters. 
+function updateEntry(newEntry) {
+    var query = {
+        where: {
+            id_site: newEntry["id_site"],
+            date: newEntry["date"]
+        }
+    };
+
+    var observable = Rx.Observable.create((observer) => {
+        dashboard.findOne(query)
+            .then((entry) => {
+                entry.update(newEntry)
+                    .then(() => {
+                        observer.onNext();
+                        observer.onCompleted();
+                    })
+                    .catch((error) => {
+                        observer.onError(error);
+                    })
+            })
+            .catch((error) => {
+                observer.onError(error)
+            })
+    })
+    return observable;
+}
+
 var service = {};
 
 service.getAllEcartsDePesee = getAllEcartsDePesee;
@@ -415,6 +497,7 @@ service.getValorisationTotale = getValorisationTotale;
 service.getValorisationVerte = getValorisationVerte;
 service.getTotalVolumeVerte = getTotalVolumeVerte;
 service.countBordereaux = countBordereaux;
-service.getDataForSites = getDataForSites; 
+service.getDataForSites = getDataForSites;
+service.updateEntry = updateEntry;
 
 module.exports = service;

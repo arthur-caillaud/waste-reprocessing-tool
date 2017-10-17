@@ -27,6 +27,81 @@ describe("Sites Routes", () => {
     })
 
 
+    describe("GET /sites?attributes=id,nom", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/sites?attributes=id,nom")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    })
+
+
+    describe("GET /sites?order=-id", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/sites?order=-id")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    })
+
+
+    describe("GET /sites?id=1", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/sites?id=1")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    })
+
+    describe("GET /sites?metier_dependance=SEI", () => {
+
+        it("should return a 200 status code", (done) => {
+            server.get("/sites?metier_dependance=SEI")
+                .then((response) => {
+                    assert.equal(response.status, 200);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                });
+        });
+
+        it("should return the correct data", () => {
+            // TODO as the data must be studied to be tested
+        })
+    })
+
+
     describe("GET sites/:id", () => {
 
         it("should return a 200 status code", (done) => {

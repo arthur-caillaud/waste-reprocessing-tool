@@ -27,11 +27,11 @@ function queryParser(type, args, callback) {
     parsedArgs = {}
 
     // parse the fields selectors array
-    var fields = args.fields;
-        if (fields) {
+    var attributes = args.attributes;
+        if (attributes) {
           // only considers the fields if some are provided
-          fields = fields.split(',');
-          parsedArgs.fields = fields;
+          attributes = attributes.split(',');
+          parsedArgs.attributes = attributes;
         }
 
     // parse the search parameters

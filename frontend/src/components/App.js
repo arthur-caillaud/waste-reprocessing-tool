@@ -11,8 +11,7 @@ import { Glyphicon } from 'react-bootstrap';
 
 import { Col, Row } from 'react-bootstrap';
 
-import '../styles/lateralmenu.css';
-import '../styles/containers.css';
+import '../styles/general.css';
 
 class App extends Component {
   constructor() {
