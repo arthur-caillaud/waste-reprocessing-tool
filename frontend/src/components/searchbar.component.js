@@ -52,7 +52,7 @@ class SearchBarElement extends Component {
             onSuggestionsClearRequested
         } = this.props;
         const inputProps = {
-            placeholder: "France",
+            placeholder: "Nationale",
             value: value,
             onChange: onChange
         };

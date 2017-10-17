@@ -229,7 +229,6 @@ class LeftGauged3 extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state.updateGauge.value)
     return {
         value: state.updateGauge.value,
         valueBefore: state.updateGauge.valueBefore,

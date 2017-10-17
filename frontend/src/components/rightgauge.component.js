@@ -223,7 +223,6 @@ class RightGauged3 extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state.infosPanelOptions.title)
     return {
         value: 0
     }

@@ -131,6 +131,7 @@ export function updateLeftGauge(values) {
 
 export function loadSuggestions(value) {
   return dispatch => {
+      console.log("smthg happened")
     dispatch(loadSuggestionsBegin())
     return fetch('http://localhost:4000/api/sites')
         .then(response => response.json())

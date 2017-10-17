@@ -4,6 +4,7 @@
 
 .react-autosuggest__container {
   position: relative;
+  padding-top: 10px
 }
 
 .react-autosuggest__input {
