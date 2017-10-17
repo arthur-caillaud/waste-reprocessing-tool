@@ -25,18 +25,22 @@ function getSiteArchitecture(){
                 let upDependance = site.dataValues.up_dependance;
                 let uniteDependance = site.dataValues.unite_dependance;
                 let nomSite = site.dataValues.nom;
-                if(!metierDependance){
-                    metierDependance = upDependance;
-                    upDependance = uniteDependance;
+                if(!uniteDependance){
                     uniteDependance = nomSite;
+                    nomSite = null;
                 }
                 if(!upDependance){
                     upDependance = uniteDependance;
                     uniteDependance = nomSite;
+                    nomSite = null;
                 }
-                if(!uniteDependance){
+                if(!metierDependance){
+                    metierDependance = upDependance;
+                    upDependance = uniteDependance;
                     uniteDependance = nomSite;
+                    nomSite = null;
                 }
+
                 if (metierDependance && !siteArchitecture[metierDependance]){
                     siteArchitecture[metierDependance] = {};
                 }
