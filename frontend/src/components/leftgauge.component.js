@@ -8,10 +8,9 @@ import * as actions from '../actions'
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
-
-        return  [width,height];
+    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    return  [width,height];
     }
 
 var valueAnteG = 0;
@@ -194,7 +193,7 @@ class LeftGauged3 extends Component {
             }
 
         doTransition()
-        }
+    }
 
     redrawJauge() {
 
@@ -216,7 +215,7 @@ class LeftGauged3 extends Component {
     };
 
 
-      render() {
+    render() {
 
         return (
             <div className="gauge-container">
@@ -225,7 +224,7 @@ class LeftGauged3 extends Component {
           </div>
       )
 
-      }
+  };
 }
 
 function mapStateToProps(state) {
@@ -237,6 +236,7 @@ function mapStateToProps(state) {
 
     }
 };
+
 function mapDispatchToProps(dispatch) {
     return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
         value: Math.random()*100,
@@ -246,7 +246,7 @@ function mapDispatchToProps(dispatch) {
     }))
 
     }
-}
+};
 
 const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
     return(

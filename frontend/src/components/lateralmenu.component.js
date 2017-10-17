@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Nav, NavItem } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 
-import '../styles/lateralmenu.css';
+import '../styles/general.css';
 
 class SiteNavbar extends Component {
 
