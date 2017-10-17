@@ -2,6 +2,7 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
+var async = require('async');
 
 var models = require('../models/');
 var bordereau = models.bordereau;
@@ -240,21 +241,33 @@ function preCompute() {
     var year;
     var month;
 
+    let tasksArray = [];
+
     for (year=firstYear; year<=currentYear; year++) {
         // if we are on the last year, only get to the current month
         if (year == currentYear) {
             for (var month=1; month<=currentMonth; month++) {
-                preComputeForDate(year, month);
+                var task = function(callback) {
+                    preComputeForDate(year, month);
+                    callback(null, null);
+                }
+                tasksArray.push(task);
             }
         }
         // else go to december
         else {
             for (month=1; month<13; month++) {
-                preComputeForDate(year, month);
+                var task = function(callback) {
+                    preComputeForDate(year, month);
+                    callback(null, null);
+                }
+                tasksArray.push(task);
             }
         }
     }
-}
+
+    // starting async operations
+    asynch.series(tasksArray, (err, res) => {});
 
 // lauch the function when the script is called (it will only be called for that)
 preCompute();

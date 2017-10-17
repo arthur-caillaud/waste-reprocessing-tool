@@ -16,6 +16,8 @@ var sites = require('./routes/sites.controller');
 var dashboard = require('./routes/dashboard.controller');
 var graphs = require('./routes/graphs.controller');
 
+var router = express.Router();
+
 // for now, we ignore the file as it will probably be launched externally
 // var preCompute = require('./datamanagement/pre_computing');
 
@@ -36,28 +38,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
-
-app.use('/bordereaux', bordereaux);
-app.use('/dechets', dechets);
-app.use('/prestataires', prestatairesNew);
-app.use('/old/prestataires', prestataires);
-app.use('/sites', sites);
-app.use('/dashboard', dashboard);
-app.use('/graphs', graphs);
-
-
-
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
 // allow access-controll headers
 app.use(function(req, res, next) {
   // allow for cross-referencing
@@ -67,6 +47,27 @@ app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   next();
 });
+
+app.use('/api', router);
+
+router.use('/', index);
+router.use('/users', users);
+
+router.use('/bordereaux', bordereaux);
+router.use('/dechets', dechets);
+router.use('/prestataires', prestatairesNew);
+router.use('/old/prestataires', prestataires);
+router.use('/sites', sites);
+router.use('/dashboard', dashboard);
+router.use('/graphs', graphs);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
 
 
 // error handler
