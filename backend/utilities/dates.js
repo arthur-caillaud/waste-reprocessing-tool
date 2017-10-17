@@ -2,7 +2,8 @@ var utilities = {};
 
 // returns the first and last date of the selected month
 // year and month are to be given as numbers
-function computeDates(year, month, tolerance, siteId, callback) {
+function computeDates(year, month, tolerance, siteId, callback, arg) {
+
     // throw and error if invalid date provided
     if (month%1!=0 || year%1!=0 || month<1 || month>12) {
         throw "Invalid date format \n expected yyyy, mm (example 2017, 03)";
@@ -27,7 +28,7 @@ function computeDates(year, month, tolerance, siteId, callback) {
     const beginDate = year + '-' + month + '-01';
     const endDate = endYear + '-' + endMonth + '-01';
 
-    return callback(beginDate, endDate, tolerance, siteId);
+    return callback(beginDate, endDate, tolerance, siteId, arg);
 }
 
 utilities.computeDates = computeDates;
