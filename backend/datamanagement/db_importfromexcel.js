@@ -137,8 +137,8 @@ const convertRowIntoSiteSequelize = function(excelRow){
     var siteObservable = Rx.Observable.create(obs => {
         try {
             if(excelRow[15]){
-                newSite.nom = (typeof excelRow[15] == "string" ? excelRow[15].toUpperCase() : excelRow[15]);
-                site.findOrCreate({where: newSite})
+                const nom = (typeof excelRow[15] == "string" ? excelRow[15].toUpperCase() : excelRow[15]);
+                site.findOrCreate({where: {nom: nom}, default: newSite})
                 .spread((site, created) => {
                     console.log("Site found or created");
                     obs.onNext(site);
