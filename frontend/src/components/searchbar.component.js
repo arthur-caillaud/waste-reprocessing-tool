@@ -62,10 +62,7 @@ class SearchBarElement extends Component {
             onChange: onChange
         };
 
-
-
         return (
-
 
                 <Autosuggest
 

@@ -28,7 +28,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="biggest-div">
         <BrowserRouter>
           <div>
             <Row className="row-eq-height">
@@ -46,7 +46,9 @@ class App extends Component {
                 </Button>
               </Col>
               <Col sm={10}>
-                  <SearchBar className="searchbar-container" />
+                  <div className="searchbar-container" >
+                      <SearchBar/>
+                  </div>
                   <MainRouter className="main-container" />
               </Col>
             </Row>

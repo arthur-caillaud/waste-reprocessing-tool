@@ -141,11 +141,24 @@ export function loadSuggestions(value) {
   };
 }
 
+function getLevelFromSite(site) {
+
+}
+
 export function updateSite(site) {
+    return dispatch => {
+        dispatch(updateSiteName(site))
+        return fetch('http://localhost:4000/api/dashboard/4/'+site.id+'?tolerance=0&year=2017&month=3')
+            .then(response => console.log(response))
+            
+    };
+}
+
+export function updateSiteName(site) {
     return {
         type: UPDATE_SITE,
         site
-    };
+    }
 }
 
 export function updateInputValue(value) {
