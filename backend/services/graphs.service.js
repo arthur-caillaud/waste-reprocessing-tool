@@ -132,9 +132,148 @@ function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, sites,
     return observable;
 }
 
+function getGlobalQuantity(idPrestataire, beginDate, endDate, sites, label, level, listType) {
+
+    var greenList;
+
+    if (listType == "normal") {
+        greenList = 0;
+    }
+    else {
+        greenList = 1;
+    }
+
+    const query = {
+        attributes: [],
+        where: {},
+        include: [
+            {
+                model: traitement,
+                attributes: [],
+                where: {
+                    date_priseencharge: {
+                        $lte: endDate,
+                        $gte: beginDate
+                    }
+                },
+                include: [
+                    {
+                        model: prestataire,
+                        attributes: [],
+                        where: {
+                            id: idPrestataire
+                        }
+                    }
+                ]
+            },
+            {
+                model: dechet,
+                attributes: [],
+                where: {
+                    is_listeverte: greenList
+                }
+            }
+        ]
+    };
+
+    if (typeof sites != "undefined") {
+        query["where"]["id_site"] = {$in: sites};
+    }
+
+    var observable = Rx.Observable.create(obs => {
+        bordereau.sum('quantitee_finale', query)
+            .then((sum) => {
+                if (isNaN(sum)) {
+                    sum = 0;
+                }
+                console.log("yolo");
+                obs.onNext([sum, label, level, listType]);
+                console.log("swag");
+                obs.onCompleted();
+            })
+            .catch((err) => {
+                obs.onError(err);
+            });
+    });
+    return observable;
+}
+
+function getGlobalRecycledQuantity(idPrestataire, beginDate, endDate, sites, label, level, listType) {
+
+    var greenList;
+
+    if (listType == "normal") {
+        greenList = 0;
+    }
+    else {
+        greenList = 1;
+    }
+
+    const query = {
+        attributes: [],
+        where: {},
+        include: [
+            {
+                model: traitement,
+                attributes: [],
+                where: {
+                    date_priseencharge: {
+                        $lte: endDate,
+                        $gte: beginDate
+                    }
+                },
+                include: [
+                    {
+                        model: type_traitement,
+                        attributes: [],
+                        where: {
+                            qualification: "Recyclage"
+                        }
+                    },
+                    {
+                        model: prestataire,
+                        attributes: [],
+                        where: {
+                            id: idPrestataire
+                        }
+                    }
+                ]
+            },
+            {
+                model: dechet,
+                attributes: [],
+                where: {
+                    is_listeverte: greenList
+                }
+            }
+        ]
+    };
+
+    if (typeof sites != "undefined") {
+        query["where"]["id_site"] = {$in: sites};
+    }
+
+    var observable = Rx.Observable.create(obs => {
+        bordereau.sum('quantitee_finale', query)
+            .then((sum) => {
+                if (isNaN(sum)) {
+                    sum = 0;
+                }
+                obs.onNext([sum, label, level, listType]);
+                obs.onCompleted();
+            })
+            .catch((err) => {
+                obs.onError(err);
+            });
+    });
+    return observable;
+}
+
 var service = {};
 
 service.getQuantity = getQuantity;
 service.getRecycledQuantity = getRecycledQuantity;
+service.getGlobalQuantity = getGlobalQuantity;
+service.getGlobalRecycledQuantity = getGlobalRecycledQuantity;
 
 module.exports = service;
