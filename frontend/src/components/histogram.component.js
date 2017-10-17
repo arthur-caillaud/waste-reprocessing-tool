@@ -98,7 +98,7 @@ class Histogram extends Component {
         .attr('class', 'd3-tip')
         .offset([-10, 0])
         .html(function(d) {
-            return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+            return "<strong>Frequency©</strong> <span style='color:red'>" + d.frequency + "</span>";
         });
 
         const keys = data[0].keys;
