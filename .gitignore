@@ -3,3 +3,4 @@ frontend/node_modules/*
 node_modules/*
 test/test_reports.xml
 .DS_Store
+docs.DS_STORE
