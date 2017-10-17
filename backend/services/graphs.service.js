@@ -25,9 +25,7 @@ var dashboard = models.dashboard;
     in the database
 */
 
-function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) {
-    var beginDate = "2017-01-01";
-    var endDate = "2017-11-01";
+function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label, level) {
 
     const query = {
         attributes: [],
@@ -67,7 +65,7 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) 
                 if (isNaN(sum)) {
                     sum = 0;
                 }
-                obs.onNext([sum, label]);
+                obs.onNext([sum, label, level]);
                 obs.onCompleted();
             })
             .catch((err) => {
@@ -78,7 +76,7 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) 
 }
 
 
-function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label) {
+function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label, level) {
     const query = {
         attributes: [],
         include: [
@@ -124,7 +122,7 @@ function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, sites,
                 if (isNaN(sum)) {
                     sum = 0;
                 }
-                obs.onNext([sum, label]);
+                obs.onNext([sum, label, level]);
                 obs.onCompleted();
             })
             .catch((err) => {
