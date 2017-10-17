@@ -16,11 +16,13 @@ function getAllPrestataires(queryParameters) {
      if (Object.keys(queryParameters).length>0) { // checks if queryParams have actually been provided
          // modifies the fields in the 'where' statement to put everything in lower
          var where = {};
-         for (const key of Object.keys(queryParameters.where)) {
-             const val = queryParameters.where[key];
-             where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+         if (typeof queryParameters["where"] != 'undefined') {
+             for (const key of Object.keys(queryParameters.where)) {
+                 const val = queryParameters.where[key];
+                 where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+             }
+             queryParameters.where = where;
          }
-         queryParameters.where = where;
      }
 
     var getAllPrestatairesObservable = Rx.Observable.create((observer) => {

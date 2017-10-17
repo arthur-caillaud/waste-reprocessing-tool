@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import {
     CHANGE_SCALE,
     CHANGE_URL,
+    REQUEST_SITE_CHANGE,
     CHANGE_GRAPH_INPUT,
     CHANGE_GRAPH_TYPE,
     DISPLAY_TILE_INFOS,
@@ -12,7 +13,7 @@ import {
     REMOVE_GRAPH_TAG,
     TOGGLE_LATERALMENU,
     GraphTypes
-} from './actions'
+} from '../actions'
 
 function infosPanelOptions(state = {title: "eoufghz", defaultBody: "Afficher d'avantage d'informations"}, action){
     switch (action.type){

@@ -12,15 +12,20 @@ function getAllDechets(queryParameters) {
      * Args: queryParameters, parameters for the query, in the following form:
      * {attributes: string[], where: {fieldA: string, ...}, order: string[]}
      */
+
      if (Object.keys(queryParameters).length>0) {
          // modifies the fields in the 'where' statement to put everything in lower
          var where = {};
-         for (const key of Object.keys(queryParameters.where)) {
-             const val = queryParameters.where[key];
-             where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+         if (typeof queryParameters["where"] != 'undefined') {
+             for (const key of Object.keys(queryParameters.where)) {
+                 const val = queryParameters.where[key];
+                 where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+             }
+             queryParameters.where = where;
          }
-         queryParameters.where = where; 
      }
+
+     console.log(queryParameters);
 
      var observable = Rx.Observable.create((observer) => {
          Dechet.findAll(queryParameters)

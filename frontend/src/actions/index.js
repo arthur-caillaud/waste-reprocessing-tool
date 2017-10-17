@@ -1,8 +1,12 @@
+import fetch from 'isomorphic-fetch';
+
 /*
  * ACTION TYPES
  */
 export const CHANGE_SCALE = 'CHANGE_SCALE';
 export const CHANGE_URL = 'CHANGE_URL';
+export const REQUEST_SITE_CHANGE = 'REQUEST_SITE_CHANGE'; //This is the action triggered when the site is changed in the navbar.
+
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 export const DISPLAY_TILE_INFOS = 'DISPLAY_TILE_INFOS';
@@ -10,7 +14,9 @@ export const DISPLAY_TILE_NOTIFINFOS = 'DISPLAY_TILE_NOTIFINFOS';
 export const DISPLAY_GAUGE_INFOS = 'DISPLAY_GAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
+
 export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
+
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
 
 /*
@@ -30,6 +36,20 @@ export function changeScale(scale){
         scale
     }
 }
+
+
+
+
+export function requestSiteChange(newSite) {
+    return {
+        type: REQUEST_SITE_CHANGE,
+        newSite
+    }
+}
+
+
+
+
 
 export function changePage(url){
     return {
@@ -95,7 +115,7 @@ export function toggleLateralMenu(isVisible){
 }
 
 export function updateLeftGauge(values) {
-    // values is an object containing value and valueBefore
+    // values is an object containing value and valueBefore, valueAnte and valueBeforeAnte
     return {
         type: CHANGE_LEFTGAUGE_INPUT,
         values
