@@ -4,7 +4,6 @@ const config = require('../config/config.json');
 const Sequelize = require('sequelize');
 const db = require('./db');
 const async = require('async');
-const Iconv = require('iconv').Iconv;
 
 //Import data models
 const models = require('../models/');
@@ -91,6 +90,7 @@ const toQuantitee = function(quantiteeNumber){
 const convertRowIntoDechetSequelize = function(excelRow){
     var newDechet = {
         is_dangereux: toDangereux(excelRow[10]),
+        is_listeverte: 0,
         libelle: excelRow[9],
         code_europeen: excelRow[10],
         categorie: excelRow[11],
@@ -101,7 +101,7 @@ const convertRowIntoDechetSequelize = function(excelRow){
     var dechetObservable = Rx.Observable.create(obs => {
         try{
             if (excelRow[8]){
-                dechet.findOrCreate({where: {codeinterne: excelRow[8]}, default: newDechet})
+                dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
                 .spread((dechet, created) => {
                     console.log("Dechet found or created");
                     obs.onNext({
@@ -136,9 +136,9 @@ const convertRowIntoSiteSequelize = function(excelRow){
 
     var siteObservable = Rx.Observable.create(obs => {
         try {
-            if(excelRow[15]){
-                const nom = (typeof excelRow[15] == "string" ? excelRow[15].toUpperCase() : excelRow[15]);
-                site.findOrCreate({where: {nom: nom}, default: newSite})
+            if(excelRow[15] && typeof excelRow[15] === "string"){
+                const nom = excelRow[15].toUpperCase();
+                site.findOrCreate({where: {nom: nom}, defaults: newSite})
                 .spread((site, created) => {
                     console.log("Site found or created");
                     obs.onNext(site);
@@ -171,16 +171,16 @@ const convertRowIntoPrestataireSequelize = function(excelRow){
 
     var prestataireObservable = Rx.Observable.create((obs) => {
         try{
-            if(excelRow[32]){
-                prestataire.findOrCreate({where: {siret: excelRow[32]}, default: newPrestataireInter})
+            if(excelRow[32] && newPrestataireInter.nom){
+                prestataire.findOrCreate({where: {siret: excelRow[32]}, defaults: newPrestataireInter})
                 .spread((prestataireInter, created) => {
                     console.log("prestataireInter found or created");
                     obs.onNext({
                         prestataireInter: prestataireInter,
                         prestataireFinal: null
                     });
-                    if(excelRow[44]){
-                        prestataire.findOrCreate({where: {siret: excelRow[44]}, default: newPrestataireFinal})
+                    if(excelRow[44] && newPrestataireFinal.nom){
+                        prestataire.findOrCreate({where: {siret: excelRow[44]}, defaults: newPrestataireFinal})
                         .spread((prestataireFinal, created) => {
                             console.log("prestataireFinal found or created");
                             obs.onNext({
@@ -205,8 +205,8 @@ const convertRowIntoPrestataireSequelize = function(excelRow){
                 obs.onNext({
                     prestataireInter_isNull: true
                 });
-                if(excelRow[44]){
-                    prestataire.findOrCreate({where: {siret: excelRow[44]}, default: newPrestataireFinal})
+                if(excelRow[44] && newPrestataireFinal.nom){
+                    prestataire.findOrCreate({where: {siret: excelRow[44]}, defaults: newPrestataireFinal})
                     .spread((prestataireFinal, created) => {
                         console.log("prestataireFinal found or created");
                         obs.onNext({
@@ -250,7 +250,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
     var typeTraitementObservable = Rx.Observable.create(obs => {
         try{
             if(excelRow[6]){
-                type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, default: typeTraitementPrevu})
+                type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, defaults: typeTraitementPrevu})
                 .spread((typeTraitementPrevu, created) => {
                     console.log("typeTraitement found or created");
                     obs.onNext({
@@ -259,7 +259,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
                         typeTraitementFinal: null
                     });
                     if(excelRow[48]){
-                        type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, default: typeTraitementFinal})
+                        type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
                         .spread((typeTraitementFinal, created) => {
                             console.log("typeTraitement found or created");
                             obs.onNext({
@@ -268,7 +268,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
                                 typeTraitementFinal: typeTraitementFinal
                             });
                             if(excelRow[36]){
-                                type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, default: typeTraitementInter})
+                                type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
                                 .spread((typeTraitementInter, created) => {
                                     console.log("typeTraitement found or created");
                                     obs.onNext({
@@ -292,7 +292,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
                             typeTraitementFinal_isNull: true
                         });
                         if(excelRow[36]){
-                            type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, default: typeTraitementInter})
+                            type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
                             .spread((typeTraitementInter, created) => {
                                 console.log("typeTraitement found or created");
                                 obs.onNext({
@@ -320,7 +320,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
                     typeTraitementPrevu_isNull: true
                 });
                 if(excelRow[48]){
-                    type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, default: typeTraitementFinal})
+                    type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
                     .spread((typeTraitementFinal, created) => {
                         console.log("typeTraitement found or created");
                         obs.onNext({
@@ -329,7 +329,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
                             typeTraitementFinal: typeTraitementFinal
                         });
                         if(excelRow[36]){
-                            type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, default: typeTraitementInter})
+                            type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
                             .spread((typeTraitementInter, created) => {
                                 console.log("typeTraitement found or created");
                                 obs.onNext({
@@ -356,7 +356,7 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
                         typeTraitementFinal_isNull: true
                     });
                     if(excelRow[36]){
-                        type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, default: typeTraitementInter})
+                        type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
                         .spread((typeTraitementInter, created) => {
                             console.log("typeTraitement found or created");
                             obs.onNext({
@@ -397,16 +397,16 @@ const convertRowIntoTransporteurSequelize = function(excelRow){
                 nom: excelRow[37],
                 localisation: excelRow[39]
             }
-            if(excelRow[26]){
-                transporteur.findOrCreate({where: {siret: excelRow[26]}, default: newTransporteur1})
+            if(excelRow[26] && newTransporteur1.nom){
+                transporteur.findOrCreate({where: {siret: excelRow[26]}, defaults: newTransporteur1})
                 .spread((transporteur1, created) => {
                     console.log("transporteur1 found or created");
                     obs.onNext({
                         transporteur1: transporteur1,
                         transporteur2: null
                     });
-                    if(excelRow[40]){
-                        transporteur.findOrCreate({where: {siret: excelRow[40]}, default: newTransporteur2})
+                    if(excelRow[40] && newTransporteur2.nom){
+                        transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
                         .spread((transporteur2, created) => {
                             console.log("transporteur1 found or created");
                             obs.onNext({
@@ -431,8 +431,8 @@ const convertRowIntoTransporteurSequelize = function(excelRow){
                 obs.onNext({
                     transporteur1_isNull: true
                 });
-                if(excelRow[40]){
-                    transporteur.findOrCreate({where: {siret: excelRow[40]}, default: newTransporteur2})
+                if(excelRow[40] && newTransporteur2.nom){
+                    transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
                     .spread((transporteur2, created) => {
                         console.log("transporteur2 found or created");
                         obs.onNext({
@@ -742,7 +742,7 @@ const convertRowIntoBordereauSequelize = function(excelRow){
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 }
             });
             dechetObservable.subscribe({
@@ -757,9 +757,7 @@ const convertRowIntoBordereauSequelize = function(excelRow){
                     }
                 },
                 onError: err => {
-                    console.error(err);
-                },
-                onCompleted: () => {
+                    obs.onError(err);
                 }
             });
             transportObservable.subscribe({
@@ -781,7 +779,7 @@ const convertRowIntoBordereauSequelize = function(excelRow){
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 }
             });
             siteObservable.subscribe({
@@ -796,7 +794,7 @@ const convertRowIntoBordereauSequelize = function(excelRow){
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 },
                 onCompleted: () => {
 
@@ -814,7 +812,7 @@ const convertRowIntoBordereauSequelize = function(excelRow){
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 }
             });
         }
@@ -1060,13 +1058,11 @@ const writeIntoBdd = function(excelName) {
                             onError: error => {
                                 console.error("Error thrown by bordereauObservable", error);
                                 process.nextTick(() => {
-                                    console.log("NO NEXT TICK");
-                                    callback(error, null);
+                                    callback(null, true);
                                 });
                             },
                             onCompleted: () => {
                                 process.nextTick(() => {
-                                    console.log("Next tick");
                                     callback(null, true);
                                 });
                             }
@@ -1095,5 +1091,5 @@ const writeIntoBdd = function(excelName) {
 };
 
 //TEST PHASE
-//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-writeIntoBdd("dataedfmars.xlsx");
+writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+//writeIntoBdd("bigdatasample.xlsx");
