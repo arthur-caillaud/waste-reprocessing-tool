@@ -10,6 +10,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
     "react": "^15.6.1",
+    "react-autosuggest": "^9.3.2",
     "react-bootstrap": "^0.31.3",
     "react-d3": "^0.4.0",
     "react-dom": "^15.6.1",

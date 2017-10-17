@@ -19,6 +19,10 @@ export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
 
+export const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
+export const CLEAR_SUGGESTIONS = 'CLEAR_SUGGESTIONS';
+export const LOAD_SUGGESTIONS_BEGIN = 'LOAD_SUGGESTIONS_BEGIN';
+export const MAYBE_UPDATE_SUGGESTIONS = 'MAYBE_UPDATE_SUGGESTIONS';
 /*
  * other constants
  */
@@ -120,4 +124,44 @@ export function updateLeftGauge(values) {
         type: CHANGE_LEFTGAUGE_INPUT,
         values
     }
+}
+
+
+//SearchBar
+
+export function loadSuggestions(value) {
+  return dispatch => {
+    dispatch(loadSuggestionsBegin())
+    return fetch('http://localhost:4000/api/sites')
+        .then(response => response.json())
+        .then(json => dispatch(updateInputValue(value)))
+
+  };
+}
+
+export function updateInputValue(value) {
+  return {
+    type: UPDATE_INPUT_VALUE,
+    value
+  };
+}
+
+export function clearSuggestions() {
+  return {
+    type: CLEAR_SUGGESTIONS
+  };
+}
+
+export function loadSuggestionsBegin() {
+  return {
+    type: LOAD_SUGGESTIONS_BEGIN
+  };
+}
+
+export function maybeUpdateSuggestions(suggestions, value) {
+  return {
+    type: MAYBE_UPDATE_SUGGESTIONS,
+    suggestions,
+    value
+  };
 }

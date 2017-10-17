@@ -12,6 +12,10 @@ import {
     ADD_GRAPH_TAG,
     REMOVE_GRAPH_TAG,
     TOGGLE_LATERALMENU,
+    UPDATE_INPUT_VALUE,
+    CLEAR_SUGGESTIONS,
+    LOAD_SUGGESTIONS_BEGIN,
+    MAYBE_UPDATE_SUGGESTIONS,
     GraphTypes
 } from '../actions'
 
@@ -76,11 +80,47 @@ function updateGauge(state= {value: 0, valueBefore: 0, valueAnte:0, valueBeforeA
     }
 }
 
+function updateSearchBar(state = {value: '', suggestions: [], isLoading: false}, action) {
+    switch (action.type) {
+        case UPDATE_INPUT_VALUE:
+            return Object.assign({}, state, {
+                value: action.value
+            });
+
+        case CLEAR_SUGGESTIONS:
+            return Object.assign({}, state, {
+                suggestions: []
+            });
+
+        case LOAD_SUGGESTIONS_BEGIN:
+            return Object.assign({}, state, {
+                isLoading: true
+        });
+
+        case MAYBE_UPDATE_SUGGESTIONS:
+        // Ignore suggestions if input value changed
+            if (action.value !== state.value) {
+                return Object.assign({}, state, {
+                    isLoading: false
+                });
+            }
+
+            return Object.assign({}, state, {
+                suggestions: action.suggestions,
+                isLoading: false
+            });
+
+        default:
+            return state;
+        }
+}
+
 const akkaApp = combineReducers({
     pageOptions,
     graphOptions,
     infosPanelOptions,
-    updateGauge
+    updateGauge,
+    updateSearchBar
 })
 
 export default akkaApp

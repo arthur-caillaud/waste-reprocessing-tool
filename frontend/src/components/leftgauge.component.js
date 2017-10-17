@@ -94,7 +94,7 @@ class LeftGauged3 extends Component {
 
         var middleTextCount=g.append('text')
                 .style("fill",function (d) { return color(d); })
-                .style('font-size', '40px')
+                .style('font-size', width/6)
                 .datum(0)
                 .attr("class",'middleText')
                 .attr("text-anchor", 'middle')
