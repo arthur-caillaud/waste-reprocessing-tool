@@ -63,11 +63,11 @@ function verifyParameters(req, res, next) {
     const endDate = req.query.endDate;
 
     // required parameters not provided
-    if (!(prestataire) || !(dechet)) {
-        utilities.errorHandler("Invalid arguments", (errorPacket) => {
-            res.status(errorPacket.status).send(errorPacket.message);
-        });
-    }
+    // if (!(prestataire) || !(dechet)) {
+    //     utilities.errorHandler("Invalid arguments", (errorPacket) => {
+    //         res.status(errorPacket.status).send(errorPacket.message);
+    //     });
+    // }
     // both endDate and beginDate are not required, but must be valid
     try {
         if (typeof beginDate != 'undefined') {
@@ -188,6 +188,89 @@ function getNecessarySites(req, res, next) {
     var subscription = SitesService.getAllSites(query).subscribe(observer);
 }
 
+/**
+this function will get the global data (global and green list valorisation and
+volumes)
+**/
+function getGlobalData(req, res) {
+    const idPrestataire = req.params.prestataire;
+    const beginDate = req.locals.beginDate;
+    const endDate = req.locals.endDate;
+    const previousBeginDate = req.locals.previousBeginDate;
+    const previousEndDate = req.locals.previousEndDate;
+    const sites = req.locals.sites;
+
+    var result = {
+        "current": {
+            "normal": {},
+            "greenList": {}
+        },
+        "previous": {
+            "normal": {},
+            "greenList": {}
+        }};
+    console.log(result);
+    var loops = 8;
+
+    var idArray = [];
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
+
+    var onNext = (data) => {
+        console.log("coucou");
+        console.log(data);
+        console.log(result[data[2]][data[3]]);
+        result[data[2]][data[3]][data[1]] = data[0];
+        console.log(result);
+    }
+    var onCompleted = () => {
+        loops -= 1;
+        console.log(loops);
+        if (loops==0) {
+            res.json(result);
+        }
+    }
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+
+    var observerQuantity = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalQuantity(idPrestataire, beginDate, endDate, idArray, "quantity", "current", "normal")
+        .subscribe(observerQuantity);
+
+    var observerPreviousQuantity = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "quantity", "previous", "normal")
+        .subscribe(observerPreviousQuantity);
+
+    var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalRecycledQuantity(idPrestataire, beginDate, endDate, idArray, "recycled", "current", "normal")
+        .subscribe(observerRecycled);
+
+    var observerPreviousRecycled = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalRecycledQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "recycled", "previous", "normal")
+        .subscribe(observerPreviousRecycled);
+
+    var observerQuantityGreen = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalQuantity(idPrestataire, beginDate, endDate, idArray, "quantity", "current", "greenList")
+        .subscribe(observerQuantityGreen);
+
+    var observerPreviousQuantityGreen = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "quantity", "previous", "greenList")
+        .subscribe(observerPreviousQuantityGreen);
+
+    var observerRecycledGreen = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalRecycledQuantity(idPrestataire, beginDate, endDate, idArray, "recycled", "current", "greenList")
+        .subscribe(observerRecycledGreen);
+
+    var observerPreviousRecycledGreen = Rx.Observer.create(onNext, onError, onCompleted);
+    GraphsService.getGlobalRecycledQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "recycled", "previous", "greenList")
+        .subscribe(observerPreviousRecycledGreen);
+
+}
+
 
 /**
 Now that we know that the args are valid, we can use this function to get the
@@ -229,9 +312,6 @@ function getGraphsData(req, res) {
         });
     };
 
-    console.log(previousBeginDate);
-    console.log(previousEndDate);
-
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
     GraphsService.getQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "quantity", "current")
         .subscribe(observerQantity);
@@ -254,8 +334,9 @@ function getGraphsData(req, res) {
 
 
 // routes association
-router.get('/:prestataire/:dechet', verifyParameters);
-router.get('/:prestataire/:dechet', getNecessarySites);
+router.get('*', verifyParameters);
+router.get('*', getNecessarySites);
+router.get('/:prestataire', getGlobalData)
 router.get('/:prestataire/:dechet', getGraphsData);
 
 module.exports = router;
