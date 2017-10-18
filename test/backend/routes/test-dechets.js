@@ -21,8 +21,16 @@ describe("Déchets Routes", () => {
                 });
         });
 
-        it("should return the correct data", () => {
-            // TODO as the data must be studied to be tested
+        it("should return the correct number of data", (done) => {
+            // shoud return 162 unique values
+            server.get("/dechets")
+                .then((response) => {
+                    assert.equal(response.body.length, 162);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                })
         })
     });
 
