@@ -47,7 +47,7 @@ class App extends Component {
               </Col>
               <Col sm={10}>
                   <div className="searchbar-container" >
-                      <SearchBar/>
+                      <SearchBar id="MainSearchBar"/>
                   </div>
                   <MainRouter className="main-container" />
               </Col>

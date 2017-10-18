@@ -2,6 +2,7 @@ import React, { Component, } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { connect } from "react-redux";
 import * as actions from '../actions';
+import * as apiCalls from '../actions/api_calls'
 import akkaApp from '../reducers/index.js';
 
 
@@ -9,6 +10,7 @@ import '../styles/searchbar.css'
 
 
 function getSuggestionValue(suggestion) {
+
     return suggestion.nom;
 }
 function renderSuggestion(suggestion) {
@@ -31,13 +33,13 @@ function mapDispatchToProps(dispatch) {
             dispatch(actions.updateInputValue(newValue));
         },
         onSuggestionsFetchRequested({ value }) {
-            dispatch(actions.loadSuggestions(value));
+            dispatch(apiCalls.loadSuggestions(value));
         },
         onSuggestionsClearRequested() {
             dispatch(actions.clearSuggestions());
         },
         onSuggestionSelected(event, { suggestion }) {
-            dispatch(actions.updateSite(suggestion));
+            dispatch(apiCalls.updateSite(suggestion));
         }
     };
 }
@@ -55,6 +57,7 @@ class SearchBarElement extends Component {
             onSuggestionsFetchRequested,
             onSuggestionsClearRequested,
             onSuggestionSelected,
+            id,
         } = this.props;
         const inputProps = {
             placeholder: "Région/Site/...",
@@ -72,6 +75,7 @@ class SearchBarElement extends Component {
                   onSuggestionSelected={onSuggestionSelected}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
+                  id={id}
                   inputProps={inputProps} />
 
 
