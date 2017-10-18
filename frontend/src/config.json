@@ -1,0 +1,5 @@
+{
+    "backend": {
+        "adress": "http://localhost:4000/api/"
+    }
+}

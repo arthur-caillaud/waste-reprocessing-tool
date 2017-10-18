@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import config from '../config.json';
 
 /*
  * ACTION TYPES
@@ -24,6 +25,12 @@ export const CLEAR_SUGGESTIONS = 'CLEAR_SUGGESTIONS';
 export const LOAD_SUGGESTIONS_BEGIN = 'LOAD_SUGGESTIONS_BEGIN';
 export const MAYBE_UPDATE_SUGGESTIONS = 'MAYBE_UPDATE_SUGGESTIONS';
 export const UPDATE_SITE = 'UPDATE_SITE';
+
+export const LOAD_PRESTATAIRELIST_BEGIN = 'LOAD_PRESTATAIRELIST_BEGIN';
+export const UPDATE_PRESTATAIRELIST = 'UPDATE_PRESTATAIRELIST';
+export const CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS = 'CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS';
+export const UPDATE_PRESTATAIREPANEL_INPUT = 'UPDATE_PRESTATAIREPANEL_INPUT';
+export const UPDATE_SELECTEDPRESTATAIRE = 'UPDATE_SELECTEDPRESTATAIRE';
 /*
  * other constants
  */
@@ -35,6 +42,7 @@ export const UPDATE_SITE = 'UPDATE_SITE';
 /*
  * action creators
  */
+ 
 export function changeScale(scale){
     return {
         type: CHANGE_SCALE,
@@ -42,19 +50,12 @@ export function changeScale(scale){
     }
 }
 
-
-
-
 export function requestSiteChange(newSite) {
     return {
         type: REQUEST_SITE_CHANGE,
         newSite
     }
 }
-
-
-
-
 
 export function changePage(url){
     return {
@@ -128,31 +129,15 @@ export function updateLeftGauge(values) {
 }
 
 
-//SearchBar
-
-export function loadSuggestions(value) {
-  return dispatch => {
-      console.log("smthg happened")
-    dispatch(loadSuggestionsBegin())
-    return fetch('http://localhost:4000/api/sites/?nom='+value)
-        .then(response => response.json())
-        .then(json => dispatch(maybeUpdateSuggestions(json, value)))
-
-  };
-}
+/*
+ * SearchBar (present on every frontpage)
+ */
 
 function getLevelFromSite(site) {
 
 }
 
-export function updateSite(site) {
-    return dispatch => {
-        dispatch(updateSiteName(site))
-        return fetch('http://localhost:4000/api/dashboard/4/'+site.id+'?tolerance=0&year=2017&month=3')
-            .then(response => console.log(response))
-            
-    };
-}
+
 
 export function updateSiteName(site) {
     return {
@@ -186,4 +171,41 @@ export function maybeUpdateSuggestions(suggestions, value) {
     suggestions,
     value
   };
+}
+
+/*
+ * Prestataire Input Panel (present in '/prestataire' page)
+ */
+
+export function loadPrestataireListBegin(){
+    return {
+        type: LOAD_PRESTATAIRELIST_BEGIN
+    }
+}
+
+export function updatePrestataireList(json){
+    return {
+        type: UPDATE_PRESTATAIRELIST,
+        json
+    }
+}
+
+export function clearPrestatairesSearchSuggestions(){
+    return {
+        type: CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS
+    }
+}
+
+export function updatePrestatairePanelInput(input){
+    return {
+        type: UPDATE_PRESTATAIREPANEL_INPUT,
+        input
+    }
+}
+
+export function updateSelectedPrestatire(prestataire){
+    return {
+        type: UPDATE_SELECTEDPRESTATAIRE,
+        prestataire
+    }
 }

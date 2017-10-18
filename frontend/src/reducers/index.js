@@ -17,6 +17,11 @@ import {
     LOAD_SUGGESTIONS_BEGIN,
     MAYBE_UPDATE_SUGGESTIONS,
     UPDATE_SITE,
+    LOAD_PRESTATAIRELIST_BEGIN,
+    UPDATE_PRESTATAIRELIST,
+    CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS,
+    UPDATE_PRESTATAIREPANEL_INPUT,
+    UPDATE_SELECTEDPRESTATAIRE,
     GraphTypes
 } from '../actions'
 
@@ -118,6 +123,22 @@ function updateSearchBar(state = {value: '', suggestions: [], isLoading: false, 
         default:
             return state;
         }
+}
+
+function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [], isLoading: false, chosenPrestataire: '', suggestion: []}, action){
+    switch(action.type){
+        case LOAD_PRESTATAIRELIST_BEGIN:
+            return Object.assign({}, state, {
+                isLoading: true
+            });
+        case UPDATE_PRESTATAIRELIST:
+            return Object.assign({}, state, {
+                prestatairesList: action.json
+            });
+
+        default :
+            return state;
+    }
 }
 
 const akkaApp = combineReducers({

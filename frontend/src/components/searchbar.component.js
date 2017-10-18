@@ -2,6 +2,7 @@ import React, { Component, } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { connect } from "react-redux";
 import * as actions from '../actions';
+import * as apiCalls from '../actions/api_calls'
 import akkaApp from '../reducers/index.js';
 
 
@@ -31,13 +32,13 @@ function mapDispatchToProps(dispatch) {
             dispatch(actions.updateInputValue(newValue));
         },
         onSuggestionsFetchRequested({ value }) {
-            dispatch(actions.loadSuggestions(value));
+            dispatch(apiCalls.loadSuggestions(value));
         },
         onSuggestionsClearRequested() {
             dispatch(actions.clearSuggestions());
         },
         onSuggestionSelected(event, { suggestion }) {
-            dispatch(actions.updateSite(suggestion));
+            dispatch(apiCalls.updateSite(suggestion));
         }
     };
 }
