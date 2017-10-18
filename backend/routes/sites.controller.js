@@ -27,11 +27,14 @@ anything concerning the prestataires
   * @apiParam (queryParam) {string} [unite_dependance] unité de dépendance des sites
   * @apiParam (queryParam) {string} [up_dependance] aucune idée non plus
   * @apiParam (queryParam) {string} [metier_dependance] métier de dépendance des sites
+  * @apiParam (queryParam) {string} [any] recherche sur n'importe quel champ possible
   * @apiParam (queryParam) {string} [order] Tri de la liste des résultats
   * @apiParam (queryParam) {string[]} [fields] Sélection des champs
   *
   * @apiExample {curl} Exemple sans argument
   *   curl -i http://localhost:4000/api/sites
+  * @apiExample {curl} Exemple recherche sur tous les champs
+  *   curl -i http://localhost:4000/api/sites/?any=aquitaine
   * @apiExample {curl} Exemple avec arguments
   *   curl -i http://localhost:4000/api/sites/?fields=id,nom&order=-nom
   *

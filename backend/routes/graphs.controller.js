@@ -68,6 +68,7 @@ function verifyParameters(req, res, next) {
     //         res.status(errorPacket.status).send(errorPacket.message);
     //     });
     // }
+    
     // both endDate and beginDate are not required, but must be valid
     try {
         if (typeof beginDate != 'undefined') {
