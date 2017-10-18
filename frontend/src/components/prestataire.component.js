@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 
 import { array } from '../utilities/text-generator.component';
 
-import PrestataireSearchBar from './search.component';
+import PrestataireSearchBar from './searchbar.component';
 import Histogram from '../components/histogram.component';
 
 class Prestataire extends Component {
@@ -23,7 +23,7 @@ class Prestataire extends Component {
             <Row>
               <Col sm={2}>
                 <Row>
-                  <PrestataireSearchBar/>
+                  <PrestataireSearchBar id="prestatairepanel-searchbar"/>
                 </Row>
                 <Row>
                   <ListGroup>

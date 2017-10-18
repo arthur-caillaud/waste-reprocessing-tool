@@ -5,9 +5,7 @@ import * as actions from '../actions';
 import * as apiCalls from '../actions/api_calls'
 import akkaApp from '../reducers/index.js';
 
-
 import '../styles/searchbar.css'
-
 
 function getSuggestionValue(suggestion) {
 
@@ -65,18 +63,15 @@ class SearchBarElement extends Component {
         };
 
         return (
-
                 <Autosuggest
-
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  onSuggestionSelected={onSuggestionSelected}
-                  getSuggestionValue={getSuggestionValue}
-                  renderSuggestion={renderSuggestion}
-                  inputProps={inputProps} />
-
-
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    onSuggestionSelected={onSuggestionSelected}
+                    getSuggestionValue={getSuggestionValue}
+                    renderSuggestion={renderSuggestion}
+                    inputProps={inputProps}
+                    />
         )
     }
 }

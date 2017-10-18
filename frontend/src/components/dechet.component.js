@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Histogram from '../components/histogram.component';
-import DechetSearchBar from './search.component';
+import DechetSearchBar from './searchbar.component';
 
 class Dechet extends Component {
 
