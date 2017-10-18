@@ -5,7 +5,6 @@ import * as actions from './index';
 
 export function loadSuggestions(value) {
   return dispatch => {
-      console.log("smthg happened")
     dispatch(actions.loadSuggestionsBegin())
     return fetch(config.backend.adress+'dashboard/architecture')
         .then(response => response.json())

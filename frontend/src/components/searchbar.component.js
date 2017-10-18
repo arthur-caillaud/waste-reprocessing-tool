@@ -57,6 +57,7 @@ class SearchBarElement extends Component {
             onSuggestionsFetchRequested,
             onSuggestionsClearRequested,
             onSuggestionSelected,
+            id,
         } = this.props;
         const inputProps = {
             placeholder: "Région/Site/...",
@@ -74,6 +75,7 @@ class SearchBarElement extends Component {
                   onSuggestionSelected={onSuggestionSelected}
                   getSuggestionValue={getSuggestionValue}
                   renderSuggestion={renderSuggestion}
+                  id={id}
                   inputProps={inputProps} />
 
 
