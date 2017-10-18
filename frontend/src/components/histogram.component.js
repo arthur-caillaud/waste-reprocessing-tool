@@ -25,22 +25,27 @@ function clone(obj) {
 class Histogram extends Component {
     // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
     // each object in valuesArray is stack of N columns labelled with Object.title
-    valuesArray = [{
+    valuesArray = this.props.values;
+    newValuesArray = [{
         title: 'Taux de valorisation global',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [78,82,73]
+        values: [46,98,20]
     },{
         title: 'Fer et acier',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [54,65,43]
+        values: [51,72,65]
     },{
         title: 'Carton',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [90,95,86]
+        values: [80,91,82]
     },{
         title: "Aluminium",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [10,65,90]
+        values: [40,65,70]
+    },{
+        title: "Déchets dangereux",
+        keys: ['VEOLIA','GLOBAL','REGIONAL'],
+        values: [60,52,23]
     }];
 
     toNullArray(valuesArray){
@@ -157,7 +162,7 @@ class Histogram extends Component {
                 })
             })
             .transition().duration(1500)
-            .attr("y", d => { console.log(d); return y(d.value); })
+            .attr("y", d => { return y(d.value); })
             .attr("height", d => { return (height - y(d.value)); });
 
         //Adding legend to the graph
@@ -200,7 +205,36 @@ class Histogram extends Component {
                 .attr("font-weight", "bold")
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
+
+        setTimeout(() => {this.doTransition(this.newValuesArray)},2000);
     };
+
+    doTransition(newValues){
+        let svgDoc = d3.select('svg')
+        let g = svgDoc.select('g');
+        const keys = newValues[0].keys;
+        const height = getChartSize("#histogram-container").height;
+        console.log("Height",height);
+        let y = d3.scaleLinear()
+        .rangeRound([height, 0]);
+        console.log(y);
+
+        g.select("g").selectAll("g")
+            .data(newValues)
+            .selectAll('rect')
+            .data(d => {
+                return keys.map((key,index) => {
+                    return ({
+                        key: key,
+                        value: d.values[index]
+                    });
+                })
+            })
+            .transition().duration(1500)
+            .attr("y", d => { console.log(d); return y(d.value); })
+            .attr("height", d => { return (height - y(d.value)); });
+
+    }
 
     redrawHistogram() {
         d3.select("#"+this.props.id).select("svg").remove("svg")

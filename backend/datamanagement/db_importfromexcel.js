@@ -1091,5 +1091,5 @@ const writeIntoBdd = function(excelName) {
 };
 
 //TEST PHASE
-writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-//writeIntoBdd("bigdatasample.xlsx");
+//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+writeIntoBdd("bigdatasample.xlsx");
