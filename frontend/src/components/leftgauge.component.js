@@ -26,18 +26,18 @@ class LeftGauged3 extends Component {
         */
 
 
-        var value = this.props.value;
-        var valueBefore = this.props.valueBefore;
-        var valueAnte = this.props.valueAnte;
-        var valueBeforeAnte = this.props.valueBeforeAnte;
+        var leftvalue = this.props.leftvalue;
+        var leftvalueBefore = this.props.leftvalueBefore;
+        var leftvalueAnte = this.props.leftvalueAnte;
+        var leftvalueBeforeAnte = this.props.leftvalueBeforeAnte;
         var margin = {top: 20, right: 20, bottom: 40, left: 20};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
         /*
         Here we just save previous state
         */
-        valueAnteG = this.props.value
-        valueBeforeAnteG = this.props.valueBefore
+        valueAnteG = this.props.leftvalue
+        valueBeforeAnteG = this.props.leftvalueBefore
 
 
 
@@ -79,15 +79,15 @@ class LeftGauged3 extends Component {
                 innerRadius: (width/2) - margin.top - 15,
                 outerRadius: (width/2)- margin.top,
                 startAngle: scale(0),
-                endAngle: scale(value),
-                valueAnte: scale(valueAnte)
+                endAngle: scale(leftvalue),
+                valueAnte: scale(leftvalueAnte)
             },
             {
                 innerRadius: (width/2) -margin.top-10 - margin.bottom/2,
                 outerRadius: (width/2)-margin.top - margin.bottom/2,
                 startAngle: scale(0),
-                endAngle: scale(valueBefore),
-                valueAnte: scale(valueBeforeAnte)
+                endAngle: scale(leftvalueBefore),
+                valueAnte: scale(leftvalueBeforeAnte)
             }
         ]
 
@@ -151,7 +151,7 @@ class LeftGauged3 extends Component {
                         };
                     })
                     .styleTween("fill", function() {
-                        var interpolate = d3.interpolateRgb(color(valueAnte), color(value))
+                        var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
                         return function(t) {
                             return interpolate(t)
                         }
@@ -164,11 +164,11 @@ class LeftGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(valueAnte, value);
+                            i = d3.interpolateNumber(leftvalueAnte, leftvalue);
                         return function(t) { that.text(format(i(t))); };
                       })
                       .styleTween("fill", function() {
-                          var interpolate = d3.interpolateRgb(color(valueAnte), color(value))
+                          var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
                           return function(t) {
                               return interpolate(t)
                           }
@@ -184,7 +184,7 @@ class LeftGauged3 extends Component {
                             return function(t) {that.text('%')}
                         })
                         .styleTween("fill", function() {
-                            var interpolate = d3.interpolateRgb(color(valueAnte), color(value))
+                            var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
                             return function(t) {
                                 return interpolate(t)
                             }
@@ -219,7 +219,7 @@ class LeftGauged3 extends Component {
 
         return (
             <div className="gauge-container">
-                <h2 className="gauge-title">Valorisation Globale</h2>
+                <h2 className="gauge-title">Valorisation Liste Verte</h2>
             <div id={this.props.id} className="chart-container"></div>
 
           </div>
@@ -230,29 +230,24 @@ class LeftGauged3 extends Component {
 
 function mapStateToProps(state) {
     return {
-        value: state.updateGauge.value,
-        valueBefore: state.updateGauge.valueBefore,
-        valueAnte: state.updateGauge.valueAnte,
-        valueBeforeAnte: state.updateGauge.valueBeforeAnte
+        leftvalue: state.updateGauge.leftvalue,
+        leftvalueBefore: state.updateGauge.leftvalueBefore,
+        leftvalueAnte: state.updateGauge.leftvalueAnte,
+        leftvalueBeforeAnte: state.updateGauge.leftvalueBeforeAnte
 
     }
 };
 
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
-        value: Math.random()*100,
-        valueBefore:Math.random()*100,
-        valueAnte: valueAnteG,
-        valueBeforeAnte: valueBeforeAnteG
-    }))
+    return {showMoreInfos: () => dispatch(actions.displayLeftGaugeInfos())
 
     }
 };
 
-const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
+const LeftGauge = ({showMoreInfos, leftvalue, leftvalueBefore, leftvalueBeforeAnte, leftvalueAnte}) => {
     return(
         <div onClick={showMoreInfos}>
-            <LeftGauged3 id="leftgauge" value={value} valueBefore={valueBefore} valueAnte={valueAnte} valueBeforeAnte={valueBeforeAnte}/>
+            <LeftGauged3 id="leftgauge" leftvalue={leftvalue} leftvalueBefore={leftvalueBefore} leftvalueAnte={leftvalueAnte} leftvalueBeforeAnte={leftvalueBeforeAnte}/>
         </div>
     )
 }
