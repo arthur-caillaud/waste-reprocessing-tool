@@ -130,10 +130,6 @@ export function updateLeftGauge(values) {
  * SearchBar (present on every frontpage)
  */
 
-function getLevelFromSite(site) {
-
-}
-
 
 
 export function updateSiteName(site) {

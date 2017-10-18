@@ -1,15 +1,15 @@
 import fetch from 'isomorphic-fetch';
 import config from '../config.json';
-
-import * as actions from './index'
+import HelperService from './service';
+import * as actions from './index';
 
 export function loadSuggestions(value) {
   return dispatch => {
       console.log("smthg happened")
     dispatch(actions.loadSuggestionsBegin())
-    return fetch(config.backend.adress+'sites/?nom='+value)
+    return fetch(config.backend.adress+'dashboard/architecture')
         .then(response => response.json())
-        .then(json => dispatch(actions.maybeUpdateSuggestions(json, value)))
+        .then(json => dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json), value), value)))
 
   };
 }
