@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Grid, Col, Row } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import { List, ListItem } from 'material-ui';
 
 import { array } from '../utilities/text-generator.component';
 
 //import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
+import InputGraphPanel from '../components/inputgraphpanel.component';
 
 class Prestataire extends Component {
   render() {
@@ -19,17 +19,11 @@ class Prestataire extends Component {
 
     return (
       <div>
-        <div>
           <Grid fluid>
             <Row>
               <Col sm={2}>
-                <Row>
-                </Row>
-                <Row>
-                  <ListGroup>
-                    { list }
-                  </ListGroup>
-                </Row>
+                <InputGraphPanel onClick={() => {alert("Element clicked")}} inputArray={[{nom: "VEOLIA"},{nom: "EDF"},{nom: "ARCELOR MITTAL"},
+                {nom:"SOCIETE MARTINIQUAISE DE VALORISATION"},{nom:"NOVERGIE (VEDENE)"},{nom:"SAICA"}]}/>
               </Col>
               <Col sm={10}>
                 <Row>
@@ -57,8 +51,17 @@ class Prestataire extends Component {
                 </Row>
               </Col>
             </Row>
+            <Row>
+                <Col sm={4}>
+                    <div>
+                        Searchbar
+                    </div>
+                </Col>
+                <Col sm={8}>
+                    Fouzy les tags ici
+                </Col>
+            </Row>
           </Grid>
-        </div>
     </div>
     );
   }

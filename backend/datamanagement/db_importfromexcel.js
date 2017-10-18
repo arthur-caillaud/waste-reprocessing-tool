@@ -67,10 +67,10 @@ const toListeVerte = function(liste_verte){
     return 0;
 };
 const toIndicateurNationalValorisation = function(indicateurNationalValorisation) {
-    if (indicateurNationalValorisation == "Oui"){
+    if (indicateurNationalValorisation === "OUI"){
         return 1
     }
-    if (indicateurNationalValorisation == "Non"){
+    if (indicateurNationalValorisation === "NON"){
         return 0
     }
     return null;

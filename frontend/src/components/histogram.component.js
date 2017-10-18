@@ -206,7 +206,7 @@ class Histogram extends Component {
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
 
-        setTimeout(() => {this.doTransition(this.newValuesArray)},2000);
+        //setTimeout(() => {this.doTransition(this.newValuesArray)},2000);
     };
 
     doTransition(newValues){

@@ -11,7 +11,7 @@ function getChartSize(el) {
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
     let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
     return  [width,height];
-    }
+};
 
 var valueAnteG = 0;
 var valueBeforeAnteG = 0;
