@@ -10,6 +10,7 @@ import '../styles/searchbar.css'
 
 
 function getSuggestionValue(suggestion) {
+
     return suggestion.nom;
 }
 function renderSuggestion(suggestion) {

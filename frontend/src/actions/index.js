@@ -1,6 +1,3 @@
-import fetch from 'isomorphic-fetch';
-import config from '../config.json';
-
 /*
  * ACTION TYPES
  */
@@ -42,7 +39,7 @@ export const UPDATE_SELECTEDPRESTATAIRE = 'UPDATE_SELECTEDPRESTATAIRE';
 /*
  * action creators
  */
- 
+
 export function changeScale(scale){
     return {
         type: CHANGE_SCALE,
