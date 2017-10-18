@@ -2,7 +2,7 @@ var HelperService = {}
 
 
 function getAllLevelNames(architecture) {
-    console.log(architecture)
+
     let levelNames = []
 
     for (let metier_dependance in architecture) {
