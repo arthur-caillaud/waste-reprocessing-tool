@@ -9,7 +9,7 @@
   "test": {
     "username": "backend",
     "password": "password",
-    "database": "db_test",
+    "database": "db",
     "host": "localhost",
     "dialect": "mysql",
     "logging": false
@@ -39,5 +39,13 @@
        "poolsize": 100,
        "minimumpoolsize": 0,
        "connectionduration": 100000
+   },
+   "test": {
+       "username": "backend",
+       "password": "password",
+       "database": "db_test",
+       "host": "localhost",
+       "dialect": "mysql",
+       "logging": false
    }
 }
