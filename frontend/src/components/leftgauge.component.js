@@ -239,12 +239,7 @@ function mapStateToProps(state) {
 };
 
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
-        leftvalue: Math.random()*100,
-        leftvalueBefore:Math.random()*100,
-        leftvalueAnte: valueAnteG,
-        leftvalueBeforeAnte: valueBeforeAnteG
-    }))
+    return {showMoreInfos: () => dispatch(actions.displayLeftGaugeInfos())
 
     }
 };

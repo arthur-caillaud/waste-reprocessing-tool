@@ -228,7 +228,7 @@ function mapStateToProps(state) {
     }
 };
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.displayGaugeInfos(12))
+    return {showMoreInfos: () => dispatch(actions.displayLeftGaugeInfos())
 
     }
 }

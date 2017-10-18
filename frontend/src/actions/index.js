@@ -7,9 +7,11 @@ export const REQUEST_SITE_CHANGE = 'REQUEST_SITE_CHANGE'; //This is the action t
 
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
+
+//Change Display More informations Panel
 export const DISPLAY_TILE_INFOS = 'DISPLAY_TILE_INFOS';
 export const DISPLAY_TILE_NOTIFINFOS = 'DISPLAY_TILE_NOTIFINFOS';
-export const DISPLAY_GAUGE_INFOS = 'DISPLAY_GAUGE_INFOS';
+export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 
@@ -90,10 +92,9 @@ export function displayTileNotifInfos(tileNotifs){
     }
 }
 
-export function displayGaugeInfos(gauge){
+export function displayLeftGaugeInfos(){
     return {
-        type: DISPLAY_GAUGE_INFOS,
-        gauge
+        type: DISPLAY_LEFTGAUGE_INFOS
     }
 }
 
@@ -137,11 +138,6 @@ export function updateMiddleGauge(values) {
 /*
  * SearchBar (present on every frontpage)
  */
-
-function getLevelFromSite(site) {
-
-}
-
 
 
 export function updateSiteName(site) {

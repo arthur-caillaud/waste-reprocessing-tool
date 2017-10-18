@@ -20,9 +20,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const VisibleTodoList = connect(
+const ReduxTile = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Tile)
 
-export default VisibleTodoList
+export default ReduxTile

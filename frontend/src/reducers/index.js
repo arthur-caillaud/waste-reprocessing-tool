@@ -7,7 +7,7 @@ import {
     CHANGE_GRAPH_TYPE,
     DISPLAY_TILE_INFOS,
     DISPLAY_TILE_NOTIFINFOS,
-    DISPLAY_GAUGE_INFOS,
+    DISPLAY_LEFTGAUGE_INFOS,
 
     CHANGE_LEFTGAUGE_INPUT,
     CHANGE_MIDDLEGAUGE_INPUT,
@@ -34,8 +34,8 @@ function infosPanelOptions(state = {title: "eoufghz", defaultBody: "Afficher d'a
     switch (action.type){
         case DISPLAY_TILE_INFOS:
             return Object.assign({}, state, action.tile);
-        case DISPLAY_GAUGE_INFOS:
-            return Object.assign({}, state, action.gauge);
+        case DISPLAY_LEFTGAUGE_INFOS:
+            return Object.assign({}, state, action.defaultBody);
         case DISPLAY_TILE_NOTIFINFOS:
             return Object.assign({}, state, action.tilenotifs);
         default:
