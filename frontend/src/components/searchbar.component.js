@@ -2,9 +2,7 @@ import React, { Component, } from 'react';
 import Autosuggest from 'react-autosuggest';
 
 
-
 import '../styles/searchbar.css'
-
 
 function getSuggestionValue(suggestion) {
 
@@ -19,8 +17,6 @@ function renderSuggestion(suggestion) {
 
 class SearchBarElement extends Component {
 
-
-
     render() {
 
         const { value,
@@ -30,6 +26,7 @@ class SearchBarElement extends Component {
             onSuggestionsFetchRequested,
             onSuggestionsClearRequested,
             onSuggestionSelected,
+            id
         } = this.props;
         const inputProps = {
             placeholder: "Région/Site/...",
@@ -38,18 +35,16 @@ class SearchBarElement extends Component {
         };
 
         return (
-
                 <Autosuggest
-
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  onSuggestionSelected={onSuggestionSelected}
-                  getSuggestionValue={getSuggestionValue}
-                  renderSuggestion={renderSuggestion}
-                  inputProps={inputProps} />
-
-
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    onSuggestionSelected={onSuggestionSelected}
+                    getSuggestionValue={getSuggestionValue}
+                    renderSuggestion={renderSuggestion}
+                    inputProps={inputProps}
+                    id={id}
+                    />
         )
     }
 }

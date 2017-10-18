@@ -3,15 +3,13 @@ import * as actions from '../../actions';
 import * as apiCalls from '../../actions/api_calls';
 import SearchBarElement from '../searchbar.component'
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
     return {
       value: state.updateSearchBar.value,
       suggestions: state.updateSearchBar.suggestions,
       isLoading: state.updateSearchBar.isLoading
     };
 }
-
-
 
 function mapDispatchToProps(dispatch) {
     return {
