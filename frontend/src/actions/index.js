@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-
+import HelperService from './service'
 /*
  * ACTION TYPES
  */
@@ -132,11 +132,13 @@ export function updateLeftGauge(values) {
 
 export function loadSuggestions(value) {
   return dispatch => {
-      console.log("smthg happened")
     dispatch(loadSuggestionsBegin())
-    return fetch('http://localhost:4000/api/sites/?nom='+value)
+    return fetch('http://localhost:4000/api/dashboard/architecture/')
         .then(response => response.json())
-        .then(json => dispatch(maybeUpdateSuggestions(json, value)))
+        .then((json) => {
+
+            return dispatch(maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json),value), value))
+        })
 
   };
 }
@@ -149,8 +151,14 @@ export function updateSite(site) {
     return dispatch => {
         dispatch(updateSiteName(site))
         return fetch('http://localhost:4000/api/dashboard/4/'+site.id+'?tolerance=0&year=2017&month=3')
-            .then(response => console.log(response))
-            
+            .then(response => {
+                dispatch(updateLeftGauge({
+                value: 88,
+                valueBefore: 12,
+                valueAnte: 54,
+                valueBeforeAnte: 34
+            }))})
+
     };
 }
 

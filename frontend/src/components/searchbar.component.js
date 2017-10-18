@@ -2,13 +2,14 @@ import React, { Component, } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { connect } from "react-redux";
 import * as actions from '../actions';
-import akkaApp from '../reducers/index.js';
+
 
 
 import '../styles/searchbar.css'
 
 
 function getSuggestionValue(suggestion) {
+
     return suggestion.nom;
 }
 function renderSuggestion(suggestion) {
