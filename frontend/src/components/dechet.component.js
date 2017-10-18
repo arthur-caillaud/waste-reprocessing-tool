@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Histogram from '../components/histogram.component';
-import DechetSearchBar from './searchbar.component';
+//import DechetSearchBar from './containers/searchbar.dechetpanel.container';
 
 class Dechet extends Component {
 
@@ -24,7 +24,6 @@ class Dechet extends Component {
             <Row>
               <Col sm={2}>
                 <Row>
-                  <DechetSearchBar/>
                 </Row>
                 <Row>
                   <ListGroup>

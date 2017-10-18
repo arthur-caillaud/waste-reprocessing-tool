@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     siret: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.STRING(255),
       allowNull: false
     },
     id: {

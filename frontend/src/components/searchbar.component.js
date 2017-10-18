@@ -17,8 +17,6 @@ function renderSuggestion(suggestion) {
 
 class SearchBarElement extends Component {
 
-
-
     render() {
 
         const { value,
@@ -28,6 +26,7 @@ class SearchBarElement extends Component {
             onSuggestionsFetchRequested,
             onSuggestionsClearRequested,
             onSuggestionSelected,
+            id
         } = this.props;
         const inputProps = {
             placeholder: "Région/Site/...",
@@ -44,6 +43,7 @@ class SearchBarElement extends Component {
                     getSuggestionValue={getSuggestionValue}
                     renderSuggestion={renderSuggestion}
                     inputProps={inputProps}
+                    id={id}
                     />
         )
     }

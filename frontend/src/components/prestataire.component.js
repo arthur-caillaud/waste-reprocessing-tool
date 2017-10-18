@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Grid, Col, Row } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import { List, ListItem } from 'material-ui';
 
 import { array } from '../utilities/text-generator.component';
 
-import PrestataireSearchBar from './searchbar.component';
+//import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
 
 class Prestataire extends Component {
@@ -23,7 +24,6 @@ class Prestataire extends Component {
             <Row>
               <Col sm={2}>
                 <Row>
-                  <PrestataireSearchBar id="prestatairepanel-searchbar"/>
                 </Row>
                 <Row>
                   <ListGroup>
