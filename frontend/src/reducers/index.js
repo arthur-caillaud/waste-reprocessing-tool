@@ -7,16 +7,21 @@ import {
     CHANGE_GRAPH_TYPE,
     DISPLAY_TILE_INFOS,
     DISPLAY_TILE_NOTIFINFOS,
-    DISPLAY_GAUGE_INFOS,
+    DISPLAY_LEFTGAUGE_INFOS,
+
     CHANGE_LEFTGAUGE_INPUT,
+    CHANGE_MIDDLEGAUGE_INPUT,
+
     ADD_GRAPH_TAG,
     REMOVE_GRAPH_TAG,
     TOGGLE_LATERALMENU,
+
     UPDATE_INPUT_VALUE,
     CLEAR_SUGGESTIONS,
     LOAD_SUGGESTIONS_BEGIN,
     MAYBE_UPDATE_SUGGESTIONS,
     UPDATE_SITE,
+
     LOAD_PRESTATAIRELIST_BEGIN,
     UPDATE_PRESTATAIRELIST,
     CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS,
@@ -29,8 +34,8 @@ function infosPanelOptions(state = {title: "eoufghz", defaultBody: "Afficher d'a
     switch (action.type){
         case DISPLAY_TILE_INFOS:
             return Object.assign({}, state, action.tile);
-        case DISPLAY_GAUGE_INFOS:
-            return Object.assign({}, state, action.gauge);
+        case DISPLAY_LEFTGAUGE_INFOS:
+            return Object.assign({}, state, action.defaultBody);
         case DISPLAY_TILE_NOTIFINFOS:
             return Object.assign({}, state, action.tilenotifs);
         default:
@@ -72,14 +77,30 @@ function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, lateralmenu
     }
 }
 
-function updateGauge(state= {value: 0, valueBefore: 0, valueAnte:0, valueBeforeAnte:0}, action) {
+function updateGauge(state= {
+        leftvalue: 0,
+        leftvalueBefore: 0,
+        leftvalueAnte: 0,
+        leftvalueBeforeAnte: 0,
+        middlevalue: 0,
+        middlevalueBefore: 0,
+        middlevalueAnte: 0,
+        middlevalueBeforeAnte: 0
+    }, action) {
     switch(action.type) {
         case 'CHANGE_LEFTGAUGE_INPUT':
             return Object.assign({}, state, {
-                value: action.values.value,
-                valueBefore: action.values.valueBefore,
-                valueAnte: action.values.valueAnte,
-                valueBeforeAnte: action.values.valueBeforeAnte
+                leftvalue: action.values.leftvalue,
+                leftvalueBefore: action.values.leftvalueBefore,
+                leftvalueAnte: action.values.leftvalueAnte,
+                leftvalueBeforeAnte: action.values.leftvalueBeforeAnte
+            });
+        case 'CHANGE_MIDDLEGAUGE_INPUT':
+            return Object.assign({}, state, {
+                middlevalue: action.values.middlevalue,
+                middlevalueBefore: action.values.middlevalueBefore,
+                middlevalueAnte: action.values.middlevalueAnte,
+                middlevalueBeforeAnte: action.values.middlevalueBeforeAnte
             });
         default:
             return state;
@@ -87,6 +108,17 @@ function updateGauge(state= {value: 0, valueBefore: 0, valueAnte:0, valueBeforeA
 }
 
 function updateSearchBar(state = {value: '', suggestions: [], isLoading: false, site:'National'}, action) {
+
+/*
+The data cycle is the following :
+When the user types something in the main searchbar, the first call is UPDATE_INPUT_VALUE
+AutoSuggest then detects a change in input value and start LOAD_SUGGESTIONS_BEGIN
+isLoading is set to True, and the API call starts. (See explanation in HelperService in the action folder)
+When they are loaded, isLoading is set to False and the suggestions are displayed.
+On Suggestion Selection, we change the Input Value, CLEAR_SUGGESTIONS (to close the suggestion list)
+And UPDATE_SITE (see HelperService again)
+*/
+
     switch (action.type) {
         case UPDATE_INPUT_VALUE:
             return Object.assign({}, state, {
@@ -133,9 +165,21 @@ function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [
             });
         case UPDATE_PRESTATAIRELIST:
             return Object.assign({}, state, {
-                prestatairesList: action.json
+                prestatairesList: action.json,
+                isLoading: false
             });
-
+        case CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS:
+            return Object.assign({}, state, {
+                suggestion: []
+            });
+        case UPDATE_PRESTATAIREPANEL_INPUT:
+            return Object.assign({}, state, {
+                input: action.input
+            });
+        case UPDATE_SELECTEDPRESTATAIRE:
+            return Object.assign({}, state, {
+                chosenPrestataire: action.prestataire
+            });
         default :
             return state;
     }
@@ -146,7 +190,8 @@ const akkaApp = combineReducers({
     graphOptions,
     infosPanelOptions,
     updateGauge,
-    updateSearchBar
+    updateSearchBar,
+    updatePrestataireSelectionPanel
 })
 
 export default akkaApp
