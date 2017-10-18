@@ -9,11 +9,10 @@ Main Search Bar API calls
 */
 export function loadSuggestions(value) {
   return dispatch => {
-
     dispatch(actions.loadSuggestionsBegin())
     return fetch(config.backend.adress+'dashboard/architecture')
         .then(response => response.json())
-        .then(json => dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json),value), value)))
+        .then(json => dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json), value), value)))
 
   };
 }

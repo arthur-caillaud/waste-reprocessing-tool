@@ -17,11 +17,27 @@ function getAllSites(queryParameters) {
          // modifies the fields in the 'where' statement to put everything in lower
          var where = {};
          for (const key of Object.keys(queryParameters.where)) {
-             const val = queryParameters.where[key];
-             where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+             if (key == "any") {
+                 var anyValue = queryParameters.where.any;
+                 var anyFilter = {
+                     $or: [
+                         sequelize.where(sequelize.fn('LOWER', sequelize.col('nom')), 'LIKE', anyValue),
+                         sequelize.where(sequelize.fn('LOWER', sequelize.col('unite_dependance')), 'LIKE', anyValue),
+                         sequelize.where(sequelize.fn('LOWER', sequelize.col('up_dependance')), 'LIKE', anyValue),
+                         sequelize.where(sequelize.fn('LOWER', sequelize.col('metier_dependance')), 'LIKE', anyValue),
+                     ]
+                 };
+                 where["any"] = anyFilter;
+             }
+             else {
+                 const val = queryParameters.where[key];
+                 where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+             }
          }
          queryParameters.where = where;
      }
+
+     console.log(queryParameters);
 
     var observable = Rx.Observable.create((observer) => {
         Site.findAll(queryParameters)

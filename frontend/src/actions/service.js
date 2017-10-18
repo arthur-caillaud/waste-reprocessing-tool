@@ -45,7 +45,6 @@ function filterByValue(array, value) {
 
         }
     });
-
     return Liste
 }
 

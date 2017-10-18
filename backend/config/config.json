@@ -4,13 +4,14 @@
     "password": "arthurpierreaurelien",
     "database": "db",
     "host": "91.134.242.69",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "test": {
     "username": "backend",
     "password": "password",
     "database": "db_test",
-    "host": "localhost",
+    "host": "91.134.242.69",
     "dialect": "mysql",
     "logging": false
   },
@@ -39,5 +40,13 @@
        "poolsize": 100,
        "minimumpoolsize": 0,
        "connectionduration": 100000
+   },
+   "test": {
+       "username": "backend",
+       "password": "password",
+       "database": "db_test",
+       "host": "91.134.242.69",
+       "dialect": "mysql",
+       "logging": false
    }
 }
