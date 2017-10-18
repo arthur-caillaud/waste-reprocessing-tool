@@ -13,7 +13,7 @@ class InputGraphPanel extends Component {
 
         let list = []
         inputArray.forEach(input => {
-            let listItem = ( <ListGroupItem onClick={onClickFunction}>{input.nom}</ListGroupItem> )
+            let listItem = ( <ListGroupItem href="/" onClick={onClickFunction}>{input.nom}</ListGroupItem> )
             list.push(listItem);
         })
         return (
