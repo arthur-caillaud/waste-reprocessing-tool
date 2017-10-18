@@ -8,11 +8,13 @@ import * as actions from '../actions'
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
-
-        return  [width,height];
+    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    return  [width,height];
     }
+
+var valueAnteG = 0;
+var valueBeforeAnteG = 0;
 
 
 class MiddleGauged3 extends Component {
@@ -24,11 +26,18 @@ class MiddleGauged3 extends Component {
         */
 
 
-        var value = 88;
-        var valueBefore = 90;
+        var middlevalue = this.props.middlevalue;
+        var middlevalueBefore = this.props.middlevalueBefore;
+        var middlevalueAnte = this.props.middlevalueAnte;
+        var middlevalueBeforeAnte = this.props.middlevalueBeforeAnte;
         var margin = {top: 20, right: 20, bottom: 40, left: 20};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
+        /*
+        Here we just save previous state
+        */
+        valueAnteG = this.props.middlevalue
+        valueBeforeAnteG = this.props.middlevalueBefore
 
 
 
@@ -70,19 +79,21 @@ class MiddleGauged3 extends Component {
                 innerRadius: (width/2) - margin.top - 15,
                 outerRadius: (width/2)- margin.top,
                 startAngle: scale(0),
-                endAngle: scale(value)
+                endAngle: scale(middlevalue),
+                valueAnte: scale(middlevalueAnte)
             },
             {
                 innerRadius: (width/2) -margin.top-10 - margin.bottom/2,
                 outerRadius: (width/2)-margin.top - margin.bottom/2,
                 startAngle: scale(0),
-                endAngle: scale(valueBefore)
+                endAngle: scale(middlevalueBefore),
+                valueAnte: scale(middlevalueBeforeAnte)
             }
         ]
 
         var middleTextCount=g.append('text')
                 .style("fill",function (d) { return color(d); })
-                .style('font-size', '40px')
+                .style('font-size', '6vmin')
                 .datum(0)
                 .attr("class",'middleText')
                 .attr("text-anchor", 'middle')
@@ -95,7 +106,7 @@ class MiddleGauged3 extends Component {
 
         var percentage = g.append('text')
                 .style("fill", function (d) { return color(d); })
-                .style('font-size', '10px')
+                .style('font-size', '1.5vmin')
                 .attr('text-anchor', 'middle')
                 .attr('dx', -28)
                 .attr('dy', -3)
@@ -119,7 +130,6 @@ class MiddleGauged3 extends Component {
         */
 
 
-
         function doTransition() {
             g.selectAll("path.arc")
                 .data(data)
@@ -133,7 +143,7 @@ class MiddleGauged3 extends Component {
                     .transition().duration(2500)
                     .attrTween("d", function(d) {
 
-                        var start = {startAngle: scale(0), endAngle: scale(0)};
+                        var start = {startAngle: scale(0), endAngle: d.valueAnte};
 
                         var interpolate = d3.interpolate(start, d)
                         return function (t) {
@@ -141,8 +151,9 @@ class MiddleGauged3 extends Component {
                         };
                     })
                     .styleTween("fill", function() {
+                        var interpolate = d3.interpolateRgb(color(middlevalueAnte), color(middlevalue))
                         return function(t) {
-                            return color(t*value)
+                            return interpolate(t)
                         }
                       })
 
@@ -153,12 +164,13 @@ class MiddleGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
+                            i = d3.interpolateNumber(middlevalueAnte, middlevalue);
                         return function(t) { that.text(format(i(t))); };
                       })
                       .styleTween("fill", function() {
+                          var interpolate = d3.interpolateRgb(color(middlevalueAnte), color(middlevalue))
                           return function(t) {
-                              return color(t*value)
+                              return interpolate(t)
                           }
                         })
                 });
@@ -172,17 +184,19 @@ class MiddleGauged3 extends Component {
                             return function(t) {that.text('%')}
                         })
                         .styleTween("fill", function() {
+                            var interpolate = d3.interpolateRgb(color(middlevalueAnte), color(middlevalue))
                             return function(t) {
-                                return color(t*value)
+                                return interpolate(t)
                             }
-                        })
+                          })
                     })
             }
 
-        setTimeout(doTransition, 750)
-        }
+        doTransition()
+    }
 
     redrawJauge() {
+
         d3.select("#"+this.props.id).select("svg").remove("svg")
         this.drawJauge();
     };
@@ -190,26 +204,18 @@ class MiddleGauged3 extends Component {
     componentDidMount() {
 
         this.drawJauge()
-        window.addEventListener('resize',this.handleResize())
+
 
     };
-    handleResize() {
-        var svgDoc = d3.select("#"+this.props.id)
-            .attr("width", getChartSize("#"+this.props.id)[0] - 30)
-            .attr("height", getChartSize("#"+this.props.id)[1] - 60)
 
-    }
 
     componentDidUpdate() {
+        this.redrawJauge();
 
-        this.handleResize();
     };
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
-    }
 
-      render() {
+    render() {
 
         return (
             <div className="gauge-container">
@@ -219,24 +225,34 @@ class MiddleGauged3 extends Component {
           </div>
       )
 
-      }
+  };
 }
 
 function mapStateToProps(state) {
     return {
-        value: 0
+        middlevalue: state.updateGauge.middlevalue,
+        middlevalueBefore: state.updateGauge.middlevalueBefore,
+        middlevalueAnte: state.updateGauge.middlevalueAnte,
+        middlevalueBeforeAnte: state.updateGauge.middlevalueBeforeAnte
+
     }
 };
+
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.displayGaugeInfos(12))
+    return {showMoreInfos: () => dispatch(actions.updateMiddleGauge({
+        middlevalue: Math.random()*100,
+        middlevalueBefore:Math.random()*100,
+        middlevalueAnte: valueAnteG,
+        middlevalueBeforeAnte: valueBeforeAnteG
+    }))
 
     }
-}
+};
 
-const MiddleGauge = ({showMoreInfos}) => {
+const MiddleGauge = ({showMoreInfos, middlevalue, middlevalueBefore, middlevalueBeforeAnte, middlevalueAnte}) => {
     return(
         <div onClick={showMoreInfos}>
-            <MiddleGauged3 id="middlegauge"/>
+            <MiddleGauged3 id="middlegauge" middlevalue={middlevalue} middlevalueBefore={middlevalueBefore} middlevalueAnte={middlevalueAnte} middlevalueBeforeAnte={middlevalueBeforeAnte}/>
         </div>
     )
 }
