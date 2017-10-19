@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Histogram from '../components/histogram.component';
-import InputGraphPanel from '../components/inputgraphpanel.component';
+import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 //import DechetSearchBar from './containers/searchbar.dechetpanel.container';
 
 class Dechet extends Component {
@@ -23,11 +23,15 @@ class Dechet extends Component {
         <div>
           <Grid fluid>
             <Row>
-                <Col sm={2}>
-                  <InputGraphPanel onClick={() => {alert("Element clicked")}} inputArray={[{nom: "CÂBLES ÉLECTRIQUES (TOUS MÉTAUX) - 029"},{nom: "HUILES DIÉLECTRIQUES NON CHLORÉES (TENEUR INFÉRIEURE À 50 PPM EN PCB-PCT) - 069"},
-                      {nom: "EMBALLAGES PLASTIQUES POLLUÉS (HUILES/HYDROCARBURES ...) - 146B"},{nom:"SF6 EN RÉCIPIENTS SOUS PRESSION - 116D"}]}/>
+                <Col sm={3}>
+                    <InputGraphPanel
+                        idInputPanel="dechet-selection-panel"
+                        onClickActionName="updateSelectedDechet"
+                        onLoadActionName="loadDechetList"
+                        branchName="updateDechetSelectionPanel"
+                    />
                 </Col>
-              <Col sm={10}>
+              <Col sm={9}>
                 <Row>
                     <Histogram title="EMBALLAGE PAPIER-CARTON" id="dechet-hist" values={[{
                         title: 'Taux de valorisation global',

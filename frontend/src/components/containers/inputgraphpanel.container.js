@@ -10,7 +10,7 @@ function mapStateToProps(state, ownProps) {
     return {
         inputArray: state[branchName].inputArray,
         selectedInput: state[branchName].selectedInput,
-        id: idInputPanel,
+        id: idInputPanel
     }
 };
 
@@ -22,7 +22,7 @@ function mapDispatchToProps(dispatch, ownProps) {
             dispatch(actions[onClickActionName](input));
         },
         onLoaded: () => {
-            dispatch(actions[onLoadActionName]());
+            dispatch(apiCalls[onLoadActionName]());
         }
     });
 };

@@ -31,6 +31,12 @@ export const UPDATE_PRESTATAIRELIST = 'UPDATE_PRESTATAIRELIST';
 export const CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS = 'CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS';
 export const UPDATE_SELECTEDPRESTATAIRE = 'UPDATE_SELECTEDPRESTATAIRE';
 export const UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT = 'UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT';
+
+export const LOAD_DECHETLIST_BEGIN = 'LOAD_DECHETLIST_BEGIN';
+export const UPDATE_DECHETLIST = 'UPDATE_DECHETLIST';
+export const CLEAR_DECHETS_SEARCHSUGGESTIONS = 'CLEAR_DECHETS_SEARCHSUGGESTIONS';
+export const UPDATE_SELECTEDDECHET = 'UPDATE_SELECTEDDECHET';
+export const UPDATE_DECHETPANEL_SEARCHBAR_INPUT = 'UPDATE_DECHETPANEL_SEARCHBAR_INPUT';
 /*
  * other constants
  */
@@ -207,6 +213,43 @@ export function updatePrestatairePanelSearchBarInput(input){
 export function updateSelectedPrestataire(prestataire){
     return {
         type: UPDATE_SELECTEDPRESTATAIRE,
+        prestataire
+    }
+}
+
+/*
+ * Dechet Input Panel (present in '/dechet' page)
+ */
+
+export function loadDechetListBegin(){
+    return {
+        type: LOAD_DECHETLIST_BEGIN
+    }
+}
+
+export function updateDechetList(json){
+    return {
+        type: UPDATE_DECHETLIST,
+        json
+    }
+}
+
+export function clearDechetsSearchSuggestions(){
+    return {
+        type: CLEAR_DECHETS_SEARCHSUGGESTIONS
+    }
+}
+
+export function updateDechetPanelSearchBarInput(input){
+    return {
+        type: UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
+        input
+    }
+}
+
+export function updateSelectedDechet(prestataire){
+    return {
+        type: UPDATE_SELECTEDDECHET,
         prestataire
     }
 }

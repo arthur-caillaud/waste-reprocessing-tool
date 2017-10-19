@@ -21,15 +21,15 @@ class Prestataire extends Component {
       <div>
           <Grid fluid>
             <Row>
-              <Col sm={2}>
+              <Col sm={3}>
                 <InputGraphPanel
                     idInputPanel="prestataire-selection-panel"
                     onClickActionName="updateSelectedPrestatire"
-                    onLoadActionName="loadPrestataireListBegin"
+                    onLoadActionName="loadPrestataireList"
                     branchName="updatePrestataireSelectionPanel"
                 />
               </Col>
-              <Col sm={10}>
+              <Col sm={9}>
                 <Histogram title="VEOLIA" id="prestataire-hist" values={[{
                       title: 'Taux de valorisation global',
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
