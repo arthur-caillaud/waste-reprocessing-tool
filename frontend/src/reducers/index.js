@@ -25,8 +25,8 @@ import {
     LOAD_PRESTATAIRELIST_BEGIN,
     UPDATE_PRESTATAIRELIST,
     CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS,
-    UPDATE_PRESTATAIREPANEL_INPUT,
     UPDATE_SELECTEDPRESTATAIRE,
+    UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
     GraphTypes
 } from '../actions'
 
@@ -165,20 +165,20 @@ function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [
             });
         case UPDATE_PRESTATAIRELIST:
             return Object.assign({}, state, {
-                prestatairesList: action.json,
+                inputArray: action.json,
                 isLoading: false
             });
         case CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS:
             return Object.assign({}, state, {
                 suggestion: []
             });
-        case UPDATE_PRESTATAIREPANEL_INPUT:
+        case UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT:
             return Object.assign({}, state, {
                 input: action.input
             });
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
-                chosenPrestataire: action.prestataire
+                selectedInput: action.prestataire
             });
         default :
             return state;

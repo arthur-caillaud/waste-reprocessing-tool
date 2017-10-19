@@ -29,8 +29,8 @@ export const UPDATE_SITE = 'UPDATE_SITE';
 export const LOAD_PRESTATAIRELIST_BEGIN = 'LOAD_PRESTATAIRELIST_BEGIN';
 export const UPDATE_PRESTATAIRELIST = 'UPDATE_PRESTATAIRELIST';
 export const CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS = 'CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS';
-export const UPDATE_PRESTATAIREPANEL_INPUT = 'UPDATE_PRESTATAIREPANEL_INPUT';
 export const UPDATE_SELECTEDPRESTATAIRE = 'UPDATE_SELECTEDPRESTATAIRE';
+export const UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT = 'UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT';
 /*
  * other constants
  */
@@ -197,14 +197,14 @@ export function clearPrestatairesSearchSuggestions(){
     }
 }
 
-export function updatePrestatairePanelInput(input){
+export function updatePrestatairePanelSearchBarInput(input){
     return {
-        type: UPDATE_PRESTATAIREPANEL_INPUT,
+        type: UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
         input
     }
 }
 
-export function updateSelectedPrestatire(prestataire){
+export function updateSelectedPrestataire(prestataire){
     return {
         type: UPDATE_SELECTEDPRESTATAIRE,
         prestataire

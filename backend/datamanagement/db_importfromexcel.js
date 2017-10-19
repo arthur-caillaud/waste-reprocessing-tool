@@ -930,6 +930,7 @@ const readXlsx = function (filepath, sheetNumber, startingRow) {
                             if (typeof cell == "string"){
                                 newCell = cell.trim();
                                 newCell = newCell.toUpperCase();
+                                newCell = newCell.replace(/[\u0300-\u036f]/g, "");
                             }
                             if (cell == ""){
                                 newCell = null;
@@ -1091,5 +1092,5 @@ const writeIntoBdd = function(excelName) {
 };
 
 //TEST PHASE
-//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-writeIntoBdd("bigdatasample.xlsx");
+writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
+//writeIntoBdd("bigdatasample.xlsx");
