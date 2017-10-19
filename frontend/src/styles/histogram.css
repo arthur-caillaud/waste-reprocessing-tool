@@ -45,3 +45,8 @@
   top: 100%;
   left: 0;
 }
+
+.input-panel .inputs-container{
+    max-height: 83vh;
+    overflow-y: scroll;
+}

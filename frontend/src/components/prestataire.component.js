@@ -24,7 +24,7 @@ class Prestataire extends Component {
               <Col sm={3}>
                 <InputGraphPanel
                     idInputPanel="prestataire-selection-panel"
-                    onClickActionName="updateSelectedPrestatire"
+                    onClickActionName="updateSelectedPrestataire"
                     onLoadActionName="loadPrestataireList"
                     branchName="updatePrestataireSelectionPanel"
                 />

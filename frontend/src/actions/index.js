@@ -247,9 +247,9 @@ export function updateDechetPanelSearchBarInput(input){
     }
 }
 
-export function updateSelectedDechet(prestataire){
+export function updateSelectedDechet(dechet){
     return {
         type: UPDATE_SELECTEDDECHET,
-        prestataire
+        dechet
     }
 }
