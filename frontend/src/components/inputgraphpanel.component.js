@@ -5,6 +5,13 @@ import { FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
 //import searchComponent
 
 class InputGraphPanel extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            searchInput: ''
+        };
+    }
+
 
     render() {
 
@@ -13,6 +20,15 @@ class InputGraphPanel extends Component {
         const selectedInput = this.props.selectedInput;
         const searchInputFunction = this.props.onSearch;
         const suggestion = this.props.suggestion;
+        const input = this.state.searchInput;
+
+        function handleNoResultsFound(){
+            if(input && input.length > 0){
+                if(suggestion.length === 0){
+                    return 'error';
+                }
+            }
+        };
 
         let list = []
         let containerArray = (suggestion.length > 0) ? suggestion : inputArray;
@@ -33,12 +49,18 @@ class InputGraphPanel extends Component {
 
         return (
             <div className="input-panel">
-                <FormGroup>
+                <FormGroup
+                    controlId="formBasicText"
+                    validationState={handleNoResultsFound()}
+                >
                     <InputGroup>
                         <FormControl
                             type="text"
                             placeholder={this.props.searchPlaceholder}
-                            onChange={e => {searchInputFunction(e.target.value);}} />
+                            onChange={e => {
+                                this.setState({searchInput: e.target.value});
+                                searchInputFunction(e.target.value);
+                            }} />
                         <InputGroup.Addon>
                             <Glyphicon glyph="search" />
                         </InputGroup.Addon>
