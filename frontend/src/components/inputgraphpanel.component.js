@@ -22,11 +22,12 @@ class InputGraphPanel extends Component {
                 let listItem;
                 if (input.nom === selectedInput){
                     listItem = ( <ListGroupItem onClick={() => selectInputFunction(input.nom)} active>{input.nom}</ListGroupItem> )
+                    list.unshift(listItem);
                 }
                 else {
                     listItem = ( <ListGroupItem onClick={() => selectInputFunction(input.nom)}>{input.nom}</ListGroupItem> )
+                    list.push(listItem);
                 }
-                list.push(listItem);
             });
         }
 
