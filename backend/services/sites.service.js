@@ -37,8 +37,6 @@ function getAllSites(queryParameters) {
          queryParameters.where = where;
      }
 
-     console.log(queryParameters);
-
     var observable = Rx.Observable.create((observer) => {
         Site.findAll(queryParameters)
             .then((prestataires) => {
