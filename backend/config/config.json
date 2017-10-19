@@ -45,7 +45,6 @@
        "password": "password",
        "database": "db_test",
        "host": "91.134.242.69",
-       "dialect": "mysql",
-       "logging": false
+       "dialect": "mysql"
    }
 }
