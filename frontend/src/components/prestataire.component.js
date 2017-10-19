@@ -26,8 +26,7 @@ class Prestataire extends Component {
                 {nom:"SOCIETE MARTINIQUAISE DE VALORISATION"},{nom:"NOVERGIE (VEDENE)"},{nom:"SAICA"}]}/>
               </Col>
               <Col sm={10}>
-                <Row>
-                  <Histogram title="VEOLIA" id="prestataire-hist" values={[{
+                <Histogram title="VEOLIA" id="prestataire-hist" values={[{
                       title: 'Taux de valorisation global',
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
                       values: [78,82,73]
@@ -48,18 +47,15 @@ class Prestataire extends Component {
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
                       values: [30,40,33]
                   }]}/>
-                </Row>
               </Col>
-            </Row>
-            <Row>
-                <Col sm={4}>
-                    <div>
-                        Searchbar
-                    </div>
-                </Col>
-                <Col sm={8}>
-                    Fouzy les tags ici
-                </Col>
+              <Col sm={4}>
+                <div>
+                  Searchbar
+                </div>
+              </Col>
+              <Col sm={8}>
+                Fouzy les tags ici
+              </Col>
             </Row>
           </Grid>
     </div>
