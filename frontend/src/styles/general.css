@@ -1,3 +1,7 @@
+button {
+    outline-width: 0px;
+}
+
 .navBar {
   vertical-align: middle;
   padding-bottom: 0%;
