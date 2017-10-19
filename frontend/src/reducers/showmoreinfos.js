@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export class LeftGaugeInfos extends Component {
     render() {
-        if (window.store.getState().infosPanelOptions.isShown == true){
+        if (window.store.getState().infosPanelOptions.leftGaugeShown == true){
         return (
             <div>
                 <h3>
@@ -28,7 +28,7 @@ export class LeftGaugeInfos extends Component {
 
 export class MiddleGaugeInfos extends Component {
     render () {
-        if (window.store.getState().infosPanelOptions.isShown == true){
+        if (window.store.getState().infosPanelOptions.middleGaugeShown == true){
         return (
             <div>
                 <h3>

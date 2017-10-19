@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import MainRouter from '../utilities/router.component';
 import LateralMenu from './lateralmenu.component';
 import SearchBar from './containers/searchbar.main.container';
+import SearchTree from './containers/searchtree.container';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
@@ -46,6 +47,9 @@ class App extends Component {
                 </Button>
               </Col>
               <Col sm={10}>
+                  <div>
+                      <SearchTree />
+                  </div>
                   <div className="searchbar-container" >
                       <SearchBar id="MainSearchBar"/>
                   </div>

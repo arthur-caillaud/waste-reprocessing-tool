@@ -36,37 +36,32 @@ import {
     GraphTypes
 } from '../actions'
 
-function infosPanelOptions(state = {defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>, isShown: false}, action){
+function infosPanelOptions(
+    state = {
+    defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
+    middleGaugeShown: false,
+    leftGaugeShown: false
+    },
+    action){
     switch (action.type){
         case DISPLAY_TILE_INFOS:
             return Object.assign({}, state, action.tile);
-
         case DISPLAY_TILE_NOTIFINFOS:
             return Object.assign({}, state, action.tilenotifs);
+
         case DISPLAY_LEFTGAUGE_INFOS:
-            if (state.isShown == false){
-                return Object.assign({}, state, {
-                    isShown: !state.isShown,
-                    defaultBody: <LeftGaugeInfos />
+            return Object.assign({}, state, {
+                leftGaugeShown: !state.leftGaugeShown,
+                middleGaugeShown: false,
+                defaultBody: <LeftGaugeInfos />
                 });
-            }
-            else{
-                return Object.assign({}, state, {
-                    defaultBody: <LeftGaugeInfos />
-                });
-            }
+
         case DISPLAY_MIDDLEGAUGE_INFOS:
-        if (state.isShown == false){
             return Object.assign({}, state, {
-                isShown: !state.isShown,
+                leftGaugeShown: false,
+                middleGaugeShown: !state.middleGaugeShown,
                 defaultBody: <MiddleGaugeInfos />
             });
-        }
-        else{
-            return Object.assign({}, state, {
-                defaultBody: <MiddleGaugeInfos />
-            });
-        }
         default:
             return state;
     }
