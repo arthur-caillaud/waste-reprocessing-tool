@@ -458,7 +458,7 @@ function getDataForSites(idArray, date) {
 
 
 // this function updates an existing entry in the dashboard table
-// we provide the new entry as parameters. 
+// we provide the new entry as parameters.
 function updateEntry(newEntry) {
     var query = {
         where: {
@@ -470,10 +470,16 @@ function updateEntry(newEntry) {
     var observable = Rx.Observable.create((observer) => {
         dashboard.findOne(query)
             .then((entry) => {
-                entry.update(newEntry)
+                entry.update(newEntry.dataValues)
                     .then(() => {
-                        observer.onNext();
-                        observer.onCompleted();
+                        entry.save()
+                            .then(() => {
+                                observer.onNext();
+                                observer.onCompleted();
+                            })
+                            .catch((error) => {
+                                throw error;
+                            })
                     })
                     .catch((error) => {
                         observer.onError(error);
@@ -483,6 +489,21 @@ function updateEntry(newEntry) {
                 observer.onError(error)
             })
     })
+    return observable;
+}
+
+
+function getDashboards() {
+    var observable = Rx.Observable.create((observer) => {
+        dashboard.findAll()
+            .then((data) => {
+                observer.onNext(data);
+                observer.onCompleted();
+            })
+            .catch((error) => {
+                observer.onError(error);
+            })
+    });
     return observable;
 }
 
@@ -499,5 +520,6 @@ service.getTotalVolumeVerte = getTotalVolumeVerte;
 service.countBordereaux = countBordereaux;
 service.getDataForSites = getDataForSites;
 service.updateEntry = updateEntry;
+service.getDashboards = getDashboards;
 
 module.exports = service;

@@ -67,6 +67,26 @@ function getDashboard(req, res, next) {
   }
 }
 
+
+function getAllDashboards(req, res) {
+    var onNext = (data) => {
+        res.json(data);
+    };
+    var onError = (error) => {
+        console.error(error);
+        utilities.errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+    var onCompleted = () => {
+
+    };
+
+    var observer = Rx.Observer.create(onNext, onError, onCompleted);
+    console.log(DashboardService);
+    DashboardService.getDashboards().subscribe(observer);
+}
+
 function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
@@ -169,6 +189,7 @@ function getArchitecture(req, res) {
 
 
 // routes to the functions
+router.get('/', getAllDashboards);
 router.get('/architecture', getArchitecture);
 
 router.get('/:level/:name', getDashboard);

@@ -22,7 +22,7 @@ render((
 );
 
 // Log the initial state
-console.log("Store",window.store.getState());
+//console.log("Store",window.store.getState());
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener

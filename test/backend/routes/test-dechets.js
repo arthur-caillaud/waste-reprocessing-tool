@@ -132,8 +132,27 @@ describe("Déchets Routes", () => {
                 })
         })
 
-        it("should return the correct data", () => {
-            // TODO as the data must be studied to be tested
+        it("should return the correct data", (done) => {
+            // we know what this data should be
+            server.get("/dechets/1")
+                .then((response) => {
+                    var expectedValue = {
+                        "codeinterne": "052B",
+                        "is_listeverte": 1,
+                        "is_dangereux": 0,
+                        "libelle": "DND EN MÉLANGE, ASSIMILABLES AUX ORDURES MÉNAGÈRES (HORS PAPIER, CARTON, MÉTAL, PLASTIQUE, VERRE ET BOIS) - 052B",
+                        "code_europeen": "20 03 01",
+                        "categorie": "DIB",
+                        "indicateur_national_valorisation": null,
+                        "famille": "LISTE VERTE,TOUS DÉCHETS,BILAN EUROP-34 DND OM ET ASSIM,BILAN EUROP-35 DIB MÉNAGERS,TOUT VENANT,EXPLOITATION",
+                        "id": 1
+                    };
+                    assert.deepEqual(response.body, expectedValue);
+                    done();
+                })
+                .catch((err) => {
+                    done(err);
+                })
         })
 
     });
