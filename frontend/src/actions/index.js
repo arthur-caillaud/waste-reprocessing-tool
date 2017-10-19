@@ -7,15 +7,18 @@ export const REQUEST_SITE_CHANGE = 'REQUEST_SITE_CHANGE'; //This is the action t
 
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
+
+//Change Display More informations Panel
 export const DISPLAY_TILE_INFOS = 'DISPLAY_TILE_INFOS';
 export const DISPLAY_TILE_NOTIFINFOS = 'DISPLAY_TILE_NOTIFINFOS';
-export const DISPLAY_GAUGE_INFOS = 'DISPLAY_GAUGE_INFOS';
+export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 
 export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
+export const CHANGE_MIDDLEGAUGE_INPUT = 'CHANGE_MIDDLEGAUGE_INPUT';
 
 export const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
 export const CLEAR_SUGGESTIONS = 'CLEAR_SUGGESTIONS';
@@ -89,10 +92,9 @@ export function displayTileNotifInfos(tileNotifs){
     }
 }
 
-export function displayGaugeInfos(gauge){
+export function displayLeftGaugeInfos(){
     return {
-        type: DISPLAY_GAUGE_INFOS,
-        gauge
+        type: DISPLAY_LEFTGAUGE_INFOS
     }
 }
 
@@ -125,11 +127,17 @@ export function updateLeftGauge(values) {
     }
 }
 
+export function updateMiddleGauge(values) {
+    return {
+        type: CHANGE_MIDDLEGAUGE_INPUT,
+        values
+    }
+}
+
 
 /*
  * SearchBar (present on every frontpage)
  */
-
 
 
 export function updateSiteName(site) {

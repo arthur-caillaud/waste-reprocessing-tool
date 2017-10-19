@@ -1,7 +1,10 @@
 #histogram-container{
     position: relative;
     height: 90vh;
-    background-color: #EBEBEB;
+    border: 1px solid rgb(221,221,221);
+    border-radius: 5px;
+    margin-right: 1vw;
+    box-shadow: 0px 0px 5px rgb(221,221,221);
 }
 
 .chart-container{

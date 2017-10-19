@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import MainRouter from '../utilities/router.component';
 import LateralMenu from './lateralmenu.component';
-import SearchBar from './searchbar.component';
+import SearchBar from './containers/searchbar.main.container';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
