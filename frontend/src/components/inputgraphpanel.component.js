@@ -8,14 +8,25 @@ class InputGraphPanel extends Component {
 
     render() {
 
-        let inputArray = this.props.inputArray;
-        let onClickFunction = this.props.onClickFunction;
+        const inputArray = this.props.inputArray;
+        const onClick = this.props.onClick;
+        const selectedInput = this.props.selectedInput;
 
         let list = []
-        inputArray.forEach(input => {
-            let listItem = ( <ListGroupItem href="/" onClick={onClickFunction}>{input.nom}</ListGroupItem> )
-            list.push(listItem);
-        })
+
+        if(inputArray){
+            inputArray.forEach(input => {
+                let listItem;
+                if (input === selectedInput){
+                    listItem = ( <ListGroupItem onClick={onClick} active>{input.nom}</ListGroupItem> )
+                }
+                else {
+                    listItem = ( <ListGroupItem onClick={onClick}>{input.nom}</ListGroupItem> )
+                }
+                list.push(listItem);
+            });
+        }
+
         return (
             <div className="input-panel">
                 <FormGroup>
@@ -30,9 +41,16 @@ class InputGraphPanel extends Component {
                     {list}
                 </ListGroup>
             </div>
-      )
-  };
+        );
 
-}
+    };
+
+    componentDidMount() {
+
+        this.props.onLoaded()
+
+    };
+
+};
 
 export default InputGraphPanel;

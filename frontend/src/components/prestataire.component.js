@@ -7,7 +7,7 @@ import { array } from '../utilities/text-generator.component';
 
 //import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
-import InputGraphPanel from '../components/inputgraphpanel.component';
+import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 
 class Prestataire extends Component {
   render() {
@@ -22,8 +22,12 @@ class Prestataire extends Component {
           <Grid fluid>
             <Row>
               <Col sm={2}>
-                <InputGraphPanel onClick={() => {alert("Element clicked")}} inputArray={[{nom: "VEOLIA"},{nom: "EDF"},{nom: "ARCELOR MITTAL"},
-                {nom:"SOCIETE MARTINIQUAISE DE VALORISATION"},{nom:"NOVERGIE (VEDENE)"},{nom:"SAICA"}]}/>
+                <InputGraphPanel
+                    idInputPanel="prestataire-selection-panel"
+                    onClickActionName="updateSelectedPrestatire"
+                    onLoadActionName="loadPrestataireListBegin"
+                    branchName="updatePrestataireSelectionPanel"
+                />
               </Col>
               <Col sm={10}>
                 <Histogram title="VEOLIA" id="prestataire-hist" values={[{

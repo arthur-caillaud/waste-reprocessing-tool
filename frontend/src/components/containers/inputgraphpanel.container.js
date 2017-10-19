@@ -1,33 +1,42 @@
-import { connect } from "react-redux"
-import * as actions from '../actions'
-import * as apiCalls from '../actions/api_calls'
+import React from 'react';
+import { connect } from "react-redux";
+import * as actions from '../../actions';
+import * as apiCalls from '../../actions/api_calls';
+import InputGraphPanel from '../inputgraphpanel.component';
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+    const branchName = ownProps.branchName;
+    const idInputPanel = ownProps.idInputPanel;
     return {
-        values: state.updateGauge.value,
-        valueBefore: state.updateGauge.valueBefore,
-        valueAnte: state.updateGauge.valueAnte,
-        valueBeforeAnte: state.updateGauge.valueBeforeAnte
+        inputArray: state[branchName].inputArray,
+        selectedInput: state[branchName].selectedInput,
+        id: idInputPanel,
     }
 };
 
-function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
-        value: Math.random()*100,
-        valueBefore:Math.random()*100,
-        valueAnte: valueAnteG,
-        valueBeforeAnte: valueBeforeAnteG
-    }))
-
-    }
+function mapDispatchToProps(dispatch, ownProps) {
+    const onClickActionName = ownProps.onClickActionName;
+    const onLoadActionName = ownProps.onLoadActionName;
+    return ({
+        onClick: (input) => {
+            dispatch(actions[onClickActionName](input));
+        },
+        onLoaded: () => {
+            dispatch(actions[onLoadActionName]());
+        }
+    });
 };
 
-const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
+const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, id}) => {
     return(
-        <div onClick={showMoreInfos}>
-            <LeftGauged3 id="leftgauge" value={value} valueBefore={valueBefore} valueAnte={valueAnte} valueBeforeAnte={valueBeforeAnte}/>
-        </div>
-    )
+        <InputGraphPanel
+            id={id}
+            inputArray={inputArray}
+            selectedInput={selectedInput}
+            onClick={onClick}
+            onLoaded={onLoaded}
+        />
+    );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeftGauge);
+export default connect(mapStateToProps, mapDispatchToProps)(InputGraphPanelContainer);
