@@ -91,14 +91,20 @@ function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
 
+    console.log(req.params);
+
     const field = hierarchy[req.params.level];
     const name = req.params.name
     var query = {};
 
+    console.log(req.params.level);
+
     if (req.params.level == 0) {
-        const where = {};
+        console.log("lolwat");
+        var where = {};
     }
     else {
+        console.log("wtf");
         var where = {};
         where[field] = name;
         query.where = where;
@@ -115,6 +121,9 @@ function getNecessarySites(req, res, next) {
     var complete = () => {
         next();
     };
+
+    console.log("tiens la query c'est ");
+    console.log(query);
 
     var observer = Rx.Observer.create(onNext, error, complete);
     var subscription = SitesService.getAllSites(query).subscribe(observer);
@@ -154,9 +163,6 @@ function processDashboardData(req, res) {
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getDataForSites(idArray, date).subscribe(observer);
-
-
-
 }
 
 /**
@@ -188,17 +194,63 @@ function getArchitecture(req, res) {
 }
 
 
+function processDetailedData(req, res) {
+    // list of all the sites that will be used
+    var sites = req.locals;
+    var tolerance = req.query.tolerance;
+    var idArray = [];
+    var month = req.query.month;
+    var year = req.query.year;
+
+    var result = {};
+
+    var result = {};
+    var loopsToDo = 4;
+
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
+
+    var onNext = (data) => {
+        res.json(data);
+    };
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+    var onCompleted = () => {};
+
+    dates.computeDates(year, month, tolerance, idArray, (beginDate, endDate, tolerance, siteId, arg) => {
+        var observer = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getDetailsForSites(beginDate, endDate, tolerance, idArray)
+            .subscribe(observer);
+    }, null);
+}
+
+
 // routes to the functions
 router.get('/', getAllDashboards);
 router.get('/architecture', getArchitecture);
+router.get('/details', (req, res) => res.status(404).send("Invalid query"));
+
+router.get('/details/:level/:name', getDashboard);
+router.get('/details/:level', getDashboard);
+
+router.get('/details/:level/:name/', getNecessarySites);
+router.get('/details/:level/', getNecessarySites);
+
+router.get('/details/:level/', processDetailedData);
+router.get('/details/:level/:name', processDetailedData);
 
 router.get('/:level/:name', getDashboard);
 router.get('/:level', getDashboard);
 
-router.get('/:level/:name', getNecessarySites);
-router.get('/:level', getNecessarySites);
+router.get('/:level/:name/', getNecessarySites);
+router.get('/:level/', getNecessarySites);
 
 router.get('/:level/:name', processDashboardData);
 router.get('/:level', processDashboardData);
+
 
 module.exports = router;

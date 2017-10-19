@@ -455,6 +455,76 @@ function getDataForSites(idArray, date) {
     return observable;
 }
 
+// this function is called to get the details in the dashboard for the requested
+// sites. All the data must be processed by hands, but it will be called after
+// the main function, so time is not really a big factor here
+function getDetailsForSites(beginDate, endDate, tolerance, idArray) {
+
+    var observable = Rx.Observable.create((observer) => {
+
+        var date = new Date();
+
+        var result = {};
+        var loopsToDo = 8;
+
+        var tempNext = (data) => {
+            result[data[1]] = data[0];
+            loopsToDo -= 1;
+        }
+
+        var tempError = (error) => {
+            console.error(error);
+            throw error;
+        }
+
+        var tempCompleted = () => {
+            try {
+                if (loopsToDo == 0) {
+                    observer.onNext(result);
+                    observer.onCompleted();
+                }
+            }
+            catch (error) {
+                observer.onError(error);
+            }
+        }
+
+        var observerEcarts = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, "ecarts_pesee")
+            .subscribe(observerEcarts);
+
+        var observerIncoherences = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllIncoherencesFilieres(idArray, 0, beginDate, endDate, "incoherences_filieres_norm")
+            .subscribe(observerIncoherences);
+
+        var observerIncoherencesDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllIncoherencesFilieres(idArray, 1, beginDate, endDate, "incoherences_filieres_dd")
+            .subscribe(observerIncoherencesDD);
+
+        var observerFilieresInterdites = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllFilieresInterdites(idArray, 0, beginDate, endDate, "filieres_interdites_norm")
+            .subscribe(observerFilieresInterdites);
+
+        var observerFilieresInterditesDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllFilieresInterdites(idArray, 1, beginDate, endDate, "filieres_interdites_dd")
+            .subscribe(observerFilieresInterditesDD);
+
+        var observerRetards = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllRetards(idArray, 0, date, "retards_norm")
+            .subscribe(observerRetards);
+
+        var observerRetardsDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getAllRetards(idArray, 1, date, "retards_dd")
+            .subscribe(observerRetardsDD);
+
+        var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        countBordereaux(idArray, beginDate, endDate, "bordereaux")
+            .subscribe(observerCounter);
+    })
+
+    return observable;
+}
+
 
 
 // this function updates an existing entry in the dashboard table
@@ -507,6 +577,7 @@ function getDashboards() {
     return observable;
 }
 
+
 var service = {};
 
 service.getAllEcartsDePesee = getAllEcartsDePesee;
@@ -521,5 +592,6 @@ service.countBordereaux = countBordereaux;
 service.getDataForSites = getDataForSites;
 service.updateEntry = updateEntry;
 service.getDashboards = getDashboards;
+service.getDetailsForSites = getDetailsForSites;
 
 module.exports = service;
