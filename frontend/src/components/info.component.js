@@ -19,7 +19,7 @@ class Info extends Component {
     }
     return (
       <div>
-        <h2> Informations générales </h2>
+        <h2> Carte de France </h2>
         <div>
           { text }
         </div>

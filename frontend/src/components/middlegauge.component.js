@@ -1,9 +1,9 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
-import { connect } from "react-redux"
-import * as actions from '../actions'
-
+import { connect } from "react-redux";
+import * as actions from '../actions';
+import  HelperService from '../actions/service';
 
 
 function getChartSize(el) {
@@ -30,7 +30,7 @@ class MiddleGauged3 extends Component {
         var middlevalueBefore = this.props.middlevalueBefore;
         var middlevalueAnte = this.props.middlevalueAnte;
         var middlevalueBeforeAnte = this.props.middlevalueBeforeAnte;
-        var margin = {top: 20, right: 20, bottom: 40, left: 20};
+        var margin = {top: 10, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
         /*
@@ -83,8 +83,8 @@ class MiddleGauged3 extends Component {
                 valueAnte: scale(middlevalueAnte)
             },
             {
-                innerRadius: (width/2) -margin.top-10 - margin.bottom/2,
-                outerRadius: (width/2)-margin.top - margin.bottom/2,
+                innerRadius: (width/2) -margin.top-10 - margin.bottom/3,
+                outerRadius: (width/2)-margin.top - margin.bottom/2 +3,
                 startAngle: scale(0),
                 endAngle: scale(middlevalueBefore),
                 valueAnte: scale(middlevalueBeforeAnte)
@@ -93,7 +93,7 @@ class MiddleGauged3 extends Component {
 
         var middleTextCount=g.append('text')
                 .style("fill",function (d) { return color(d); })
-                .style('font-size', '6vmin')
+                .style('font-size', '5vmin')
                 .datum(0)
                 .attr("class",'middleText')
                 .attr("text-anchor", 'middle')
@@ -108,7 +108,7 @@ class MiddleGauged3 extends Component {
                 .style("fill", function (d) { return color(d); })
                 .style('font-size', '1.5vmin')
                 .attr('text-anchor', 'middle')
-                .attr('dx', -28)
+                .attr('dx', '-4.7vmin')
                 .attr('dy', -3)
         /*
         Important part.
@@ -238,16 +238,12 @@ function mapStateToProps(state) {
     }
 };
 
-function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.updateMiddleGauge({
-        middlevalue: Math.random()*100,
-        middlevalueBefore:Math.random()*100,
-        middlevalueAnte: valueAnteG,
-        middlevalueBeforeAnte: valueBeforeAnteG
-    }))
 
+function mapDispatchToProps(dispatch) {
+    return {showMoreInfos: () => {dispatch(HelperService.displayMiddleGaugeInfos())
     }
 };
+}
 
 const MiddleGauge = ({showMoreInfos, middlevalue, middlevalueBefore, middlevalueBeforeAnte, middlevalueAnte}) => {
     return(

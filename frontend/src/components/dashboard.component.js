@@ -6,7 +6,10 @@ import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
 import RightGauge from './rightgauge.component';
 import Info from './info.component';
+import MoreInfosContainer from './containers/moreinfos.container'
 import Tile from './containers/tile.container';
+
+import '../styles/general.css';
 
 class Dashboard extends Component {
   render() {
@@ -39,7 +42,7 @@ class Dashboard extends Component {
                   <Col sm={3}> <Tile id="dashboard-tile8" title="Prestataire perf" value="+5%" isGrowing={false}/> </Col>
                 </Row>
               </Col>
-              <Col sm={3}> <Info paragraphs="2" /> </Col>
+              <Col sm={3}  className="show-more-infos" > <MoreInfosContainer/> </Col>
             </Row>
 
           </Grid>

@@ -27,3 +27,9 @@
     width: 100%;
     overflow: auto;
 }
+
+.show-more-infos {
+    position: relative;
+    height: 40vh;
+    width: 100%;
+}

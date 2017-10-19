@@ -1,3 +1,4 @@
+import * as actions from './index';
 var HelperService = {}
 
 
@@ -49,29 +50,52 @@ function filterByValue(array, value) {
 }
 
 function presentDataForNewSite(json) {
-    let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0}
+    let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: ""}
     let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0}
     let dataForRightGauge = {}
-    console.log(json)
+
+
+
+
+    dataForLeftGauge.details = json.details
+
     if (!(json.volume_total == "0.0000")) {
 
-        dataForLeftGauge.leftvalue = parseInt(json.valorisation_l_verte)*100/parseInt(json.volume_total)
+        dataForLeftGauge.leftvalue = json.valorisation_l_verte*100/json.volume_total
         dataForLeftGauge.leftvalueBefore = 12
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
 
-        dataForMiddleGauge.middlevalue = parseInt(json.valorisation_totale)*100/parseInt(json.volume_total)
+        dataForMiddleGauge.middlevalue = json.valorisation_totale*100/json.volume_total
         dataForMiddleGauge.middlevalueBefore = 12
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
         dataForMiddleGauge.middlevalueBeforeAnte = window.store.getState().updateGauge.middlevalueBefore
+
     }
 
-    let response = { dataForLeftGauge: dataForLeftGauge, dataForMiddleGauge: dataForMiddleGauge }
+    let response = {
+        dataForLeftGauge: dataForLeftGauge,
+        dataForMiddleGauge: dataForMiddleGauge,
+
+    }
     return response
 
 }
 
+function displayLeftGaugeInfos() {
+    return dispatch => {
+        dispatch(actions.displayLeftGaugeInfos())
+    }
+}
 
+function displayMiddleGaugeInfos() {
+    return dispatch => {
+        dispatch(actions.displayMiddleGaugeInfos())
+    }
+}
+
+HelperService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
+HelperService.displayLeftGaugeInfos = displayLeftGaugeInfos;
 HelperService.presentDataForNewSite = presentDataForNewSite;
 HelperService.filterByValue = filterByValue;
 HelperService.getAllLevelNames = getAllLevelNames;

@@ -1,13 +1,19 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
+import {LeftGaugeInfos, MiddleGaugeInfos} from './showmoreinfos.js';
+
+import React from "react";
 import {
     CHANGE_SCALE,
     CHANGE_URL,
     REQUEST_SITE_CHANGE,
     CHANGE_GRAPH_INPUT,
     CHANGE_GRAPH_TYPE,
+    UPDATE_MOREINFOS_CONTENT,
     DISPLAY_TILE_INFOS,
     DISPLAY_TILE_NOTIFINFOS,
+
     DISPLAY_LEFTGAUGE_INFOS,
+    DISPLAY_MIDDLEGAUGE_INFOS,
 
     CHANGE_LEFTGAUGE_INPUT,
     CHANGE_MIDDLEGAUGE_INPUT,
@@ -30,14 +36,37 @@ import {
     GraphTypes
 } from '../actions'
 
-function infosPanelOptions(state = {title: "eoufghz", defaultBody: "Afficher d'avantage d'informations"}, action){
+function infosPanelOptions(state = {defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>, isShown: false}, action){
     switch (action.type){
         case DISPLAY_TILE_INFOS:
             return Object.assign({}, state, action.tile);
-        case DISPLAY_LEFTGAUGE_INFOS:
-            return Object.assign({}, state, action.defaultBody);
+
         case DISPLAY_TILE_NOTIFINFOS:
             return Object.assign({}, state, action.tilenotifs);
+        case DISPLAY_LEFTGAUGE_INFOS:
+            if (state.isShown == false){
+                return Object.assign({}, state, {
+                    isShown: !state.isShown,
+                    defaultBody: <LeftGaugeInfos />
+                });
+            }
+            else{
+                return Object.assign({}, state, {
+                    defaultBody: <LeftGaugeInfos />
+                });
+            }
+        case DISPLAY_MIDDLEGAUGE_INFOS:
+        if (state.isShown == false){
+            return Object.assign({}, state, {
+                isShown: !state.isShown,
+                defaultBody: <MiddleGaugeInfos />
+            });
+        }
+        else{
+            return Object.assign({}, state, {
+                defaultBody: <MiddleGaugeInfos />
+            });
+        }
         default:
             return state;
     }
@@ -77,7 +106,8 @@ function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, lateralmenu
     }
 }
 
-function updateGauge(state= {
+function updateGauge(
+    state= {
         leftvalue: 0,
         leftvalueBefore: 0,
         leftvalueAnte: 0,
@@ -85,15 +115,18 @@ function updateGauge(state= {
         middlevalue: 0,
         middlevalueBefore: 0,
         middlevalueAnte: 0,
-        middlevalueBeforeAnte: 0
-    }, action) {
+        middlevalueBeforeAnte: 0,
+        details: "",
+    }, action
+) {
     switch(action.type) {
         case 'CHANGE_LEFTGAUGE_INPUT':
             return Object.assign({}, state, {
                 leftvalue: action.values.leftvalue,
                 leftvalueBefore: action.values.leftvalueBefore,
                 leftvalueAnte: action.values.leftvalueAnte,
-                leftvalueBeforeAnte: action.values.leftvalueBeforeAnte
+                leftvalueBeforeAnte: action.values.leftvalueBeforeAnte,
+                details: action.values.details
             });
         case 'CHANGE_MIDDLEGAUGE_INPUT':
             return Object.assign({}, state, {
@@ -102,6 +135,9 @@ function updateGauge(state= {
                 middlevalueAnte: action.values.middlevalueAnte,
                 middlevalueBeforeAnte: action.values.middlevalueBeforeAnte
             });
+
+        case UPDATE_MOREINFOS_CONTENT:
+            return Object.assign({}, state, action.details);
         default:
             return state;
     }

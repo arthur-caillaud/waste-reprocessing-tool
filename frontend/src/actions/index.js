@@ -9,9 +9,11 @@ export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 
 //Change Display More informations Panel
+export const UPDATE_MOREINFOS_CONTENT = 'UPDATE_MOREINFOS_CONTENT';
 export const DISPLAY_TILE_INFOS = 'DISPLAY_TILE_INFOS';
 export const DISPLAY_TILE_NOTIFINFOS = 'DISPLAY_TILE_NOTIFINFOS';
 export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
+export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 
@@ -78,6 +80,14 @@ export function changeGraphType(graphType){
     }
 }
 
+
+export function updateStateTreeForMoreInfos(details) {
+    return {
+        type: UPDATE_MOREINFOS_CONTENT,
+        details
+    }
+}
+
 export function displayTileInfos(tile){
     return {
         type: DISPLAY_TILE_INFOS,
@@ -92,11 +102,7 @@ export function displayTileNotifInfos(tileNotifs){
     }
 }
 
-export function displayLeftGaugeInfos(){
-    return {
-        type: DISPLAY_LEFTGAUGE_INFOS
-    }
-}
+
 
 export function addGraphTag(tag){
     return {
@@ -126,6 +132,17 @@ export function updateLeftGauge(values) {
         values
     }
 }
+export function displayLeftGaugeInfos(){
+    return {
+        type: DISPLAY_LEFTGAUGE_INFOS
+    }
+}
+export function displayMiddleGaugeInfos(){
+    return {
+        type: DISPLAY_MIDDLEGAUGE_INFOS
+    }
+}
+
 
 export function updateMiddleGauge(values) {
     return {
