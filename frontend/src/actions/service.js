@@ -52,6 +52,7 @@ function presentDataForNewSite(json) {
     let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0}
     let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0}
     let dataForRightGauge = {}
+    console.log(json)
     if (!(json.volume_total == "0.0000")) {
 
         dataForLeftGauge.leftvalue = parseInt(json.valorisation_l_verte)*100/parseInt(json.volume_total)
