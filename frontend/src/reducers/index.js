@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { searchInArray } from './service';
 import {
     CHANGE_SCALE,
     CHANGE_URL,
@@ -179,9 +180,13 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
                 suggestion: []
             });
         case UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT:
-            return Object.assign({}, state, {
-                input: action.input
-            });
+        const input = action.input;
+        const arrayInWhichToSearch = state.inputArray;
+        const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
+        return Object.assign({}, state, {
+            input: action.input,
+            suggestion: foundElementsArray,
+        });
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
                 selectedInput: action.prestataire
@@ -207,8 +212,12 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
                 suggestion: []
             });
         case UPDATE_DECHETPANEL_SEARCHBAR_INPUT:
+            const input = action.input;
+            const arrayInWhichToSearch = state.inputArray;
+            const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
             return Object.assign({}, state, {
-                input: action.input
+                input: action.input,
+                suggestion: foundElementsArray,
             });
         case UPDATE_SELECTEDDECHET:
             return Object.assign({}, state, {

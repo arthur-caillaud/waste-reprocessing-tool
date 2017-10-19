@@ -203,7 +203,7 @@ export function clearPrestatairesSearchSuggestions(){
     }
 }
 
-export function updatePrestatairePanelSearchBarInput(input){
+export function updatePrestatairePanelSearchbarInput(input){
     return {
         type: UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
         input
@@ -240,7 +240,7 @@ export function clearDechetsSearchSuggestions(){
     }
 }
 
-export function updateDechetPanelSearchBarInput(input){
+export function updateDechetPanelSearchbarInput(input){
     return {
         type: UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
         input

@@ -28,7 +28,9 @@ class Dechet extends Component {
                         idInputPanel="dechet-selection-panel"
                         onClickActionName="updateSelectedDechet"
                         onLoadActionName="loadDechetList"
+                        onSearchActionName="updateDechetPanelSearchbarInput"
                         branchName="updateDechetSelectionPanel"
+                        searchPlaceholder="Rechercher un déchet"
                     />
                 </Col>
               <Col sm={9}>

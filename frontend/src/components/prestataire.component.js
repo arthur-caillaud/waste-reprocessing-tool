@@ -26,7 +26,9 @@ class Prestataire extends Component {
                     idInputPanel="prestataire-selection-panel"
                     onClickActionName="updateSelectedPrestataire"
                     onLoadActionName="loadPrestataireList"
+                    onSearchActionName="updatePrestatairePanelSearchbarInput"
                     branchName="updatePrestataireSelectionPanel"
+                    searchPlaceholder="Rechercher un prestataire"
                 />
               </Col>
               <Col sm={9}>
