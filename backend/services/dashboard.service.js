@@ -492,6 +492,21 @@ function updateEntry(newEntry) {
     return observable;
 }
 
+
+function getDashboards() {
+    var observable = Rx.Observable.create((observer) => {
+        dashboard.findAll()
+            .then((data) => {
+                observer.onNext(data);
+                observer.onCompleted();
+            })
+            .catch((error) => {
+                observer.onError(error);
+            })
+    });
+    return observable;
+}
+
 var service = {};
 
 service.getAllEcartsDePesee = getAllEcartsDePesee;
@@ -505,5 +520,6 @@ service.getTotalVolumeVerte = getTotalVolumeVerte;
 service.countBordereaux = countBordereaux;
 service.getDataForSites = getDataForSites;
 service.updateEntry = updateEntry;
+service.getDashboards = getDashboards;
 
 module.exports = service;
