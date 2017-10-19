@@ -143,7 +143,7 @@ describe("Déchets Routes", () => {
                         "libelle": "DND EN MÉLANGE, ASSIMILABLES AUX ORDURES MÉNAGÈRES (HORS PAPIER, CARTON, MÉTAL, PLASTIQUE, VERRE ET BOIS) - 052B",
                         "code_europeen": "20 03 01",
                         "categorie": "DIB",
-                        "indicateur_national_valorisation": null,
+                        "indicateur_national_valorisation": 1,
                         "famille": "LISTE VERTE,TOUS DÉCHETS,BILAN EUROP-34 DND OM ET ASSIM,BILAN EUROP-35 DIB MÉNAGERS,TOUT VENANT,EXPLOITATION",
                         "id": 1
                     };
