@@ -25,8 +25,8 @@ function clone(obj) {
 class Histogram extends Component {
     // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
     // each object in valuesArray is stack of N columns labelled with Object.title
-    valuesArray = this.props.values;
-    newValuesArray = [{
+    graphTitle = this.props.title;
+    valuesArray = [{
         title: 'Taux de valorisation global',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
         values: [46,98,20]
@@ -252,6 +252,7 @@ class Histogram extends Component {
     render() {
         return (
         <div id="histogram-container">
+            <h2 className="chart-title">Valorisation {this.graphTitle}</h2>
             <div id={this.props.id} className="chart-container"></div>
         </div>
         );
