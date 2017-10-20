@@ -77,3 +77,30 @@
     border-top: 1px solid rgb(225,225,225);
     border-radius: 5px;
 }
+
+.chosen-tag {
+    display: inline-block;
+    background-color: #ffb74d;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 34px;
+    user-select: none;
+    cursor: default;
+    margin-right: 1vw;
+}
+
+.chosen-tag span{
+    padding: 6px 12px;
+    vertical-align: middle;
+}
+
+.remove-tag-button {
+    padding: 6px 12px;
+    margin-left: 0.2vw;
+    color: rgb(80,80,80);
+    cursor: pointer;
+}
+
+.remove-tag-button:hover {
+    color: rgb(40,40,40);
+}

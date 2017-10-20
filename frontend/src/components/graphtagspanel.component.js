@@ -7,7 +7,8 @@ class GraphTagsPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchContainerClassName: "hidden tags-search-container"
+            searchContainerClassName: "hidden tags-search-container",
+            suggestion: []
         }
         this.showTagsSearchContainer = this.showTagsSearchContainer.bind(this);
     }
@@ -20,37 +21,64 @@ class GraphTagsPanel extends Component {
         this.setState({searchContainerClassName: "tags-search-container hidden"});
     }
 
+    searchInArray(array,value){
+        if(value !== '' && value == value.toString()){
+            const regEx = new RegExp(value.toString(),'i');
+            let foundElementsArray = [];
+            if(array){
+                array.forEach(el => {
+                    if (el.nom.match(regEx)){
+                        foundElementsArray.push(el);
+                    }
+                });
+            }
+            return foundElementsArray;
+        }
+        return array;
+    }
+
     render() {
 
-        const tagsArray = this.props.inputArray;
-        const addTag = this.props.onTagClick;
-        const searchInputFunction = this.props.onSearch;
-        const suggestionArray = this.props.suggestionArray;
-        const searchInput = this.state.searchInput;
+        const id= this.props.id
+        const inputArray = this.props.inputArray
+        const tagsArray = this.props.tagsArray
+        const searchPlaceholder = this.props.searchPlaceholder
+        const onTagClick = this.props.onTagClick;
+        const onLoaded = this.props.onLoaded;
+        const onRemove = this.props.onRemove;
         const isLoading = this.props.isLoading;
-        const chosenTagsArray=["Déchet A","Déchet B","Déchet C","Déchet D","Déchet E"];
+        const suggestionArray = this.state.suggestion;
+        const input = this.state.searchInput;
 
-        /*function handleNoResultsFound(){
+        function handleNoResultsFound(){
             if(input && input.length > 0){
-                if(suggestion.length === 0){
+                if(suggestionArray.length === 0){
                     return 'error';
                 }
             }
-        };*/
+        };
 
-        let list=[]
-
-        for (var i = 0; i < 100; i++) {
-            const tagComponent = ( <ListGroupItem href="/">{i}</ListGroupItem>)
-            list.push(tagComponent)
-        }
-
-        /*if(tagArray){
-            tagArray.forEach(tag => {
-                const tagComponent = ( <ListGroupItem>{tag}</ListGroupItem>)
+        let list = [];
+        if(suggestionArray){
+            suggestionArray.forEach(tag => {
+                const tagComponent = ( <ListGroupItem
+                    onClick={(e) => {alert(e.target);this.showTagsSearchContainer();
+                    }}>
+                        {tag}
+                    </ListGroupItem>)
                 list.push(tagComponent)
             })
-        }*/
+        }
+
+        let chosenTags = [];
+        if(tagsArray){
+            tagsArray.forEach(dechet => {
+                const dechetTag = (
+                    <div className="chosen-tag"><span>{dechet.nom}</span><Glyphicon glyph="remove" className="remove-tag-button" onClick={onRemove}/></div>
+                )
+                chosenTags.push(dechetTag);
+            })
+        }
 
         return (
             <div className="tag-panel">
@@ -58,7 +86,10 @@ class GraphTagsPanel extends Component {
                     <ListGroup className={this.state.searchContainerClassName}>
                         {list}
                     </ListGroup>
-                    <FormGroup>
+                    <FormGroup
+                        controlId="formBasicText"
+                        validationState={handleNoResultsFound()}
+                    >
                         <InputGroup
                             onClick={(e) => this.showTagsSearchContainer()}
                         >
@@ -67,7 +98,7 @@ class GraphTagsPanel extends Component {
                                 placeholder={this.props.searchPlaceholder}
                                 onChange={e => {
                                     this.setState({searchInput: e.target.value});
-                                    searchInputFunction(e.target.value);
+                                    this.setState({suggestion: this.searchInArray(inputArray, this.state.searchInput)});
                                 }} />
                             <InputGroup.Addon>
                                 <Glyphicon glyph="search" />
@@ -76,11 +107,15 @@ class GraphTagsPanel extends Component {
                     </FormGroup>
                 </Col>
                 <Col className="no-right-padding" xs={8}>
-
+                    {chosenTags}
                 </Col>
             </div>
         );
     }
+
+    componentDidMount() {
+        this.props.onLoaded();
+    };
 }
 
 export default GraphTagsPanel;

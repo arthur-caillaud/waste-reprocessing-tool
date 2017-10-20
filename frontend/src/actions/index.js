@@ -38,8 +38,15 @@ export const CLEAR_DECHETS_SEARCHSUGGESTIONS = 'CLEAR_DECHETS_SEARCHSUGGESTIONS'
 export const UPDATE_SELECTEDDECHET = 'UPDATE_SELECTEDDECHET';
 export const UPDATE_DECHETPANEL_SEARCHBAR_INPUT = 'UPDATE_DECHETPANEL_SEARCHBAR_INPUT';
 
+export const LOAD_PRESTATAIREGRAPH_TAGS_BEGIN = "LOAD_PRESTATAIREGRAPH_TAGS";
 export const ADD_DECHET_GRAPH_TAG = "ADD_DECHET_GRAPH_TAG";
 export const REMOVE_DECHET_GRAPH_TAG = "REMOVE_DECHET_GRAPH_TAG";
+export const UPDATE_DECHETTAGS_INPUTARRAY = "UPDATE_DECHETTAGS_INPUTARRAY";
+
+export const LOAD_DECHETGRAPH_TAGS_BEGIN = "LOAD_DECHETGRAPH_TAGS";
+export const ADD_PRESTATAIRE_GRAPH_TAG = "ADD_DECHET_GRAPH_TAG";
+export const REMOVE_PRESTATAIRE_GRAPH_TAG = "REMOVE_DECHET_GRAPH_TAG";
+export const UPDATE_PRESTATAIRETAGS_INPUTARRAY = "UPDATE_PRESTATAIRETAGS_INPUTARRAY";
 /*
  * other constants
  */
@@ -257,16 +264,64 @@ export function updateSelectedDechet(dechet){
     }
 }
 
-export function addDechetGraphTag(dechetTag){
+/*
+ * Prestataire vision : add graph tag Panel
+ */
+
+export function loadPrestataireGraphTagsBegin() {
     return {
-        type: ADD_DECHET_GRAPH_TAG,
+        type: LOAD_PRESTATAIREGRAPH_TAGS_BEGIN
+    }
+}
+
+export function addPrestataireGraphTag(dechetTag){
+    return {
+        type: ADD_PRESTATAIRE_GRAPH_TAG,
         dechetTag
     }
 }
 
-export function removeDechetGraphTag(dechetTag){
+export function removePrestataireGraphTag(dechetTag){
+    return {
+        type: REMOVE_PRESTATAIRE_GRAPH_TAG,
+        dechetTag
+    }
+}
+
+export function updateDechetTagsInputArray(inputArray){
+    return {
+        type: UPDATE_DECHETTAGS_INPUTARRAY,
+        inputArray
+    }
+}
+
+/*
+ * Dechet vision : add graph tag Panel
+ */
+
+export function loadDechetGraphTagsBegin(){
+    return {
+        type: LOAD_DECHETGRAPH_TAGS_BEGIN
+    }
+}
+
+export function addDechetGraphTag(prestataireTag){
+    return {
+        type: ADD_DECHET_GRAPH_TAG,
+        prestataireTag
+    }
+}
+
+export function removeDechetGraphTag(prestataireTag){
     return {
         type: REMOVE_DECHET_GRAPH_TAG,
-        dechetTag
+        prestataireTag
+    }
+}
+
+export function updatePrestataireTagsInputArray(inputArray){
+    return {
+        type: UPDATE_PRESTATAIRETAGS_INPUTARRAY,
+        inputArray
     }
 }

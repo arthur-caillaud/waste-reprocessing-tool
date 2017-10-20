@@ -9,42 +9,40 @@ function mapStateToProps(state, ownProps) {
     const idTagsPanel = ownProps.idTagsPanel;
     const searchPlaceholder = ownProps.placeholder;
     return {
+        tagsArray: state[branchName].tagsArray,
         inputArray: state[branchName].inputArray,
-        selectedInput: state[branchName].selectedInput,
-        suggestion: state[branchName].suggestion,
         isLoading: state[branchName].isLoading,
-        id: idInputPanel
+        id: idTagsPanel
     }
 };
 
 function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
+    const onRemoveActionName = ownProps.onRemoveActionName;
     const onLoadActionName = ownProps.onLoadActionName;
-    const onSearchActionName = ownProps.onSearchActionName;
     return ({
-        onClick: (input) => {
-            dispatch(actions[onClickActionName](input));
+        onTagClick: (tag) => {
+            dispatch(actions[onClickActionName](tag));
         },
         onLoaded: () => {
             dispatch(apiCalls[onLoadActionName]());
         },
-        onSearch: (input) => {
-            dispatch(actions[onSearchActionName](input))
+        onRemove: (tag) => {
+            dispatch(actions[onRemoveActionName](tag));
         }
     });
 };
 
-const GraphTagsPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion}) => {
+const GraphTagsPanelContainer = ({inputArray, tagsArray, onTagClick, onLoaded, onRemove, id, searchPlaceholder, isLoading}) => {
     return(
         <GraphTagsPanel
             id={id}
-            suggestion={suggestion}
             inputArray={inputArray}
-            selectedInput={selectedInput}
+            tagsArray={tagsArray}
             searchPlaceholder={searchPlaceholder}
-            onClick={onClick}
+            onTagClick={onTagClick}
             onLoaded={onLoaded}
-            onSearch={onSearch}
+            onRemove={onRemove}
             isLoading={isLoading}
         />
     );
