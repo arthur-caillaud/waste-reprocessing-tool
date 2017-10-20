@@ -186,9 +186,7 @@ function getGlobalQuantity(idPrestataire, beginDate, endDate, sites, label, leve
                 if (isNaN(sum)) {
                     sum = 0;
                 }
-                console.log("yolo");
                 obs.onNext([sum, label, level, listType]);
-                console.log("swag");
                 obs.onCompleted();
             })
             .catch((err) => {

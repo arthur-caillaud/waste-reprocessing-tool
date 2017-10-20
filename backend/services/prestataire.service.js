@@ -6,6 +6,18 @@ var sequelize = require('sequelize');
 var models = require('../models/');
 var Prestataire = models.prestataire;
 var Distance = models.distance;
+var Bordereau = models.bordereau;
+var traitement = models.traitement;
+var bordereau = models.bordereau;
+var dechet = models.dechet;
+var prestataire = models.prestataire;
+var site = models.site;
+var traitement = models.traitement;
+var transport = models.transport;
+var transporteur = models.transporteur;
+var type_traitement = models.type_traitement;
+var referentiel_dechet = models.referentiel_dechet;
+var dashboard = models.dashboard;
 
 function getAllPrestataires(queryParameters) {
     /* This function creates an Observable and returns it. It searches for all
@@ -36,6 +48,75 @@ function getAllPrestataires(queryParameters) {
             });
     });
     return getAllPrestatairesObservable;
+}
+
+
+// given a sites array, returns all the prestataires working for these sites in
+// the given timeframe
+function getPrestatairesForSites(sitesArray, beginDate, endDate) {
+    // var query = {
+    //     attributes: [],
+    //     where: {
+    //         id_site: {$in: sitesArray}
+    //     },
+    //     include: [
+    //         {
+    //             model: traitement,
+    //             attributes: [],
+    //             where: {
+    //                 date_priseencharge: {
+    //                     $lt: endDate,
+    //                     $gte: beginDate
+    //                 }
+    //             },
+    //             include: [
+    //                 {
+    //                     model: Prestataire,
+    //                 }
+    //             ]
+    //         }
+    //     ]
+    // };
+
+    const query = {
+        attributes: [],
+        where: {
+            id_site: {$in: sitesArray},
+        },
+        include: [
+            {
+                model: traitement,
+                attributes: [],
+                where: {
+                    date_priseencharge: {
+                        $lte: endDate,
+                        $gte: beginDate
+                    }
+                },
+                include: [
+                    {
+                        model: prestataire
+                    }
+                ]
+            }
+        ]
+    };
+
+    console.log(query.include);
+
+    var observable = Rx.Observable.create((obs) => {
+        Bordereau.findAll(query)
+            .then((prestataires) => {
+                obs.onNext(prestataires);
+                obs.onCompleted();
+            })
+            .catch((error) => {
+                obs.onNext(error);
+                obs.onCompleted();
+            })
+    });
+
+    return observable;
 }
 
 function getPrestataireById(prestataireId) {
@@ -122,5 +203,6 @@ service.getAllPrestataires = getAllPrestataires;
 service.getPrestataireById = getPrestataireById;
 service.getPrestataireByName = getPrestataireByName;
 service.getPrestatairesCloseToPrestataire = getPrestatairesCloseToPrestataire;
+service.getPrestatairesForSites = getPrestatairesForSites;
 
 module.exports = service;

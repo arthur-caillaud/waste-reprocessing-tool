@@ -15,6 +15,7 @@ var dechets = require('./routes/dechets.controller');
 var sites = require('./routes/sites.controller');
 var dashboard = require('./routes/dashboard.controller');
 var graphs = require('./routes/graphs.controller');
+var graphsNew = require('./routes/graphs.new.controller');
 
 var router = express.Router();
 
@@ -60,6 +61,7 @@ router.use('/old/prestataires', prestataires);
 router.use('/sites', sites);
 router.use('/dashboard', dashboard);
 router.use('/graphs', graphs);
+router.use('/new/graphs', graphsNew);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
