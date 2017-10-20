@@ -43,8 +43,25 @@ API calls for Prestataire Vision
 export function loadPrestataireList(){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
-        return fetch(config.backend.adress+'prestataire')
+        return fetch(config.backend.adress+'prestataires')
             .then(response => response.json())
             .then(json => dispatch(actions.updatePrestataireList(json)));
+    }
+}
+
+/*
+API calls for Dechet Vision
+*/
+export function loadDechetList(){
+    return dispatch => {
+        dispatch(actions.loadDechetListBegin());
+        return fetch(config.backend.adress+'dechets')
+            .then(response => response.json())
+            .then(json => {
+                json.forEach(row => {
+                    row.nom = row.libelle;
+                })
+                dispatch(actions.updateDechetList(json));
+            });
     }
 }

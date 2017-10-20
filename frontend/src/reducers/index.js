@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { searchInArray } from './service';
 import {
     CHANGE_SCALE,
     CHANGE_URL,
@@ -27,6 +28,12 @@ import {
     CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS,
     UPDATE_SELECTEDPRESTATAIRE,
     UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
+
+    LOAD_DECHETLIST_BEGIN,
+    UPDATE_DECHETLIST,
+    CLEAR_DECHETS_SEARCHSUGGESTIONS,
+    UPDATE_SELECTEDDECHET,
+    UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
     GraphTypes
 } from '../actions'
 
@@ -157,7 +164,7 @@ And UPDATE_SITE (see HelperService again)
         }
 }
 
-function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [], isLoading: false, chosenPrestataire: '', suggestion: []}, action){
+function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
     switch(action.type){
         case LOAD_PRESTATAIRELIST_BEGIN:
             return Object.assign({}, state, {
@@ -173,12 +180,48 @@ function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [
                 suggestion: []
             });
         case UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT:
-            return Object.assign({}, state, {
-                input: action.input
-            });
+        const input = action.input;
+        const arrayInWhichToSearch = state.inputArray;
+        const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
+        return Object.assign({}, state, {
+            input: action.input,
+            suggestion: foundElementsArray,
+        });
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
                 selectedInput: action.prestataire
+            });
+        default :
+            return state;
+    }
+}
+
+function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
+    switch(action.type){
+        case LOAD_DECHETLIST_BEGIN:
+            return Object.assign({}, state, {
+                isLoading: true
+            });
+        case UPDATE_DECHETLIST:
+            return Object.assign({}, state, {
+                inputArray: action.json,
+                isLoading: false
+            });
+        case CLEAR_DECHETS_SEARCHSUGGESTIONS:
+            return Object.assign({}, state, {
+                suggestion: []
+            });
+        case UPDATE_DECHETPANEL_SEARCHBAR_INPUT:
+            const input = action.input;
+            const arrayInWhichToSearch = state.inputArray;
+            const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
+            return Object.assign({}, state, {
+                input: action.input,
+                suggestion: foundElementsArray,
+            });
+        case UPDATE_SELECTEDDECHET:
+            return Object.assign({}, state, {
+                selectedInput: action.dechet
             });
         default :
             return state;
@@ -191,7 +234,8 @@ const akkaApp = combineReducers({
     infosPanelOptions,
     updateGauge,
     updateSearchBar,
-    updatePrestataireSelectionPanel
+    updatePrestataireSelectionPanel,
+    updateDechetSelectionPanel
 })
 
 export default akkaApp
