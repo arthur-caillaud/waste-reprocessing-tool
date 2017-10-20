@@ -37,6 +37,9 @@ export const UPDATE_DECHETLIST = 'UPDATE_DECHETLIST';
 export const CLEAR_DECHETS_SEARCHSUGGESTIONS = 'CLEAR_DECHETS_SEARCHSUGGESTIONS';
 export const UPDATE_SELECTEDDECHET = 'UPDATE_SELECTEDDECHET';
 export const UPDATE_DECHETPANEL_SEARCHBAR_INPUT = 'UPDATE_DECHETPANEL_SEARCHBAR_INPUT';
+
+export const ADD_DECHET_GRAPH_TAG = "ADD_DECHET_GRAPH_TAG";
+export const REMOVE_DECHET_GRAPH_TAG = "REMOVE_DECHET_GRAPH_TAG";
 /*
  * other constants
  */
@@ -251,5 +254,19 @@ export function updateSelectedDechet(dechet){
     return {
         type: UPDATE_SELECTEDDECHET,
         dechet
+    }
+}
+
+export function addDechetGraphTag(dechetTag){
+    return {
+        type: ADD_DECHET_GRAPH_TAG,
+        dechetTag
+    }
+}
+
+export function removeDechetGraphTag(dechetTag){
+    return {
+        type: REMOVE_DECHET_GRAPH_TAG,
+        dechetTag
     }
 }

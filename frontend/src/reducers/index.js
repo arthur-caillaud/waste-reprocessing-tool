@@ -34,6 +34,10 @@ import {
     CLEAR_DECHETS_SEARCHSUGGESTIONS,
     UPDATE_SELECTEDDECHET,
     UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
+
+    ADD_DECHET_GRAPH_TAG,
+    REMOVE_DECHET_GRAPH_TAG,
+
     GraphTypes
 } from '../actions'
 
@@ -228,6 +232,27 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
     }
 }
 
+function updatePrestataireGraphTagsPanel(state = {input: '', tagsArray: []}, action){
+    switch (action.type) {
+        case ADD_DECHET_GRAPH_TAG:
+            return Object.assign({}, state, {
+                tagsArray: [...state.tagsArray, action.dechetTag]
+            });
+        case REMOVE_DECHET_GRAPH_TAG:
+            let newTagsArray = []
+            state.tagsArray.forEach(tag => {
+                if(tag !== "action.dechetTag"){
+                    newTagsArray.push(tag);
+                }
+            });
+            return Object.assign({}, state, {
+                tagsArray: newTagsArray
+            })
+        default:
+            return state;
+    }
+}
+
 const akkaApp = combineReducers({
     pageOptions,
     graphOptions,
@@ -235,7 +260,8 @@ const akkaApp = combineReducers({
     updateGauge,
     updateSearchBar,
     updatePrestataireSelectionPanel,
-    updateDechetSelectionPanel
+    updateDechetSelectionPanel,
+    updatePrestataireGraphTagsPanel
 })
 
 export default akkaApp

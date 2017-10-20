@@ -23,7 +23,7 @@ class GraphTagsPanel extends Component {
     render() {
 
         const tagsArray = this.props.inputArray;
-        let addTag = this.props.onTagClick;
+        const addTag = this.props.onTagClick;
         const searchInputFunction = this.props.onSearch;
         const suggestionArray = this.props.suggestionArray;
         const searchInput = this.state.searchInput;
@@ -37,10 +37,6 @@ class GraphTagsPanel extends Component {
                 }
             }
         };*/
-
-        addTag = function(){
-
-        };
 
         let list=[]
 
