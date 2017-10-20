@@ -26,7 +26,7 @@ anything concerning the graphs
 
 
 /**
-  * @api {GET} /graphs/prestataires Donne le taux de valorisation global et liste
+  * @api {GET} /graphs/prestataires/:level/:name Donne le taux de valorisation global et liste
   * verte en moyenne nationale. Donne aussi la liste des prestataires travaillant
   * avec l'entitée donnée
   * @apiGroup Graphs
@@ -40,13 +40,36 @@ anything concerning the graphs
   * (facultatif dans le cas d'une hierarchie 0 (niveau central))
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/graphs/pretataires/49/3
+  *   curl -i http://localhost:4000/api/graphs/prestataires/0
   * @apiExample {curl} Exemple avec arguments
-  *   curl -i http://localhost:4000/api/graphs/49/3/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
+  *   curl -i http://localhost:4000/api/graphs/prestataires/1/SEI/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
   *
   * @apiSuccess {JSONString} data Informations nécessaires
   * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
   */
+
+
+/**
+    * @api {GET} /graphs/prestataires/:level/:name/dechets/:id Donne la liste des déchets
+    * avec les déchets valorisés pour un prestataire donné sur un lieu donné
+    * @apiGroup Graphs
+    * @apiVersion 1.1.0
+    *
+    * @apiParam (queryParam) {string} [beginDate] première date voulue (format yyyy-mm-dd)
+    * @apiParam (queryParam) {string} [endDate] première date voulue (format yyyy-mm-dd)
+    * @apiParam (queryParam) {number} [level] niveau voulu dans la hierarchie (allant
+    * de 0 : central à 4 : site) default: 0
+    * @apiParam (queryParam) {string} [name] nom du lieu voulu dans sa hierarchie
+    * (facultatif dans le cas d'une hierarchie 0 (niveau central))
+    *
+    * @apiExample {curl} Exemple
+    *   curl -i http://localhost:4000/api/graphs/prestataires/0/dechets/1
+    * @apiExample {curl} Exemple avec arguments
+    *   curl -i http://localhost:4000/api/graphs/0/prestataires/1/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
+    *
+    * @apiSuccess {JSONString} data Informations nécessaires
+    * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
+*/
 
 /**
 This function is first called upon request. It verifies that all necessary
@@ -318,16 +341,16 @@ router.get('/prestataires/:level/', verifyParameters);
 router.get('/prestataires/:level/', getNecessarySites);
 router.get('/prestataires/:level/', getGlobalData);
 
-router.get('/prestataires/:level/:prestataireId', verifyParameters);
-router.get('/prestataires/:level/:prestataireId', getNecessarySites);
-router.get('/prestataires/:level/:prestataireId', getDataForPrestataire);
+router.get('/prestataires/:level/dechets/:prestataireId', verifyParameters);
+router.get('/prestataires/:level/dechets/:prestataireId', getNecessarySites);
+router.get('/prestataires/:level/dechets/:prestataireId', getDataForPrestataire);
 
 router.get('/prestataires/:level/:name', verifyParameters);
 router.get('/prestataires/:level/:name', getNecessarySites);
 router.get('/prestataires/:level/:name', getGlobalData);
 
-router.get('/prestataires/:level/:name/:prestataireId', verifyParameters);
-router.get('/prestataires/:level/:name/:prestataireId', getNecessarySites);
-router.get('/prestataires/:level/:name/:prestataireId', getDataForPrestataire);
+router.get('/prestataires/:level/:name/dechets/:prestataireId', verifyParameters);
+router.get('/prestataires/:level/:name/dechets/:prestataireId', getNecessarySites);
+router.get('/prestataires/:level/:name/dechets/:prestataireId', getDataForPrestataire);
 
 module.exports = router;
