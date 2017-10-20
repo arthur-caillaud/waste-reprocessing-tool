@@ -12,6 +12,7 @@ function mapStateToProps(state, ownProps) {
         inputArray: state[branchName].inputArray,
         selectedInput: state[branchName].selectedInput,
         suggestion: state[branchName].suggestion,
+        isLoading: state[branchName].isLoading,
         id: idInputPanel
     }
 };
@@ -33,7 +34,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     });
 };
 
-const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, suggestion}) => {
+const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion}) => {
     return(
         <InputGraphPanel
             id={id}
@@ -44,6 +45,7 @@ const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded,
             onClick={onClick}
             onLoaded={onLoaded}
             onSearch={onSearch}
+            isLoading={isLoading}
         />
     );
 }
