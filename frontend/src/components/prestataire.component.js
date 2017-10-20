@@ -55,8 +55,8 @@ class Prestataire extends Component {
                       values: [30,40,33]
                   }]}/>
               </Col>
-              <Col sm={12}>
-                 <GraphTagsPanel/> 
+              <Col sm={9} smOffset={3}>
+                 <GraphTagsPanel/>
               </Col>
             </Row>
           </Grid>
