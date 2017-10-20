@@ -434,11 +434,14 @@ function countBordereaux(idArray, beginDate, endDate, label) {
 // this function returns an observable with all the elements in the table
 // matching the provided id and date.
 // NOTE: considering the constraints, it should return only one site (or 0)
-function getDataForSites(idArray, date) {
+function getDataForSites(idArray, beginDate, endDate) {
     var query = {
         where: {
             id_site: {$in: idArray},
-            date: date
+            date: {
+                $lt: endDate,
+                $gte: beginDate
+            }
         }
     };
 

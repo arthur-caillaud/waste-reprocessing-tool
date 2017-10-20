@@ -35,11 +35,11 @@ anything concerning the dashboard
   * (facultatif dans le cas d'une hierarchie 1 (niveau central))
   * @apiParam (queryParam) {number} tolerance niveau de tolérance pour les écarts
   * de pesée
-  * @apiParam (queryParam) {number} year année choisie
-  * @apiParam (queryParam) {number} month mois choisi
+  * @apiParam (queryParam) {number} beginDate première date
+  * @apiParam (queryParam) {number} endDate dernière date
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/dashboard/2/42?tolerance=12
+  *   curl -i http://localhost:4000/api/dashboard/2/42?tolerance=12&beginDate=2017-01-01&endDate=2017-06-01
   *
   * @apiSuccess {JSONString} dashboard Informations nécessaires à la construction
   * de la dashboard sur le site voulu
@@ -52,11 +52,11 @@ function getDashboard(req, res, next) {
   var level = req.params.level;
   var name = req.params.name; //undefined if not provided
   var tolerance = req.query.tolerance;
-  var year = req.query.year;
-  var month = req.query.month;
+  var beginDate = req.query.beginDate;
+  var endDate = req.query.endDate;
 
   // when we check if name, we actually check if it is defined
-  if (level<0 || level>4 || (level>1 && !(name)) || !(tolerance) || !(year) || !(month)) {
+  if (level<0 || level>4 || (level>1 && !(name)) || !(tolerance) || !(endDate) || !(beginDate)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {
           res.status(errorPacket.status).send(errorPacket.message);
       });
@@ -83,15 +83,12 @@ function getAllDashboards(req, res) {
     };
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
-    console.log(DashboardService);
     DashboardService.getDashboards().subscribe(observer);
 }
 
 function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
-
-    console.log(req.params);
 
     const field = hierarchy[req.params.level];
     const name = req.params.name
@@ -100,12 +97,10 @@ function getNecessarySites(req, res, next) {
     console.log(req.params.level);
 
     if (req.params.level == 0) {
-        console.log("lolwat");
         var where = {};
     }
     else {
         console.log("wtf");
-        var where = {};
         where[field] = name;
         query.where = where;
     }
@@ -122,9 +117,6 @@ function getNecessarySites(req, res, next) {
         next();
     };
 
-    console.log("tiens la query c'est ");
-    console.log(query);
-
     var observer = Rx.Observer.create(onNext, error, complete);
     var subscription = SitesService.getAllSites(query).subscribe(observer);
 }
@@ -134,6 +126,8 @@ function processDashboardData(req, res) {
     var sites = req.locals;
     var tolerance = req.query.tolerance;
     var idArray = [];
+    var beginDate = req.query.beginDate;
+    var endDate = req.query.endDate;
 
     var result = {};
     var loopsToDo = 4;
@@ -152,17 +146,8 @@ function processDashboardData(req, res) {
     };
     var onCompleted = () => {};
 
-    const year = req.query.year;
-    var month = req.query.month;
-
-    if (month<10) {
-        month = "0" + month;
-    }
-
-    const date = year + '-' + month + '-01';
-
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getDataForSites(idArray, date).subscribe(observer);
+    DashboardService.getDataForSites(idArray, beginDate, endDate).subscribe(observer);
 }
 
 /**
@@ -199,8 +184,8 @@ function processDetailedData(req, res) {
     var sites = req.locals;
     var tolerance = req.query.tolerance;
     var idArray = [];
-    var month = req.query.month;
-    var year = req.query.year;
+    var beginDate = req.query.beginDate;
+    var endDate = req.query.endDate;
 
     var result = {};
 
@@ -221,11 +206,10 @@ function processDetailedData(req, res) {
     };
     var onCompleted = () => {};
 
-    dates.computeDates(year, month, tolerance, idArray, (beginDate, endDate, tolerance, siteId, arg) => {
-        var observer = Rx.Observer.create(onNext, onError, onCompleted);
-        DashboardService.getDetailsForSites(beginDate, endDate, tolerance, idArray)
-            .subscribe(observer);
-    }, null);
+    var observer = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getDetailsForSites(beginDate, endDate, tolerance, idArray)
+        .subscribe(observer);
+
 }
 
 
