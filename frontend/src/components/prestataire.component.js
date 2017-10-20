@@ -56,7 +56,7 @@ class Prestataire extends Component {
                   }]}/>
               </Col>
               <Col sm={9} smOffset={3}>
-                 <GraphTagsPanel/>
+                 <GraphTagsPanel searchPlaceholder="Ajouter des déchets"/>
               </Col>
             </Row>
           </Grid>

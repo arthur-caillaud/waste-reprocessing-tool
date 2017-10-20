@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
 
 class GraphTagsPanel extends Component {
@@ -12,15 +13,51 @@ class GraphTagsPanel extends Component {
 
     render() {
 
+        const tagsArray = this.props.inputArray;
+        const addTag = this.props.onTagClick;
+        const searchInputFunction = this.props.onSearch;
+        const suggestionArray = this.props.suggestionArray;
+        const searchInput = this.state.searchInput;
+        const isLoading = this.props.isLoading;
+        const chosenTagsArray=["Déchet A","Déchet B","Déchet C","Déchet D","Déchet E"];
+
+        function handleNoResultsFound(){
+            if(input && input.length > 0){
+                if(suggestion.length === 0){
+                    return 'error';
+                }
+            }
+        };
+
+        let list=[]
+
+        for (var i = 0; i < 100; i++) {
+            const tagComponent = ( <ListGroupItem>{i}</ListGroupItem>)
+            list.push(tagComponent)
+        }
+
+        /*if(tagArray){
+            tagArray.forEach(tag => {
+                const tagComponent = ( <ListGroupItem>{tag}</ListGroupItem>)
+                list.push(tagComponent)
+            })
+        }*/
+
         return (
             <div className="tag-panel">
-                <Col className="no-left-padding" xs={4}>
+                <Col className="no-left-padding no-right-padding" xs={4}>
+                    <ListGroup className="tags-search-container hidden">
+                        {list}
+                    </ListGroup>
                     <FormGroup>
                         <InputGroup>
                             <FormControl
                                 type="text"
                                 placeholder={this.props.searchPlaceholder}
-                                onChange={e => {}} />
+                                onChange={e => {
+                                    this.setState({searchInput: e.target.value});
+                                    searchInputFunction(e.target.value);
+                                }} />
                             <InputGroup.Addon>
                                 <Glyphicon glyph="search" />
                             </InputGroup.Addon>
@@ -28,17 +65,7 @@ class GraphTagsPanel extends Component {
                     </FormGroup>
                 </Col>
                 <Col className="no-right-padding" xs={8}>
-                    <FormGroup>
-                        <InputGroup>
-                            <FormControl
-                                type="text"
-                                placeholder={this.props.searchPlaceholder}
-                                onChange={e => {}} />
-                            <InputGroup.Addon>
-                                <Glyphicon glyph="search" />
-                            </InputGroup.Addon>
-                        </InputGroup>
-                    </FormGroup>
+
                 </Col>
             </div>
         );
