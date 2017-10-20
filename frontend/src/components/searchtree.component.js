@@ -1,43 +1,114 @@
 import React, { Component, } from 'react';
-import { SplitButton, MenuItem } from 'react-bootstrap';
+import { SplitButton, MenuItem, ButtonToolbar } from 'react-bootstrap';
 
 import '../styles/searchtree.css';
 
-function trimString(string, value) {
-    return string.substring(0, value);
+function trimString(string, value, defaultString) {
+
+    return string == null ? defaultString : string.substring(0, value)+'...';
 }
 
 class SearchTreeElement extends Component {
+
+
     render() {
+
         const {
-            nom,
-            site_production,
+            site,
             unite_dependance,
             up_dependance,
             metier_dependance,
-            id
+            id,
+            onRenderMetierClickHandler,
+            onRenderUpClickHandler,
+            onRenderUniteClickHandler,
+            onRenderSiteClickHandler
         } = this.props;
 
-        if (nom) {
-        return (
-            <div className="searchtree-container">
-                <SplitButton bsSize="xsmall" bsStyle='default' title={trimString(metier_dependance, 7)} key={4}>
-                    <MenuItem eventKey="1">Action</MenuItem>
-                </SplitButton>
-                <SplitButton bsSize="xsmall" bsStyle='default' title={trimString(up_dependance, 7)} key={5}>
-                    <MenuItem eventKey="1">Action</MenuItem>
-                </SplitButton>
+        /*
+        Clicking on the dropdown arrow should display a list of items.
+        Clicking on the button is supposed to reset the entire display to one level higher
+        */
+        var RenderMetier = <SplitButton
+                                bsSize="small"
+                                bsStyle='default'
+                                onClick={onRenderMetierClickHandler}
+                                title={trimString(metier_dependance, 8, 'National')}
+                                key={1}>
+                                <MenuItem eventKey="1">Action</MenuItem>
+                            </SplitButton>;
 
+        var RenderUp = <SplitButton
+                            bsSize="small"
+                            bsStyle='default'
+                            onClick={onRenderUpClickHandler}
+                            title={trimString(up_dependance, 8, 'Choix Up')}
+                            key={2}>
+                            <MenuItem eventKey="1">Action</MenuItem>
+                        </SplitButton>;
 
+        var RenderUnite = <SplitButton
+                                bsSize="small"
+                                bsStyle='default'
+                                onClick={onRenderUniteClickHandler}
+                                title={trimString(unite_dependance, 8, 'ChxUnite')}
+                                key={3}>
+                                <MenuItem eventKey="1">Action</MenuItem>
+                            </SplitButton>;
 
-            </div>
+        var RenderSite = <SplitButton
+                            bsSize="small"
+                            bsStyle='default'
+                            onClick={onRenderSiteClickHandler}
+                            title={trimString(site, 8, 'Nom Site')}
+                            key={4}>
+                            <MenuItem eventKey="1">Action</MenuItem>
+                        </SplitButton>;
 
-        )
-    } else {
-        return (
-            <div></div>
-        )
-    }
+        //We define different renders to display things accordingly
+
+        if (site ==null && unite_dependance==null && up_dependance==null && metier_dependance==null) {
+            return (
+                <div className="searchtree-container">
+                    <ButtonToolbar>
+                        {RenderMetier}
+                    </ButtonToolbar>
+                </div>
+            )
+        } else if (site ==null && unite_dependance==null && up_dependance==null && metier_dependance!=null) {
+            return (
+                <div className="searchtree-container">
+                    <ButtonToolbar>
+                        {RenderMetier}
+                        {RenderUp}
+                    </ButtonToolbar>
+                </div>
+            )
+        } else if (site ==null && unite_dependance==null && up_dependance!=null && metier_dependance!=null) {
+            return (
+                <div className="searchtree-container">
+                    <ButtonToolbar>
+                        {RenderMetier}
+                        {RenderUp}
+                        {RenderUnite}
+                    </ButtonToolbar>
+                </div>
+            )
+        } else {
+            return (
+                <div className="searchtree-container">
+                    <ButtonToolbar>
+                        {RenderMetier}
+                        {RenderUp}
+                        {RenderUnite}
+                        {RenderSite}
+                    </ButtonToolbar>
+
+                </div>
+
+            )
+        }
+
     }
 }
 

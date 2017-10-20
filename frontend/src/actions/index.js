@@ -8,10 +8,7 @@ export const REQUEST_SITE_CHANGE = 'REQUEST_SITE_CHANGE'; //This is the action t
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 
-//Change Display More informations Panel
-export const UPDATE_MOREINFOS_CONTENT = 'UPDATE_MOREINFOS_CONTENT';
-export const DISPLAY_TILE_INFOS = 'DISPLAY_TILE_INFOS';
-export const DISPLAY_TILE_NOTIFINFOS = 'DISPLAY_TILE_NOTIFINFOS';
+export const RESET_MOREINFOS_TO_DEFAULT = 'RESET_MOREINFOS_TO_DEFAULT'
 export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
 export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
@@ -81,26 +78,6 @@ export function changeGraphType(graphType){
 }
 
 
-export function updateStateTreeForMoreInfos(details) {
-    return {
-        type: UPDATE_MOREINFOS_CONTENT,
-        details
-    }
-}
-
-export function displayTileInfos(tile){
-    return {
-        type: DISPLAY_TILE_INFOS,
-        tile
-    }
-}
-
-export function displayTileNotifInfos(tileNotifs){
-    return {
-        type: DISPLAY_TILE_NOTIFINFOS,
-        tileNotifs
-    }
-}
 
 
 
@@ -151,6 +128,11 @@ export function updateMiddleGauge(values) {
     }
 }
 
+export function resetMoreInfosToDefault() {
+    return {
+        type: RESET_MOREINFOS_TO_DEFAULT
+    }
+}
 
 /*
  * SearchBar (present on every frontpage)

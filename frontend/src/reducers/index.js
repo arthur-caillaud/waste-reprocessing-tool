@@ -8,12 +8,11 @@ import {
     REQUEST_SITE_CHANGE,
     CHANGE_GRAPH_INPUT,
     CHANGE_GRAPH_TYPE,
-    UPDATE_MOREINFOS_CONTENT,
-    DISPLAY_TILE_INFOS,
-    DISPLAY_TILE_NOTIFINFOS,
+
 
     DISPLAY_LEFTGAUGE_INFOS,
     DISPLAY_MIDDLEGAUGE_INFOS,
+    RESET_MOREINFOS_TO_DEFAULT,
 
     CHANGE_LEFTGAUGE_INPUT,
     CHANGE_MIDDLEGAUGE_INPUT,
@@ -44,10 +43,6 @@ function infosPanelOptions(
     },
     action){
     switch (action.type){
-        case DISPLAY_TILE_INFOS:
-            return Object.assign({}, state, action.tile);
-        case DISPLAY_TILE_NOTIFINFOS:
-            return Object.assign({}, state, action.tilenotifs);
 
         case DISPLAY_LEFTGAUGE_INFOS:
             return Object.assign({}, state, {
@@ -62,6 +57,12 @@ function infosPanelOptions(
                 middleGaugeShown: !state.middleGaugeShown,
                 defaultBody: <MiddleGaugeInfos />
             });
+        case RESET_MOREINFOS_TO_DEFAULT:
+            return Object.assign({}, state, {
+                defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
+                middleGaugeShown: false,
+                leftGaugeShown: false
+            })
         default:
             return state;
     }
@@ -130,9 +131,6 @@ function updateGauge(
                 middlevalueAnte: action.values.middlevalueAnte,
                 middlevalueBeforeAnte: action.values.middlevalueBeforeAnte
             });
-
-        case UPDATE_MOREINFOS_CONTENT:
-            return Object.assign({}, state, action.details);
         default:
             return state;
     }

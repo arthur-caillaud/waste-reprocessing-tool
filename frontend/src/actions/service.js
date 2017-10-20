@@ -14,7 +14,10 @@ function getAllLevelNames(architecture) {
         levelNames.push({
             nom: metier_dependance,
             architecture: {
-                metier_dependance: metier_dependance
+                metier_dependance: metier_dependance,
+                up_dependance: null,
+                unite_dependance: null,
+                site: null
             },
             level: 1
         })
@@ -25,7 +28,9 @@ function getAllLevelNames(architecture) {
                 nom: up_dependance,
                 architecture: {
                     metier_dependance: metier_dependance,
-                    up_dependance: up_dependance
+                    up_dependance: up_dependance,
+                    unite_dependance: null,
+                    site: null
                 },
                 level: 2
             })
@@ -37,7 +42,8 @@ function getAllLevelNames(architecture) {
                     architecture: {
                         metier_dependance: metier_dependance,
                         up_dependance: up_dependance,
-                        unite_dependance: unite_dependance
+                        unite_dependance: unite_dependance,
+                        site: null
                     },
                     level: 3
                 })
@@ -83,23 +89,32 @@ function filterByValue(array, value) {
 }
 
 function presentDataForNewSite(json) {
-    let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: ""}
-    let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0}
-    let dataForRightGauge = {}
+    let volume_total = 0.0000;
+    let valorisation_l_verte = 0.0000;
+    let valorisation_totale = 0.0000;
 
+    json.forEach(function(element) {
 
+        volume_total += parseFloat(element.volume_total)
+        valorisation_l_verte += parseFloat(element.valorisation_l_verte)
+        valorisation_totale += parseFloat(element.valorisation_totale)
+    });
 
+    let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: ""};
+    let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0};
+    let dataForRightGauge = {};
 
-    dataForLeftGauge.details = json.details
+    //TO MODIFY WITH INTELLECT
+    dataForLeftGauge.details = json[0].details
+    console.log(volume_total)
+    if (!(volume_total == 0.0000)) {
 
-    if (!(json.volume_total == "0.0000")) {
-
-        dataForLeftGauge.leftvalue = json.valorisation_l_verte*100/json.volume_total
+        dataForLeftGauge.leftvalue = valorisation_l_verte*100/volume_total
         dataForLeftGauge.leftvalueBefore = 12
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
 
-        dataForMiddleGauge.middlevalue = json.valorisation_totale*100/json.volume_total
+        dataForMiddleGauge.middlevalue = valorisation_totale*100/volume_total
         dataForMiddleGauge.middlevalueBefore = 12
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
         dataForMiddleGauge.middlevalueBeforeAnte = window.store.getState().updateGauge.middlevalueBefore

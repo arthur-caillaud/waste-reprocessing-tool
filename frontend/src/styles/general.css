@@ -13,7 +13,7 @@
 }
 
 .searchbar-container{
-
+    position: relative;
     height: 10vh;
 }
 

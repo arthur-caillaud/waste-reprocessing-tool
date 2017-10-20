@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import { Row, Col, Grid } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import * as apiCalls from '../actions/api_calls';
 
 import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
@@ -11,7 +13,11 @@ import Tile from './containers/tile.container';
 
 import '../styles/general.css';
 
-class Dashboard extends Component {
+class DashboardElement extends Component {
+
+   componentDidMount() {
+       this.props.getNationalState();
+   }
   render() {
     return (
       <div>
@@ -52,4 +58,28 @@ class Dashboard extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+    return {
+
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getNationalState: () => {
+            dispatch(apiCalls.updateSite({
+                    nom: "National",
+                    level: 0,
+                    architecture: {
+                        nom: null,
+                        unite_dependance: null,
+                        up_dependance: null,
+                        metier_dependance: null
+                    }
+                }
+            ))
+
+        }
+    }
+}
+const Dashboard = connect(mapStateToProps, mapDispatchToProps)(DashboardElement)
 export default Dashboard;
