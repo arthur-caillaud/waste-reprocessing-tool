@@ -7,32 +7,45 @@ class GraphTagsPanel extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            searchContainerClassName: "hidden tags-search-container"
         }
+        this.showTagsSearchContainer = this.showTagsSearchContainer.bind(this);
+    }
+
+    showTagsSearchContainer(){
+        this.setState({searchContainerClassName: "tags-search-container"});
+    }
+
+    hideTagsSearchContainer(){
+        this.setState({searchContainerClassName: "tags-search-container hidden"});
     }
 
     render() {
 
         const tagsArray = this.props.inputArray;
-        const addTag = this.props.onTagClick;
+        let addTag = this.props.onTagClick;
         const searchInputFunction = this.props.onSearch;
         const suggestionArray = this.props.suggestionArray;
         const searchInput = this.state.searchInput;
         const isLoading = this.props.isLoading;
         const chosenTagsArray=["Déchet A","Déchet B","Déchet C","Déchet D","Déchet E"];
 
-        function handleNoResultsFound(){
+        /*function handleNoResultsFound(){
             if(input && input.length > 0){
                 if(suggestion.length === 0){
                     return 'error';
                 }
             }
+        };*/
+
+        addTag = function(){
+
         };
 
         let list=[]
 
         for (var i = 0; i < 100; i++) {
-            const tagComponent = ( <ListGroupItem>{i}</ListGroupItem>)
+            const tagComponent = ( <ListGroupItem href="/">{i}</ListGroupItem>)
             list.push(tagComponent)
         }
 
@@ -46,11 +59,13 @@ class GraphTagsPanel extends Component {
         return (
             <div className="tag-panel">
                 <Col className="no-left-padding no-right-padding" xs={4}>
-                    <ListGroup className="tags-search-container hidden">
+                    <ListGroup className={this.state.searchContainerClassName}>
                         {list}
                     </ListGroup>
                     <FormGroup>
-                        <InputGroup>
+                        <InputGroup
+                            onClick={(e) => this.showTagsSearchContainer()}
+                        >
                             <FormControl
                                 type="text"
                                 placeholder={this.props.searchPlaceholder}
