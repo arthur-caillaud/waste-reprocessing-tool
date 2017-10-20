@@ -31,3 +31,11 @@ button {
     width: 100%;
     overflow: auto;
 }
+
+div.no-left-padding{
+    padding-left: 0;
+}
+
+div.no-right-padding{
+    padding-right: 0;
+}
