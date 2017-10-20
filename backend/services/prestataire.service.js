@@ -4,9 +4,6 @@ var service = {};
 var sequelize = require('sequelize');
 
 var models = require('../models/');
-var Prestataire = models.prestataire;
-var Distance = models.distance;
-var Bordereau = models.bordereau;
 var traitement = models.traitement;
 var bordereau = models.bordereau;
 var dechet = models.dechet;
@@ -38,7 +35,7 @@ function getAllPrestataires(queryParameters) {
      }
 
     var getAllPrestatairesObservable = Rx.Observable.create((observer) => {
-        Prestataire.findAll(queryParameters)
+        prestataire.findAll(queryParameters)
             .then((prestataires) => {
                 observer.onNext(prestataires);
                 observer.onCompleted();
@@ -78,7 +75,9 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
     //     ]
     // };
 
-    const query = {
+    var traitementsId = [];
+
+    var query1 = {
         attributes: [],
         where: {
             id_site: {$in: sitesArray},
@@ -86,29 +85,39 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
         include: [
             {
                 model: traitement,
-                attributes: [],
+                as: 'traitementFinal',
                 where: {
                     date_priseencharge: {
                         $lte: endDate,
                         $gte: beginDate
                     }
                 },
-                include: [
-                    {
-                        model: prestataire
-                    }
-                ]
             }
         ]
     };
 
-    console.log(query.include);
+    var query2 = {
+        where: {
+            id: {$in: traitementsId}
+        }
+    };
 
     var observable = Rx.Observable.create((obs) => {
-        Bordereau.findAll(query)
-            .then((prestataires) => {
-                obs.onNext(prestataires);
-                obs.onCompleted();
+        bordereau.findAll(query1)
+            .then((traitements) => {
+                console.log(traitements);
+                traitements.forEach((traitement) => {
+                    traitementsId.push(traitement.dataValues.traitementFinal.id);
+                })
+                prestataire.findAll(query2)
+                    .then((prestataires) => {
+                        obs.onNext(prestataires);
+                        obs.onCompleted();
+                    })
+                    .catch((error) => {
+                        obs.onNext(error);
+                        obs.onCompleted();
+                    })
             })
             .catch((error) => {
                 obs.onNext(error);

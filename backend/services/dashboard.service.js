@@ -36,6 +36,7 @@ function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 where: {
                     date_priseencharge: {
                         $lt: endDate,
@@ -78,6 +79,7 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
             include: [
                 {
                     model: traitement,
+                    as: 'traitementFinal',
                     required: true,
                     where: {
                         date_priseencharge: {
@@ -134,6 +136,7 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
                 },
                 {
                     model: traitement,
+                    as: 'traitementFinal',
                     where: {
                         date_priseencharge: {
                             $lt: endDate,
@@ -177,6 +180,7 @@ function getAllRetards(idArray, dangereux, date, label) {
             include: [
                 {
                     model: traitement,
+                    as: 'traitementFinal',
                     where: {
                         date_priseencharge: {$lt: (date - maxDelay)}
                 }},
@@ -213,6 +217,7 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
             include: [
                 {
                     model: traitement,
+                    as: 'traitementFinal',
                     attributes: [],
                     where: {
                         date_priseencharge: {
@@ -251,6 +256,7 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
             include: [
                 {
                     model: traitement,
+                    as: 'traitementFinal',
                     attributes: [],
                     where: {
                         date_priseencharge: {
@@ -294,9 +300,9 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 attributes: [],
                 where: {
-                    id: sequelize.where(sequelize.col('bordereau.id_traitement_final'), sequelize.col('traitement.id')),
                     date_priseencharge: {
                         $lt: endDate,
                         $gte: beginDate
@@ -343,9 +349,9 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 attributes: [],
                 where: {
-                    id: sequelize.where(sequelize.col('bordereau.id_traitement_final'), sequelize.col('traitement.id')),
                     date_priseencharge: {
                         $lt: endDate,
                         $gte: beginDate
@@ -401,9 +407,9 @@ function countBordereaux(idArray, beginDate, endDate, label) {
          include: [
              {
                  model: traitement,
+                 as: 'traitementFinal',
                  attributes: [],
                  where: {
-                     id: sequelize.where(sequelize.col('bordereau.id_traitement_final'), sequelize.col('traitement.id')),
                      date_priseencharge: {
                          $lt: endDate,
                          $gte: beginDate

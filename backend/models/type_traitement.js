@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   type_traitement.associate = function(models) {
-      type_traitement.hasMany(models.bordereau, {foreignKey: 'id_traitement_prevu', sourceKey: 'id'});
+      type_traitement.belongsToMany(models.bordereau, {through: 'bordereauxForTraitementPrevu', foreignKey: 'id', sourceKey: 'id_traitement_prevu'});
       type_traitement.hasMany(models.traitement, {foreignKey: 'id_type_traitement', sourceKey: 'id'});
       type_traitement.hasMany(models.referentiel_dechet, {foreignKey: 'id_type_traitement', sourceKey: 'id'})
   }

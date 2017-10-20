@@ -218,23 +218,25 @@ function getGlobalData(req, res) {
     };
 
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getTotalVolume(idArray, beginDate, endDate, idArray, ["volume_total", "globalData"])
+    DashboardService.getTotalVolume(idArray, beginDate, endDate, ["volume_total", "globalData"])
         .subscribe(observerQantity);
 
     var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getValorisationTotale(idArray, beginDate, endDate, idArray, ["valorisation_totale", "globalData"])
+    DashboardService.getValorisationTotale(idArray, beginDate, endDate, ["valorisation_totale", "globalData"])
         .subscribe(observerRecycled);
 
     var observerQantityVerte = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getTotalVolumeVerte(idArray, beginDate, endDate, idArray, ["volume_l_verte", "globalData"])
+    DashboardService.getTotalVolumeVerte(idArray, beginDate, endDate, ["volume_l_verte", "globalData"])
         .subscribe(observerQantityVerte);
 
     var observerRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getValorisationVerte(idArray, beginDate, endDate, idArray, ["valorisation_l_verte", "globalData"])
+    DashboardService.getValorisationVerte(idArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
         .subscribe(observerRecycledVerte);
 
     var observerPrestataires = Rx.Observer.create(
         (data) => {
+            console.log("coucou");
+            console.log(data);
             result.prestataires = data;
         },
         onError,
