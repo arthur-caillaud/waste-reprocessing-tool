@@ -12,7 +12,10 @@ export function loadSuggestions(value) {
     dispatch(actions.loadSuggestionsBegin())
     return fetch(config.backend.adress+'dashboard/architecture')
         .then(response => response.json())
-        .then(json => dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json), value), value)))
+        .then(json => {
+
+            dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json), value), value))
+        })
 
   };
 }
@@ -28,6 +31,7 @@ export function updateSite(site) {
             .then(response => response.json())
             .then(json => {
                 console.log(json)
+
                 let newValues = HelperService.presentDataForNewSite(json[0])
 
                 let leftValues = newValues.dataForLeftGauge;

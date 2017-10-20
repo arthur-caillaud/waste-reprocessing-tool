@@ -11,7 +11,7 @@ import registerServiceWorker from './registerServiceWorker';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const loggerMiddleware = createLogger();
-window.store = createStore(akkaApp, composeEnhancers(applyMiddleware(thunkMiddleware, loggerMiddleware)));
+window.store = createStore(akkaApp, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 render((
 
@@ -27,7 +27,7 @@ render((
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
 let unsubscribe = window.store.subscribe(() =>
-  console.log(window.store.getState())
+  {}
 );
 
 registerServiceWorker();

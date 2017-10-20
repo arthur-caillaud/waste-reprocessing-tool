@@ -138,7 +138,23 @@ function updateGauge(
     }
 }
 
-function updateSearchBar(state = {value: '', suggestions: [], isLoading: false, site:'National'}, action) {
+function updateSearchBar(
+    state = {
+        value: '',
+        suggestions: [],
+        isLoading: false,
+        site: {
+            nom: "National",
+            level: 0,
+            architecture: {
+                nom: null,
+                unite_dependance: null,
+                up_dependance: null,
+                metier_dependance: null
+            }
+        }
+    },
+    action) {
 
 /*
 The data cycle is the following :

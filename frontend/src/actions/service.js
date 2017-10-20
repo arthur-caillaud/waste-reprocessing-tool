@@ -11,26 +11,59 @@ function getAllLevelNames(architecture) {
     let levelNames = []
 
     for (let metier_dependance in architecture) {
-        levelNames.push({ nom: metier_dependance, level: 1 })
+        levelNames.push({
+            nom: metier_dependance,
+            architecture: {
+                metier_dependance: metier_dependance
+            },
+            level: 1
+        })
         let metier = architecture[metier_dependance]
 
         for (let up_dependance in metier) {
-            levelNames.push({ nom: up_dependance, level: 2 })
+            levelNames.push({
+                nom: up_dependance,
+                architecture: {
+                    metier_dependance: metier_dependance,
+                    up_dependance: up_dependance
+                },
+                level: 2
+            })
             let up = metier[up_dependance]
 
             for (let unite_dependance in up) {
-                levelNames.push({ nom: unite_dependance, level: 3 })
+                levelNames.push({
+                    nom: unite_dependance,
+                    architecture: {
+                        metier_dependance: metier_dependance,
+                        up_dependance: up_dependance,
+                        unite_dependance: unite_dependance
+                    },
+                    level: 3
+                })
                 let unite = up[unite_dependance]
 
                 for (let site in unite) {
-                    levelNames.push({ nom: site, level: 4 })
+                    levelNames.push({
+                        nom: site,
+                        architecture: {
+                            metier_dependance: metier_dependance,
+                            up_dependance: up_dependance,
+                            unite_dependance: unite_dependance,
+                            site: site
+                        },
+                        level: 4
+                    })
 
                 }
             }
         }
-
     }
     return levelNames;
+}
+
+function getArchitectureFromSite(level, name) {
+
 }
 
 
@@ -94,6 +127,7 @@ function displayMiddleGaugeInfos() {
     }
 }
 
+HelperService.getArchitectureFromSite = getArchitectureFromSite;
 HelperService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
 HelperService.displayLeftGaugeInfos = displayLeftGaugeInfos;
 HelperService.presentDataForNewSite = presentDataForNewSite;
