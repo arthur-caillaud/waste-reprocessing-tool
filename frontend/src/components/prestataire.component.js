@@ -8,6 +8,7 @@ import { array } from '../utilities/text-generator.component';
 //import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
+import GraphTagsPanel from '../components/graphtagspanel.component';
 
 class Prestataire extends Component {
   render() {
@@ -54,13 +55,8 @@ class Prestataire extends Component {
                       values: [30,40,33]
                   }]}/>
               </Col>
-              <Col sm={4}>
-                <div>
-                  Searchbar
-                </div>
-              </Col>
-              <Col sm={8}>
-                Fouzy les tags ici
+              <Col sm={12}>
+                 <GraphTagsPanel/> 
               </Col>
             </Row>
           </Grid>

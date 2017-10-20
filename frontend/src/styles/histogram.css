@@ -1,9 +1,8 @@
 #histogram-container{
     position: relative;
-    height: 90vh;
+    height: 81vh;
     border: 1px solid rgb(221,221,221);
     border-radius: 5px;
-    margin-right: 1vw;
     box-shadow: 0px 0px 5px rgb(221,221,221);
 }
 
@@ -53,9 +52,17 @@
   left: 0;
 }
 
+.input-panel{
+    height: 75vh;
+}
+
 .input-panel .inputs-container{
     border: 1px solid rgb(225,225,225);
     border-radius: 5px;
-    max-height: 83vh;
     overflow-y: scroll;
+    max-height: 100%;
+}
+
+.tag-panel {
+    margin-top: 2vh;
 }
