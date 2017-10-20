@@ -144,7 +144,7 @@ function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
 
-    const level = req.query.level;
+    const level = req.params.level;
 
     if (level<0 || level>4 || (level>1 && !(name))) {
         utilities.errorHandler("Invalid arguments", (errorPacket) => {
@@ -153,8 +153,10 @@ function getNecessarySites(req, res, next) {
     }
 
     const field = hierarchy[level];
-    const name = req.query.name;
+    const name = req.params.name;
     var query = {};
+
+    var loops = 2;
 
     if (typeof field != "undefined") {
         if (req.params.level == 0) {
@@ -167,8 +169,8 @@ function getNecessarySites(req, res, next) {
         }
     }
 
-    var onNext = (data) => {
-        req.locals["sites"] = data;
+    var onNext = (label, data) => {
+        req.locals[label] = data;
     };
     var error = (error) => {
         utilities.errorHandler(error, (errorPacket) => {
@@ -176,16 +178,25 @@ function getNecessarySites(req, res, next) {
         });
     };
     var complete = () => {
-        next();
+        loops -= 1;
+        if (loops == 0) {
+            next();
+        }
+
     };
 
-    var observer = Rx.Observer.create(onNext, error, complete);
+    var observer = Rx.Observer.create((data) => onNext("sites", data), error, complete);
     var subscription = SitesService.getAllSites(query).subscribe(observer);
+
+    var observer2 = Rx.Observer.create((data) => onNext("globalSites", data), error, complete);
+    var subscription2 = SitesService.getAllSites({}).subscribe(observer2);
+
 }
 
 
 function getGlobalData(req, res) {
     const sites = req.locals.sites;
+    const globalSites = req.locals.globalSites;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
 
@@ -199,6 +210,11 @@ function getGlobalData(req, res) {
     var idArray = [];
     for (var i=0; i<sites.length; i++) {
         idArray.push(sites[i].id);
+    }
+
+    var globalArray = [];
+    for (var i=0; i<globalSites.length; i++) {
+        globalArray.push(globalSites[i].id);
     }
 
     var onNext = (data) => {
@@ -217,26 +233,27 @@ function getGlobalData(req, res) {
         });
     };
 
+    console.log(globalArray);
+    console.log(idArray);
+
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getTotalVolume(idArray, beginDate, endDate, ["volume_total", "globalData"])
+    DashboardService.getTotalVolume(globalArray, beginDate, endDate, ["volume_total", "globalData"])
         .subscribe(observerQantity);
 
     var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getValorisationTotale(idArray, beginDate, endDate, ["valorisation_totale", "globalData"])
+    DashboardService.getValorisationTotale(globalArray, beginDate, endDate, ["valorisation_totale", "globalData"])
         .subscribe(observerRecycled);
 
     var observerQantityVerte = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getTotalVolumeVerte(idArray, beginDate, endDate, ["volume_l_verte", "globalData"])
+    DashboardService.getTotalVolumeVerte(globalArray, beginDate, endDate, ["volume_l_verte", "globalData"])
         .subscribe(observerQantityVerte);
 
     var observerRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getValorisationVerte(idArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
+    DashboardService.getValorisationVerte(globalArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
         .subscribe(observerRecycledVerte);
 
     var observerPrestataires = Rx.Observer.create(
         (data) => {
-            console.log("coucou");
-            console.log(data);
             result.prestataires = data;
         },
         onError,
@@ -247,10 +264,70 @@ function getGlobalData(req, res) {
 }
 
 
+function getDataForPrestataire(req, res) {
+
+    const sites = req.locals.sites;
+    const beginDate = req.locals.beginDate;
+    const endDate = req.locals.endDate;
+
+    var loops = 2;
+
+    var idArray = [];
+    var id = req.params.prestataireId;
+
+    var result = {};
+
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
+
+    var onNext = (label, data) => {
+        result[label] = data;
+    }
+
+    var onCompleted = () => {
+        loops -= 1;
+        if (loops == 0) {
+            res.json(result);
+        }
+    }
+
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            console.log(error);
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+
+    var observerQuantity = Rx.Observer.create((data) => onNext("quantity", data), onError, onCompleted);
+    prestataireService.getDechetsForPrestataire(id, idArray, 0, beginDate, endDate)
+        .subscribe(observerQuantity);
+
+    var observerRecycled = Rx.Observer.create((data) => onNext("recycled", data), onError, onCompleted);
+    prestataireService.getDechetsForPrestataire(id, idArray, 1, beginDate, endDate)
+        .subscribe(observerRecycled);
+
+}
 
 
 router.get('/prestataires/', verifyParameters);
 router.get('/prestataires/', getNecessarySites);
 router.get('/prestataires/', getGlobalData);
+
+router.get('/prestataires/:level/', verifyParameters);
+router.get('/prestataires/:level/', getNecessarySites);
+router.get('/prestataires/:level/', getGlobalData);
+
+router.get('/prestataires/:level/:prestataireId', verifyParameters);
+router.get('/prestataires/:level/:prestataireId', getNecessarySites);
+router.get('/prestataires/:level/:prestataireId', getDataForPrestataire);
+
+router.get('/prestataires/:level/:name', verifyParameters);
+router.get('/prestataires/:level/:name', getNecessarySites);
+router.get('/prestataires/:level/:name', getGlobalData);
+
+router.get('/prestataires/:level/:name/:prestataireId', verifyParameters);
+router.get('/prestataires/:level/:name/:prestataireId', getNecessarySites);
+router.get('/prestataires/:level/:name/:prestataireId', getDataForPrestataire);
 
 module.exports = router;
