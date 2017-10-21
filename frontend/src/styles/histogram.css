@@ -80,8 +80,9 @@
 
 .chosen-tag {
     display: inline-block;
-    background-color: #ffb74d;
-    border: 1px solid #ccc;
+    color: white;
+    background-color: #757575;
+    padding-top: 4px;
     border-radius: 4px;
     height: 34px;
     user-select: none;
