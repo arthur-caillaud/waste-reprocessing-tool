@@ -8,6 +8,7 @@ import SearchBar from './containers/searchbar.main.container';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
+import { Nav, NavItem } from 'react-bootstrap';
 
 import { Col, Row } from 'react-bootstrap';
 
@@ -31,27 +32,21 @@ class App extends Component {
       <div className="biggest-div">
         <BrowserRouter>
           <div>
-            <Row className="row-eq-height">
-              <Col sm={2} hidden={!this.state.navBar} className="navBar">
-                <Col sm={10}> <LateralMenu/> </Col>
-                <Col sm={2}>
-                  <Button bsStyle="primary" onClick={() => this.toggleNavBar()}>
-                     <Glyphicon glyph="menu-left"/>
-                  </Button>
-                </Col>
-              </Col>
-              <Col sm={1} hidden={this.state.navBar}>
-                <Button bsStyle="primary" onClick={() => this.toggleNavBar()}>
-                   <Glyphicon glyph="menu-right"/>
-                </Button>
-              </Col>
-              <Col sm={10}>
+              <Row className="navbar-container">
+                  <Nav bsStyle="tabs" activeKey="1" onSelect={this.handleSelect}>
+                      <NavItem eventKey="1" href="/">Dashboard</NavItem>
+                      <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
+                      <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
+                  </Nav>
                   <div className="searchbar-container" >
                       <SearchBar id="MainSearchBar"/>
                   </div>
-                  <MainRouter className="main-container" />
-              </Col>
-            </Row>
+              </Row>
+              <Row className="row-eq-height">
+                  <Col sm={12}>
+                      <MainRouter className="main-container" />
+                  </Col>
+              </Row>
           </div>
         </BrowserRouter>
       </div>

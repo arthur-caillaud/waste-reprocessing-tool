@@ -21,8 +21,9 @@ button {
 }
 
 .searchbar-container{
-
-    height: 10vh;
+    position: relative;
+    bottom: 0.5vh;
+    left: 3vw;
 }
 
 .main-app{
