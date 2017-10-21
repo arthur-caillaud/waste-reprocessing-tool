@@ -19,10 +19,12 @@ class SearchTreeElement extends Component {
             up_dependance,
             metier_dependance,
             id,
+            suggestions,
             onRenderMetierClickHandler,
             onRenderUpClickHandler,
             onRenderUniteClickHandler,
-            onRenderSiteClickHandler
+            onRenderSiteClickHandler,
+            updateMetier
         } = this.props;
 
         /*
@@ -35,7 +37,12 @@ class SearchTreeElement extends Component {
                                 onClick={onRenderMetierClickHandler}
                                 title={trimString(metier_dependance, 8, 'National')}
                                 key={1}>
-                                <MenuItem eventKey="1">Action</MenuItem>
+                                <MenuItem eventKey="SEI" onSelect={updateMetier}>SEI</MenuItem>
+                                <MenuItem eventKey="ENEDIS" onSelect={updateMetier}>ENEDIS</MenuItem>
+                                <MenuItem eventKey="DPN" onSelect={updateMetier}>DPN</MenuItem>
+                                <MenuItem eventKey="DPIH" onSelect={updateMetier}>DPIH</MenuItem>
+                                <MenuItem eventKey="DPIT" onSelect={updateMetier}>DPIT</MenuItem>
+                                <MenuItem eventKey="DIPNN" onSelect={updateMetier}>DIPNN</MenuItem>
                             </SplitButton>;
 
         var RenderUp = <SplitButton

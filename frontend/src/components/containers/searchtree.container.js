@@ -9,7 +9,8 @@ function mapStateToProps(state) {
         unite_dependance: state.updateSearchBar.site.architecture.unite_dependance,
         up_dependance: state.updateSearchBar.site.architecture.up_dependance,
         metier_dependance: state.updateSearchBar.site.architecture.metier_dependance,
-        id: state.updateSearchBar.site.id
+        id: state.updateSearchBar.site.id,
+        suggestions: state.updateSearchBar.site.suggestions
     }
 }
 
@@ -70,6 +71,19 @@ function mapDispatchToProps(dispatch) {
                 }
             ))
             dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.unite_dependance))
+        },
+        updateMetier:  (evt) => {
+            dispatch(apiCalls.updateSite({
+                nom: evt,
+                level: 1,
+                architecture: {
+                    nom: null,
+                    unite_dependance: null,
+                    up_dependance: null,
+                    metier_dependance: evt
+                }
+
+            }))
         }
     }
 

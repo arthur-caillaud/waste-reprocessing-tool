@@ -68,10 +68,16 @@ function getAllLevelNames(architecture) {
     return levelNames;
 }
 
-function getArchitectureFromSite(level, name) {
 
+function getMenuForMetiers() {
+    let menuMetier = [];
+    let architecture = window.store.getState().pageOptions.architecture;
+    console.log(architecture)
+    for(let metier in architecture) {
+        menuMetier.push(metier)
+    }
+    return menuMetier;
 }
-
 
 function filterByValue(array, value) {
 
@@ -106,7 +112,6 @@ function presentDataForNewSite(json) {
 
     //TO MODIFY WITH INTELLECT
     dataForLeftGauge.details = json[0].details
-    console.log(volume_total)
     if (!(volume_total == 0.0000)) {
 
         dataForLeftGauge.leftvalue = valorisation_l_verte*100/volume_total
@@ -142,7 +147,7 @@ function displayMiddleGaugeInfos() {
     }
 }
 
-HelperService.getArchitectureFromSite = getArchitectureFromSite;
+HelperService.getMenuForMetiers = getMenuForMetiers;
 HelperService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
 HelperService.displayLeftGaugeInfos = displayLeftGaugeInfos;
 HelperService.presentDataForNewSite = presentDataForNewSite;

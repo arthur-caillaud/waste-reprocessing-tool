@@ -5,10 +5,11 @@ import React from "react";
 import {
     CHANGE_SCALE,
     CHANGE_URL,
+
     REQUEST_SITE_CHANGE,
     CHANGE_GRAPH_INPUT,
     CHANGE_GRAPH_TYPE,
-
+    SAVE_ARCHITECTURE,
 
     DISPLAY_LEFTGAUGE_INFOS,
     DISPLAY_MIDDLEGAUGE_INFOS,
@@ -89,12 +90,14 @@ function graphOptions(state = {type: GraphTypes.HISTOGRAM_GRAPH, input: '', tags
     }
 }
 
-function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, lateralmenuIsVisible: true}, action){
+function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, lateralmenuIsVisible: true}, action){
     switch (action.type) {
         case CHANGE_URL:
             return Object.assign({}, state, {url: action.url});
         case CHANGE_SCALE:
             return Object.assign({}, state, {scale: action.scale});
+        case SAVE_ARCHITECTURE:
+            return Object.assign({}, state, {architecture: action.architecture});
         case TOGGLE_LATERALMENU:
             return Object.assign({}, state, {lateralmenuIsVisible: !state.lateralmenuIsVisible});
         default:
@@ -149,6 +152,12 @@ function updateSearchBar(
                 unite_dependance: null,
                 up_dependance: null,
                 metier_dependance: null
+            },
+            suggestions: {
+                nom: [],
+                unite_dependance: [],
+                up_dependance: [],
+                metier_dependance: []
             }
         }
     },

@@ -17,6 +17,7 @@ class DashboardElement extends Component {
 
    componentDidMount() {
        this.props.getNationalState();
+       this.props.getArchitecture();
    }
   render() {
     return (
@@ -77,7 +78,9 @@ const mapDispatchToProps = (dispatch) => {
                     }
                 }
             ))
-
+        },
+        getArchitecture: () => {
+            dispatch(apiCalls.getArchitecture())
         }
     }
 }
