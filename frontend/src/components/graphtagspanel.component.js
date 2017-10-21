@@ -22,7 +22,7 @@ class GraphTagsPanel extends Component {
     }
 
     searchInArray(array,value){
-        if(value !== '' && value == value.toString()){
+        if(value !== ''){
             const regEx = new RegExp(value.toString(),'i');
             let foundElementsArray = [];
             if(array){
@@ -59,12 +59,13 @@ class GraphTagsPanel extends Component {
         };
 
         let list = [];
-        if(suggestionArray){
-            suggestionArray.forEach(tag => {
+        let containerArray = (suggestionArray.length > 0) ? suggestionArray : inputArray;
+
+        if(containerArray){
+            containerArray.forEach(tag => {
                 const tagComponent = ( <ListGroupItem
-                    onClick={(e) => {alert(e.target);this.showTagsSearchContainer();
-                    }}>
-                        {tag}
+                    onClick={() => {onTagClick(tag.nom)}}>
+                        {tag.nom}
                     </ListGroupItem>)
                 list.push(tagComponent)
             })
@@ -74,7 +75,10 @@ class GraphTagsPanel extends Component {
         if(tagsArray){
             tagsArray.forEach(dechet => {
                 const dechetTag = (
-                    <div className="chosen-tag"><span>{dechet.nom}</span><Glyphicon glyph="remove" className="remove-tag-button" onClick={onRemove}/></div>
+                    <div className="chosen-tag">
+                        <span>{dechet}</span>
+                        <Glyphicon glyph="remove" className="remove-tag-button" onClick={() => onRemove(dechet)}/>
+                    </div>
                 )
                 chosenTags.push(dechetTag);
             })
@@ -97,8 +101,10 @@ class GraphTagsPanel extends Component {
                                 type="text"
                                 placeholder={this.props.searchPlaceholder}
                                 onChange={e => {
-                                    this.setState({searchInput: e.target.value});
-                                    this.setState({suggestion: this.searchInArray(inputArray, this.state.searchInput)});
+                                    this.setState({
+                                        searchInput: e.target.value,
+                                        suggestion: this.searchInArray(inputArray, e.target.value)
+                                    });
                                 }} />
                             <InputGroup.Addon>
                                 <Glyphicon glyph="search" />

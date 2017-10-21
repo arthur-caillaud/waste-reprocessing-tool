@@ -60,8 +60,8 @@ class Prestataire extends Component {
                      searchPlaceholder="Ajouter des déchets"
                      branchName="updatePrestataireGraphTagsPanel"
                      idInputPanel="dechet-tag-panel"
-                     onClickActionName="addDechetGraphTag"
-                     onRemoveActionName="removeDechetGraphTag"
+                     onClickActionName="addPrestataireGraphTag"
+                     onRemoveActionName="removePrestataireGraphTag"
                      onLoadActionName="loadDechetsConsideringChosenPrestataire"
                 />
               </Col>
