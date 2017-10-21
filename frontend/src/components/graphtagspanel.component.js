@@ -17,8 +17,10 @@ class GraphTagsPanel extends Component {
         this.setState({searchContainerClassName: "tags-search-container"});
     }
 
-    hideTagsSearchContainer(){
-        this.setState({searchContainerClassName: "tags-search-container hidden"});
+    hideTagsSearchContainer(e){
+        if(e.target.className !== "tag-container-element"){
+            this.setState({searchContainerClassName: "tags-search-container hidden"});
+        }
     }
 
     searchInArray(array,value){
@@ -64,7 +66,8 @@ class GraphTagsPanel extends Component {
         if(containerArray){
             containerArray.forEach(tag => {
                 const tagComponent = ( <ListGroupItem
-                    onClick={() => {onTagClick(tag.nom)}}>
+                    onClick={() => {onTagClick(tag.codeinterne)}}
+                    className="tag-container-element">
                         {tag.nom}
                     </ListGroupItem>)
                 list.push(tagComponent)
@@ -121,6 +124,7 @@ class GraphTagsPanel extends Component {
 
     componentDidMount() {
         this.props.onLoaded();
+        document.body.addEventListener('click', e => this.hideTagsSearchContainer(e));
     };
 }
 
