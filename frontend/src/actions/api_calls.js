@@ -40,6 +40,7 @@ export function updateSite(site) {
 /*
 API calls for Prestataire Vision
 */
+
 export function loadPrestataireList(){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
@@ -49,9 +50,24 @@ export function loadPrestataireList(){
     }
 }
 
+export function loadDechetsConsideringChosenPrestataire(){
+    return dispatch => {
+        dispatch(actions.loadDechetListBegin());
+        return fetch(config.backend.adress+'dechets')
+            .then(response => response.json())
+            .then(json => {
+                json.forEach(row => {
+                    row.nom = row.libelle;
+                })
+                dispatch(actions.updateDechetTagsInputArray(json));
+            });
+    }
+}
+
 /*
 API calls for Dechet Vision
 */
+
 export function loadDechetList(){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
@@ -63,5 +79,14 @@ export function loadDechetList(){
                 })
                 dispatch(actions.updateDechetList(json));
             });
+    }
+}
+
+export function loadPrestatairesConsideringChosenDechet(){
+    return dispatch => {
+        dispatch(actions.loadPrestataireListBegin());
+        return fetch(config.backend.adress+'prestataires')
+            .then(response => response.json())
+            .then(json => dispatch(actions.updatePrestataireTagsInputArray(json)));
     }
 }

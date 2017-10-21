@@ -34,6 +34,17 @@ import {
     CLEAR_DECHETS_SEARCHSUGGESTIONS,
     UPDATE_SELECTEDDECHET,
     UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
+
+    LOAD_PRESTATAIREGRAPH_TAGS_BEGIN,
+    ADD_DECHET_GRAPH_TAG,
+    REMOVE_DECHET_GRAPH_TAG,
+    UPDATE_DECHETTAGS_INPUTARRAY,
+
+    LOAD_DECHETGRAPH_TAGS_BEGIN,
+    ADD_PRESTATAIRE_GRAPH_TAG,
+    REMOVE_PRESTATAIRE_GRAPH_TAG,
+    UPDATE_PRESTATAIRETAGS_INPUTARRAY,
+
     GraphTypes
 } from '../actions'
 
@@ -228,6 +239,64 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
     }
 }
 
+function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoading: false}, action){
+    switch (action.type) {
+        case LOAD_PRESTATAIREGRAPH_TAGS_BEGIN:
+            return Object({}, state, {
+                isLoading: true
+            })
+        case ADD_DECHET_GRAPH_TAG:
+            return Object.assign({}, state, {
+                tagsArray: [...state.tagsArray, action.dechetTag]
+            });
+        case REMOVE_DECHET_GRAPH_TAG:
+            let newTagsArray = []
+            state.tagsArray.forEach(tag => {
+                if(tag !== "action.dechetTag"){
+                    newTagsArray.push(tag);
+                }
+            });
+            return Object.assign({}, state, {
+                tagsArray: newTagsArray
+            });
+        case UPDATE_DECHETTAGS_INPUTARRAY:
+            return Object.assign({}, state, {
+                inputArray: action.inputArray
+            })
+        default:
+            return state;
+    }
+}
+
+function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoading: false}, action){
+    switch (action.type) {
+        case LOAD_DECHETGRAPH_TAGS_BEGIN:
+            return Object({}, state, {
+                isLoading: true
+            })
+        case ADD_PRESTATAIRE_GRAPH_TAG:
+            return Object.assign({}, state, {
+                tagsArray: [...state.tagsArray, action.dechetTag]
+            });
+        case REMOVE_PRESTATAIRE_GRAPH_TAG:
+            let newTagsArray = []
+            state.tagsArray.forEach(tag => {
+                if(tag !== "action.dechetTag"){
+                    newTagsArray.push(tag);
+                }
+            });
+            return Object.assign({}, state, {
+                tagsArray: newTagsArray
+            })
+        case UPDATE_PRESTATAIRETAGS_INPUTARRAY:
+            return Object.assign({}, state, {
+                inputArray: action.inputArray
+            })
+        default:
+            return state;
+    }
+}
+
 const akkaApp = combineReducers({
     pageOptions,
     graphOptions,
@@ -235,7 +304,9 @@ const akkaApp = combineReducers({
     updateGauge,
     updateSearchBar,
     updatePrestataireSelectionPanel,
-    updateDechetSelectionPanel
+    updateDechetSelectionPanel,
+    updatePrestataireGraphTagsPanel,
+    updateDechetGraphTagsPanel
 })
 
 export default akkaApp

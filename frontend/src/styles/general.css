@@ -1,3 +1,7 @@
+#root {
+    background-color: rgb(250,250,250);
+}
+
 button {
     outline-width: 0px;
 }
@@ -17,8 +21,9 @@ button {
 }
 
 .searchbar-container{
-
-    height: 10vh;
+    position: relative;
+    bottom: 0.5vh;
+    left: 3vw;
 }
 
 .main-app{
@@ -30,4 +35,12 @@ button {
     height: 100%;
     width: 100%;
     overflow: auto;
+}
+
+div.no-left-padding{
+    padding-left: 0;
+}
+
+div.no-right-padding{
+    padding-right: 0;
 }

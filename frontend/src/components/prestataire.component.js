@@ -8,6 +8,7 @@ import { array } from '../utilities/text-generator.component';
 //import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
+import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 
 class Prestataire extends Component {
   render() {
@@ -54,13 +55,15 @@ class Prestataire extends Component {
                       values: [30,40,33]
                   }]}/>
               </Col>
-              <Col sm={4}>
-                <div>
-                  Searchbar
-                </div>
-              </Col>
-              <Col sm={8}>
-                Fouzy les tags ici
+              <Col sm={9} smOffset={3}>
+                 <GraphTagsPanel
+                     searchPlaceholder="Ajouter des déchets"
+                     branchName="updatePrestataireGraphTagsPanel"
+                     idInputPanel="dechet-tag-panel"
+                     onClickActionName="addDechetGraphTag"
+                     onRemoveActionName="removeDechetGraphTag"
+                     onLoadActionName="loadDechetsConsideringChosenPrestataire"
+                />
               </Col>
             </Row>
           </Grid>

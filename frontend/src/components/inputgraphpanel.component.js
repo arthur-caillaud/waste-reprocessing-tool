@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
-import CircularProgress from 'material-ui/CircularProgress';
 
 //import searchComponent
 
@@ -47,11 +46,6 @@ class InputGraphPanel extends Component {
                     list.push(listItem);
                 }
             });
-        }
-        console.log(isLoading);
-        if(isLoading){
-            console.log("Waiting for response")
-            list = ["Is Loading..."];
         }
 
         return (

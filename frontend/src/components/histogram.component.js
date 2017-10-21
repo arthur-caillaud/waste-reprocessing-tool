@@ -242,7 +242,7 @@ class Histogram extends Component {
     };
 
     componentDidMount() {
-        this.__initHistogram(this.valuesArray);
+        window.addEventListener("resize", this.__initHistogram(this.valuesArray));
     };
 
     componentDidUpdate() {
