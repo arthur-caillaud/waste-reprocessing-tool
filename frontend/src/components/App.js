@@ -33,7 +33,7 @@ class App extends Component {
         <BrowserRouter>
           <div>
               <Row className="navbar-container">
-                  <Nav bsStyle="tabs" activeKey="1" onSelect={this.handleSelect}>
+                  <Nav bsStyle="tabs" justified activeKey="1" onSelect={this.handleSelect}>
                       <NavItem eventKey="1" href="/">Dashboard</NavItem>
                       <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
                       <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
