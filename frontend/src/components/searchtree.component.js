@@ -24,8 +24,13 @@ class SearchTreeElement extends Component {
             onRenderUpClickHandler,
             onRenderUniteClickHandler,
             onRenderSiteClickHandler,
-            updateMetier
+            updateMetier,
+            updateUp,
+            updateUnite,
+            updateSite
         } = this.props;
+
+
 
         /*
         Clicking on the dropdown arrow should display a list of items.
@@ -51,7 +56,9 @@ class SearchTreeElement extends Component {
                             onClick={onRenderUpClickHandler}
                             title={trimString(up_dependance, 8, 'Choix Up')}
                             key={2}>
-                            <MenuItem eventKey="1">Action</MenuItem>
+                            {suggestions.up_dependance.map(function(name){
+                                return <MenuItem eventKey={name} onSelect={updateUp}>{name}</MenuItem>
+                            })}
                         </SplitButton>;
 
         var RenderUnite = <SplitButton
@@ -60,7 +67,9 @@ class SearchTreeElement extends Component {
                                 onClick={onRenderUniteClickHandler}
                                 title={trimString(unite_dependance, 8, 'ChxUnite')}
                                 key={3}>
-                                <MenuItem eventKey="1">Action</MenuItem>
+                                {suggestions.unite_dependance.map(function(name){
+                                    return <MenuItem eventKey={name} onSelect={updateUnite}>{name}</MenuItem>
+                                })}
                             </SplitButton>;
 
         var RenderSite = <SplitButton
@@ -69,7 +78,9 @@ class SearchTreeElement extends Component {
                             onClick={onRenderSiteClickHandler}
                             title={trimString(site, 8, 'Nom Site')}
                             key={4}>
-                            <MenuItem eventKey="1">Action</MenuItem>
+                            {suggestions.nom.map(function(name){
+                                return <MenuItem eventKey={name} onSelect={updateSite}>{name}</MenuItem>
+                            })}
                         </SplitButton>;
 
         //We define different renders to display things accordingly

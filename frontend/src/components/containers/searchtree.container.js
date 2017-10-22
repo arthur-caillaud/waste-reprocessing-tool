@@ -5,7 +5,7 @@ import SearchTreeElement from '../searchtree.component'
 
 function mapStateToProps(state) {
     return {
-        site: state.updateSearchBar.site.architecture.site,
+        site: state.updateSearchBar.site.architecture.nom,
         unite_dependance: state.updateSearchBar.site.architecture.unite_dependance,
         up_dependance: state.updateSearchBar.site.architecture.up_dependance,
         metier_dependance: state.updateSearchBar.site.architecture.metier_dependance,
@@ -84,7 +84,46 @@ function mapDispatchToProps(dispatch) {
                 }
 
             }))
-        }
+        },
+        updateUp: (evt) => {
+            dispatch(apiCalls.updateSite({
+                nom: evt,
+                level: 2,
+                architecture: {
+                    nom: null,
+                    unite_dependance: null,
+                    up_dependance: evt,
+                    metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                }
+
+            }))
+        },
+        updateUnite: (evt) => {
+            dispatch(apiCalls.updateSite({
+                nom: evt,
+                level: 3,
+                architecture: {
+                    nom: null,
+                    unite_dependance: evt,
+                    up_dependance: window.store.getState().updateSearchBar.site.architecture.up_dependance,
+                    metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                }
+
+            }))
+        },
+        updateSite: (evt) => {
+            dispatch(apiCalls.updateSite({
+                nom: evt,
+                level: 4,
+                architecture: {
+                    nom: evt,
+                    unite_dependance: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
+                    up_dependance: window.store.getState().updateSearchBar.site.architecture.up_dependance,
+                    metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                }
+
+            }))
+        },
     }
 
 }

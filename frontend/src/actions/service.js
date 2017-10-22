@@ -72,12 +72,71 @@ function getAllLevelNames(architecture) {
 function getMenuForMetiers() {
     let menuMetier = [];
     let architecture = window.store.getState().pageOptions.architecture;
-    console.log(architecture)
+
     for(let metier in architecture) {
         menuMetier.push(metier)
     }
     return menuMetier;
 }
+function getMenuForUp(site) {
+    let menuUp = [];
+    let architecture = window.store.getState().pageOptions.architecture;
+
+    let entries = Object.entries(architecture)
+    entries.forEach(function(element) {
+        if (element[0] == site.architecture.metier_dependance) {
+
+            for (let up in element[1]) {
+                menuUp.push(up)
+            }
+        }
+
+    })
+
+    return menuUp
+}
+
+function getMenuForUnite(site) {
+    let menuUnite = []
+    let entries = Object.entries(window.store.getState().pageOptions.architecture)
+    entries.forEach(function(element) {
+        if (element[0] == site.architecture.metier_dependance) {
+            let entries2 = Object.entries(element[1])
+            entries2.forEach(function(element2) {
+                if (element2[0] == site.architecture.up_dependance) {
+                    for (let unite in element2[1]) {
+                        menuUnite.push(unite)
+                    }
+                }
+            })
+        }
+    })
+    return menuUnite
+}
+
+function getMenuForSite(site) {
+    let menuSite = []
+    let entries = Object.entries(window.store.getState().pageOptions.architecture)
+    entries.forEach(function(element) {
+        if (element[0] == site.architecture.metier_dependance) {
+            let entries2 = Object.entries(element[1])
+            entries2.forEach(function(element2) {
+                if (element2[0] == site.architecture.up_dependance) {
+                    let entries3 = Object.entries(element2[1])
+                    entries3.forEach(function(element3) {
+                        if (element3[0] == site.architecture.unite_dependance) {
+                            for (let site in element3[1]) {
+                                menuSite.push(site)
+                            }
+                        }
+                    })
+                }
+            })
+        }
+    })
+    return menuSite
+}
+
 
 function filterByValue(array, value) {
 
@@ -148,6 +207,9 @@ function displayMiddleGaugeInfos() {
 }
 
 HelperService.getMenuForMetiers = getMenuForMetiers;
+HelperService.getMenuForUp = getMenuForUp;
+HelperService.getMenuForUnite = getMenuForUnite;
+HelperService.getMenuForSite = getMenuForSite;
 HelperService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
 HelperService.displayLeftGaugeInfos = displayLeftGaugeInfos;
 HelperService.presentDataForNewSite = presentDataForNewSite;
