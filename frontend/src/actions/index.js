@@ -4,7 +4,7 @@
 export const CHANGE_SCALE = 'CHANGE_SCALE';
 export const CHANGE_URL = 'CHANGE_URL';
 export const SAVE_ARCHITECTURE = 'SAVE_ARCHITECTURE';
-export const REQUEST_SITE_CHANGE = 'REQUEST_SITE_CHANGE'; //This is the action triggered when the site is changed in the navbar.
+
 
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
@@ -57,12 +57,6 @@ export function saveArchitecture(architecture) {
     }
 }
 
-export function requestSiteChange(newSite) {
-    return {
-        type: REQUEST_SITE_CHANGE,
-        newSite
-    }
-}
 
 export function changePage(url){
     return {

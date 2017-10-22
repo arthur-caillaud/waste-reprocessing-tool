@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import Tile from '../tile.component';
+import TileElement from '../tile.component';
 
 
 
@@ -16,9 +16,9 @@ const mapDispatchToProps = dispatch => {
   }
 
 
-const ReduxTile = connect(
+const MiddleLeftTile = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Tile)
+)(TileElement)
 
-export default ReduxTile
+export default MiddleLeftTile

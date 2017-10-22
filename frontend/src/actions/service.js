@@ -78,13 +78,14 @@ function getMenuForMetiers() {
     }
     return menuMetier;
 }
+
 function getMenuForUp(site) {
     let menuUp = [];
     let architecture = window.store.getState().pageOptions.architecture;
 
     let entries = Object.entries(architecture)
     entries.forEach(function(element) {
-        if (element[0] == site.architecture.metier_dependance) {
+        if (element[0] === site.architecture.metier_dependance) {
 
             for (let up in element[1]) {
                 menuUp.push(up)
@@ -100,10 +101,10 @@ function getMenuForUnite(site) {
     let menuUnite = []
     let entries = Object.entries(window.store.getState().pageOptions.architecture)
     entries.forEach(function(element) {
-        if (element[0] == site.architecture.metier_dependance) {
+        if (element[0] === site.architecture.metier_dependance) {
             let entries2 = Object.entries(element[1])
             entries2.forEach(function(element2) {
-                if (element2[0] == site.architecture.up_dependance) {
+                if (element2[0] === site.architecture.up_dependance) {
                     for (let unite in element2[1]) {
                         menuUnite.push(unite)
                     }
@@ -118,13 +119,13 @@ function getMenuForSite(site) {
     let menuSite = []
     let entries = Object.entries(window.store.getState().pageOptions.architecture)
     entries.forEach(function(element) {
-        if (element[0] == site.architecture.metier_dependance) {
+        if (element[0] === site.architecture.metier_dependance) {
             let entries2 = Object.entries(element[1])
             entries2.forEach(function(element2) {
-                if (element2[0] == site.architecture.up_dependance) {
+                if (element2[0] === site.architecture.up_dependance) {
                     let entries3 = Object.entries(element2[1])
                     entries3.forEach(function(element3) {
-                        if (element3[0] == site.architecture.unite_dependance) {
+                        if (element3[0] === site.architecture.unite_dependance) {
                             for (let site in element3[1]) {
                                 menuSite.push(site)
                             }
@@ -157,7 +158,7 @@ function presentDataForNewSite(json) {
     let volume_total = 0.0000;
     let valorisation_l_verte = 0.0000;
     let valorisation_totale = 0.0000;
-
+    console.log(json)
     json.forEach(function(element) {
 
         volume_total += parseFloat(element.volume_total)

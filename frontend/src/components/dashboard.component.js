@@ -8,8 +8,11 @@ import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
 import RightGauge from './rightgauge.component';
 import Info from './info.component';
-import MoreInfosContainer from './containers/moreinfos.container'
-import Tile from './containers/tile.container';
+import MoreInfosContainer from './containers/moreinfos.container';
+import LeftTile from './containers/lefttile.container';
+import RightTile from './containers/righttile.container';
+import MiddleRightTile from './containers/middlerighttile.container';
+import MiddleLeftTile from './containers/middlelefttile.container';
 
 import '../styles/general.css';
 
@@ -37,17 +40,17 @@ class DashboardElement extends Component {
             <Row className="show-grid">
               <Col sm={9}>
                 <Row>
-                  <Col sm={3}> <Tile id="dashboard-tile1" title="Ecarts de pesée relevés" value="6" isGrowing={true} /> </Col>
-                  <Col sm={3}> <Tile id="dashboard-tile2" title="Incohérences filières" value="7" isGrowing={true} notifValue="2"/> </Col>
-                  <Col sm={3}> <Tile id="dashboard-tile3" title="Bordereaux de retour en retard" value="11" isGrowing={false} notifValue="4"/> </Col>
-                  <Col sm={3}> <Tile id="dashboard-tile4" title="Bordereaux en filière interdite" value="4" isGrowing={true}/> </Col>
+                  <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
+                  <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
+                  <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
+                  <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
                 </Row>
-                <Row className="show-grid">
+                {/* <Row className="show-grid">
                   <Col sm={3}> <Tile id="dashboard-tile5" title="Prestataire perf" value="+30%" isGrowing={true}/> </Col>
                   <Col sm={3}> <Tile id="dashboard-tile6" title="Prestataire perf" value="+20%" isGrowing={false}/> </Col>
                   <Col sm={3}> <Tile id="dashboard-tile7" title="Prestataire perf" value="-10%" isGrowing={false}/> </Col>
                   <Col sm={3}> <Tile id="dashboard-tile8" title="Prestataire perf" value="+5%" isGrowing={false}/> </Col>
-                </Row>
+                </Row> */}
               </Col>
               <Col sm={3}  className="show-more-infos" > <MoreInfosContainer/> </Col>
             </Row>

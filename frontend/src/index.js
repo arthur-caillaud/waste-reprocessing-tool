@@ -4,13 +4,11 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import { createLogger } from 'redux-logger';
 import akkaApp from './reducers/index.js';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const loggerMiddleware = createLogger();
 window.store = createStore(akkaApp, composeEnhancers(applyMiddleware(thunkMiddleware)));
 
 render((

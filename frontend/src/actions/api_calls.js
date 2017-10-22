@@ -53,9 +53,11 @@ export function updateSite(site) {
                 let newValues = HelperService.presentDataForNewSite(json)
                 let leftValues = newValues.dataForLeftGauge;
                 let middleValues = newValues.dataForMiddleGauge;
+                //let leftTileValues = newValues.dataForLeftTile;
 
                 dispatch(actions.updateLeftGauge(leftValues))
                 dispatch(actions.updateMiddleGauge(middleValues))
+                //dispatch(actions.updateLeftTile(leftTileValues))
                 dispatch(actions.resetMoreInfosToDefault())
 
             })
