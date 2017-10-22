@@ -12,11 +12,6 @@ import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 class Dechet extends Component {
 
   render() {
-    var i = 0;
-    var list = [];
-    for (i=0; i<array.length; i++) {
-      list.push(<ListGroupItem>{array[i]}</ListGroupItem>);
-    }
 
     return (
       <div>
@@ -33,8 +28,7 @@ class Dechet extends Component {
                         searchPlaceholder="Rechercher un déchet"
                     />
                 </Col>
-              <Col sm={9}>
-                <Row>
+                <Col sm={9}>
                     <Histogram title="EMBALLAGE PAPIER-CARTON" id="dechet-hist" values={[{
                         title: 'Taux de valorisation global',
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
@@ -56,20 +50,19 @@ class Dechet extends Component {
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
                         values: [30,40,33]
                     }]}/>
-                </Row>
-              </Col>
-              <Col sm={9} smOffset={3}>
-                 <GraphTagsPanel
-                     searchPlaceholder="Ajouter des prestataires"
-                     branchName="updateDechetGraphTagsPanel"
-                     idInputPanel="prestataire-tag-panel"
-                     onClickActionName="addDechetGraphTag"
-                     onRemoveActionName="removeDechetGraphTag"
-                     onLoadActionName="loadPrestatairesConsideringChosenDechet"
-                />
-              </Col>
+                </Col>
+                <Col sm={9} smOffset={3}>
+                     <GraphTagsPanel
+                         searchPlaceholder="Ajouter des prestataires pour ce déchet"
+                         branchName="updateDechetGraphTagsPanel"
+                         idInputPanel="prestataire-tag-panel"
+                         onClickActionName="addDechetGraphTag"
+                         onRemoveActionName="removeDechetGraphTag"
+                         onLoadActionName="loadPrestatairesConsideringChosenDechet"
+                    />
+                </Col>
             </Row>
-          </Grid>
+        </Grid>
         </div>
     </div>
     );

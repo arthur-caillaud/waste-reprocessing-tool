@@ -276,12 +276,12 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
             })
         case ADD_DECHET_GRAPH_TAG:
             return Object.assign({}, state, {
-                tagsArray: [...state.tagsArray, action.dechetTag]
+                tagsArray: [...state.tagsArray, action.prestataireTag]
             });
         case REMOVE_DECHET_GRAPH_TAG:
             let newTagsArray = []
             state.tagsArray.forEach(tag => {
-                if(tag !== "action.dechetTag"){
+                if(tag !== action.prestataireTag){
                     newTagsArray.push(tag);
                 }
             });
@@ -289,8 +289,11 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
                 tagsArray: newTagsArray
             })
         case UPDATE_PRESTATAIRETAGS_INPUTARRAY:
+            const newInputArray = action.inputArray.map(prestataire => {
+                return Object.assign({},prestataire,{codeinterne: prestataire.id});
+            });
             return Object.assign({}, state, {
-                inputArray: action.inputArray
+                inputArray: newInputArray
             })
         default:
             return state;

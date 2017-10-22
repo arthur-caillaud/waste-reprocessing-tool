@@ -5,18 +5,13 @@ import { Button } from 'react-bootstrap';
 
 import { array } from '../utilities/text-generator.component';
 
-//import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 
 class Prestataire extends Component {
+
   render() {
-    var i = 0;
-    var list = [];
-    for (i=0; i<array.length; i++) {
-      list.push(<ListGroupItem>{array[i]}</ListGroupItem>);
-    }
 
     return (
       <div>
@@ -57,7 +52,7 @@ class Prestataire extends Component {
               </Col>
               <Col sm={9} smOffset={3}>
                  <GraphTagsPanel
-                     searchPlaceholder="Ajouter des déchets"
+                     searchPlaceholder="Ajouter des déchets pour ce prestataire"
                      branchName="updatePrestataireGraphTagsPanel"
                      idInputPanel="dechet-tag-panel"
                      onClickActionName="addPrestataireGraphTag"
