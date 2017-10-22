@@ -22,34 +22,46 @@ class App extends Component {
     }
   }
 
-  toggleNavBar() {
-    var navBar = this.state.navBar;
-    this.setState({navBar: !navBar});
-  }
-
   render() {
-    return (
-      <div className="biggest-div">
-        <BrowserRouter>
-          <div>
-              <Row className="navbar-container">
-                  <Nav bsStyle="tabs" justified activeKey="1" onSelect={this.handleSelect}>
-                      <NavItem eventKey="1" href="/">Dashboard</NavItem>
-                      <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
-                      <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
-                  </Nav>
-                  <div className="searchbar-container" >
-                      <SearchBar id="MainSearchBar"/>
+
+      const location = window.location.href;
+      const currentPage = location.split('/')[3];
+      let activeKey = "1"
+      console.log("location", location);
+      console.log("currentPage", currentPage);
+      if (currentPage === "") {
+          activeKey = "1";
+      }
+      else if(currentPage === "prestataire"){
+          activeKey = "2";
+      }
+      else if(currentPage === "dechet"){
+          activeKey = "3";
+      }
+      console.log("activeKey",activeKey);
+
+      return (
+          <div className="biggest-div">
+              <BrowserRouter>
+                  <div>
+                      <Row className="navbar-container">
+                          <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
+                              <NavItem eventKey="1" href="/">Dashboard</NavItem>
+                              <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
+                              <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
+                          </Nav>
+                          <div className="searchbar-container" >
+                              <SearchBar id="MainSearchBar"/>
+                          </div>
+                      </Row>
+                      <Row className="row-eq-height">
+                          <Col sm={12}>
+                              <MainRouter className="main-container" />
+                          </Col>
+                      </Row>
                   </div>
-              </Row>
-              <Row className="row-eq-height">
-                  <Col sm={12}>
-                      <MainRouter className="main-container" />
-                  </Col>
-              </Row>
+              </BrowserRouter>
           </div>
-        </BrowserRouter>
-      </div>
   )
   }
 }
