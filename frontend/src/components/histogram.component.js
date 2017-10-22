@@ -106,7 +106,7 @@ class Histogram extends Component {
         .rangeRound([height, 0]);
 
         let z = d3.scaleOrdinal()
-        .range(["#6FD96C", "#9CE371", "#B3CC70", "#E3E071", "#D9CB6C", "#43E8B0", "#49FF8E"]);
+        .range(["first-rect", "second-rect", "third-rect"]);
 
         let bundleLabels = data.map(bundle => {
             return bundle.title;
@@ -145,7 +145,7 @@ class Histogram extends Component {
             .attr("y", function(d) { return y(d.value); })
             .attr("width", x1.bandwidth())
             .attr("height", function(d) { return height - y(d.value); })
-            .attr("fill", function(d) { return z(d.key); })
+            .attr("class", function(d) { return z(d.key); })
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide);
 
@@ -179,7 +179,7 @@ class Histogram extends Component {
             .attr("x", width - 19)
             .attr("width", 19)
             .attr("height", 19)
-            .attr("fill", z);
+            .attr("class", z);
 
         legend.append("text")
             .attr("x", width - 24)

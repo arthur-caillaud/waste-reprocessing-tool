@@ -20,9 +20,28 @@
     height: 100%;
 }
 
-.hist-bar:hover{
-    border: 10px solid black;
+.first-rect{
+    fill: #66bb6a;
+}
 
+.first-rect:hover{
+    fill: #4caf50;
+}
+
+.second-rect{
+    fill: #ffeb3b;
+}
+
+.second-rect:hover{
+    fill: #fdd835
+}
+
+.third-rect{
+    fill: #ff9800;
+}
+
+.third-rect:hover{
+    fill: #fb8c00;
 }
 
 .d3-tip {
@@ -82,7 +101,7 @@
     display: inline-block;
     color: white;
     background-color: #757575;
-    padding-top: 4px;
+    padding-top: 4 px;
     border-radius: 4px;
     height: 34px;
     user-select: none;
