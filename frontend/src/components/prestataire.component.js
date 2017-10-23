@@ -31,45 +31,47 @@ class Prestataire extends Component {
                 <Histogram title="VEOLIA" id="prestataire-hist" values={[{
                       title: 'Taux de valorisation global',
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                      values: [78,82,73]
+                      values: [78,82,73],
+                      volumes: [230,4839,1020]
                   },{
                       title: 'Fer et acier',
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                      values: [54,65,43]
+                      values: [54,65,43],
+                      volumes: [230,4839,1020]
                   },{
                       title: 'Carton',
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                      values: [90,95,86]
+                      values: [90,95,86],
+                      volumes: [230,4839,1020]
                   },{
                       title: "Aluminium",
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                      values: [10,65,90]
+                      values: [10,65,90],
+                      volumes: [230,4839,1020]
                   },{
                       title: "Déchets dangereux",
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                      values: [30,40,33]
+                      values: [30,40,33],
+                      volumes: [230,4839,1020]
                   }]}/>
               </Col>
-
+              <Col sm={9} smOffset={3}>
+                 <GraphTagsPanel
+                     searchPlaceholder="Ajouter des déchets pour ce prestataire"
+                     branchName="updatePrestataireGraphTagsPanel"
+                     idInputPanel="dechet-tag-panel"
+                     onClickActionName="addPrestataireGraphTag"
+                     onRemoveActionName="removePrestataireGraphTag"
+                     onLoadActionName="loadDechetsConsideringChosenPrestataire"
+                     inputGraphPanelBranch="updatePrestataireSelectionPanel"
+                     defaultOnLoadActionName="loadDechetList"
+                />
+              </Col>
             </Row>
           </Grid>
     </div>
     );
   }
 }
-
-/*
-<Col sm={9} smOffset={3}>
-   <GraphTagsPanel
-       searchPlaceholder="Ajouter des déchets pour ce prestataire"
-       branchName="updatePrestataireGraphTagsPanel"
-       idInputPanel="dechet-tag-panel"
-       onClickActionName="addPrestataireGraphTag"
-       onRemoveActionName="removePrestataireGraphTag"
-       onLoadActionName="loadDechetsConsideringChosenPrestataire"
-       inputGraphPanelBranch="updatePrestataireSelectionPanel"
-       defaultOnLoadActionName="loadDechetList"
-  />
-</Col>*/
 
 export default Prestataire;

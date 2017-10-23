@@ -26,32 +26,7 @@ class Histogram extends Component {
     // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
     // each object in valuesArray is stack of N columns labelled with Object.title
     graphTitle = this.props.title;
-    valuesArray = [{
-        title: 'Taux de valorisation global',
-        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [46,98,20],
-        volumes: [760,2810,1120]
-    },{
-        title: 'Fer et acier',
-        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [51,72,65],
-        volumes: [760,2810,1120]
-    },{
-        title: 'Carton',
-        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [80,91,82],
-        volumes: [760,2810,1120]
-    },{
-        title: "Aluminium",
-        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [40,65,70],
-        volumes: [760,2810,1120]
-    },{
-        title: "Déchets dangereux",
-        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [60,52,23],
-        volumes: [760,2810,1120]
-    }];
+    valuesArray = this.props.values;
 
     toNullArray(valuesArray){
         return valuesArray.map(bundle => {
