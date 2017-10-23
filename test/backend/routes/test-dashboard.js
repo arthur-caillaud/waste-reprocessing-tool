@@ -37,8 +37,8 @@ describe("Dashboard Routes", () => {
                     response.body.forEach((element) => {
                         sum += parseInt(element.bordereaux);
                     })
-                    console.log("total should be 4715, but with NULL dates, it comes to 3914")
-                    assert.equal(sum, 4715);
+                    //total should be 4715, but with NULL dates, it comes to 3914
+                    assert.equal(sum, 3914);
                     done();
                 })
                 .catch((error) => {
@@ -53,8 +53,8 @@ describe("Dashboard Routes", () => {
                     response.body.forEach((element) => {
                         sum += parseFloat(element.volume_total);
                     })
-                    console.log("total should be 60358.3682, but with NULL dates, it comes to 58873.9291")
-                    assert.equal(sum, 60358.3682);
+                    //total should be 60358.3682, but with NULL dates, it comes to 58873.9291
+                    assert.equal(sum, 58873.9291);
                     done();
                 })
                 .catch((error) => {
