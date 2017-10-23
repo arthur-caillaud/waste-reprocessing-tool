@@ -5,13 +5,15 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import {persistStore, autoRehydrate } from 'redux-persist';
+import {REHYDRATE} from 'redux-persist/constants'
+import createActionBuffer from 'redux-action-buffer';
 import akkaApp from './reducers/index.js';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-window.store = composeEnhancers(applyMiddleware(thunkMiddleware), autoRehydrate())(createStore)(akkaApp)
-
+window.store = composeEnhancers(autoRehydrate(), applyMiddleware(thunkMiddleware, createActionBuffer(REHYDRATE)))(createStore)(akkaApp)
+persistStore(window.store)
 render((
 
     <Provider store={window.store}>

@@ -24,8 +24,8 @@ class InputGraphPanel extends Component {
         const isLoading = this.props.isLoading;
         const localisationLevel = this.props.localisationLevel;
         const localisationName = this.props.localisationName;
-        
-        this.props.onLoaded(localisationLevel,localisationName);
+
+        //this.props.onLoaded(localisationLevel,localisationName);
 
         function handleNoResultsFound(){
             if(input && input.length > 0){

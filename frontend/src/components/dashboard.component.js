@@ -17,7 +17,7 @@ import '../styles/general.css';
 
 class Dashboard extends Component {
 componentDidMount(){
-    persistStore(window.store).purge()
+
 }
 
   render() {
