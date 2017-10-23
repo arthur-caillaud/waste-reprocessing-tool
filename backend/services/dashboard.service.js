@@ -147,7 +147,7 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
                     }
                 }],
             where: {
-                traitement: sequelize.where(sequelize.col('traitement.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
+                traitement: sequelize.where(sequelize.col('traitementFinal.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
                 id_site: {$in: idArray}
             }
         }).

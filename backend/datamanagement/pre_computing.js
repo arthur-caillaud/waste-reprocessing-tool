@@ -279,8 +279,8 @@ function preCompute() {
     var currentYear = date.getFullYear();
 
     // DEPRECATED: used to specify earlier last date for testing purposes
-    currentMonth = 1;
-    currentYear = 2017;
+    // currentMonth = 1;
+    // currentYear = 2017;
 
     let year;
     let month;

@@ -15,7 +15,8 @@
         "password": "password",
         "database": "db_test",
         "host": "91.134.242.69",
-        "dialect": "mysql"
+        "dialect": "mysql",
+        "logging": false
     },
     "production": {
         "username": "root",
@@ -48,6 +49,7 @@
         "password": "password",
         "database": "db_test",
         "host": "91.134.242.69",
-        "dialect": "mysql"
+        "dialect": "mysql",
+        "logging": false
     }
 }
