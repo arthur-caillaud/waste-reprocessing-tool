@@ -28,14 +28,16 @@ class DashboardElement extends Component {
         <div>
           <Grid fluid>
             <Row className="show-grid">
-
-              <Col sm={3}> <LeftGauge/> </Col>
-              <Col sm={3}> <MiddleGauge/> </Col>
-              <Col sm={3}> <RightGauge/> </Col>
-
+                <Col sm={9}>
+                    <Row>
+                        <Col sm={3}> <LeftGauge/> </Col>
+                        <Col sm={3}> <MiddleGauge/> </Col>
+                        <Col sm={3}> <RightGauge/> </Col>
+                        <Col sm={3}> <Info paragraphs="1"/></Col>
+                    </Row>
+                </Col>
               <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>
-
 
             <Row className="show-grid">
               <Col sm={9}>
@@ -45,16 +47,9 @@ class DashboardElement extends Component {
                   <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
                   <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
                 </Row>
-                {/* <Row className="show-grid">
-                  <Col sm={3}> <Tile id="dashboard-tile5" title="Prestataire perf" value="+30%" isGrowing={true}/> </Col>
-                  <Col sm={3}> <Tile id="dashboard-tile6" title="Prestataire perf" value="+20%" isGrowing={false}/> </Col>
-                  <Col sm={3}> <Tile id="dashboard-tile7" title="Prestataire perf" value="-10%" isGrowing={false}/> </Col>
-                  <Col sm={3}> <Tile id="dashboard-tile8" title="Prestataire perf" value="+5%" isGrowing={false}/> </Col>
-                </Row> */}
               </Col>
               <Col sm={3}  className="show-more-infos" > <MoreInfosContainer/> </Col>
             </Row>
-
           </Grid>
         </div>
     </div>
