@@ -187,8 +187,6 @@ function presentDataForNewSite(json) {
     let dataForMiddleRightTile = {};
     let dataForRightTile = {};
 
-    //TO MODIFY WITH INTELLECT
-    dataForLeftGauge.details = json[0].details;
 
     dataForLeftTile.ecarts_pesee = ecarts_pesee;
     dataForRightTile.incoherences_filieres_dd = incoherences_filieres_dd;
