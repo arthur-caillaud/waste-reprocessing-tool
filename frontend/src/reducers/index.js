@@ -16,6 +16,10 @@ import {
 
     CHANGE_LEFTGAUGE_INPUT,
     CHANGE_MIDDLEGAUGE_INPUT,
+    CHANGE_LEFTTILE_INPUT,
+    CHANGE_RIGHTTILE_INPUT,
+    CHANGE_MIDDLELEFTTILE_INPUT,
+    CHANGE_MIDDLERIGHTTILE_INPUT,
 
     ADD_GRAPH_TAG,
     REMOVE_GRAPH_TAG,
@@ -138,6 +142,42 @@ function updateGauge(
     }
 }
 
+function updateTile(
+    state= {
+        ecarts_pesee: 0,
+        incoherences_filieres_dd:0,
+        incoherences_filieres_norm: 0,
+        filieres_interdites_dd: 0,
+        filieres_interdites_norm: 0,
+        retards_dd: 0,
+        retards_norm: 0,
+    }, action
+) {
+    switch(action.type) {
+        case 'CHANGE_LEFTTILE_INPUT':
+            return Object.assign({}, state, {
+                ecarts_pesee: action.values.ecarts_pesee
+            });
+        case 'CHANGE_RIGHTTILE_INPUT':
+            return Object.assign({}, state, {
+                incoherences_filieres_dd: action.values.incoherences_filieres_dd,
+                incoherences_filieres_norm: action.values.incoherences_filieres_norm,
+            });
+        case 'CHANGE_MIDDLELEFTTILE_INPUT':
+            return Object.assign({}, state, {
+                filieres_interdites_norm: action.values.filieres_interdites_norm,
+                filieres_interdites_dd: action.values.filieres_interdites_dd
+            });
+        case 'CHANGE_MIDDLERIGHTTILE_INPUT':
+            return Object.assign({}, state, {
+                retards_dd: action.values.retards_dd,
+                retards_norm: action.values.retards_norm
+            });
+        default:
+            return state;
+    }
+}
+
 function updateSearchBar(
     state = {
         value: '',
@@ -243,6 +283,7 @@ const akkaApp = combineReducers({
     graphOptions,
     infosPanelOptions,
     updateGauge,
+    updateTile,
     updateSearchBar,
     updatePrestataireSelectionPanel
 })

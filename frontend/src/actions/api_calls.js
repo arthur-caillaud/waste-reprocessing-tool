@@ -51,13 +51,20 @@ export function updateSite(site) {
             .then(response => response.json())
             .then(json => {
                 let newValues = HelperService.presentDataForNewSite(json)
+                
                 let leftValues = newValues.dataForLeftGauge;
                 let middleValues = newValues.dataForMiddleGauge;
-                //let leftTileValues = newValues.dataForLeftTile;
+                let leftTileValues = newValues.dataForLeftTile;
+                let middleLeftTileValues = newValues.dataForMiddleLeftTile;
+                let middleRightTileValues = newValues.dataForMiddleRightTile;
+                let rightTileValues = newValues.dataForRightTile;
 
                 dispatch(actions.updateLeftGauge(leftValues))
                 dispatch(actions.updateMiddleGauge(middleValues))
-                //dispatch(actions.updateLeftTile(leftTileValues))
+                dispatch(actions.updateLeftTile(leftTileValues))
+                dispatch(actions.updateRightTile(rightTileValues))
+                dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                dispatch(actions.updateMiddleRightTile(middleRightTileValues))
                 dispatch(actions.resetMoreInfosToDefault())
 
             })

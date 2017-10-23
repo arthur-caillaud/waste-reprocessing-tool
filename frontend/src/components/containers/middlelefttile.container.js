@@ -5,7 +5,10 @@ import TileElement from '../tile.component';
 
 
 const mapStateToProps = state => {
-  return {
+  return {value: state.updateTile.filieres_interdites_norm,
+          isGrowing: true,
+          notifValue: state.updateTile.filieres_interdites_dd,
+          title: "Filières Interdites"
   }
 }
 

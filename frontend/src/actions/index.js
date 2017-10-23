@@ -19,6 +19,13 @@ export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
 export const CHANGE_MIDDLEGAUGE_INPUT = 'CHANGE_MIDDLEGAUGE_INPUT';
+export const CHANGE_LEFTTILE_INPUT = 'CHANGE_LEFTTILE_INPUT';
+export const CHANGE_RIGHTTILE_INPUT = 'CHANGE_RIGHTTILE_INPUT';
+export const CHANGE_MIDDLELEFTTILE_INPUT = 'CHANGE_MIDDLELEFTTILE_INPUT';
+export const CHANGE_MIDDLERIGHTTILE_INPUT = 'CHANGE_MIDDLERIGHTTILE_INPUT';
+
+
+
 
 export const UPDATE_INPUT_VALUE = 'UPDATE_INPUT_VALUE';
 export const CLEAR_SUGGESTIONS = 'CLEAR_SUGGESTIONS';
@@ -111,6 +118,36 @@ export function updateLeftGauge(values) {
         values
     }
 }
+export function updateMiddleGauge(values) {
+    return {
+        type: CHANGE_MIDDLEGAUGE_INPUT,
+        values
+    }
+}
+export function updateLeftTile(values) {
+    return {
+        type: CHANGE_LEFTTILE_INPUT,
+        values
+    }
+}
+export function updateMiddleLeftTile(values) {
+    return {
+        type: CHANGE_MIDDLELEFTTILE_INPUT,
+        values
+    }
+}
+export function updateMiddleRightTile(values) {
+    return {
+        type: CHANGE_MIDDLERIGHTTILE_INPUT,
+        values
+    }
+}
+export function updateRightTile(values) {
+    return {
+        type: CHANGE_RIGHTTILE_INPUT,
+        values
+    }
+}
 export function displayLeftGaugeInfos(){
     return {
         type: DISPLAY_LEFTGAUGE_INFOS
@@ -122,13 +159,6 @@ export function displayMiddleGaugeInfos(){
     }
 }
 
-
-export function updateMiddleGauge(values) {
-    return {
-        type: CHANGE_MIDDLEGAUGE_INPUT,
-        values
-    }
-}
 
 export function resetMoreInfosToDefault() {
     return {

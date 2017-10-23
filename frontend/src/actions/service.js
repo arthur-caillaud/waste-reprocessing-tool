@@ -158,20 +158,47 @@ function presentDataForNewSite(json) {
     let volume_total = 0.0000;
     let valorisation_l_verte = 0.0000;
     let valorisation_totale = 0.0000;
-    console.log(json)
-    json.forEach(function(element) {
+    let ecarts_pesee = 0;
+    let filieres_interdites_dd = 0;
+    let filieres_interdites_norm = 0;
+    let incoherences_filieres_dd = 0;
+    let incoherences_filieres_norm = 0;
+    let retards_dd = 0;
+    let retards_norm = 0;
 
-        volume_total += parseFloat(element.volume_total)
-        valorisation_l_verte += parseFloat(element.valorisation_l_verte)
-        valorisation_totale += parseFloat(element.valorisation_totale)
+    json.forEach(function(element) {
+        volume_total += parseFloat(element.volume_total);
+        valorisation_l_verte += parseFloat(element.valorisation_l_verte);
+        valorisation_totale += parseFloat(element.valorisation_totale);
+        ecarts_pesee += parseFloat(element.ecarts_pesee);
+        filieres_interdites_dd += parseFloat(element.filieres_interdites_dd);
+        filieres_interdites_norm += parseFloat(element.filieres_interdites_norm);
+        incoherences_filieres_dd += parseFloat(element.incoherences_filieres_dd);
+        incoherences_filieres_norm += parseFloat(element.incoherences_filieres_norm);
+        retards_dd += parseFloat(element.retards_dd);
+        retards_norm += parseFloat(element.retards_norm);
     });
 
     let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: ""};
     let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0};
     let dataForRightGauge = {};
+    let dataForLeftTile = {};
+    let dataForMiddleLeftTile = {};
+    let dataForMiddleRightTile = {};
+    let dataForRightTile = {};
 
     //TO MODIFY WITH INTELLECT
-    dataForLeftGauge.details = json[0].details
+    dataForLeftGauge.details = json[0].details;
+
+    dataForLeftTile.ecarts_pesee = ecarts_pesee;
+    dataForRightTile.incoherences_filieres_dd = incoherences_filieres_dd;
+    dataForRightTile.incoherences_filieres_norm = incoherences_filieres_norm;
+    dataForMiddleLeftTile.filieres_interdites_dd = filieres_interdites_dd;
+    dataForMiddleLeftTile.filieres_interdites_norm = filieres_interdites_norm;
+    dataForMiddleRightTile.retards_dd = retards_dd;
+    dataForMiddleRightTile.retards_norm = retards_norm;
+
+
     if (!(volume_total == 0.0000)) {
 
         dataForLeftGauge.leftvalue = valorisation_l_verte*100/volume_total
@@ -189,6 +216,10 @@ function presentDataForNewSite(json) {
     let response = {
         dataForLeftGauge: dataForLeftGauge,
         dataForMiddleGauge: dataForMiddleGauge,
+        dataForLeftTile: dataForLeftTile,
+        dataForRightTile: dataForRightTile,
+        dataForMiddleRightTile: dataForMiddleRightTile,
+        dataForMiddleLeftTile:  dataForMiddleLeftTile
 
     }
     return response

@@ -5,10 +5,10 @@ import TileElement from '../tile.component';
 
 
 const mapStateToProps = state => {
-    return {value: 12,
+    return {value: state.updateTile.ecarts_pesee,
             isGrowing: true,
-            notifValue: 1,
-            title: "lol"
+            notifValue: 0,
+            title: "Ecarts de Pesée"
     }
 }
 

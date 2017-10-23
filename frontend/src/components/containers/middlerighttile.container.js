@@ -5,7 +5,10 @@ import TileElement from '../tile.component';
 
 
 const mapStateToProps = state => {
-  return {
+  return {value: state.updateTile.retards_norm,
+          isGrowing: true,
+          notifValue: state.updateTile.retards_dd,
+          title: "Retards de Bordereaux"
   }
 }
 

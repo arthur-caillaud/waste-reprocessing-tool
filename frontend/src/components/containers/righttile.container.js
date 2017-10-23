@@ -5,7 +5,10 @@ import TileElement from '../tile.component';
 
 
 const mapStateToProps = state => {
-  return {
+  return {value: state.updateTile.incoherences_filieres_norm,
+          isGrowing: true,
+          notifValue: state.updateTile.incoherences_filieres_dd,
+          title: "Incohérences Filières"
   }
 }
 
