@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import { Row, Col, Grid } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import * as apiCalls from '../actions/api_calls';
 
 import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
@@ -13,15 +11,15 @@ import LeftTile from './containers/lefttile.container';
 import RightTile from './containers/righttile.container';
 import MiddleRightTile from './containers/middlerighttile.container';
 import MiddleLeftTile from './containers/middlelefttile.container';
-
+import { persistStore } from 'redux-persist'
 import '../styles/general.css';
 
-class DashboardElement extends Component {
 
-   componentDidMount() {
-       this.props.getNationalState();
-       this.props.getArchitecture();
-   }
+class Dashboard extends Component {
+componentDidMount(){
+    persistStore(window.store).purge()
+}
+
   render() {
     return (
       <div>
@@ -57,30 +55,5 @@ class DashboardElement extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
 
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getNationalState: () => {
-            dispatch(apiCalls.updateSite({
-                    nom: "National",
-                    level: 0,
-                    architecture: {
-                        nom: null,
-                        unite_dependance: null,
-                        up_dependance: null,
-                        metier_dependance: null
-                    }
-                }
-            ))
-        },
-        getArchitecture: () => {
-            dispatch(apiCalls.getArchitecture())
-        }
-    }
-}
-const Dashboard = connect(mapStateToProps, mapDispatchToProps)(DashboardElement)
 export default Dashboard;

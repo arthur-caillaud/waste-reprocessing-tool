@@ -11,7 +11,7 @@ import registerServiceWorker from './registerServiceWorker';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 window.store = composeEnhancers(applyMiddleware(thunkMiddleware), autoRehydrate())(createStore)(akkaApp)
-persistStore(window.store)
+
 render((
 
     <Provider store={window.store}>

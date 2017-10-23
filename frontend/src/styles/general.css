@@ -12,6 +12,7 @@ button {
   background-color: #a5c7ff;
 }
 
+
 .row-eq-height {
   vertical-align: middle;
   display: -webkit-box;
@@ -22,20 +23,19 @@ button {
 
 .searchbar-container{
     position: relative;
-    bottom: 0.5vh;
-    left: 3vw;
+    padding-bottom: 5vh;
+    border-bottom: 1px solid rgb(221,221,221);
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgb(221,221,221);
+    background-color: white;
 }
 
 .main-app{
     position: relative;
-    height: 90vh;
+    top: 5vh;
+    height: 85vh;
 }
 
-.biggest-div {
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-}
 
 div.no-left-padding{
     padding-left: 0;
@@ -43,4 +43,7 @@ div.no-left-padding{
 
 div.no-right-padding{
     padding-right: 0;
+}
+#tmp {
+    display: none;
 }
