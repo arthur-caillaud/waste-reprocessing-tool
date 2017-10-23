@@ -1,6 +1,7 @@
 .searchtree-container {
+    position: relative;
     margin-left: 0%;
-    padding-top: 10px;
+
 }
 
 /*.dropdown.btn {
