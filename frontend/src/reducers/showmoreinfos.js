@@ -11,6 +11,9 @@ export class LeftGaugeInfos extends Component {
                 <p>
                     Taux de valorisation de l'année: {window.store.getState().updateGauge.leftvalue}
                 </p>
+                <p>
+                    {window.store.getState().updateGauge.details}
+                </p>
             </div>
         );
     }
@@ -36,6 +39,9 @@ export class MiddleGaugeInfos extends Component {
                 </h3>
                 <p>
                     Taux de valorisation de l'année: {window.store.getState().updateGauge.middlevalue}
+                </p>
+                <p>
+                    {window.store.getState().updateGauge.details}
                 </p>
             </div>
         );

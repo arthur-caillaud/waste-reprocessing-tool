@@ -211,7 +211,10 @@ function presentDataForNewSite(json) {
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
         dataForMiddleGauge.middlevalueBeforeAnte = window.store.getState().updateGauge.middlevalueBefore
 
-    }
+    } else {
+         dataForLeftGauge.details = "Pas de Bordereaux sur la période sélectionnée"
+         dataForMiddleGauge.details = "Pas de Bordereaux sur la période sélectionnée"
+     }
 
     let response = {
         dataForLeftGauge: dataForLeftGauge,
