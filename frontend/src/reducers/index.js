@@ -1,7 +1,7 @@
 import React from "react"
 import { combineReducers } from 'redux';
 import { searchInArray } from './service';
-import { MiddleGaugeInfos, LeftGaugeInfos } from './showmoreinfos'
+import { MiddleGaugeInfos, LeftGaugeInfos } from '../components/showmoreinfos.component'
 import {
     CHANGE_SCALE,
     CHANGE_URL,

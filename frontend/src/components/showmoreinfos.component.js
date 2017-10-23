@@ -9,7 +9,7 @@ export class LeftGaugeInfos extends Component {
                     Valorisation LISTE Verte
                 </h3>
                 <p>
-                    Taux de valorisation de l'année: {window.store.getState().updateGauge.leftvalue}
+                    Taux de valorisation de l'année: {window.store.getState().updateGauge.leftvalue.toFixed(2)} %
                 </p>
                 <p>
                     {window.store.getState().updateGauge.details}
@@ -38,7 +38,7 @@ export class MiddleGaugeInfos extends Component {
                     Valorisation Globale
                 </h3>
                 <p>
-                    Taux de valorisation de l'année: {window.store.getState().updateGauge.middlevalue}
+                    Taux de valorisation de l'année: {window.store.getState().updateGauge.middlevalue.toFixed(2)} %
                 </p>
                 <p>
                     {window.store.getState().updateGauge.details}
