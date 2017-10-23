@@ -30,7 +30,6 @@ function mapDispatchToProps(dispatch, ownProps) {
             dispatch(actions[onClickActionName](tag));
         },
         onLoaded: () => {
-            console.log(idChosenInput);
             if(idChosenInput !== ''){
                 dispatch(apiCalls[onLoadActionName](localisationLevel,localisationName,idChosenInput));
             }

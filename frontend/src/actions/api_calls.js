@@ -79,6 +79,7 @@ API calls for Prestataire Vision
 export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
+        console.log(name);
         return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name)
             .then(response => response.json())
             .then(json => dispatch(actions.updatePrestataireList(json)));
