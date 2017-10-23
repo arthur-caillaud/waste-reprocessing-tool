@@ -1,8 +1,7 @@
 import React from 'react'
 import { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
-import * as apiCalls from '../actions/api_calls';
+
 
 import MainRouter from '../utilities/router.component';
 import LateralMenu from './lateralmenu.component';
@@ -17,18 +16,14 @@ import { Col, Row } from 'react-bootstrap';
 
 import '../styles/general.css';
 
-class AppElement extends Component {
+class App extends Component {
   constructor() {
     super();
     this.state = {
       navBar: true,
     }
   }
-  componentDidMount() {
 
-      this.props.getArchitecture();
-      this.props.getNationalState();
-  }
 
   render() {
 
@@ -81,31 +76,6 @@ class AppElement extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
 
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getNationalState: () => {
-            dispatch(apiCalls.updateSite({
-                    nom: "National",
-                    level: 0,
-                    architecture: {
-                        nom: null,
-                        unite_dependance: null,
-                        up_dependance: null,
-                        metier_dependance: null
-                    }
-                }
-            ))
-        },
-        getArchitecture: () => {
-            dispatch(apiCalls.getArchitecture())
-        }
-    }
-}
-const App = connect(mapStateToProps, mapDispatchToProps)(AppElement)
 
 export default App;
