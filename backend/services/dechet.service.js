@@ -5,6 +5,10 @@ var sequelize = require('sequelize');
 
 var models = require('../models/');
 var Dechet = models.dechet;
+var Traitement = models.traitement;
+var Bordereau = models.bordereau;
+var Prestataire = models.prestataire;
+var Type_traitement = models.type_traitement;
 
 function getAllDechets(queryParameters) {
     /* This function creates an Observable and returns it. It searches for all
@@ -65,7 +69,120 @@ function getDechetById(id) {
 
 }
 
+
+function getDechetsForSites(idArray, beginDate, endDate) {
+
+    var query = {
+        attributes: [],
+        where: {
+            id_site: {$in: idArray}
+        },
+        include: [
+            {
+                attributes: [],
+                model: Traitement,
+                as: 'traitementFinal',
+                where: {
+                    date_priseencharge: {
+                        $lte: endDate,
+                        $gte: beginDate
+                    }
+                }
+            },
+            {
+                model: Dechet,
+            }
+        ]
+    };
+
+    var observable = Rx.Observable.create((obs) => {
+        Bordereau.findAll(query)
+            .then((bordereaux) => {
+                obs.onNext(bordereaux);
+                obs.onCompleted();
+            })
+            .catch((error) => {
+                obs.onError(error);
+            })
+    });
+
+    return observable;
+}
+
+function getPrestatairesForDechet(id, sitesId, recycled, beginDate, endDate) {
+
+    // TODO use a dictionnary for this
+    var qualification;
+    if (recycled == 1) {
+        qualification = "Recyclage";
+    }
+    else {
+        qualification = "%";
+    }
+
+    var query = {
+        where: {
+            id_site: {$in: sitesId},
+            id_dechet: id
+        },
+        group: sequelize.col('traitementFinal.id_prestataire'),
+        order: [sequelize.col('traitementFinal.id_prestataire')],
+        attributes: [
+            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'quantitee_finale']
+        ],
+        include: [
+            {
+                model: Traitement,
+                as: 'traitementFinal',
+                attributes: ['id'],
+                where: {
+                    date_priseencharge: {
+                        $lte: endDate,
+                        $gte: beginDate
+                    }
+                },
+                include: [
+                    {
+                        model: Type_traitement,
+                        attributes: [],
+                        where: {
+                            qualification: {$like: qualification}
+                        }
+                    },
+                    {
+                        model: Prestataire,
+                        attributes: [
+                            'nom',
+                            'siret',
+                            'id',
+                            'localisation'
+                        ]
+                    }
+                ]
+            },
+        ]
+    };
+
+    var observable = Rx.Observable.create((obs) => {
+        Bordereau.findAll(query)
+            .then((bordereaux) => {
+                bordereaux.forEach((bordereau) => {
+                    bordereau.dataValues.prestataire = bordereau.dataValues.traitementFinal.prestataire;
+                    bordereau.dataValues.traitementFinal = undefined;
+                })
+                obs.onNext(bordereaux);
+                obs.onCompleted();
+            })
+            .catch((error) => {
+                obs.onError(error);
+            })
+    });
+    return observable;
+}
+
 service.getAllDechets = getAllDechets;
 service.getDechetById = getDechetById;
+service.getDechetsForSites = getDechetsForSites;
+service.getPrestatairesForDechet = getPrestatairesForDechet;
 
 module.exports = service;
