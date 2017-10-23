@@ -44,7 +44,6 @@ anything concerning the dashboard
   * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
   */
 function getDashboard(req, res, next) {
-  // currently only returns a 200 code with dummy data
 
   // checks if the args are in range
   var level = req.params.level;
