@@ -1,10 +1,17 @@
 #histogram-container{
     position: relative;
-    height: 90vh;
+    height: 81vh;
     border: 1px solid rgb(221,221,221);
     border-radius: 5px;
-    margin-right: 1vw;
     box-shadow: 0px 0px 5px rgb(221,221,221);
+    background-color: white;
+}
+
+.chart-title{
+    position: absolute;
+    right: 5%;
+    top: 5px;
+    margin-top: 0;
 }
 
 .chart-container{
@@ -13,9 +20,28 @@
     height: 100%;
 }
 
-.hist-bar:hover{
-    border: 10px solid black;
+.first-rect{
+    fill: #66bb6a;
+}
 
+.first-rect:hover{
+    fill: #4caf50;
+}
+
+.second-rect{
+    fill: #ffeb3b;
+}
+
+.second-rect:hover{
+    fill: #fdd835
+}
+
+.third-rect{
+    fill: #ff9800;
+}
+
+.third-rect:hover{
+    fill: #fb8c00;
 }
 
 .d3-tip {
@@ -44,4 +70,57 @@
   margin: -1px 0 0 0;
   top: 100%;
   left: 0;
+}
+
+.input-panel{
+    height: 81vh;
+}
+
+.input-panel .inputs-container{
+    border-top: 1px solid rgb(225,225,225);
+    border-radius: 5px;
+    overflow-y: scroll;
+    max-height: 100%;
+}
+
+.tag-panel {
+    margin-top: 2vh;
+}
+
+.tags-search-container {
+    position: absolute;
+    bottom: 5vh;
+    width: 100%;
+    max-height: 70vh;
+    overflow-y: scroll;
+    border-top: 1px solid rgb(225,225,225);
+    border-radius: 5px;
+}
+
+.chosen-tag {
+    display: inline-block;
+    color: white;
+    background-color: #757575;
+    padding-top: 4 px;
+    border-radius: 4px;
+    height: 34px;
+    user-select: none;
+    cursor: default;
+    margin-right: 1vw;
+}
+
+.chosen-tag span{
+    padding: 6px 12px;
+    vertical-align: middle;
+}
+
+.remove-tag-button {
+    padding: 6px 12px;
+    margin-left: 0.2vw;
+    color: rgb(80,80,80);
+    cursor: pointer;
+}
+
+.remove-tag-button:hover {
+    color: rgb(40,40,40);
 }

@@ -5,27 +5,29 @@ import { Button } from 'react-bootstrap';
 
 import { array } from '../utilities/text-generator.component';
 
-//import PrestataireSearchBar from './search.component';
 import Histogram from '../components/histogram.component';
-import InputGraphPanel from '../components/inputgraphpanel.component';
+import InputGraphPanel from '../components/containers/inputgraphpanel.container';
+import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 
 class Prestataire extends Component {
+
   render() {
-    var i = 0;
-    var list = [];
-    for (i=0; i<array.length; i++) {
-      list.push(<ListGroupItem>{array[i]}</ListGroupItem>);
-    }
 
     return (
       <div>
           <Grid fluid>
             <Row>
-              <Col sm={2}>
-                <InputGraphPanel onClick={() => {alert("Element clicked")}} inputArray={[{nom: "VEOLIA"},{nom: "EDF"},{nom: "ARCELOR MITTAL"},
-                {nom:"SOCIETE MARTINIQUAISE DE VALORISATION"},{nom:"NOVERGIE (VEDENE)"},{nom:"SAICA"}]}/>
+              <Col sm={3}>
+                <InputGraphPanel
+                    idInputPanel="prestataire-selection-panel"
+                    onClickActionName="updateSelectedPrestataire"
+                    onLoadActionName="loadPrestataireList"
+                    onSearchActionName="updatePrestatairePanelSearchbarInput"
+                    branchName="updatePrestataireSelectionPanel"
+                    searchPlaceholder="Rechercher un prestataire"
+                />
               </Col>
-              <Col sm={10}>
+              <Col sm={9}>
                 <Histogram title="VEOLIA" id="prestataire-hist" values={[{
                       title: 'Taux de valorisation global',
                       keys: ['VEOLIA','GLOBAL','REGIONAL'],
@@ -48,13 +50,17 @@ class Prestataire extends Component {
                       values: [30,40,33]
                   }]}/>
               </Col>
-              <Col sm={4}>
-                <div>
-                  Searchbar
-                </div>
-              </Col>
-              <Col sm={8}>
-                Fouzy les tags ici
+              <Col sm={9} smOffset={3}>
+                 <GraphTagsPanel
+                     searchPlaceholder="Ajouter des déchets pour ce prestataire"
+                     branchName="updatePrestataireGraphTagsPanel"
+                     idInputPanel="dechet-tag-panel"
+                     onClickActionName="addPrestataireGraphTag"
+                     onRemoveActionName="removePrestataireGraphTag"
+                     onLoadActionName="loadDechetsConsideringChosenPrestataire"
+                     inputGraphPanelBranch="updatePrestataireSelectionPanel"
+                     defaultOnLoadActionName="loadDechetList"
+                />
               </Col>
             </Row>
           </Grid>

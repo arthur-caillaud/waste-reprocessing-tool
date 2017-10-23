@@ -26,30 +26,50 @@ anything concerning the graphs
 
 
 /**
-  * @api {GET} /dashboard/:prestataire/:dechet Recherche les informations nécessaires pour
-  * construire les graphes en fonction des déchets et prestataires
+  * @api {GET} /graphs/prestataires/:level/:name Donne le taux de valorisation global et liste
+  * verte en moyenne nationale. Donne aussi la liste des prestataires travaillant
+  * avec l'entitée donnée
   * @apiGroup Graphs
-  * @apiVersion 1.0.0
-  * @apiDeprecated use now version 1.1.0
-  * @apiParam (queryArgs) {number} prestataireId id du prestataire considéré
-  * @apiParam (queryArgs) {number} dechetId id du déchet considéré
-
+  * @apiVersion 1.1.0
+  *
   * @apiParam (queryParam) {string} [beginDate] première date voulue (format yyyy-mm-dd)
   * @apiParam (queryParam) {string} [endDate] première date voulue (format yyyy-mm-dd)
   * @apiParam (queryParam) {number} [level] niveau voulu dans la hierarchie (allant
   * de 0 : central à 4 : site) default: 0
   * @apiParam (queryParam) {string} [name] nom du lieu voulu dans sa hierarchie
-  * (facultatif dans le cas d'une hierarchie 1 (niveau central))
+  * (facultatif dans le cas d'une hierarchie 0 (niveau central))
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/graphs/49/3
+  *   curl -i http://localhost:4000/api/graphs/prestataires/0
   * @apiExample {curl} Exemple avec arguments
-  *   curl -i http://localhost:4000/api/graphs/49/3/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
+  *   curl -i http://localhost:4000/api/graphs/prestataires/1/SEI/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
   *
-  * @apiSuccess {JSONString} data Informations nécessaires à la construction
-  * du graphe voulu
+  * @apiSuccess {JSONString} data Informations nécessaires
   * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
   */
+
+
+/**
+    * @api {GET} /graphs/prestataires/:level/:name/dechets/:id Donne la liste des déchets
+    * avec les déchets valorisés pour un prestataire donné sur un lieu donné
+    * @apiGroup Graphs
+    * @apiVersion 1.1.0
+    *
+    * @apiParam (queryParam) {string} [beginDate] première date voulue (format yyyy-mm-dd)
+    * @apiParam (queryParam) {string} [endDate] première date voulue (format yyyy-mm-dd)
+    * @apiParam (queryParam) {number} [level] niveau voulu dans la hierarchie (allant
+    * de 0 : central à 4 : site) default: 0
+    * @apiParam (queryParam) {string} [name] nom du lieu voulu dans sa hierarchie
+    * (facultatif dans le cas d'une hierarchie 0 (niveau central))
+    *
+    * @apiExample {curl} Exemple
+    *   curl -i http://localhost:4000/api/graphs/prestataires/0/dechets/1
+    * @apiExample {curl} Exemple avec arguments
+    *   curl -i http://localhost:4000/api/graphs/0/prestataires/1/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
+    *
+    * @apiSuccess {JSONString} data Informations nécessaires
+    * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
+*/
 
 /**
 This function is first called upon request. It verifies that all necessary
@@ -57,8 +77,6 @@ arguments are provided and returns an error if not the case
 If the request is correct, the next function will be called
 */
 function verifyParameters(req, res, next) {
-
-    console.log("nan mais en fait je devrais pas être ici");
 
     const prestataire = req.params.prestataire;
     const dechet = req.params.dechet;
@@ -140,20 +158,16 @@ function verifyParameters(req, res, next) {
     dates["previousBeginDate"] = previousBeginDate;
     dates["previousEndDate"] = previousEndDate;
 
-    console.log(dates);
-
     req.locals = dates;
     next();
 }
-
-
 
 // We still need to get the necessary sites to be used in the request
 function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
 
-    const level = req.query.level;
+    const level = req.params.level;
 
     if (level<0 || level>4 || (level>1 && !(name))) {
         utilities.errorHandler("Invalid arguments", (errorPacket) => {
@@ -162,8 +176,10 @@ function getNecessarySites(req, res, next) {
     }
 
     const field = hierarchy[level];
-    const name = req.query.name;
+    const name = req.params.name;
     var query = {};
+
+    var loops = 2;
 
     if (typeof field != "undefined") {
         if (req.params.level == 0) {
@@ -176,8 +192,8 @@ function getNecessarySites(req, res, next) {
         }
     }
 
-    var onNext = (data) => {
-        req.locals["sites"] = data;
+    var onNext = (label, data) => {
+        req.locals[label] = data;
     };
     var error = (error) => {
         utilities.errorHandler(error, (errorPacket) => {
@@ -185,119 +201,47 @@ function getNecessarySites(req, res, next) {
         });
     };
     var complete = () => {
-        next();
+        loops -= 1;
+        if (loops == 0) {
+            next();
+        }
+
     };
 
-    var observer = Rx.Observer.create(onNext, error, complete);
+    var observer = Rx.Observer.create((data) => onNext("sites", data), error, complete);
     var subscription = SitesService.getAllSites(query).subscribe(observer);
+
+    var observer2 = Rx.Observer.create((data) => onNext("globalSites", data), error, complete);
+    var subscription2 = SitesService.getAllSites({}).subscribe(observer2);
+
 }
 
-/**
-this function will get the global data (global and green list valorisation and
-volumes)
-**/
+
 function getGlobalData(req, res) {
-    const idPrestataire = req.params.prestataire;
+    const sites = req.locals.sites;
+    const globalSites = req.locals.globalSites;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
-    const previousBeginDate = req.locals.previousBeginDate;
-    const previousEndDate = req.locals.previousEndDate;
-    const sites = req.locals.sites;
 
     var result = {
-        "current": {
-            "normal": {},
-            "greenList": {}
-        },
-        "previous": {
-            "normal": {},
-            "greenList": {}
-        }};
-    var loops = 8;
-
-    var idArray = [];
-    for (var i=0; i<sites.length; i++) {
-        idArray.push(sites[i].id);
-    }
-
-    var onNext = (data) => {
-        result[data[2]][data[3]][data[1]] = data[0];
-    }
-    var onCompleted = () => {
-        loops -= 1;
-        console.log(loops);
-        if (loops==0) {
-            res.json(result);
-        }
-    }
-    var onError = (error) => {
-        utilities.errorHandler(error, (errorPacket) => {
-            res.status(errorPacket.status).send(errorPacket.message);
-        });
+        "globalData": {},
+        "prestataires": []
     };
 
-    var observerQuantity = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalQuantity(idPrestataire, beginDate, endDate, idArray, "quantity", "current", "normal")
-        .subscribe(observerQuantity);
-
-    var observerPreviousQuantity = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "quantity", "previous", "normal")
-        .subscribe(observerPreviousQuantity);
-
-    var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalRecycledQuantity(idPrestataire, beginDate, endDate, idArray, "recycled", "current", "normal")
-        .subscribe(observerRecycled);
-
-    var observerPreviousRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalRecycledQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "recycled", "previous", "normal")
-        .subscribe(observerPreviousRecycled);
-
-    var observerQuantityGreen = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalQuantity(idPrestataire, beginDate, endDate, idArray, "quantity", "current", "greenList")
-        .subscribe(observerQuantityGreen);
-
-    var observerPreviousQuantityGreen = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "quantity", "previous", "greenList")
-        .subscribe(observerPreviousQuantityGreen);
-
-    var observerRecycledGreen = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalRecycledQuantity(idPrestataire, beginDate, endDate, idArray, "recycled", "current", "greenList")
-        .subscribe(observerRecycledGreen);
-
-    var observerPreviousRecycledGreen = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getGlobalRecycledQuantity(idPrestataire, previousBeginDate, previousEndDate, idArray, "recycled", "previous", "greenList")
-        .subscribe(observerPreviousRecycledGreen);
-
-}
-
-
-/**
-Now that we know that the args are valid, we can use this function to get the
-needed data
-It will send send the data for a prestataire and a dechet, in the given timeframe
-if no timeframe given, will go from 01-01 of this year to current date
-**/
-function getGraphsData(req, res) {
-
-    const idPrestataire = req.params.prestataire;
-    const idDechet = req.params.dechet;
-    const beginDate = req.locals.beginDate;
-    const endDate = req.locals.endDate;
-    const previousBeginDate = req.locals.previousBeginDate;
-    const previousEndDate = req.locals.previousEndDate;
-    const sites = req.locals.sites;
-
-    var result = {"current": {}, "previous": {}};
-    var loops = 4;
+    var loops = 5;
 
     var idArray = [];
     for (var i=0; i<sites.length; i++) {
         idArray.push(sites[i].id);
     }
 
+    var globalArray = [];
+    for (var i=0; i<globalSites.length; i++) {
+        globalArray.push(globalSites[i].id);
+    }
+
     var onNext = (data) => {
-        console.log(data[0]);
-        result[data[2]][data[1]] = data[0];
+        result.globalData[data[1][0]] = data[0];
     }
     var onCompleted = () => {
         loops -= 1;
@@ -307,35 +251,106 @@ function getGraphsData(req, res) {
     }
     var onError = (error) => {
         utilities.errorHandler(error, (errorPacket) => {
+            console.log(error);
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
+
+    console.log(globalArray);
+    console.log(idArray);
 
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "quantity", "current")
+    DashboardService.getTotalVolume(globalArray, beginDate, endDate, ["volume_total", "globalData"])
         .subscribe(observerQantity);
 
-    var observerPreviousQantity = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getQuantity(idPrestataire, idDechet, previousBeginDate, previousEndDate, idArray, "quantity", "previous")
-        .subscribe(observerPreviousQantity);
-
     var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, idArray, "recycled", "current")
+    DashboardService.getValorisationTotale(globalArray, beginDate, endDate, ["valorisation_totale", "globalData"])
         .subscribe(observerRecycled);
 
-    var observerPreviousRecycled = Rx.Observer.create(onNext, onError, onCompleted);
-    GraphsService.getRecycledQuantity(idPrestataire, idDechet, previousBeginDate, previousEndDate, idArray, "recycled", "previous")
-        .subscribe(observerPreviousRecycled);
+    var observerQantityVerte = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getTotalVolumeVerte(globalArray, beginDate, endDate, ["volume_l_verte", "globalData"])
+        .subscribe(observerQantityVerte);
+
+    var observerRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getValorisationVerte(globalArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
+        .subscribe(observerRecycledVerte);
+
+    var observerPrestataires = Rx.Observer.create(
+        (data) => {
+            result.prestataires = data;
+        },
+        onError,
+        onCompleted
+    );
+    prestataireService.getPrestatairesForSites(idArray, beginDate, endDate)
+        .subscribe(observerPrestataires);
+}
 
 
+function getDataForPrestataire(req, res) {
+
+    const sites = req.locals.sites;
+    const beginDate = req.locals.beginDate;
+    const endDate = req.locals.endDate;
+
+    var loops = 2;
+
+    var idArray = [];
+    var id = req.params.prestataireId;
+
+    var result = {};
+
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
+
+    var onNext = (label, data) => {
+        result[label] = data;
+    }
+
+    var onCompleted = () => {
+        loops -= 1;
+        if (loops == 0) {
+            res.json(result);
+        }
+    }
+
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            console.log(error);
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+
+    var observerQuantity = Rx.Observer.create((data) => onNext("quantity", data), onError, onCompleted);
+    prestataireService.getDechetsForPrestataire(id, idArray, 0, beginDate, endDate)
+        .subscribe(observerQuantity);
+
+    var observerRecycled = Rx.Observer.create((data) => onNext("recycled", data), onError, onCompleted);
+    prestataireService.getDechetsForPrestataire(id, idArray, 1, beginDate, endDate)
+        .subscribe(observerRecycled);
 
 }
 
 
-// routes association
-router.get('*', verifyParameters);
-router.get('*', getNecessarySites);
-router.get('/:prestataire', getGlobalData)
-router.get('/:prestataire/:dechet', getGraphsData);
+router.get('/prestataires/', verifyParameters);
+router.get('/prestataires/', getNecessarySites);
+router.get('/prestataires/', getGlobalData);
+
+router.get('/prestataires/:level/', verifyParameters);
+router.get('/prestataires/:level/', getNecessarySites);
+router.get('/prestataires/:level/', getGlobalData);
+
+router.get('/prestataires/:level/dechets/:prestataireId', verifyParameters);
+router.get('/prestataires/:level/dechets/:prestataireId', getNecessarySites);
+router.get('/prestataires/:level/dechets/:prestataireId', getDataForPrestataire);
+
+router.get('/prestataires/:level/:name', verifyParameters);
+router.get('/prestataires/:level/:name', getNecessarySites);
+router.get('/prestataires/:level/:name', getGlobalData);
+
+router.get('/prestataires/:level/:name/dechets/:prestataireId', verifyParameters);
+router.get('/prestataires/:level/:name/dechets/:prestataireId', getNecessarySites);
+router.get('/prestataires/:level/:name/dechets/:prestataireId', getDataForPrestataire);
 
 module.exports = router;

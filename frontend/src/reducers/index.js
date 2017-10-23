@@ -1,7 +1,7 @@
+import React from "react"
 import { combineReducers } from 'redux';
-import {LeftGaugeInfos, MiddleGaugeInfos} from './showmoreinfos.js';
-
-import React from "react";
+import { searchInArray } from './service';
+import { MiddleGaugeInfos, LeftGaugeInfos } from './showmoreinfos'
 import {
     CHANGE_SCALE,
     CHANGE_URL,
@@ -34,8 +34,25 @@ import {
     LOAD_PRESTATAIRELIST_BEGIN,
     UPDATE_PRESTATAIRELIST,
     CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS,
-    UPDATE_PRESTATAIREPANEL_INPUT,
     UPDATE_SELECTEDPRESTATAIRE,
+    UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
+
+    LOAD_DECHETLIST_BEGIN,
+    UPDATE_DECHETLIST,
+    CLEAR_DECHETS_SEARCHSUGGESTIONS,
+    UPDATE_SELECTEDDECHET,
+    UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
+
+    LOAD_PRESTATAIREGRAPH_TAGS_BEGIN,
+    ADD_DECHET_GRAPH_TAG,
+    REMOVE_DECHET_GRAPH_TAG,
+    UPDATE_DECHETTAGS_INPUTARRAY,
+
+    LOAD_DECHETGRAPH_TAGS_BEGIN,
+    ADD_PRESTATAIRE_GRAPH_TAG,
+    REMOVE_PRESTATAIRE_GRAPH_TAG,
+    UPDATE_PRESTATAIRETAGS_INPUTARRAY,
+
     GraphTypes
 } from '../actions'
 
@@ -250,7 +267,7 @@ And UPDATE_SITE (see HelperService again)
         }
 }
 
-function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [], isLoading: false, chosenPrestataire: '', suggestion: []}, action){
+function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
     switch(action.type){
         case LOAD_PRESTATAIRELIST_BEGIN:
             return Object.assign({}, state, {
@@ -258,22 +275,120 @@ function updatePrestataireSelectionPanel(state = {input: '', prestatairesList: [
             });
         case UPDATE_PRESTATAIRELIST:
             return Object.assign({}, state, {
-                prestatairesList: action.json,
+                inputArray: action.json.prestataires,
                 isLoading: false
             });
         case CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS:
             return Object.assign({}, state, {
                 suggestion: []
             });
-        case UPDATE_PRESTATAIREPANEL_INPUT:
-            return Object.assign({}, state, {
-                input: action.input
-            });
+        case UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT:
+        const input = action.input;
+        const arrayInWhichToSearch = state.inputArray;
+        const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
+        return Object.assign({}, state, {
+            input: action.input,
+            suggestion: foundElementsArray,
+        });
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
-                chosenPrestataire: action.prestataire
+                selectedInput: action.prestataire
             });
         default :
+            return state;
+    }
+}
+
+function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
+    switch(action.type){
+        case LOAD_DECHETLIST_BEGIN:
+            return Object.assign({}, state, {
+                isLoading: true
+            });
+        case UPDATE_DECHETLIST:
+            return Object.assign({}, state, {
+                inputArray: action.json,
+                isLoading: false
+            });
+        case CLEAR_DECHETS_SEARCHSUGGESTIONS:
+            return Object.assign({}, state, {
+                suggestion: []
+            });
+        case UPDATE_DECHETPANEL_SEARCHBAR_INPUT:
+            const input = action.input;
+            const arrayInWhichToSearch = state.inputArray;
+            const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
+            return Object.assign({}, state, {
+                input: action.input,
+                suggestion: foundElementsArray,
+            });
+        case UPDATE_SELECTEDDECHET:
+            return Object.assign({}, state, {
+                selectedInput: action.dechet
+            });
+        default :
+            return state;
+    }
+}
+
+function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoading: false}, action){
+    switch (action.type) {
+        case LOAD_PRESTATAIREGRAPH_TAGS_BEGIN:
+            return Object({}, state, {
+                isLoading: true
+            })
+        case ADD_PRESTATAIRE_GRAPH_TAG:
+            return Object.assign({}, state, {
+                tagsArray: [...state.tagsArray, action.dechetTag]
+            });
+        case REMOVE_PRESTATAIRE_GRAPH_TAG:
+            let newTagsArray = []
+            state.tagsArray.forEach(tag => {
+                if(tag !== action.dechetTag){
+                    newTagsArray.push(tag);
+                }
+            });
+            return Object.assign({}, state, {
+                tagsArray: newTagsArray
+            });
+        case UPDATE_DECHETTAGS_INPUTARRAY:
+            console.log(action.inputArray);
+            return Object.assign({}, state, {
+                inputArray: action.inputArray
+            })
+        default:
+            return state;
+    }
+}
+
+function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoading: false}, action){
+    switch (action.type) {
+        case LOAD_DECHETGRAPH_TAGS_BEGIN:
+            return Object({}, state, {
+                isLoading: true
+            })
+        case ADD_DECHET_GRAPH_TAG:
+            return Object.assign({}, state, {
+                tagsArray: [...state.tagsArray, action.prestataireTag]
+            });
+        case REMOVE_DECHET_GRAPH_TAG:
+            let newTagsArray = []
+            state.tagsArray.forEach(tag => {
+                if(tag !== action.prestataireTag){
+                    newTagsArray.push(tag);
+                }
+            });
+            return Object.assign({}, state, {
+                tagsArray: newTagsArray
+            })
+        case UPDATE_PRESTATAIRETAGS_INPUTARRAY:
+            const newInputArray = action.inputArray.map(prestataire => {
+                return Object.assign({},prestataire,{codeinterne: prestataire.id});
+            });
+            return Object.assign({}, state, {
+                inputArray: newInputArray
+            })
+        default:
             return state;
     }
 }
@@ -285,7 +400,10 @@ const akkaApp = combineReducers({
     updateGauge,
     updateTile,
     updateSearchBar,
-    updatePrestataireSelectionPanel
+    updatePrestataireSelectionPanel,
+    updateDechetSelectionPanel,
+    updatePrestataireGraphTagsPanel,
+    updateDechetGraphTagsPanel
 })
 
 export default akkaApp

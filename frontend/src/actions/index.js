@@ -36,8 +36,24 @@ export const UPDATE_SITE = 'UPDATE_SITE';
 export const LOAD_PRESTATAIRELIST_BEGIN = 'LOAD_PRESTATAIRELIST_BEGIN';
 export const UPDATE_PRESTATAIRELIST = 'UPDATE_PRESTATAIRELIST';
 export const CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS = 'CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS';
-export const UPDATE_PRESTATAIREPANEL_INPUT = 'UPDATE_PRESTATAIREPANEL_INPUT';
 export const UPDATE_SELECTEDPRESTATAIRE = 'UPDATE_SELECTEDPRESTATAIRE';
+export const UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT = 'UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT';
+
+export const LOAD_DECHETLIST_BEGIN = 'LOAD_DECHETLIST_BEGIN';
+export const UPDATE_DECHETLIST = 'UPDATE_DECHETLIST';
+export const CLEAR_DECHETS_SEARCHSUGGESTIONS = 'CLEAR_DECHETS_SEARCHSUGGESTIONS';
+export const UPDATE_SELECTEDDECHET = 'UPDATE_SELECTEDDECHET';
+export const UPDATE_DECHETPANEL_SEARCHBAR_INPUT = 'UPDATE_DECHETPANEL_SEARCHBAR_INPUT';
+
+export const LOAD_PRESTATAIREGRAPH_TAGS_BEGIN = "LOAD_PRESTATAIREGRAPH_TAGS";
+export const ADD_DECHET_GRAPH_TAG = "ADD_DECHET_GRAPH_TAG";
+export const REMOVE_DECHET_GRAPH_TAG = "REMOVE_DECHET_GRAPH_TAG";
+export const UPDATE_DECHETTAGS_INPUTARRAY = "UPDATE_DECHETTAGS_INPUTARRAY";
+
+export const LOAD_DECHETGRAPH_TAGS_BEGIN = "LOAD_DECHETGRAPH_TAGS";
+export const ADD_PRESTATAIRE_GRAPH_TAG = "ADD_DECHET_GRAPH_TAG";
+export const REMOVE_PRESTATAIRE_GRAPH_TAG = "REMOVE_DECHET_GRAPH_TAG";
+export const UPDATE_PRESTATAIRETAGS_INPUTARRAY = "UPDATE_PRESTATAIRETAGS_INPUTARRAY";
 /*
  * other constants
  */
@@ -228,16 +244,115 @@ export function clearPrestatairesSearchSuggestions(){
     }
 }
 
-export function updatePrestatairePanelInput(input){
+export function updatePrestatairePanelSearchbarInput(input){
     return {
-        type: UPDATE_PRESTATAIREPANEL_INPUT,
+        type: UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
         input
     }
 }
 
-export function updateSelectedPrestatire(prestataire){
+export function updateSelectedPrestataire(prestataire){
     return {
         type: UPDATE_SELECTEDPRESTATAIRE,
         prestataire
+    }
+}
+
+/*
+ * Dechet Input Panel (present in '/dechet' page)
+ */
+
+export function loadDechetListBegin(){
+    return {
+        type: LOAD_DECHETLIST_BEGIN
+    }
+}
+
+export function updateDechetList(json){
+    return {
+        type: UPDATE_DECHETLIST,
+        json
+    }
+}
+
+export function clearDechetsSearchSuggestions(){
+    return {
+        type: CLEAR_DECHETS_SEARCHSUGGESTIONS
+    }
+}
+
+export function updateDechetPanelSearchbarInput(input){
+    return {
+        type: UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
+        input
+    }
+}
+
+export function updateSelectedDechet(dechet){
+    return {
+        type: UPDATE_SELECTEDDECHET,
+        dechet
+    }
+}
+
+/*
+ * Prestataire vision : add graph tag Panel
+ */
+
+export function loadPrestataireGraphTagsBegin() {
+    return {
+        type: LOAD_PRESTATAIREGRAPH_TAGS_BEGIN
+    }
+}
+
+export function addPrestataireGraphTag(dechetTag){
+    return {
+        type: ADD_PRESTATAIRE_GRAPH_TAG,
+        dechetTag
+    }
+}
+
+export function removePrestataireGraphTag(dechetTag){
+    return {
+        type: REMOVE_PRESTATAIRE_GRAPH_TAG,
+        dechetTag
+    }
+}
+
+export function updateDechetTagsInputArray(inputArray){
+    return {
+        type: UPDATE_DECHETTAGS_INPUTARRAY,
+        inputArray
+    }
+}
+
+/*
+ * Dechet vision : add graph tag Panel
+ */
+
+export function loadDechetGraphTagsBegin(){
+    return {
+        type: LOAD_DECHETGRAPH_TAGS_BEGIN
+    }
+}
+
+export function addDechetGraphTag(prestataireTag){
+    return {
+        type: ADD_DECHET_GRAPH_TAG,
+        prestataireTag
+    }
+}
+
+export function removeDechetGraphTag(prestataireTag){
+    return {
+        type: REMOVE_DECHET_GRAPH_TAG,
+        prestataireTag
+    }
+}
+
+export function updatePrestataireTagsInputArray(inputArray){
+    return {
+        type: UPDATE_PRESTATAIRETAGS_INPUTARRAY,
+        inputArray
     }
 }

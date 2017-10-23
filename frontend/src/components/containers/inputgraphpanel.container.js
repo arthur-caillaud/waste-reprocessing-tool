@@ -1,33 +1,55 @@
-import { connect } from "react-redux"
-import * as actions from '../actions'
-import * as apiCalls from '../actions/api_calls'
+import React from 'react';
+import { connect } from "react-redux";
+import * as actions from '../../actions';
+import * as apiCalls from '../../actions/api_calls';
+import InputGraphPanel from '../inputgraphpanel.component';
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+    const branchName = ownProps.branchName;
+    const idInputPanel = ownProps.idInputPanel;
+    const searchPlaceholder = ownProps.placeholder;
     return {
-        values: state.updateGauge.value,
-        valueBefore: state.updateGauge.valueBefore,
-        valueAnte: state.updateGauge.valueAnte,
-        valueBeforeAnte: state.updateGauge.valueBeforeAnte
+        inputArray: state[branchName].inputArray,
+        selectedInput: state[branchName].selectedInput,
+        suggestion: state[branchName].suggestion,
+        isLoading: state[branchName].isLoading,
+        id: idInputPanel,
     }
 };
 
-function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
-        value: Math.random()*100,
-        valueBefore:Math.random()*100,
-        valueAnte: valueAnteG,
-        valueBeforeAnte: valueBeforeAnteG
-    }))
-
-    }
+function mapDispatchToProps(dispatch, ownProps) {
+    const onClickActionName = ownProps.onClickActionName;
+    const onLoadActionName = ownProps.onLoadActionName;
+    const onSearchActionName = ownProps.onSearchActionName;
+    const localisationLevel = window.store.getState().pageOptions.scale.level;
+    const localisationName = window.store.getState().pageOptions.scale.name;
+    return ({
+        onClick: (input) => {
+            dispatch(actions[onClickActionName](input));
+        },
+        onLoaded: () => {
+            dispatch(apiCalls[onLoadActionName](localisationLevel,localisationName));
+        },
+        onSearch: (input) => {
+            dispatch(actions[onSearchActionName](input))
+        }
+    });
 };
 
-const LeftGauge = ({showMoreInfos, value, valueBefore, valueBeforeAnte, valueAnte}) => {
+const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion}) => {
     return(
-        <div onClick={showMoreInfos}>
-            <LeftGauged3 id="leftgauge" value={value} valueBefore={valueBefore} valueAnte={valueAnte} valueBeforeAnte={valueBeforeAnte}/>
-        </div>
-    )
+        <InputGraphPanel
+            id={id}
+            suggestion={suggestion}
+            inputArray={inputArray}
+            selectedInput={selectedInput}
+            searchPlaceholder={searchPlaceholder}
+            onClick={onClick}
+            onLoaded={onLoaded}
+            onSearch={onSearch}
+            isLoading={isLoading}
+        />
+    );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LeftGauge);
+export default connect(mapStateToProps, mapDispatchToProps)(InputGraphPanelContainer);

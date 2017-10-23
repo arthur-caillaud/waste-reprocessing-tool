@@ -9,6 +9,7 @@ import SearchTree from './containers/searchtree.container';
 
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
+import { Nav, NavItem } from 'react-bootstrap';
 
 import { Col, Row } from 'react-bootstrap';
 
@@ -22,46 +23,46 @@ class App extends Component {
     }
   }
 
-  toggleNavBar() {
-    var navBar = this.state.navBar;
-    this.setState({navBar: !navBar});
-  }
-
   render() {
-    return (
-      <div className="biggest-div">
-        <BrowserRouter>
-          <div>
-            <Row className="row-eq-height">
-              <Col sm={2} hidden={!this.state.navBar} className="navBar">
-                <Col sm={10}> <LateralMenu/> </Col>
-                <Col sm={2}>
-                  <Button bsStyle="primary" onClick={() => this.toggleNavBar()}>
-                     <Glyphicon glyph="menu-left"/>
-                  </Button>
-                </Col>
-              </Col>
-              <Col sm={1} hidden={this.state.navBar}>
-                <Button bsStyle="primary" onClick={() => this.toggleNavBar()}>
-                   <Glyphicon glyph="menu-right"/>
-                </Button>
-              </Col>
-              <Col sm={10}>
-                  <div className="searchbar-container" >
-                      <Col sm ={6}>
-                          <SearchTree />
-                      </Col>
-                      <Col sm={6}>
-                          <SearchBar id="MainSearchBar"/>
-                      </Col>
 
+      const location = window.location.href;
+      const currentPage = location.split('/')[3];
+      let activeKey = "1"
+      console.log("location", location);
+      console.log("currentPage", currentPage);
+      if (currentPage === "") {
+          activeKey = "1";
+      }
+      else if(currentPage === "prestataire"){
+          activeKey = "2";
+      }
+      else if(currentPage === "dechet"){
+          activeKey = "3";
+      }
+      console.log("activeKey",activeKey);
+
+      return (
+          <div className="biggest-div">
+              <BrowserRouter>
+                  <div>
+                      <Row className="navbar-container">
+                          <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
+                              <NavItem eventKey="1" href="/">Dashboard</NavItem>
+                              <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
+                              <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
+                          </Nav>
+                          <div className="searchbar-container" >
+                              <SearchBar id="MainSearchBar"/>
+                          </div>
+                      </Row>
+                      <Row className="row-eq-height">
+                          <Col sm={12}>
+                              <MainRouter className="main-container" />
+                          </Col>
+                      </Row>
                   </div>
-                  <MainRouter className="main-container" />
-              </Col>
-            </Row>
+              </BrowserRouter>
           </div>
-        </BrowserRouter>
-      </div>
   )
   }
 }

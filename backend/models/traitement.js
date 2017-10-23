@@ -40,6 +40,8 @@ module.exports = function(sequelize, DataTypes) {
   traitement.associate = function(models){
       traitement.belongsTo(models.prestataire, {foreignKey: 'id_prestataire', targetKey: 'id'});
       traitement.belongsTo(models.type_traitement, {foreignKey: 'id_type_traitement', targetKey: 'id'});
+      traitement.hasOne(models.bordereau, {as: 'traitementInter', foreignKey: 'id_traitement_inter', sourceKey: 'id'});
+      traitement.hasOne(models.bordereau, {as: 'traitementFinal', foreignKey: 'id_traitement_final', sourceKey: 'id'});
   }
 
   return traitement;

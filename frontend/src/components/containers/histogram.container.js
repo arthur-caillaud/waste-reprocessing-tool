@@ -1,17 +1,16 @@
 import { connect } from "react-redux"
 import * as actions from '../actions'
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+    const branchName = ownProps.branchName;
+    const idGraph = ownProps.idGraph;
     return {
-        values: state.updateGauge.value,
-        valueBefore: state.updateGauge.valueBefore,
-        valueAnte: state.updateGauge.valueAnte,
-        valueBeforeAnte: state.updateGauge.valueBeforeAnte
-
+        title: state[branchName].graphTitle,
+        values: state[branchName].graphValues
     }
 };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
     return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
         value: Math.random()*100,
         valueBefore:Math.random()*100,

@@ -25,27 +25,32 @@ function clone(obj) {
 class Histogram extends Component {
     // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
     // each object in valuesArray is stack of N columns labelled with Object.title
-    valuesArray = this.props.values;
-    newValuesArray = [{
+    graphTitle = this.props.title;
+    valuesArray = [{
         title: 'Taux de valorisation global',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [46,98,20]
+        values: [46,98,20],
+        //volume: [760,2810,1120]
     },{
         title: 'Fer et acier',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [51,72,65]
+        values: [51,72,65],
+        //volume: [760,2810,1120]
     },{
         title: 'Carton',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [80,91,82]
+        values: [80,91,82],
+        //volume: [760,2810,1120]
     },{
         title: "Aluminium",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [40,65,70]
+        values: [40,65,70],
+        //volume: [760,2810,1120]
     },{
         title: "Déchets dangereux",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [60,52,23]
+        values: [60,52,23],
+        //volume: [760,2810,1120]
     }];
 
     toNullArray(valuesArray){
@@ -106,7 +111,7 @@ class Histogram extends Component {
         .rangeRound([height, 0]);
 
         let z = d3.scaleOrdinal()
-        .range(["#6FD96C", "#9CE371", "#B3CC70", "#E3E071", "#D9CB6C", "#43E8B0", "#49FF8E"]);
+        .range(["first-rect", "second-rect", "third-rect"]);
 
         let bundleLabels = data.map(bundle => {
             return bundle.title;
@@ -145,7 +150,7 @@ class Histogram extends Component {
             .attr("y", function(d) { return y(d.value); })
             .attr("width", x1.bandwidth())
             .attr("height", function(d) { return height - y(d.value); })
-            .attr("fill", function(d) { return z(d.key); })
+            .attr("class", function(d) { return z(d.key); })
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide);
 
@@ -179,7 +184,7 @@ class Histogram extends Component {
             .attr("x", width - 19)
             .attr("width", 19)
             .attr("height", 19)
-            .attr("fill", z);
+            .attr("class", z);
 
         legend.append("text")
             .attr("x", width - 24)
@@ -242,7 +247,7 @@ class Histogram extends Component {
     };
 
     componentDidMount() {
-        this.__initHistogram(this.valuesArray);
+        window.addEventListener("resize", this.__initHistogram(this.valuesArray));
     };
 
     componentDidUpdate() {
@@ -252,6 +257,7 @@ class Histogram extends Component {
     render() {
         return (
         <div id="histogram-container">
+            <h2 className="chart-title">Valorisation {this.graphTitle}</h2>
             <div id={this.props.id} className="chart-container"></div>
         </div>
         );

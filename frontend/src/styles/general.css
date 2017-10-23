@@ -1,3 +1,11 @@
+#root {
+    background-color: rgb(250,250,250);
+}
+
+button {
+    outline-width: 0px;
+}
+
 .navBar {
   vertical-align: middle;
   padding-bottom: 0%;
@@ -14,7 +22,8 @@
 
 .searchbar-container{
     position: relative;
-    height: 10vh;
+    bottom: 0.5vh;
+    left: 3vw;
 }
 
 .main-app{
@@ -28,8 +37,10 @@
     overflow: auto;
 }
 
-.show-more-infos {
-    position: relative;
-    height: 40vh;
-    width: 100%;
+div.no-left-padding{
+    padding-left: 0;
+}
+
+div.no-right-padding{
+    padding-right: 0;
 }

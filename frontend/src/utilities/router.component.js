@@ -12,7 +12,7 @@ import Dechet from '../components/dechet.component';
 const Root = () => (
 
       <Router>
-        <div className="main-app">
+        <div className="main-app no-left-padding no-right-padding">
           <Route exact path='/' component={Dashboard}/>
           <Route path='/prestataire' component={Prestataire}/>
           <Route path='/dechet' component={Dechet}/>

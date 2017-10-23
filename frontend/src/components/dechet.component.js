@@ -6,29 +6,29 @@ import { Button } from 'react-bootstrap';
 import { array } from '../utilities/text-generator.component';
 
 import Histogram from '../components/histogram.component';
-import InputGraphPanel from '../components/inputgraphpanel.component';
-//import DechetSearchBar from './containers/searchbar.dechetpanel.container';
+import InputGraphPanel from '../components/containers/inputgraphpanel.container';
+import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 
 class Dechet extends Component {
 
   render() {
-    var i = 0;
-    var list = [];
-    for (i=0; i<array.length; i++) {
-      list.push(<ListGroupItem>{array[i]}</ListGroupItem>);
-    }
 
     return (
       <div>
         <div>
           <Grid fluid>
             <Row>
-                <Col sm={2}>
-                  <InputGraphPanel onClick={() => {alert("Element clicked")}} inputArray={[{nom: "CÂBLES ÉLECTRIQUES (TOUS MÉTAUX) - 029"},{nom: "HUILES DIÉLECTRIQUES NON CHLORÉES (TENEUR INFÉRIEURE À 50 PPM EN PCB-PCT) - 069"},
-                      {nom: "EMBALLAGES PLASTIQUES POLLUÉS (HUILES/HYDROCARBURES ...) - 146B"},{nom:"SF6 EN RÉCIPIENTS SOUS PRESSION - 116D"}]}/>
+                <Col sm={3}>
+                    <InputGraphPanel
+                        idInputPanel="dechet-selection-panel"
+                        onClickActionName="updateSelectedDechet"
+                        onLoadActionName="loadDechetList"
+                        onSearchActionName="updateDechetPanelSearchbarInput"
+                        branchName="updateDechetSelectionPanel"
+                        searchPlaceholder="Rechercher un déchet"
+                    />
                 </Col>
-              <Col sm={10}>
-                <Row>
+                <Col sm={9}>
                     <Histogram title="EMBALLAGE PAPIER-CARTON" id="dechet-hist" values={[{
                         title: 'Taux de valorisation global',
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
@@ -50,10 +50,19 @@ class Dechet extends Component {
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
                         values: [30,40,33]
                     }]}/>
-                </Row>
-              </Col>
+                </Col>
+                <Col sm={9} smOffset={3}>
+                     <GraphTagsPanel
+                         searchPlaceholder="Ajouter des prestataires pour ce déchet"
+                         branchName="updateDechetGraphTagsPanel"
+                         idInputPanel="prestataire-tag-panel"
+                         onClickActionName="addDechetGraphTag"
+                         onRemoveActionName="removeDechetGraphTag"
+                         onLoadActionName="loadPrestatairesConsideringChosenDechet"
+                    />
+                </Col>
             </Row>
-          </Grid>
+        </Grid>
         </div>
     </div>
     );
