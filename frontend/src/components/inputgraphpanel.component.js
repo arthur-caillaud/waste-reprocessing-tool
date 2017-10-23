@@ -22,11 +22,7 @@ class InputGraphPanel extends Component {
         const suggestion = this.props.suggestion;
         const input = this.state.searchInput;
         const isLoading = this.props.isLoading;
-        const localisationLevel = this.props.localisationLevel;
-        const localisationName = this.props.localisationName;
-
-        //this.props.onLoaded(localisationLevel,localisationName);
-
+        
         function handleNoResultsFound(){
             if(input && input.length > 0){
                 if(suggestion.length === 0){
@@ -76,14 +72,6 @@ class InputGraphPanel extends Component {
                 </ListGroup>
             </div>
         );
-
-    };
-
-    componentDidMount() {
-
-        const localisationLevel = this.props.localisationLevel;
-        const localisationName = this.props.localisationName;
-        this.props.onLoaded(localisationLevel,localisationName);
 
     };
 
