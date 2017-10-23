@@ -167,6 +167,7 @@ function getNecessarySites(req, res, next) {
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
 
     const level = req.params.level;
+    const name = req.params.name;
 
     if (level<0 || level>4 || (level>1 && !(name))) {
         utilities.errorHandler("Invalid arguments", (errorPacket) => {

@@ -438,6 +438,38 @@ function countBordereaux(idArray, beginDate, endDate, label) {
 }
 
 
+function getUndated(idArray, label) {
+    var query = {
+        include: [
+            {
+                model: traitement,
+                as: 'traitementFinal',
+                attributes: [],
+                where: {
+                    date_priseencharge: null
+                }
+            }
+        ],
+        where: {
+            id_site: {$in: idArray}
+        }
+    };
+
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.findAll(query)
+            .then((bordereaux) => {
+                obs.onNext([bordereaux, label]);
+                obs.onCompleted();
+            })
+            .catch((error) => {
+                obs.onError(error);
+            })
+    });
+
+    return observable;
+}
+
+
 
 // this function returns an observable with all the elements in the table
 // matching the provided id and date.
@@ -476,7 +508,7 @@ function getDetailsForSites(beginDate, endDate, idArray) {
         var date = new Date();
 
         var result = {};
-        var loopsToDo = 8;
+        var loopsToDo = 9;
 
         var tempNext = (data) => {
             result[data[1]] = data[0];
@@ -531,6 +563,10 @@ function getDetailsForSites(beginDate, endDate, idArray) {
         var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);
         countBordereaux(idArray, beginDate, endDate, "bordereaux")
             .subscribe(observerCounter);
+
+        var observerUndated = Rx.Observer.create(tempNext, tempError, tempCompleted);
+        getUndated(idArray, "non_dates")
+            .subscribe(observerUndated);
     })
 
     return observable;
@@ -604,5 +640,6 @@ service.getDataForSites = getDataForSites;
 service.updateEntry = updateEntry;
 service.getDashboards = getDashboards;
 service.getDetailsForSites = getDetailsForSites;
+service.getUndated = getUndated;
 
 module.exports = service;

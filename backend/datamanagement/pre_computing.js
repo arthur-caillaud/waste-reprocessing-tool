@@ -95,7 +95,7 @@ function computeForSite(beginDate, endDate, siteId, callback) {
         the counter. When it is at 0, we are sure that every processing is done
         We then can exit the function safely and save the result
     */
-    var loopsToDo = 12;
+    var loopsToDo = 13;
 
     // create the Dashboard element thzat will store all pre computed values
     var computedValues = new dashboard();
@@ -216,6 +216,10 @@ function computeForSite(beginDate, endDate, siteId, callback) {
     var observerCounter = Rx.Observer.create(onNextNumber, onError, onCompleted);
     DashboardService.countBordereaux([siteId], beginDate, endDate, "bordereaux")
         .subscribe(observerCounter);
+
+    var observerUndated = Rx.Observer.create(onNextArray, onError, onCompleted);
+    DashboardService.getUndated([siteId], "non_dates")
+        .subscribe(observerUndated);
 
 }
 
