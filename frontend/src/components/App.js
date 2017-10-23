@@ -28,8 +28,6 @@ class App extends Component {
       const location = window.location.href;
       const currentPage = location.split('/')[3];
       let activeKey = "1"
-      console.log("location", location);
-      console.log("currentPage", currentPage);
       if (currentPage === "") {
           activeKey = "1";
       }
@@ -39,7 +37,7 @@ class App extends Component {
       else if(currentPage === "dechet"){
           activeKey = "3";
       }
-      console.log("activeKey",activeKey);
+
 
       return (
           <div className="biggest-div">
@@ -51,8 +49,15 @@ class App extends Component {
                               <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
                               <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
                           </Nav>
+                      </Row>
+                      <Row>
                           <div className="searchbar-container" >
-                              <SearchBar id="MainSearchBar"/>
+                              <Col sm={6}>
+                                  <SearchTree/>
+                              </Col>
+                              <Col sm={6}>
+                                  <SearchBar id="MainSearchBar"/>
+                              </Col>
                           </div>
                       </Row>
                       <Row className="row-eq-height">

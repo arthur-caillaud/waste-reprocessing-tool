@@ -44,7 +44,6 @@ anything concerning the dashboard
   * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
   */
 function getDashboard(req, res, next) {
-  // currently only returns a 200 code with dummy data
 
   // checks if the args are in range
   var level = req.params.level;
@@ -91,13 +90,11 @@ function getNecessarySites(req, res, next) {
     const name = req.params.name
     var query = {};
 
-    console.log(req.params.level);
-
     if (req.params.level == 0) {
         var where = {};
     }
     else {
-        console.log("wtf");
+        var where = {};
         where[field] = name;
         query.where = where;
     }

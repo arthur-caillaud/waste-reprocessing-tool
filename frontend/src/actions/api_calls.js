@@ -47,11 +47,11 @@ export function updateSite(site) {
         //Here we must have a dispatch that updates the search tree according to new site
         //Which means that we need the new architecture
         dispatch(actions.updateSiteName(site))
-        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?tolerance=0&year=2017&month=3')
+        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate=2017-03-01&endDate=2017-04-01')
             .then(response => response.json())
             .then(json => {
                 let newValues = HelperService.presentDataForNewSite(json)
-                
+
                 let leftValues = newValues.dataForLeftGauge;
                 let middleValues = newValues.dataForMiddleGauge;
                 let leftTileValues = newValues.dataForLeftTile;
