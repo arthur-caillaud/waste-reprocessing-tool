@@ -183,7 +183,7 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
             });
         case UPDATE_PRESTATAIRELIST:
             return Object.assign({}, state, {
-                inputArray: action.json,
+                inputArray: action.json.prestataires,
                 isLoading: false
             });
         case CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS:
@@ -260,6 +260,7 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
                 tagsArray: newTagsArray
             });
         case UPDATE_DECHETTAGS_INPUTARRAY:
+            console.log(action.inputArray);
             return Object.assign({}, state, {
                 inputArray: action.inputArray
             })

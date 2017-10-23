@@ -58,6 +58,8 @@ class Prestataire extends Component {
                      onClickActionName="addPrestataireGraphTag"
                      onRemoveActionName="removePrestataireGraphTag"
                      onLoadActionName="loadDechetsConsideringChosenPrestataire"
+                     inputGraphPanelBranch="updatePrestataireSelectionPanel"
+                     defaultOnLoadActionName="loadDechetList"
                 />
               </Col>
             </Row>

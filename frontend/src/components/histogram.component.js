@@ -29,23 +29,28 @@ class Histogram extends Component {
     valuesArray = [{
         title: 'Taux de valorisation global',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [46,98,20]
+        values: [46,98,20],
+        //volume: [760,2810,1120]
     },{
         title: 'Fer et acier',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [51,72,65]
+        values: [51,72,65],
+        //volume: [760,2810,1120]
     },{
         title: 'Carton',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [80,91,82]
+        values: [80,91,82],
+        //volume: [760,2810,1120]
     },{
         title: "Aluminium",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [40,65,70]
+        values: [40,65,70],
+        //volume: [760,2810,1120]
     },{
         title: "Déchets dangereux",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-        values: [60,52,23]
+        values: [60,52,23],
+        //volume: [760,2810,1120]
     }];
 
     toNullArray(valuesArray){

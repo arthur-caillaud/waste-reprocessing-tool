@@ -41,21 +41,22 @@ export function updateSite(site) {
 API calls for Prestataire Vision
 */
 
-export function loadPrestataireList(){
+export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
-        return fetch(config.backend.adress+'prestataires')
+        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name)
             .then(response => response.json())
             .then(json => dispatch(actions.updatePrestataireList(json)));
     }
 }
 
-export function loadDechetsConsideringChosenPrestataire(){
+export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
-        return fetch(config.backend.adress+'dechets')
+        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+idPrestataire)
             .then(response => response.json())
             .then(json => {
+                console.log(json);
                 json.forEach(row => {
                     row.nom = row.libelle;
                 })
@@ -68,10 +69,10 @@ export function loadDechetsConsideringChosenPrestataire(){
 API calls for Dechet Vision
 */
 
-export function loadDechetList(){
+export function loadDechetList(level,name){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
-        return fetch(config.backend.adress+'dechets')
+        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name)
             .then(response => response.json())
             .then(json => {
                 json.forEach(row => {
@@ -82,10 +83,10 @@ export function loadDechetList(){
     }
 }
 
-export function loadPrestatairesConsideringChosenDechet(){
+export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
-        return fetch(config.backend.adress+'prestataires')
+        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name+'/prestataires/'+idDechet)
             .then(response => response.json())
             .then(json => dispatch(actions.updatePrestataireTagsInputArray(json)));
     }

@@ -20,12 +20,23 @@ function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
     const onRemoveActionName = ownProps.onRemoveActionName;
     const onLoadActionName = ownProps.onLoadActionName;
+    const defaultOnLoadActionName = ownProps.defaultOnLoadActionName;
+    const inputGraphPanelBranch = ownProps.inputGraphPanelBranch;
+    const idChosenInput = window.store.getState()[inputGraphPanelBranch].selectedInput;
+    const localisationLevel = window.store.getState().pageOptions.scale.level;
+    const localisationName = window.store.getState().pageOptions.scale.name;
     return ({
         onTagClick: (tag) => {
             dispatch(actions[onClickActionName](tag));
         },
         onLoaded: () => {
-            dispatch(apiCalls[onLoadActionName]());
+            console.log(idChosenInput);
+            if(idChosenInput !== ''){
+                dispatch(apiCalls[onLoadActionName](localisationLevel,localisationName,idChosenInput));
+            }
+            else{
+                dispatch(apiCalls[defaultOnLoadActionName](localisationLevel,localisationName));
+            }
         },
         onRemove: (tag) => {
             dispatch(actions[onRemoveActionName](tag));

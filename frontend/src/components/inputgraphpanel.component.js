@@ -37,12 +37,12 @@ class InputGraphPanel extends Component {
         if(containerArray){
             containerArray.forEach(input => {
                 let listItem;
-                if (input.nom === selectedInput){
-                    listItem = ( <ListGroupItem onClick={() => selectInputFunction(input.nom)} active>{input.nom}</ListGroupItem> )
+                if (input.id === selectedInput){
+                    listItem = ( <ListGroupItem onClick={() => selectInputFunction(input.id)} active>{input.nom}</ListGroupItem> )
                     list.unshift(listItem);
                 }
                 else {
-                    listItem = ( <ListGroupItem onClick={() => selectInputFunction(input.nom)}>{input.nom}</ListGroupItem> )
+                    listItem = ( <ListGroupItem onClick={() => selectInputFunction(input.id)}>{input.nom}</ListGroupItem> )
                     list.push(listItem);
                 }
             });

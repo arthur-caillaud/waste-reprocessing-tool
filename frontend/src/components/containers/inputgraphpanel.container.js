@@ -13,7 +13,7 @@ function mapStateToProps(state, ownProps) {
         selectedInput: state[branchName].selectedInput,
         suggestion: state[branchName].suggestion,
         isLoading: state[branchName].isLoading,
-        id: idInputPanel
+        id: idInputPanel,
     }
 };
 
@@ -21,12 +21,14 @@ function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
     const onLoadActionName = ownProps.onLoadActionName;
     const onSearchActionName = ownProps.onSearchActionName;
+    const localisationLevel = window.store.getState().pageOptions.scale.level;
+    const localisationName = window.store.getState().pageOptions.scale.name;
     return ({
         onClick: (input) => {
             dispatch(actions[onClickActionName](input));
         },
         onLoaded: () => {
-            dispatch(apiCalls[onLoadActionName]());
+            dispatch(apiCalls[onLoadActionName](localisationLevel,localisationName));
         },
         onSearch: (input) => {
             dispatch(actions[onSearchActionName](input))
