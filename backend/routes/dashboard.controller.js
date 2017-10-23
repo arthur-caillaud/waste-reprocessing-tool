@@ -33,13 +33,11 @@ anything concerning the dashboard
   * de 0 : central à 4 : site)
   * @apiParam (queryArgs) {string} name nom du lieu voulu dans sa hierarchie
   * (facultatif dans le cas d'une hierarchie 1 (niveau central))
-  * @apiParam (queryParam) {number} tolerance niveau de tolérance pour les écarts
-  * de pesée
   * @apiParam (queryParam) {number} beginDate première date
   * @apiParam (queryParam) {number} endDate dernière date
   *
   * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/dashboard/2/42?tolerance=12&beginDate=2017-01-01&endDate=2017-06-01
+  *   curl -i http://localhost:4000/api/dashboard/2/42?beginDate=2017-01-01&endDate=2017-06-01
   *
   * @apiSuccess {JSONString} dashboard Informations nécessaires à la construction
   * de la dashboard sur le site voulu
@@ -51,12 +49,11 @@ function getDashboard(req, res, next) {
   // checks if the args are in range
   var level = req.params.level;
   var name = req.params.name; //undefined if not provided
-  var tolerance = req.query.tolerance;
   var beginDate = req.query.beginDate;
   var endDate = req.query.endDate;
 
   // when we check if name, we actually check if it is defined
-  if (level<0 || level>4 || (level>1 && !(name)) || !(tolerance) || !(endDate) || !(beginDate)) {
+  if (level<0 || level>4 || (level>1 && !(name)) || !(endDate) || !(beginDate)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {
           res.status(errorPacket.status).send(errorPacket.message);
       });
@@ -124,7 +121,6 @@ function getNecessarySites(req, res, next) {
 function processDashboardData(req, res) {
     // list of all the sites that will be used
     var sites = req.locals;
-    var tolerance = req.query.tolerance;
     var idArray = [];
     var beginDate = req.query.beginDate;
     var endDate = req.query.endDate;
@@ -182,7 +178,6 @@ function getArchitecture(req, res) {
 function processDetailedData(req, res) {
     // list of all the sites that will be used
     var sites = req.locals;
-    var tolerance = req.query.tolerance;
     var idArray = [];
     var beginDate = req.query.beginDate;
     var endDate = req.query.endDate;
@@ -207,7 +202,7 @@ function processDetailedData(req, res) {
     var onCompleted = () => {};
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getDetailsForSites(beginDate, endDate, tolerance, idArray)
+    DashboardService.getDetailsForSites(beginDate, endDate, idArray)
         .subscribe(observer);
 
 }

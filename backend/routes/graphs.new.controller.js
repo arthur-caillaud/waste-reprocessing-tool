@@ -26,9 +26,7 @@ anything concerning the graphs
 
 
 /**
-  * @api {GET} /graphs/prestataires/:level/:name Donne le taux de valorisation global et liste
-  * verte en moyenne nationale. Donne aussi la liste des prestataires travaillant
-  * avec l'entitée donnée
+  * @api {GET} /graphs/prestataires/ A CHANGER
   * @apiGroup Graphs
   * @apiVersion 1.1.0
   *
