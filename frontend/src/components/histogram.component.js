@@ -30,27 +30,27 @@ class Histogram extends Component {
         title: 'Taux de valorisation global',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
         values: [46,98,20],
-        //volume: [760,2810,1120]
+        volumes: [760,2810,1120]
     },{
         title: 'Fer et acier',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
         values: [51,72,65],
-        //volume: [760,2810,1120]
+        volumes: [760,2810,1120]
     },{
         title: 'Carton',
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
         values: [80,91,82],
-        //volume: [760,2810,1120]
+        volumes: [760,2810,1120]
     },{
         title: "Aluminium",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
         values: [40,65,70],
-        //volume: [760,2810,1120]
+        volumes: [760,2810,1120]
     },{
         title: "Déchets dangereux",
         keys: ['VEOLIA','GLOBAL','REGIONAL'],
         values: [60,52,23],
-        //volume: [760,2810,1120]
+        volumes: [760,2810,1120]
     }];
 
     toNullArray(valuesArray){
@@ -92,7 +92,8 @@ class Histogram extends Component {
             return ("<div><div><strong>"+
             d.key+
             "</strong></div>"+
-            "Taux de valorisation <span style='color:red'>" + d.value + "%</span></div>"
+            "<div>Taux de valorisation <span style='color:red'>" + d.value + "%</span></div>"+
+            "<div>Volume traité <span style='color:red'>" + d.volume + "t</span></div></div>"
         )});
         svgDoc.call(tip);
 
@@ -139,7 +140,8 @@ class Histogram extends Component {
             return keys.map((key,index) => {
                 return ({
                     key: key,
-                    value: d.values[index]
+                    value: d.values[index],
+                    volume: d.volumes[index]
                 });
             })
         })
@@ -162,7 +164,8 @@ class Histogram extends Component {
                 return keys.map((key,index) => {
                     return ({
                         key: key,
-                        value: d.values[index]
+                        value: d.values[index],
+                        volume: d.volumes[index]
                     });
                 })
             })
@@ -231,7 +234,8 @@ class Histogram extends Component {
                 return keys.map((key,index) => {
                     return ({
                         key: key,
-                        value: d.values[index]
+                        value: d.values[index],
+                        volume: d.volumes[index]
                     });
                 })
             })
