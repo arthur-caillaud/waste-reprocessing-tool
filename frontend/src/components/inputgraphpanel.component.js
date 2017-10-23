@@ -12,7 +12,6 @@ class InputGraphPanel extends Component {
         };
     }
 
-
     render() {
 
         const inputArray = this.props.inputArray;
@@ -22,6 +21,8 @@ class InputGraphPanel extends Component {
         const suggestion = this.props.suggestion;
         const input = this.state.searchInput;
         const isLoading = this.props.isLoading;
+
+        console.log(inputArray);
         
         function handleNoResultsFound(){
             if(input && input.length > 0){

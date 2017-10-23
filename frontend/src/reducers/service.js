@@ -11,5 +11,5 @@ export function searchInArray(array,value){
         }
         return foundElementsArray;
     }
-    return array;
+    return [];
 }

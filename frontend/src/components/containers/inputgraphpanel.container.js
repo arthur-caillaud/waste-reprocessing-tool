@@ -13,8 +13,6 @@ function mapStateToProps(state, ownProps) {
         selectedInput: state[branchName].selectedInput,
         suggestion: state[branchName].suggestion,
         isLoading: state[branchName].isLoading,
-        localisationLevel: window.store.getState().updateSearchBar.site.level,
-        localisationName: window.store.getState().updateSearchBar.site.nom,
         id: idInputPanel,
     }
 };
@@ -27,16 +25,13 @@ function mapDispatchToProps(dispatch, ownProps) {
         onClick: (input) => {
             dispatch(actions[onClickActionName](input));
         },
-        onLoaded: (level,name) => {
-            dispatch(apiCalls[onLoadActionName](level,name));
-        },
         onSearch: (input) => {
             dispatch(actions[onSearchActionName](input))
         }
     });
 };
 
-const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion, localisationLevel, localisationName}) => {
+const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion}) => {
     return(
         <InputGraphPanel
             id={id}
@@ -48,8 +43,6 @@ const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded,
             onLoaded={onLoaded}
             onSearch={onSearch}
             isLoading={isLoading}
-            localisationLevel={localisationLevel}
-            localisationName={localisationName}
         />
     );
 }
