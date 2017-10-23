@@ -176,7 +176,6 @@ function getNecessarySites(req, res, next) {
     }
 
     const field = hierarchy[level];
-    const name = req.params.name;
     var query = {};
 
     var loops = 2;
