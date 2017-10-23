@@ -11,6 +11,7 @@ var DashboardService = require('../services/dashboard.service');
 var SitesService = require('../services/sites.service');
 var ToolkitService = require('../services/toolkit.service');
 var GraphsService = require('../services/graphs.service');
+var DechetService = require('../services/dechet.service');
 
 /*
 This is a controller entirely dedicated to error handling when it comes
@@ -215,7 +216,7 @@ function getNecessarySites(req, res, next) {
 }
 
 
-function getGlobalData(req, res) {
+function getGlobalPrestataires(req, res) {
     const sites = req.locals.sites;
     const globalSites = req.locals.globalSites;
     const beginDate = req.locals.beginDate;
@@ -253,9 +254,6 @@ function getGlobalData(req, res) {
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
-
-    console.log(globalArray);
-    console.log(idArray);
 
     var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getTotalVolume(globalArray, beginDate, endDate, ["volume_total", "globalData"])
@@ -331,13 +329,126 @@ function getDataForPrestataire(req, res) {
 }
 
 
+function getGlobalDechets(req, res) {
+    const sites = req.locals.sites;
+    const globalSites = req.locals.globalSites;
+    const beginDate = req.locals.beginDate;
+    const endDate = req.locals.endDate;
+
+    var result = {
+        "globalData": {},
+        "dechets": []
+    };
+
+    var loops = 5;
+
+    var idArray = [];
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
+
+    var globalArray = [];
+    for (var i=0; i<globalSites.length; i++) {
+        globalArray.push(globalSites[i].id);
+    }
+
+    var onNext = (data) => {
+        result.globalData[data[1][0]] = data[0];
+    }
+    var onCompleted = () => {
+        loops -= 1;
+        if (loops==0) {
+            res.json(result);
+        }
+    }
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            console.log(error);
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+
+    var observerQantity = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getTotalVolume(globalArray, beginDate, endDate, ["volume_total", "globalData"])
+        .subscribe(observerQantity);
+
+    var observerRecycled = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getValorisationTotale(globalArray, beginDate, endDate, ["valorisation_totale", "globalData"])
+        .subscribe(observerRecycled);
+
+    var observerQantityVerte = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getTotalVolumeVerte(globalArray, beginDate, endDate, ["volume_l_verte", "globalData"])
+        .subscribe(observerQantityVerte);
+
+    var observerRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
+    DashboardService.getValorisationVerte(globalArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
+        .subscribe(observerRecycledVerte);
+
+    var observerDechets = Rx.Observer.create(
+        (data) => {
+            result.dechets = data;
+        },
+        onError,
+        onCompleted
+    );
+    DechetService.getDechetsForSites(idArray, beginDate, endDate)
+        .subscribe(observerDechets);
+}
+
+
+function getDataForDechet(req, res) {
+
+    const sites = req.locals.sites;
+    const beginDate = req.locals.beginDate;
+    const endDate = req.locals.endDate;
+
+    var loops = 2;
+
+    var idArray = [];
+    var id = req.params.dechetId;
+
+    var result = {};
+
+    for (var i=0; i<sites.length; i++) {
+        idArray.push(sites[i].id);
+    }
+
+    var onNext = (label, data) => {
+        result[label] = data;
+    }
+
+    var onCompleted = () => {
+        loops -= 1;
+        if (loops == 0) {
+            res.json(result);
+        }
+    }
+
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            console.log(error);
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+
+    var observerQuantity = Rx.Observer.create((data) => onNext("quantity", data), onError, onCompleted);
+    DechetService.getPrestatairesForDechet(id, idArray, 0, beginDate, endDate)
+        .subscribe(observerQuantity);
+
+    var observerRecycled = Rx.Observer.create((data) => onNext("recycled", data), onError, onCompleted);
+    DechetService.getPrestatairesForDechet(id, idArray, 1, beginDate, endDate)
+        .subscribe(observerRecycled);
+
+}
+
+
 router.get('/prestataires/', verifyParameters);
 router.get('/prestataires/', getNecessarySites);
-router.get('/prestataires/', getGlobalData);
+router.get('/prestataires/', getGlobalPrestataires);
 
 router.get('/prestataires/:level/', verifyParameters);
 router.get('/prestataires/:level/', getNecessarySites);
-router.get('/prestataires/:level/', getGlobalData);
+router.get('/prestataires/:level/', getGlobalPrestataires);
 
 router.get('/prestataires/:level/dechets/:prestataireId', verifyParameters);
 router.get('/prestataires/:level/dechets/:prestataireId', getNecessarySites);
@@ -345,10 +456,31 @@ router.get('/prestataires/:level/dechets/:prestataireId', getDataForPrestataire)
 
 router.get('/prestataires/:level/:name', verifyParameters);
 router.get('/prestataires/:level/:name', getNecessarySites);
-router.get('/prestataires/:level/:name', getGlobalData);
+router.get('/prestataires/:level/:name', getGlobalPrestataires);
 
 router.get('/prestataires/:level/:name/dechets/:prestataireId', verifyParameters);
 router.get('/prestataires/:level/:name/dechets/:prestataireId', getNecessarySites);
 router.get('/prestataires/:level/:name/dechets/:prestataireId', getDataForPrestataire);
+
+
+router.get('/dechets/', verifyParameters);
+router.get('/dechets/', getNecessarySites);
+router.get('/dechets/', getGlobalDechets);
+
+router.get('/dechets/:level/', verifyParameters);
+router.get('/dechets/:level/', getNecessarySites);
+router.get('/dechets/:level/', getGlobalDechets);
+
+router.get('/dechets/:level/prestataires/:dechetId', verifyParameters);
+router.get('/dechets/:level/prestataires/:dechetId', getNecessarySites);
+router.get('/dechets/:level/prestataires/:dechetId', getDataForDechet);
+
+router.get('/dechets/:level/:name', verifyParameters);
+router.get('/dechets/:level/:name', getNecessarySites);
+router.get('/dechets/:level/:name', getGlobalDechets);
+
+router.get('/dechets/:level/:name/prestataires/:dechetId', verifyParameters);
+router.get('/dechets/:level/:name/prestataires/:dechetId', getNecessarySites);
+router.get('/dechets/:level/:name/prestataires/:dechetId', getDataForDechet);
 
 module.exports = router;
