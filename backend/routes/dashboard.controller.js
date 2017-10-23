@@ -90,13 +90,11 @@ function getNecessarySites(req, res, next) {
     const name = req.params.name
     var query = {};
 
-    console.log(req.params.level);
-
     if (req.params.level == 0) {
         var where = {};
     }
     else {
-        console.log("wtf");
+        var where = {};
         where[field] = name;
         query.where = where;
     }
