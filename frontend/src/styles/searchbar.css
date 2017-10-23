@@ -5,10 +5,9 @@
 }
 
 .react-autosuggest__input {
-  margin-left: 20%;
-  margin-right: 10%;
+
   display: block;
-  width: 70%;
+  width: 43%;
   height: 30px;
   padding: 10px 20px;
   font-family: Helvetica, sans-serif;
