@@ -106,7 +106,7 @@ export function loadPrestataireGraphValues(level,name,idPrestataire,chosenDechet
         return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+idPrestataire)
             .then(response => response.json())
             .then(json => {
-                
+
             })
     }
 }
@@ -121,8 +121,8 @@ export function loadDechetList(level,name){
         return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name)
             .then(response => response.json())
             .then(json => {
-                json.forEach(row => {
-                    row.nom = row.libelle;
+                json.dechets.forEach(row => {
+                    row = row.dechet;
                 })
                 dispatch(actions.updateDechetList(json));
             });
