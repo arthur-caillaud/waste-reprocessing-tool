@@ -150,6 +150,7 @@ function getPrestataireByName(prestataireName){
 
 function getDechetsForPrestataire(id, sitesId, recycled, beginDate, endDate) {
 
+    // TODO use a dictionnary for this
     var qualification;
     if (recycled == 1) {
         qualification = "Recyclage";
