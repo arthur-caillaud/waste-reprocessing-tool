@@ -14,8 +14,7 @@ function getChartSize(el) {
     return  [width,height];
 };
 
-var valueAnteG = 0;
-var valueBeforeAnteG = 0;
+
 
 
 class LeftGauged3 extends Component {
@@ -34,11 +33,7 @@ class LeftGauged3 extends Component {
         var margin = {top: 10, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
-        /*
-        Here we just save previous state
-        */
-        valueAnteG = this.props.leftvalue
-        valueBeforeAnteG = this.props.leftvalueBefore
+
 
 
 
@@ -202,15 +197,10 @@ class LeftGauged3 extends Component {
         this.drawJauge();
     };
 
-    componentDidMount() {
-
-        this.drawJauge()
-
-
-    };
 
 
     componentDidUpdate() {
+
         this.redrawJauge();
 
     };

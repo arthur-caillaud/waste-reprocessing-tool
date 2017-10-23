@@ -25,6 +25,7 @@ class App extends Component {
   }
 
 
+
   render() {
 
       const location = window.location.href;
@@ -41,8 +42,7 @@ class App extends Component {
       }
 
 
-      return (
-          <div>
+      return (<div>
               <BrowserRouter>
                   <div>
                       <Row>
@@ -71,8 +71,7 @@ class App extends Component {
                       </Row>
                   </div>
               </BrowserRouter>
-          </div>
-  )
+          </div>)
   }
 }
 
