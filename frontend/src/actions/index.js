@@ -54,6 +54,8 @@ export const LOAD_DECHETGRAPH_TAGS_BEGIN = "LOAD_DECHETGRAPH_TAGS";
 export const ADD_PRESTATAIRE_GRAPH_TAG = "ADD_DECHET_GRAPH_TAG";
 export const REMOVE_PRESTATAIRE_GRAPH_TAG = "REMOVE_DECHET_GRAPH_TAG";
 export const UPDATE_PRESTATAIRETAGS_INPUTARRAY = "UPDATE_PRESTATAIRETAGS_INPUTARRAY";
+
+export const LOAD_PRESTATAIREGRAPH_VALUES_BEGIN = "LOAD_PRESTATAIREGRAPH_VALUES_BEGIN";
 /*
  * other constants
  */
@@ -354,5 +356,11 @@ export function updatePrestataireTagsInputArray(inputArray){
     return {
         type: UPDATE_PRESTATAIRETAGS_INPUTARRAY,
         inputArray
+    }
+}
+
+export function loadPrestataireGraphValuesBegin(){
+    return {
+        type: LOAD_PRESTATAIREGRAPH_VALUES_BEGIN
     }
 }

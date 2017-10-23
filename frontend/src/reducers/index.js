@@ -90,27 +90,6 @@ function infosPanelOptions(
     }
 }
 
-function graphOptions(state = {type: GraphTypes.HISTOGRAM_GRAPH, input: '', tags:[]}, action){
-    switch (action.type) {
-        case CHANGE_GRAPH_INPUT:
-            return Object.assign({}, state, {input: action.prestataire});
-        case CHANGE_GRAPH_TYPE:
-            return Object.assign({}, state, {type: action.graphType});
-        case ADD_GRAPH_TAG:
-            return Object.assign({}, state, {tags: [...state.tags, action.tag]});
-        case REMOVE_GRAPH_TAG:
-            var newTagsArray = [];
-            state.tags.forEach(tag => {
-                if(action.tag !== tag){
-                    newTagsArray.push(tag)
-                }
-            });
-            return Object.assign({}, state, {tags: newTagsArray});
-        default:
-            return state;
-    }
-}
-
 function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, lateralmenuIsVisible: true}, action){
     switch (action.type) {
         case CHANGE_URL:
@@ -359,7 +338,6 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
                 tagsArray: newTagsArray
             });
         case UPDATE_DECHETTAGS_INPUTARRAY:
-            console.log(action.inputArray);
             return Object.assign({}, state, {
                 inputArray: action.inputArray
             })
@@ -403,9 +381,20 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
     }
 }
 
+function prestataireGraphOptions(state = {title: '', values: [], isLoading: false}, action){
+    switch(action.type){
+        case LOAD_PRESTATAIREGRAPH_VALUES_BEGIN:
+            return Object.assign({}, state, {isLoading: true})
+        case UPDATE_SELECTEDPRESTATAIRE:
+            return Object.assign({}, state, {title: action.prestataire});
+        default:
+            return state;
+    }
+}
+
+
 const akkaApp = combineReducers({
     pageOptions,
-    graphOptions,
     infosPanelOptions,
     updateGauge,
     updateTile,

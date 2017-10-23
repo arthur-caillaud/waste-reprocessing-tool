@@ -6,16 +6,19 @@ function mapStateToProps(state, ownProps) {
     const idGraph = ownProps.idGraph;
     return {
         title: state[branchName].graphTitle,
-        values: state[branchName].graphValues
+        values: state[branchName].graphValues,
+        chosenTags: state[branchName].chosenTags,
+        chosenInput: state[branchName].chosenInput
     }
 };
 
 function mapDispatchToProps(dispatch, ownProps) {
-    return {showMoreInfos: () => dispatch(actions.updateLeftGauge({
-        value: Math.random()*100,
-        valueBefore:Math.random()*100,
-        valueAnte: valueAnteG,
-        valueBeforeAnte: valueBeforeAnteG
+    return {
+        showMoreInfos: () => dispatch(actions.updateLeftGauge({
+            value: Math.random()*100,
+            valueBefore:Math.random()*100,
+            valueAnte: valueAnteG,
+            valueBeforeAnte: valueBeforeAnteG
     }))
 
     }

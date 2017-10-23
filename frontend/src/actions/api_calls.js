@@ -100,6 +100,17 @@ export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire
     }
 }
 
+export function loadPrestataireGraphValues(level,name,idPrestataire,chosenDechets){
+    return dispatch => {
+        dispatch(actions.loadPrestataireGraphValuesBegin());
+        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+idPrestataire)
+            .then(response => response.json())
+            .then(json => {
+                
+            })
+    }
+}
+
 /*
 API calls for Dechet Vision
 */
