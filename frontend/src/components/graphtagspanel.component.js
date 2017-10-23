@@ -66,7 +66,7 @@ class GraphTagsPanel extends Component {
         if(containerArray){
             containerArray.forEach(tag => {
                 const tagComponent = ( <ListGroupItem
-                    onClick={() => {onTagClick(tag.codeinterne)}}
+                    onClick={() => {onTagClick(tag)}}
                     className="tag-container-element">
                         {tag.nom}
                     </ListGroupItem>)
@@ -76,14 +76,14 @@ class GraphTagsPanel extends Component {
 
         let chosenTags = [];
         if(tagsArray){
-            tagsArray.forEach(dechet => {
-                const dechetTag = (
+            tagsArray.forEach(tag => {
+                const tagDiv = (
                     <div className="chosen-tag">
-                        <span>{dechet}</span>
-                        <Glyphicon glyph="remove" className="remove-tag-button" onClick={() => onRemove(dechet)}/>
+                        <span>{tag.shortenedName}</span>
+                        <Glyphicon glyph="remove" className="remove-tag-button" onClick={() => onRemove(tag)}/>
                     </div>
                 )
-                chosenTags.push(dechetTag);
+                chosenTags.push(tagDiv);
             })
         }
 

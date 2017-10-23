@@ -338,8 +338,14 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
                 isLoading: true
             })
         case ADD_PRESTATAIRE_GRAPH_TAG:
+            const newTag = Object.assign({}, action.dechetTag, {
+                shortenedName: action.dechetTag.codeinterne +
+                ' - ' +
+                action.dechetTag.libelle.slice(0,6) +
+                '...'
+            });
             return Object.assign({}, state, {
-                tagsArray: [...state.tagsArray, action.dechetTag]
+                tagsArray: [...state.tagsArray, newTag]
             });
         case REMOVE_PRESTATAIRE_GRAPH_TAG:
             let newTagsArray = []
@@ -368,8 +374,11 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
                 isLoading: true
             })
         case ADD_DECHET_GRAPH_TAG:
+            const newTag = Object.assign({}, action.prestataireTag, {
+                shortenedName: action.prestataireTag.nom.slice(0,11) + '...'
+            });
             return Object.assign({}, state, {
-                tagsArray: [...state.tagsArray, action.prestataireTag]
+                tagsArray: [...state.tagsArray, newTag]
             });
         case REMOVE_DECHET_GRAPH_TAG:
             let newTagsArray = []

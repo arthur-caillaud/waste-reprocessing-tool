@@ -50,23 +50,26 @@ class Prestataire extends Component {
                       values: [30,40,33]
                   }]}/>
               </Col>
-              <Col sm={9} smOffset={3}>
-                 <GraphTagsPanel
-                     searchPlaceholder="Ajouter des déchets pour ce prestataire"
-                     branchName="updatePrestataireGraphTagsPanel"
-                     idInputPanel="dechet-tag-panel"
-                     onClickActionName="addPrestataireGraphTag"
-                     onRemoveActionName="removePrestataireGraphTag"
-                     onLoadActionName="loadDechetsConsideringChosenPrestataire"
-                     inputGraphPanelBranch="updatePrestataireSelectionPanel"
-                     defaultOnLoadActionName="loadDechetList"
-                />
-              </Col>
+
             </Row>
           </Grid>
     </div>
     );
   }
 }
+
+/*
+<Col sm={9} smOffset={3}>
+   <GraphTagsPanel
+       searchPlaceholder="Ajouter des déchets pour ce prestataire"
+       branchName="updatePrestataireGraphTagsPanel"
+       idInputPanel="dechet-tag-panel"
+       onClickActionName="addPrestataireGraphTag"
+       onRemoveActionName="removePrestataireGraphTag"
+       onLoadActionName="loadDechetsConsideringChosenPrestataire"
+       inputGraphPanelBranch="updatePrestataireSelectionPanel"
+       defaultOnLoadActionName="loadDechetList"
+  />
+</Col>*/
 
 export default Prestataire;
