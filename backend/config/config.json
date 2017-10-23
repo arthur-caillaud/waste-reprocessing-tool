@@ -1,50 +1,53 @@
 {
-  "development": {
-    "username": "root",
-    "password": "arthurpierreaurelien",
-    "database": "db",
-    "host": "91.134.242.69",
-    "dialect": "mysql",
-    "logging": false
-  },
-  "test": {
-    "username": "backend",
-    "password": "password",
-    "database": "db_test",
-    "host": "91.134.242.69",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "91.134.242.69",
-    "dialect": "mysql"
-   },
-   "server": {
-       "listen_port": 4000
-   },
-   "excel": {
-       "DATA_DIR": "./data/",
-       "STARTING_ROW": 3,
-       "MAIN_SHEET": 1,
-       "REFERENTIELDECHET_SHEET": 11,
-       "REFERENTIELDECHET_STARTING_ROW": 9
-   },
-   "mysql": {
-       "url": "91.134.242.69",
-       "user": "root",
-       "password": "arthurpierreaurelien",
-       "database": "db",
-       "poolsize": 100,
-       "minimumpoolsize": 0,
-       "connectionduration": 100000
-   },
-   "test": {
-       "username": "backend",
-       "password": "password",
-       "database": "db_test",
-       "host": "91.134.242.69",
-       "dialect": "mysql"
-   }
+    "computing": {
+        "tolerance": 5
+    },
+    "development": {
+        "username": "root",
+        "password": "arthurpierreaurelien",
+        "database": "db",
+        "host": "91.134.242.69",
+        "dialect": "mysql",
+        "logging": false
+    },
+    "test": {
+        "username": "backend",
+        "password": "password",
+        "database": "db_test",
+        "host": "91.134.242.69",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "root",
+        "password": null,
+        "database": "database_production",
+        "host": "91.134.242.69",
+        "dialect": "mysql"
+    },
+    "server": {
+        "listen_port": 4000
+    },
+    "excel": {
+        "DATA_DIR": "./data/",
+        "STARTING_ROW": 3,
+        "MAIN_SHEET": 1,
+        "REFERENTIELDECHET_SHEET": 11,
+        "REFERENTIELDECHET_STARTING_ROW": 9
+    },
+    "mysql": {
+        "url": "91.134.242.69",
+        "user": "root",
+        "password": "arthurpierreaurelien",
+        "database": "db",
+        "poolsize": 100,
+        "minimumpoolsize": 0,
+        "connectionduration": 100000
+    },
+    "test": {
+        "username": "backend",
+        "password": "password",
+        "database": "db_test",
+        "host": "91.134.242.69",
+        "dialect": "mysql"
+    }
 }

@@ -15,6 +15,8 @@ var SitesService = require('../services/sites.service');
 var BordereauxService = require('../services/bordereaux.service');
 
 var utilities = require('../utilities/dates');
+var config = require('../config/config.json');
+const tolerance = config.computing.tolerance;
 
 // TODO faire async, comme dans le script d'Arthur
 
@@ -85,7 +87,7 @@ function printDuration(duration) {
 
 
 // computes all the data for a given site identified by its id in the database
-function computeForSite(beginDate, endDate, tolerance, siteId, callback) {
+function computeForSite(beginDate, endDate, siteId, callback) {
 
     printFeedback(siteId, beginDate, endDate, "computing");
 
@@ -168,7 +170,7 @@ function computeForSite(beginDate, endDate, tolerance, siteId, callback) {
 
     // create all the observer that will be used and start them
     var observerEcarts = Rx.Observer.create(onNextArray, onError, onCompleted);
-    DashboardService.getAllEcartsDePesee(tolerance, [siteId], beginDate, endDate, "ecarts_pesee")
+    DashboardService.getAllEcartsDePesee([siteId], beginDate, endDate, "ecarts_pesee")
         .subscribe(observerEcarts);
 
     var observerIncoherences = Rx.Observer.create(onNextArray, onError, onCompleted);
@@ -224,10 +226,6 @@ function computeForSite(beginDate, endDate, tolerance, siteId, callback) {
 
 function preComputeForDate(year, month, callback) {
 
-    // prepare data
-    // TODO: use a config file for the tolerance, and not use 0.
-    var tolerance = 0;
-
     // this array will contain all the ids of sites in the database
     var idArray = [];
 
@@ -249,7 +247,7 @@ function preComputeForDate(year, month, callback) {
             // in the corresponding site
             idArray.forEach((id) => {
                 var task = function(intermCallback) {
-                    utilities.computeDates(year, month, tolerance, id, computeForSite, intermCallback);
+                    utilities.computeDates(year, month, id, computeForSite, intermCallback);
                 };
                 tasksArray.push(task);
             })

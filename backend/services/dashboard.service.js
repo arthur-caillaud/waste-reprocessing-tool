@@ -17,6 +17,8 @@ var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
 var dashboard = models.dashboard;
 
+var config = require('../config/config.json');
+const tolerance = config.computing.tolerance;
 
 /** All the get functions have exactly the same format:
     First we create a query corresponding to the data we want to find
@@ -31,7 +33,7 @@ var dashboard = models.dashboard;
 
 // this function looks for all the bordereau in which the difference between
 // the estimated quantity and the actual quantity is bigger than a max value
-function getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, label) {
+function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
     const query = {
         include: [
             {
@@ -467,7 +469,7 @@ function getDataForSites(idArray, beginDate, endDate) {
 // this function is called to get the details in the dashboard for the requested
 // sites. All the data must be processed by hands, but it will be called after
 // the main function, so time is not really a big factor here
-function getDetailsForSites(beginDate, endDate, tolerance, idArray) {
+function getDetailsForSites(beginDate, endDate, idArray) {
 
     var observable = Rx.Observable.create((observer) => {
 
@@ -499,7 +501,7 @@ function getDetailsForSites(beginDate, endDate, tolerance, idArray) {
         }
 
         var observerEcarts = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllEcartsDePesee(tolerance, idArray, beginDate, endDate, "ecarts_pesee")
+        getAllEcartsDePesee(idArray, beginDate, endDate, "ecarts_pesee")
             .subscribe(observerEcarts);
 
         var observerIncoherences = Rx.Observer.create(tempNext, tempError, tempCompleted);
