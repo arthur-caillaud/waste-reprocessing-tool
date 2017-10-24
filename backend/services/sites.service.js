@@ -4,7 +4,8 @@ var service = {};
 var sequelize = require('sequelize');
 
 var models = require('../models/');
-var Site = models.site;
+var Site = models.site
+var localisation = models.localisation;
 
 var location = require('../utilities/location');
 
@@ -80,42 +81,60 @@ function getSitesCloseToSite(id) {
     var dMax = 100000; // should maybe be km
     var result = [];
     var observable = Rx.Observable.create((observer) => {
-        Site.findById(id)
-        .then((givenSite) => {
-            if (givenSite) {
-                // gets all the other sites
-                var latitude = givenSite.dataValues.latitude;
-                var longitude = givenSite.dataValues.longitude;
-                Site.findAll()
-                    .then((sites) => {
-                        // for each site, only gets the close ones
-                        sites.forEach((site) => {
-                            console.log(site);
-                            var lat = site.dataValues.latitude;
-                            var long = site.dataValues.longitude;
-                            console.log(lat);
-                            location.getDistance(longitude, latitude, long, lat, (distance) => {
-                                console.log(distance);
-                                if (distance < dMax) {
-                                    result.push(site);
-                                }
-                            })
-                        })
-                        observer.onNext(result);
-                        observer.onCompleted();
-                    })
-                    .catch((error) => {
-                        throw error;
-                    })
-
-            }
-            else {
-                throw "Resource not found";
-            }
+        Site.findAll({
+            where: {
+                id: id
+            },
+            include: [
+                {
+                    model: localisation
+                }
+            ]
         })
-        .catch ((error) => {
-            observer.onError(error);
-        });
+            .then((givenSites) => {
+                var givenSite = givenSites[0];
+                if (givenSite) {
+                    // gets all the other sites
+                    var latitude = givenSite.dataValues.localisation.dataValues.latitude;
+                    var longitude = givenSite.dataValues.localisation.dataValues.longitude;
+                    Site.findAll({
+                        include: [
+                            {
+                                model: localisation,
+                                where: {
+                                    id: {$not: null}
+                                }
+                            }
+                        ]
+                    })
+                        .then((sites) => {
+                            // for each site, only gets the close ones
+                            sites.forEach((site) => {
+                                var lat = site.dataValues.localisation.dataValues.latitude;
+                                var long = site.dataValues.localisation.dataValues.longitude;
+                                location.getDistance(longitude, latitude, long, lat, (distance) => {
+                                    console.log(site.dataValues.nom);
+                                    console.log(distance);
+                                    if (distance < dMax) {
+                                        result.push(site);
+                                    }
+                                })
+                            })
+                            observer.onNext(result);
+                            observer.onCompleted();
+                        })
+                        .catch((error) => {
+                            throw error;
+                        })
+
+                }
+                else {
+                    throw "Resource not found";
+                }
+            })
+            .catch ((error) => {
+                observer.onError(error);
+            });
     });
     return observable;
 }
