@@ -26,13 +26,15 @@ class TileElement extends Component {
 
 
       return (
-        <div ref="tile" className="dashboard-tile" onClick={onClickTile}>
+        <div>
           {notifCircle}
+          <div ref="tile" className="dashboard-tile" onClick={onClickTile}>
           <div className="valueTitle">
               <span className="value">{value}</span>
               {this.getArrow(isGrowing)}
           </div>
           <h5 className="title"> {title}</h5>
+      </div>
         </div>
       );
   }

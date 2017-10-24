@@ -13,7 +13,8 @@ export const RESET_MOREINFOS_TO_DEFAULT = 'RESET_MOREINFOS_TO_DEFAULT'
 export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
 export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
 export const DISPLAY_LEFTTILE_INFOS = 'DISPLAY_LEFTTILE_INFOS';
-export const DISPLAY_LEFTTILE_ALERTS = 'DISPLAY_LEFTTILE_ALERTS';
+export const DISPLAY_MIDDLELEFTTILE_INFOS = 'DISPLAY_LEFTTILE_INFOS';
+export const DISPLAY_MIDDLELEFTTILE_ALERTS = 'DISPLAY_MIDDLELEFTTILE_ALERTS';
 
 
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
@@ -196,9 +197,14 @@ export function displayLeftTileInfos(){
         type: DISPLAY_LEFTTILE_INFOS
     }
 }
-export function displayLeftTileAlerts(){
+export function displayMiddleLeftTileInfos(){
     return {
-        type: DISPLAY_LEFTTILE_ALERTS
+        type: DISPLAY_MIDDLELEFTTILE_INFOS
+    }
+}
+export function displayMiddleLeftTileAlerts(){
+    return {
+        type: DISPLAY_MIDDLELEFTTILE_ALERTS
     }
 }
 

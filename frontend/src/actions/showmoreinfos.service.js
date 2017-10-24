@@ -17,14 +17,20 @@ function displayLeftTileInfos() {
         dispatch(actions.displayLeftTileInfos())
     }
 }
-function displayLeftTileAlerts() {
+function displayMiddleLeftTileInfos() {
     return dispatch => {
-        dispatch(actions.displayLeftTileAlerts())
+        dispatch(actions.displayMiddleLeftTileInfos())
+    }
+}
+function displayMiddleLeftTileAlerts() {
+    return dispatch => {
+        dispatch(actions.displayMiddleLeftTileAlerts())
     }
 }
 
 MoreInfosService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
 MoreInfosService.displayLeftGaugeInfos = displayLeftGaugeInfos;
-MoreInfosService.displayLeftTileAlerts = displayLeftTileAlerts;
+MoreInfosService.displayMiddleLeftTileInfos = displayMiddleLeftTileInfos;
+MoreInfosService.displayMiddleLeftTileAlerts = displayMiddleLeftTileAlerts;
 MoreInfosService.displayLeftTileInfos = displayLeftTileInfos;
 export default MoreInfosService

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import '../../styles/tile.css';
 
-export default class LeftTileInfos extends Component {
+export default class MiddleLeftTileInfos extends Component {
     constructor(props) {
         super(props);
         this.state = {

@@ -35,7 +35,7 @@
     font-size: 250%;
 }
 
-.dashboard-tile .notifValue{
+.notifValue{
     position: absolute;
     top: -5%;
     right: -5%;
@@ -47,9 +47,11 @@
     text-align: center;
     font-size: 1.8em;
     vertical-align: middle;
+    cursor: pointer;
+    z-index: 1;
 }
 
-.dashboard-tile .notifValue:hover {
+.notifValue:hover {
     background-color: #E60000;
 }
 

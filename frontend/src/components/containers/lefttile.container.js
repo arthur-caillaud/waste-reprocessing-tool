@@ -17,9 +17,6 @@ const mapDispatchToProps = dispatch => {
     return {
         onClickTile: () => {
             dispatch(MoreInfosService.displayLeftTileInfos())
-        },
-        onClickNotif: () => {
-            dispatch(MoreInfosService.displayLeftTileAlerts())
         }
     }
 }
