@@ -21,9 +21,8 @@ class InputGraphPanel extends Component {
         const suggestion = this.props.suggestion;
         const input = this.state.searchInput;
         const isLoading = this.props.isLoading;
+        const emptyContainerMessage = this.props.emptyContainerMessage;
 
-        console.log(inputArray);
-        
         function handleNoResultsFound(){
             if(input && input.length > 0){
                 if(suggestion.length === 0){
@@ -35,7 +34,7 @@ class InputGraphPanel extends Component {
         let list = []
         let containerArray = (suggestion.length > 0) ? suggestion : inputArray;
 
-        if(containerArray){
+        if(containerArray.length > 0){
             containerArray.forEach(input => {
                 let listItem;
                 if (input.id === selectedInput){
@@ -47,6 +46,13 @@ class InputGraphPanel extends Component {
                     list.push(listItem);
                 }
             });
+        }
+        else{
+            const listItem = (
+                <ListGroupItem>
+                    {emptyContainerMessage}
+                </ListGroupItem> );
+            list.push(listItem);
         }
 
         return (

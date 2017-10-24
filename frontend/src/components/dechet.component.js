@@ -19,47 +19,56 @@ class Dechet extends Component {
           <Grid fluid>
             <Row>
                 <Col sm={3}>
-                    <InputGraphPanel
-                        idInputPanel="dechet-selection-panel"
-                        onClickActionName="updateSelectedDechet"
-                        onLoadActionName="loadDechetList"
-                        onSearchActionName="updateDechetPanelSearchbarInput"
-                        branchName="updateDechetSelectionPanel"
-                        searchPlaceholder="Rechercher un déchet"
-                    />
+                  <InputGraphPanel
+                      idInputPanel="dechet-selection-panel"
+                      onClickActionName="updateSelectedDechet"
+                      onLoadActionName="loadPrestatairesConsideringChosenDechet"
+                      onSearchActionName="updateDechetPanelSearchbarInput"
+                      branchName="updateDechetSelectionPanel"
+                      searchPlaceholder="Rechercher un déchet"
+                      emptyContainerMessage="Aucun déchet trouvé à cette échelle"
+                  />
                 </Col>
                 <Col sm={9}>
-                    <Histogram title="EMBALLAGE PAPIER-CARTON" id="dechet-hist" values={[{
+                  <Histogram title="FER ET ACIER" id="dechet-hist" values={[{
                         title: 'Taux de valorisation global',
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [78,82,73]
+                        values: [78,82,73],
+                        volumes: [230,4839,1020]
                     },{
                         title: 'Fer et acier',
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [54,65,43]
+                        values: [54,65,43],
+                        volumes: [230,4839,1020]
                     },{
                         title: 'Carton',
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [90,95,86]
+                        values: [90,95,86],
+                        volumes: [230,4839,1020]
                     },{
                         title: "Aluminium",
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [10,65,90]
+                        values: [10,65,90],
+                        volumes: [230,4839,1020]
                     },{
                         title: "Déchets dangereux",
                         keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [30,40,33]
+                        values: [30,40,33],
+                        volumes: [230,4839,1020]
                     }]}/>
                 </Col>
                 <Col sm={9} smOffset={3}>
-                     <GraphTagsPanel
-                         searchPlaceholder="Ajouter des prestataires pour ce déchet"
-                         branchName="updateDechetGraphTagsPanel"
-                         idInputPanel="prestataire-tag-panel"
-                         onClickActionName="addDechetGraphTag"
-                         onRemoveActionName="removeDechetGraphTag"
-                         onLoadActionName="loadPrestatairesConsideringChosenDechet"
-                    />
+                   <GraphTagsPanel
+                       searchPlaceholder="Ajouter des prestataires pour ce déchet"
+                       branchName="updateDechetGraphTagsPanel"
+                       idInputPanel="prestataire-tag-panel"
+                       onClickActionName="addDechetGraphTag"
+                       onRemoveActionName="removeDechetGraphTag"
+                       onLoadActionName="loadPrestatairesConsideringChosenDechet"
+                       inputGraphPanelBranch="updateDechetSelectionPanel"
+                       defaultOnLoadActionName="loadPrestataireList"
+                       emptyContainerMessage="Aucun prestataire pour ce déchet"
+                  />
                 </Col>
             </Row>
         </Grid>

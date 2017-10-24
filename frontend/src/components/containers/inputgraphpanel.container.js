@@ -8,6 +8,7 @@ function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
     const idInputPanel = ownProps.idInputPanel;
     const searchPlaceholder = ownProps.placeholder;
+    const emptyContainerMessage = ownProps.emptyContainerMessage;
     return {
         inputArray: state[branchName].inputArray,
         selectedInput: state[branchName].selectedInput,
@@ -19,11 +20,15 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
-    const onLoadActionName = ownProps.onLoadActionName;
+    const loadTagsOfInputActionName = ownProps.onLoadActionName;
     const onSearchActionName = ownProps.onSearchActionName;
     return ({
         onClick: (input) => {
             dispatch(actions[onClickActionName](input));
+            dispatch(apiCalls[loadTagsOfInputActionName](
+                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.nom,
+                input));
         },
         onSearch: (input) => {
             dispatch(actions[onSearchActionName](input))
@@ -31,7 +36,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     });
 };
 
-const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion}) => {
+const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, emptyContainerMessage, searchPlaceholder, isLoading, suggestion}) => {
     return(
         <InputGraphPanel
             id={id}
@@ -43,6 +48,7 @@ const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded,
             onLoaded={onLoaded}
             onSearch={onSearch}
             isLoading={isLoading}
+            emptyContainerMessage={emptyContainerMessage}
         />
     );
 }

@@ -21,10 +21,11 @@ class Prestataire extends Component {
                 <InputGraphPanel
                     idInputPanel="prestataire-selection-panel"
                     onClickActionName="updateSelectedPrestataire"
-                    onLoadActionName="loadPrestataireList"
+                    onLoadActionName="loadDechetsConsideringChosenPrestataire"
                     onSearchActionName="updatePrestatairePanelSearchbarInput"
                     branchName="updatePrestataireSelectionPanel"
                     searchPlaceholder="Rechercher un prestataire"
+                    emptyContainerMessage="Aucun prestataire trouvé à cette échelle"
                 />
               </Col>
               <Col sm={9}>
@@ -65,6 +66,7 @@ class Prestataire extends Component {
                      onLoadActionName="loadDechetsConsideringChosenPrestataire"
                      inputGraphPanelBranch="updatePrestataireSelectionPanel"
                      defaultOnLoadActionName="loadDechetList"
+                     emptyContainerMessage="Aucun déchet pour ce prestataire"
                 />
               </Col>
             </Row>

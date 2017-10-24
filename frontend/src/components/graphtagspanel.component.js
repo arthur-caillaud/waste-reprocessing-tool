@@ -51,6 +51,7 @@ class GraphTagsPanel extends Component {
         const isLoading = this.props.isLoading;
         const suggestionArray = this.state.suggestion;
         const input = this.state.searchInput;
+        const emptyContainerMessage = this.props.emptyContainerMessage;
 
         function handleNoResultsFound(){
             if(input && input.length > 0){
@@ -63,7 +64,7 @@ class GraphTagsPanel extends Component {
         let list = [];
         let containerArray = (suggestionArray.length > 0) ? suggestionArray : inputArray;
 
-        if(containerArray){
+        if(containerArray.length > 0){
             containerArray.forEach(tag => {
                 const tagComponent = ( <ListGroupItem
                     onClick={() => {onTagClick(tag)}}
@@ -72,6 +73,13 @@ class GraphTagsPanel extends Component {
                     </ListGroupItem>)
                 list.push(tagComponent)
             })
+        }
+        else {
+            const tagComponent = ( <ListGroupItem
+                className="tag-container-element">
+                    <i>{emptyContainerMessage}</i>
+                </ListGroupItem>)
+            list.push(tagComponent);
         }
 
         let chosenTags = [];
