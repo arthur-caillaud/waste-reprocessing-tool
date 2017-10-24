@@ -8,6 +8,7 @@ function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
     const idInputPanel = ownProps.idInputPanel;
     const searchPlaceholder = ownProps.placeholder;
+    const emptyContainerMessage = ownProps.emptyContainerMessage;
     return {
         inputArray: state[branchName].inputArray,
         selectedInput: state[branchName].selectedInput,
@@ -35,7 +36,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     });
 };
 
-const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, searchPlaceholder, isLoading, suggestion}) => {
+const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded, onSearch, id, emptyContainerMessage, searchPlaceholder, isLoading, suggestion}) => {
     return(
         <InputGraphPanel
             id={id}
@@ -47,6 +48,7 @@ const InputGraphPanelContainer = ({inputArray, selectedInput, onClick, onLoaded,
             onLoaded={onLoaded}
             onSearch={onSearch}
             isLoading={isLoading}
+            emptyContainerMessage={emptyContainerMessage}
         />
     );
 }

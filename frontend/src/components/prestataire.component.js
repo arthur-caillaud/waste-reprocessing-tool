@@ -25,6 +25,7 @@ class Prestataire extends Component {
                     onSearchActionName="updatePrestatairePanelSearchbarInput"
                     branchName="updatePrestataireSelectionPanel"
                     searchPlaceholder="Rechercher un prestataire"
+                    emptyContainerMessage="Aucun prestataire trouvé à cette échelle"
                 />
               </Col>
               <Col sm={9}>

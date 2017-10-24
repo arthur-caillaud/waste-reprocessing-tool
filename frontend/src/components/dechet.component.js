@@ -26,6 +26,7 @@ class Dechet extends Component {
                       onSearchActionName="updateDechetPanelSearchbarInput"
                       branchName="updateDechetSelectionPanel"
                       searchPlaceholder="Rechercher un déchet"
+                      emptyContainerMessage="Aucun déchet trouvé à cette échelle"
                   />
                 </Col>
                 <Col sm={9}>
