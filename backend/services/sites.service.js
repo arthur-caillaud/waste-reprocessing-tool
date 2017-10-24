@@ -78,12 +78,12 @@ function getSiteById(id) {
    return observable;
 }
 
-function getSitesCloseToSite(id, distanceMax) {
+function getSitesCloseToSite(name, distanceMax) {
     var result = [];
     var observable = Rx.Observable.create((observer) => {
         Site.findAll({
             where: {
-                id: id
+                nom: name
             },
             include: [
                 {

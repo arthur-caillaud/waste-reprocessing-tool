@@ -166,6 +166,8 @@ function getNecessarySites(req, res, next) {
     // gets the corresponding sites to be used after
     const hierarchy = ["DPIH", "metier_dependance", "up_dependance", "unite_dependance", "nom"];
 
+    const distance = 300;
+
     const level = req.params.level;
     const name = req.params.name;
 
@@ -178,7 +180,7 @@ function getNecessarySites(req, res, next) {
     const field = hierarchy[level];
     var query = {};
 
-    var loops = 2;
+    var loops = 3;
 
     if (typeof field != "undefined") {
         if (req.params.level == 0) {
@@ -213,12 +215,21 @@ function getNecessarySites(req, res, next) {
     var observer2 = Rx.Observer.create((data) => onNext("globalSites", data), error, complete);
     var subscription2 = SitesService.getAllSites({}).subscribe(observer2);
 
+    if (level == 4) {
+        var observer3 = Rx.Observer.create((data) => onNext("regionSites", data), error, complete);
+        var subscription2 = SitesService.getSitesCloseToSite(name, distance).subscribe(observer3);
+    }
+    else {
+        complete();
+    }
+
 }
 
 
 function getGlobalPrestataires(req, res) {
     const sites = req.locals.sites;
     const globalSites = req.locals.globalSites;
+    const regionSites = req.locals.regionSites;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
 
@@ -227,7 +238,7 @@ function getGlobalPrestataires(req, res) {
         "prestataires": []
     };
 
-    var loops = 5;
+    var loops = 9;
 
     var idArray = [];
     for (var i=0; i<sites.length; i++) {
@@ -237,6 +248,13 @@ function getGlobalPrestataires(req, res) {
     var globalArray = [];
     for (var i=0; i<globalSites.length; i++) {
         globalArray.push(globalSites[i].id);
+    }
+
+    var regionArray = [];
+    if (typeof regionSites != 'undefined') {
+        for (var i=0; i<regionSites.length; i++) {
+            regionArray.push(globalSites[i].id);
+        }
     }
 
     var onNext = (data) => {
@@ -270,6 +288,28 @@ function getGlobalPrestataires(req, res) {
     var observerRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getValorisationVerte(globalArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
         .subscribe(observerRecycledVerte);
+
+    if (regionArray.length>0) {
+        var observerRegionQuantity = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getTotalVolume(regionArray, beginDate, endDate, ["volume_region", "globalData"])
+            .subscribe(observerRegionQuantity);
+
+        var observerRegionRecycled = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getValorisationTotale(regionArray, beginDate, endDate, ["valorisation_region", "globalData"])
+            .subscribe(observerRegionRecycled);
+
+        var observerRegionQuantityVerte = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getTotalVolumeVerte(regionArray, beginDate, endDate, ["volume_l_verte_region", "globalData"])
+            .subscribe(observerRegionQuantityVerte);
+
+        var observerRegionRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getValorisationVerte(regionArray, beginDate, endDate, ["valorisation_l_verte_region", "globalData"])
+            .subscribe(observerRegionRecycledVerte);
+    }
+    else {
+        loops -= 3;
+        onCompleted();
+    }
 
     var observerPrestataires = Rx.Observer.create(
         (data) => {

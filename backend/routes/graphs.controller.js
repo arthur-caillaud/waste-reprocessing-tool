@@ -58,8 +58,6 @@ If the request is correct, the next function will be called
 */
 function verifyParameters(req, res, next) {
 
-    console.log("nan mais en fait je devrais pas être ici");
-
     const prestataire = req.params.prestataire;
     const dechet = req.params.dechet;
     const beginDate = req.query.beginDate;
@@ -139,8 +137,6 @@ function verifyParameters(req, res, next) {
 
     dates["previousBeginDate"] = previousBeginDate;
     dates["previousEndDate"] = previousEndDate;
-
-    console.log(dates);
 
     req.locals = dates;
     next();
@@ -225,7 +221,6 @@ function getGlobalData(req, res) {
     }
     var onCompleted = () => {
         loops -= 1;
-        console.log(loops);
         if (loops==0) {
             res.json(result);
         }
