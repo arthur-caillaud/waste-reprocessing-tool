@@ -511,22 +511,40 @@ function getGlobalDechets(req, res) {
 function getDataForDechet(req, res) {
 
     const sites = req.locals.sites;
+    const globalSites = req.locals.globalSites;
+    const regionSites = req.locals.regionSites;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
 
-    var loops = 2;
+    var loops = 6;
 
     var idArray = [];
     var id = req.params.dechetId;
 
-    var result = {};
+    var result = {
+        "sites": {},
+        "global": {},
+        "region": {}
+    };
 
     for (var i=0; i<sites.length; i++) {
         idArray.push(sites[i].id);
     }
 
+    var globalArray = [];
+    for (var i=0; i<globalSites.length; i++) {
+        globalArray.push(globalSites[i].id);
+    }
+
+    var regionArray = [];
+    if (typeof regionSites != 'undefined') {
+        for (var i=0; i<regionSites.length; i++) {
+            regionArray.push(globalSites[i].id);
+        }
+    }
+
     var onNext = (label, data) => {
-        result[label] = data;
+        result[label[0]][label[1]] = data;
     }
 
     var onCompleted = () => {
@@ -543,13 +561,38 @@ function getDataForDechet(req, res) {
         });
     };
 
-    var observerQuantity = Rx.Observer.create((data) => onNext("quantity", data), onError, onCompleted);
+    var observerQuantity = Rx.Observer.create((data) => onNext(["sites", "quantity"], data), onError, onCompleted);
     DechetService.getPrestatairesForDechet(id, idArray, 0, beginDate, endDate)
         .subscribe(observerQuantity);
 
-    var observerRecycled = Rx.Observer.create((data) => onNext("recycled", data), onError, onCompleted);
+    var observerRecycled = Rx.Observer.create((data) => onNext(["sites", "recycled"], data), onError, onCompleted);
     DechetService.getPrestatairesForDechet(id, idArray, 1, beginDate, endDate)
         .subscribe(observerRecycled);
+
+    var observerGlobalQuantity = Rx.Observer.create((data) => onNext(["global", "quantity"], data), onError, onCompleted);
+    DechetService.getPrestatairesForDechet(id, globalArray, 0, beginDate, endDate)
+        .subscribe(observerGlobalQuantity);
+
+    var observerGlobalRecycled = Rx.Observer.create((data) => onNext(["global", "recycled"], data), onError, onCompleted);
+    DechetService.getPrestatairesForDechet(id, globalArray, 1, beginDate, endDate)
+        .subscribe(observerGlobalRecycled);
+
+    if (regionArray.length > 0) {
+
+        var observerRegionQuantity = Rx.Observer.create((data) => onNext(["region", "quantity"], data), onError, onCompleted);
+        DechetService.getPrestatairesForDechet(id, regionArray, 0, beginDate, endDate)
+            .subscribe(observerRegionQuantity);
+
+        var observerRegionRecycled = Rx.Observer.create((data) => onNext(["region", "recycled"], data), onError, onCompleted);
+        DechetService.getPrestatairesForDechet(id, regionArray, 1, beginDate, endDate)
+            .subscribe(observerRegionRecycled);
+
+    }
+
+    else {
+        loops -= 2;
+        onCompleted();
+    }
 
 }
 
