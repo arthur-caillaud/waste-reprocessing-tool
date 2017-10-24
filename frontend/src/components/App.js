@@ -25,6 +25,7 @@ class App extends Component {
   }
 
 
+
   render() {
 
       const location = window.location.href;
@@ -41,25 +42,24 @@ class App extends Component {
       }
 
 
-      return (
-          <div>
+      return (<div>
               <BrowserRouter>
                   <div>
                       <Row>
-                          <Navbar staticTop>
+                          <Navbar style={{marginBottom: "1"}} staticTop>
                           <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
-                              <NavItem eventKey="1" href="/">Dashboard</NavItem>
-                              <NavItem eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
-                              <NavItem eventKey="3" href="/dechet">Vision Déchet</NavItem>
+                              <NavItem style={{height: "2vh"}} eventKey="1" href="/">Dashboard</NavItem>
+                              <NavItem style={{height: "2vh"}} eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
+                              <NavItem style={{height: "2vh"}} eventKey="3" href="/dechet">Vision Déchet</NavItem>
                           </Nav>
                           </Navbar>
                       </Row>
                       <Row>
                           <div className="searchbar-container" >
-                              <Col sm={6}>
+                              <Col sm={7}>
                                   <SearchTree/>
                               </Col>
-                              <Col sm={6}>
+                              <Col sm={5}>
                                   <SearchBar id="MainSearchBar"/>
                               </Col>
                           </div>
@@ -71,8 +71,7 @@ class App extends Component {
                       </Row>
                   </div>
               </BrowserRouter>
-          </div>
-  )
+          </div>)
   }
 }
 

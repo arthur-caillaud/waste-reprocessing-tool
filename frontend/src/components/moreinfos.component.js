@@ -8,19 +8,11 @@ class MoreInfos extends Component {
     render() {
 
         const {
-            title,
             defaultBody
         } = this.props;
         return (
-            <div>
-                <h3>
-                    {title}
-                </h3>
-                <div>
+            <div className="more-infos">
                     {defaultBody}
-                </div>
-
-
             </div>
         )
     }

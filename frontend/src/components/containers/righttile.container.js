@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import TileElement from '../tile.component';
+import MoreInfosService from '../../actions/showmoreinfos.service';
 
 
 
@@ -13,10 +14,15 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-
-      }
-  }
+    return {
+        onClickTile: () => {
+            dispatch(MoreInfosService.displayRightTileInfos())
+        },
+        onClickNotif: () => {
+            dispatch(MoreInfosService.displayRightTileAlerts())
+        },
+    }
+}
 
 
 const RightTile = connect(
