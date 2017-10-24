@@ -198,7 +198,6 @@ class LeftGauged3 extends Component {
     };
 
 
-
     componentDidUpdate() {
 
         this.redrawJauge();
