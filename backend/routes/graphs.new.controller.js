@@ -326,6 +326,7 @@ function getGlobalPrestataires(req, res) {
 function getDataForPrestataire(req, res) {
 
     const sites = req.locals.sites;
+
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
 
@@ -372,6 +373,7 @@ function getDataForPrestataire(req, res) {
 function getGlobalDechets(req, res) {
     const sites = req.locals.sites;
     const globalSites = req.locals.globalSites;
+    const regionSites = req.locals.regionSites;
     const beginDate = req.locals.beginDate;
     const endDate = req.locals.endDate;
 
@@ -380,7 +382,7 @@ function getGlobalDechets(req, res) {
         "dechets": []
     };
 
-    var loops = 5;
+    var loops = 9;
 
     var idArray = [];
     for (var i=0; i<sites.length; i++) {
@@ -390,6 +392,13 @@ function getGlobalDechets(req, res) {
     var globalArray = [];
     for (var i=0; i<globalSites.length; i++) {
         globalArray.push(globalSites[i].id);
+    }
+
+    var regionArray = [];
+    if (typeof regionSites != 'undefined') {
+        for (var i=0; i<regionSites.length; i++) {
+            regionArray.push(globalSites[i].id);
+        }
     }
 
     var onNext = (data) => {
@@ -423,6 +432,28 @@ function getGlobalDechets(req, res) {
     var observerRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getValorisationVerte(globalArray, beginDate, endDate, ["valorisation_l_verte", "globalData"])
         .subscribe(observerRecycledVerte);
+
+    if (regionArray.length>0) {
+        var observerRegionQuantity = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getTotalVolume(regionArray, beginDate, endDate, ["volume_region", "globalData"])
+            .subscribe(observerRegionQuantity);
+
+        var observerRegionRecycled = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getValorisationTotale(regionArray, beginDate, endDate, ["valorisation_region", "globalData"])
+            .subscribe(observerRegionRecycled);
+
+        var observerRegionQuantityVerte = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getTotalVolumeVerte(regionArray, beginDate, endDate, ["volume_l_verte_region", "globalData"])
+            .subscribe(observerRegionQuantityVerte);
+
+        var observerRegionRecycledVerte = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getValorisationVerte(regionArray, beginDate, endDate, ["valorisation_l_verte_region", "globalData"])
+            .subscribe(observerRegionRecycledVerte);
+    }
+    else {
+        loops -= 3;
+        onCompleted();
+    }
 
     var observerDechets = Rx.Observer.create(
         (data) => {
