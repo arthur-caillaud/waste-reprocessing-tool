@@ -257,6 +257,7 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
             });
         case UPDATE_PRESTATAIRELIST:
             return Object.assign({}, state, {
+                selectedInput: '',
                 inputArray: action.json.prestataires,
                 isLoading: false
             });
@@ -289,6 +290,7 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
             });
         case UPDATE_DECHETLIST:
             return Object.assign({}, state, {
+                selectedInput: '',
                 inputArray: action.json,
                 isLoading: false
             });
@@ -340,8 +342,11 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
                 tagsArray: newTagsArray
             });
         case UPDATE_DECHETTAGS_INPUTARRAY:
+            const newInputArray = action.inputArray.map(tag => {
+                return Object.assign({}, tag, {nom: tag.libelle});
+            })
             return Object.assign({}, state, {
-                inputArray: action.inputArray
+                inputArray: newInputArray
             })
         default:
             return state;

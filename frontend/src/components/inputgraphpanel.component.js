@@ -22,8 +22,6 @@ class InputGraphPanel extends Component {
         const input = this.state.searchInput;
         const isLoading = this.props.isLoading;
 
-        console.log(inputArray);
-        
         function handleNoResultsFound(){
             if(input && input.length > 0){
                 if(suggestion.length === 0){
@@ -35,7 +33,7 @@ class InputGraphPanel extends Component {
         let list = []
         let containerArray = (suggestion.length > 0) ? suggestion : inputArray;
 
-        if(containerArray){
+        if(containerArray.length > 0){
             containerArray.forEach(input => {
                 let listItem;
                 if (input.id === selectedInput){

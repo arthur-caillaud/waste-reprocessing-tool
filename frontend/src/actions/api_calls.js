@@ -91,10 +91,12 @@ export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire
         return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+idPrestataire)
             .then(response => response.json())
             .then(json => {
-                json.forEach(row => {
-                    row.nom = row.libelle;
-                })
-                dispatch(actions.updateDechetTagsInputArray(json));
+                let inputArray = [];
+                json.quantity.forEach(row => {
+                    inputArray.push(row.dechet);
+                });
+                console.log(inputArray);
+                dispatch(actions.updateDechetTagsInputArray(inputArray));
             });
     }
 }
@@ -106,7 +108,7 @@ export function loadPrestataireGraphValues(level,name,idPrestataire,chosenDechet
             .then(response => response.json())
             .then(json => {
 
-            })
+            });
     }
 }
 
@@ -120,10 +122,12 @@ export function loadDechetList(level,name){
         return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name)
             .then(response => response.json())
             .then(json => {
+                let newInputArray = [];
                 json.dechets.forEach(row => {
-                    row = row.dechet;
+                    let newRow = Object.assign({}, row.dechet, {nom: row.libelle});
+                    newInputArray.push(newRow);
                 })
-                dispatch(actions.updateDechetList(json));
+                dispatch(actions.updateDechetList(newInputArray));
             });
     }
 }

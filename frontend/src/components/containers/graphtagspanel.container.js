@@ -8,6 +8,7 @@ function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
     const idTagsPanel = ownProps.idTagsPanel;
     const searchPlaceholder = ownProps.placeholder;
+    const emptyContainerMessage = ownProps.emptyContainerMessage;
     return {
         tagsArray: state[branchName].tagsArray,
         inputArray: state[branchName].inputArray,
@@ -43,7 +44,7 @@ function mapDispatchToProps(dispatch, ownProps) {
     });
 };
 
-const GraphTagsPanelContainer = ({inputArray, tagsArray, onTagClick, onLoaded, onRemove, id, searchPlaceholder, isLoading}) => {
+const GraphTagsPanelContainer = ({inputArray, tagsArray, id, searchPlaceholder, emptyContainerMessage, isLoading, onTagClick, onLoaded, onRemove}) => {
     return(
         <GraphTagsPanel
             id={id}
@@ -54,6 +55,7 @@ const GraphTagsPanelContainer = ({inputArray, tagsArray, onTagClick, onLoaded, o
             onLoaded={onLoaded}
             onRemove={onRemove}
             isLoading={isLoading}
+            emptyContainerMessage={emptyContainerMessage}
         />
     );
 }

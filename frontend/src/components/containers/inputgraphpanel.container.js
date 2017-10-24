@@ -19,11 +19,15 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
-    const onLoadActionName = ownProps.onLoadActionName;
+    const loadTagsOfInputActionName = ownProps.onLoadActionName;
     const onSearchActionName = ownProps.onSearchActionName;
     return ({
         onClick: (input) => {
             dispatch(actions[onClickActionName](input));
+            dispatch(apiCalls[loadTagsOfInputActionName](
+                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.nom,
+                input));
         },
         onSearch: (input) => {
             dispatch(actions[onSearchActionName](input))
