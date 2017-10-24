@@ -22,10 +22,15 @@ function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
     const loadTagsOfInputActionName = ownProps.onLoadActionName;
     const onSearchActionName = ownProps.onSearchActionName;
+    const loadGraphValuesActionName = ownProps.loadGraphValuesActionName;
     return ({
         onClick: (input) => {
-            dispatch(actions[onClickActionName](input));
+            dispatch(actions[onClickActionName](input.id));
             dispatch(apiCalls[loadTagsOfInputActionName](
+                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.nom,
+                input.id));
+            dispatch(apiCalls[loadGraphValuesActionName](
                 window.store.getState().updateSearchBar.site.level,
                 window.store.getState().updateSearchBar.site.nom,
                 input));
