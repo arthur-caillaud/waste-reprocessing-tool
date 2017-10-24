@@ -55,6 +55,7 @@ import {
     UPDATE_PRESTATAIRETAGS_INPUTARRAY,
 
     LOAD_PRESTATAIREGRAPH_VALUES_BEGIN,
+    UPDATE_PRESTATAIREGRAPH_VALUES,
 
     GraphTypes
 } from '../actions'
@@ -433,9 +434,11 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
 function prestataireGraphOptions(state = {title: '', values: [], isLoading: false}, action){
     switch(action.type){
         case LOAD_PRESTATAIREGRAPH_VALUES_BEGIN:
-            return Object.assign({}, state, {isLoading: true})
+            return Object.assign({}, state, {isLoading: true});
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {title: action.prestataire});
+        case UPDATE_PRESTATAIREGRAPH_VALUES:
+            return Object.assign({}, state, {isLoading: false, values: action.valuesArray});
         default:
             return state;
     }
@@ -451,7 +454,8 @@ const akkaApp = combineReducers({
     updatePrestataireSelectionPanel,
     updateDechetSelectionPanel,
     updatePrestataireGraphTagsPanel,
-    updateDechetGraphTagsPanel
+    updateDechetGraphTagsPanel,
+    prestataireGraphOptions
 })
 
 export default akkaApp
