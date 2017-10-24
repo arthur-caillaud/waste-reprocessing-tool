@@ -45,6 +45,9 @@ function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
                         $gte: beginDate,
                     }
                 }
+            },
+            {
+                model: site,
             }
         ],
         where: {
@@ -94,6 +97,9 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
                     },
                 },
                 {
+                    model: site
+                },
+                {
                     model: dechet,
                     where: {
                         is_dangereux: dangereux
@@ -135,6 +141,9 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
                             gestion: 'r'
                         }
                     }
+                },
+                {
+                    model: site
                 },
                 {
                     model: traitement,
@@ -191,6 +200,9 @@ function getAllRetards(idArray, dangereux, date, label) {
                     where: {
                         is_dangereux: dangereux
                     }
+                },
+                {
+                    model: site
                 }
                 ],
             where: {
@@ -448,6 +460,9 @@ function getUndated(idArray, label) {
                 where: {
                     date_priseencharge: null
                 }
+            },
+            {
+                model: site
             }
         ],
         where: {
