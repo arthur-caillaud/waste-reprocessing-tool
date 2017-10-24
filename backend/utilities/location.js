@@ -14,7 +14,7 @@ function getDistance(longA, latA, longB, latB, callback) {
     latA = latA * Math.PI / 180;
     latB = latB * Math.PI / 180;
 
-    var result = acos(sin(longA)*sin(longB) + cos(longA)*cos(longB)*cos(latA-latB))*6371;
+    var result = acos(sin(latA)*sin(latB) + cos(latA)*cos(latB)*cos(longA-longB))*6371;
 
     callback(result);
 }
