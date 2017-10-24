@@ -52,7 +52,7 @@ function getAllPrestataires(queryParameters) {
 // the given timeframe
 function getPrestatairesForSites(sitesArray, beginDate, endDate) {
 
-    var traitementsId = [];
+    var prestatairesId = [];
 
     var query1 = {
         attributes: [],
@@ -75,7 +75,7 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
 
     var query2 = {
         where: {
-            id: {$in: traitementsId}
+            id: {$in: prestatairesId}
         }
     };
 
@@ -83,7 +83,7 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
         bordereau.findAll(query1)
             .then((traitements) => {
                 traitements.forEach((traitement) => {
-                    traitementsId.push(traitement.dataValues.traitementFinal.id);
+                    prestatairesId.push(traitement.dataValues.traitementFinal.id_prestataire);
                 })
                 prestataire.findAll(query2)
                     .then((prestataires) => {
