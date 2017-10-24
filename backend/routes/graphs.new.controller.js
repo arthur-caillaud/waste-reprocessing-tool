@@ -413,7 +413,7 @@ function getDataForPrestataire(req, res) {
             .subscribe(observerRegionRecycled);
     }
     else {
-        loops -= 2;
+        loops -= 1;
         onCompleted();
     }
 
@@ -608,7 +608,7 @@ function getDataForDechet(req, res) {
     }
 
     else {
-        loops -= 2;
+        loops -= 1;
         onCompleted();
     }
 
