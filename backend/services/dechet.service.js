@@ -78,6 +78,9 @@ function getDechetsForSites(idArray, beginDate, endDate) {
         where: {
             id_site: {$in: idArray}
         },
+        order: [
+            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'DESC']
+        ],
         include: [
             {
                 attributes: [],

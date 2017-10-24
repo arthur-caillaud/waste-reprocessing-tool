@@ -102,7 +102,7 @@ function computeForSite(beginDate, endDate, siteId, callback) {
 
     // set the date and siteId for our entry
     // NOTE: a couple (date, id_site) is necessarily unique
-    computedValues.date = endDate;
+    computedValues.date = beginDate;
     computedValues.id_site = siteId;
 
     // we use today's date to compute delays
@@ -232,7 +232,6 @@ function preComputeForDate(year, month, callback) {
 
     // this array will contain all the ids of sites in the database
     var idArray = [];
-
     var tasksArray = [];
 
     var observerId = Rx.Observer.create(
@@ -283,7 +282,7 @@ function preCompute() {
     var currentYear = date.getFullYear();
 
     // DEPRECATED: used to specify earlier last date for testing purposes
-    // currentMonth = 1;
+    // currentMonth = 2;
     // currentYear = 2017;
 
     let year;

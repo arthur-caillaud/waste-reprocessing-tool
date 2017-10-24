@@ -338,9 +338,18 @@ function getDataForPrestataire(req, res) {
     var id = req.params.prestataireId;
 
     var result = {
-        "sites": {},
-        "global": {},
-        "region": {}
+        "sites": {
+            "quantity": [],
+            "recycled": []
+        },
+        "global": {
+            "quantity": [],
+            "recycled": []
+        },
+        "region": {
+            "quantity": [],
+            "recycled": []
+        }
     };
 
     for (var i=0; i<sites.length; i++) {
@@ -522,9 +531,18 @@ function getDataForDechet(req, res) {
     var id = req.params.dechetId;
 
     var result = {
-        "sites": {},
-        "global": {},
-        "region": {}
+        "sites": {
+            "quantity": [],
+            "recycled": []
+        },
+        "global": {
+            "quantity": [],
+            "recycled": []
+        },
+        "region": {
+            "quantity": [],
+            "recycled": []
+        }
     };
 
     for (var i=0; i<sites.length; i++) {
