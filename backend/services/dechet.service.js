@@ -126,9 +126,11 @@ function getPrestatairesForDechet(id, sitesId, recycled, beginDate, endDate) {
             id_dechet: id
         },
         group: sequelize.col('traitementFinal.id_prestataire'),
-        order: [sequelize.col('traitementFinal.id_prestataire')],
         attributes: [
-            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'quantitee_finale']
+            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'quantitee_traitee']
+        ],
+        order: [
+            [sequelize.literal('quantitee_traitee'), 'DESC']
         ],
         include: [
             {
