@@ -3,7 +3,7 @@ import '../styles/gauge.css';
 import * as d3 from 'd3';
 import { connect } from "react-redux";
 import * as actions from '../actions';
-import  HelperService from '../actions/service';
+import showMoreInfos from '../actions/showmoreinfos.service';
 
 
 function getChartSize(el) {
@@ -240,7 +240,7 @@ function mapStateToProps(state) {
 
 
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => {dispatch(HelperService.displayMiddleGaugeInfos())
+    return {showMoreInfos: () => {dispatch(showMoreInfos.displayMiddleGaugeInfos())
     }
 };
 }
