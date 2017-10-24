@@ -102,7 +102,7 @@ function computeForSite(beginDate, endDate, siteId, callback) {
 
     // set the date and siteId for our entry
     // NOTE: a couple (date, id_site) is necessarily unique
-    computedValues.date = endDate;
+    computedValues.date = beginDate;
     computedValues.id_site = siteId;
 
     // we use today's date to compute delays
@@ -129,6 +129,7 @@ function computeForSite(beginDate, endDate, siteId, callback) {
     };
     var onCompleted = () => {
         if (loopsToDo == 0) {
+            console.log(computedValues.dataValues);
             // adds a comment to the entry when the bordereau list is empty
             if (computedValues["bordereaux"] == 0) {
                 computedValues["details"] += "Aucun bordereau sur la période considérée;";
@@ -233,6 +234,9 @@ function preComputeForDate(year, month, callback) {
     // this array will contain all the ids of sites in the database
     var idArray = [];
 
+    console.log(month);
+
+
     var tasksArray = [];
 
     var observerId = Rx.Observer.create(
@@ -250,10 +254,11 @@ function preComputeForDate(year, month, callback) {
             // for each value in the array, computes the datas for the given date
             // in the corresponding site
             idArray.forEach((id) => {
+                if (id==11) {
                 var task = function(intermCallback) {
                     utilities.computeDates(year, month, id, computeForSite, intermCallback);
                 };
-                tasksArray.push(task);
+                tasksArray.push(task);}
             })
             async.series(tasksArray, (err, res) => {callback(null, null)})
 
@@ -275,7 +280,7 @@ function preCompute() {
     // oldest possible year
     // TODO: put that value in a config file
     const firstYear = 2017;
-    const firstMonth = 1;
+    const firstMonth = 2;
 
     // gets the current date tu be used as last date
     var date = new Date();
@@ -283,8 +288,8 @@ function preCompute() {
     var currentYear = date.getFullYear();
 
     // DEPRECATED: used to specify earlier last date for testing purposes
-    // currentMonth = 1;
-    // currentYear = 2017;
+    currentMonth = 2;
+    currentYear = 2017;
 
     let year;
     let month;
