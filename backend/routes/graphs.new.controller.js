@@ -395,21 +395,21 @@ function getDataForPrestataire(req, res) {
         .subscribe(observerRecycled);
 
     var observerGlobalQuantity = Rx.Observer.create((data) => onNext(["global", "quantity"], data), onError, onCompleted);
-    prestataireService.getDechetsForPrestataire(id, globalArray, 0, beginDate, endDate)
+    prestataireService.getDechetsForPrestataire(undefined, globalArray, 0, beginDate, endDate)
         .subscribe(observerGlobalQuantity);
 
     var observerGlobalRecycled = Rx.Observer.create((data) => onNext(["global", "recycled"], data), onError, onCompleted);
-    prestataireService.getDechetsForPrestataire(id, globalArray, 1, beginDate, endDate)
+    prestataireService.getDechetsForPrestataire(undefined, globalArray, 1, beginDate, endDate)
         .subscribe(observerGlobalRecycled);
 
     if (regionArray.length > 0) {
 
         var observerRegionQuantity = Rx.Observer.create((data) => onNext(["region", "quantity"], data), onError, onCompleted);
-        prestataireService.getDechetsForPrestataire(id, regionArray, 0, beginDate, endDate)
+        prestataireService.getDechetsForPrestataire(undefined, regionArray, 0, beginDate, endDate)
             .subscribe(observerRegionQuantity);
 
         var observerRegionRecycled = Rx.Observer.create((data) => onNext(["region", "recycled"], data), onError, onCompleted);
-        prestataireService.getDechetsForPrestataire(id, regionArray, 1, beginDate, endDate)
+        prestataireService.getDechetsForPrestataire(undefined, regionArray, 1, beginDate, endDate)
             .subscribe(observerRegionRecycled);
     }
     else {

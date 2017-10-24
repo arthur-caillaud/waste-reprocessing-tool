@@ -176,7 +176,6 @@ function getDechetsForPrestataire(id, sitesId, recycled, beginDate, endDate) {
                 as: 'traitementFinal',
                 attributes: [],
                 where: {
-                    id_prestataire: id,
                     date_priseencharge: {
                         $lte: endDate,
                         $gte: beginDate
@@ -204,6 +203,11 @@ function getDechetsForPrestataire(id, sitesId, recycled, beginDate, endDate) {
             }
         ]
     };
+
+    if (typeof id != 'undefined') {
+        query.include[0].where["id_prestataire"] = id;
+    }
+
     var observable = Rx.Observable.create((obs) => {
         bordereau.findAll(query)
             .then((bordereaux) => {
