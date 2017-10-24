@@ -35,6 +35,7 @@ function getQuantity(idPrestataire, idDechet, beginDate, endDate, sites, label, 
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 attributes: [],
                 where: {
                     date_priseencharge: {
@@ -82,6 +83,7 @@ function getRecycledQuantity(idPrestataire, idDechet, beginDate, endDate, sites,
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 attributes: [],
                 where: {
                     date_priseencharge: {
@@ -149,6 +151,7 @@ function getGlobalQuantity(idPrestataire, beginDate, endDate, sites, label, leve
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 attributes: [],
                 where: {
                     date_priseencharge: {
@@ -213,6 +216,7 @@ function getGlobalRecycledQuantity(idPrestataire, beginDate, endDate, sites, lab
         include: [
             {
                 model: traitement,
+                as: 'traitementFinal',
                 attributes: [],
                 where: {
                     date_priseencharge: {

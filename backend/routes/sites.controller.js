@@ -85,8 +85,25 @@ function getSiteById(req, res) {
     var subscription = sitesService.getSiteById(id).subscribe(observer);
 }
 
+
+function getSitesCloseToSite(req, res) {
+    var id = req.params.id;
+    var onNext = (data) => {
+        res.json(data);
+    };
+    var onError = (error) => {
+        utilities.errorHandler(error, (errorPacket) => {
+            res.status(errorPacket.status).send(errorPacket.message);
+        });
+    };
+    var onCompleted = () => {};
+    var observer = Rx.Observer.create(onNext, onError, onCompleted);
+    sitesService.getSitesCloseToSite(id).subscribe(observer);
+}
+
 // Routes to functions
 router.get('/', getAllSites);
+router.get('/region/:id', getSitesCloseToSite);
 router.get('/:id', getSiteById);
 
 //exporting router

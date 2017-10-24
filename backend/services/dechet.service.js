@@ -73,7 +73,8 @@ function getDechetById(id) {
 function getDechetsForSites(idArray, beginDate, endDate) {
 
     var query = {
-        attributes: [],
+        attributes: ['id'],
+        group: sequelize.col('dechet.id'),
         where: {
             id_site: {$in: idArray}
         },
@@ -98,6 +99,11 @@ function getDechetsForSites(idArray, beginDate, endDate) {
     var observable = Rx.Observable.create((obs) => {
         Bordereau.findAll(query)
             .then((bordereaux) => {
+                bordereaux.forEach((bordereau) => {
+                    var dechet = bordereau.dataValues.dechet;
+                    bordereau.dataValues = dechet.dataValues;
+                    // bordereau.dataValues = bordereau.dataValues.dechet;
+                })
                 obs.onNext(bordereaux);
                 obs.onCompleted();
             })
