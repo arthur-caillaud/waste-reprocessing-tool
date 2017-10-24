@@ -196,6 +196,7 @@ function getDechetsForPrestataire(id, sitesId, recycled, beginDate, endDate) {
             {
                 model: dechet,
                 attributes: [
+                    'id',
                     'codeinterne',
                     'famille',
                     'libelle',
