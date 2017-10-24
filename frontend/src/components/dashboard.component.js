@@ -17,10 +17,10 @@ import '../styles/general.css';
 
 
 class DashboardElement extends Component {
-componentDidMount(){
-    if (window.store.getState().pageOptions.architecture == {}) {
-    this.props.getArchitecture()
-}
+    componentDidMount(){
+        if (window.store.getState().pageOptions.architecture == {}) {
+        this.props.getArchitecture()
+    }
 }
 
   render() {
@@ -29,15 +29,11 @@ componentDidMount(){
         <div>
           <Grid fluid>
             <Row className="show-grid">
-                <Col sm={9}>
-                    <Row>
-                        <Col sm={3}> <LeftGauge/> </Col>
-                        <Col sm={3}> <MiddleGauge/> </Col>
-                        <Col sm={3}> <RightGauge/> </Col>
-                        <Col sm={3}> <Info paragraphs="1"/></Col>
-                    </Row>
-                </Col>
-              <Col sm={3}> <Info paragraphs="1" /> </Col>
+
+                <Col sm={3}> <LeftGauge/> </Col>
+                <Col sm={3}> <MiddleGauge/> </Col>
+                <Col sm={3}> <RightGauge/> </Col>
+                <Col sm={3}> <Info paragraphs="1" /> </Col>
             </Row>
 
             <Row className="show-grid">

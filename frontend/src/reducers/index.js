@@ -6,6 +6,10 @@ import LeftGaugeInfos from '../components/showmoreinfos/leftgauge.showmoreinfos'
 import LeftTileInfos from '../components/showmoreinfos/lefttileinfos.showmoreinfos';
 import MiddleLeftTileInfos from '../components/showmoreinfos/middlelefttileinfos.showmoreinfos';
 import MiddleLeftTileAlerts from '../components/showmoreinfos/middlelefttilealerts.showmoreinfos';
+import MiddleRightTileInfos from '../components/showmoreinfos/middlerighttileinfos.showmoreinfos';
+import MiddleRightTileAlerts from '../components/showmoreinfos/middlerighttilealerts.showmoreinfos';
+import RightTileInfos from '../components/showmoreinfos/righttileinfos.showmoreinfos';
+import RightTileAlerts from '../components/showmoreinfos/righttilealerts.showmoreinfos';
 
 import {
     CHANGE_SCALE,
@@ -21,6 +25,10 @@ import {
     DISPLAY_LEFTTILE_INFOS,
     DISPLAY_MIDDLELEFTTILE_INFOS,
     DISPLAY_MIDDLELEFTTILE_ALERTS,
+    DISPLAY_MIDDLERIGHTTILE_INFOS,
+    DISPLAY_MIDDLERIGHTTILE_ALERTS,
+    DISPLAY_RIGHTTILE_INFOS,
+    DISPLAY_RIGHTTILE_ALERTS,
     RESET_MOREINFOS_TO_DEFAULT,
 
     CHANGE_LEFTGAUGE_INPUT,
@@ -75,6 +83,10 @@ function infosPanelOptions(
     middleGaugeShown: false,
     middleLeftTileShown: false,
     middleLeftTileAlerts: false,
+    middleRightTileShown: false,
+    middleRightTileAlerts: false,
+    rightTileShown: false,
+    rightTileAlerts: false,
     },
     action){
     switch (action.type){
@@ -86,6 +98,10 @@ function infosPanelOptions(
                 middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
                 defaultBody: <LeftGaugeInfos />
                 });
         case DISPLAY_LEFTTILE_INFOS:
@@ -95,6 +111,10 @@ function infosPanelOptions(
                 middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
                 defaultBody: <LeftTileInfos />
             });
         case DISPLAY_MIDDLEGAUGE_INFOS:
@@ -104,6 +124,10 @@ function infosPanelOptions(
                 middleGaugeShown: !state.middleGaugeShown,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
                 defaultBody: <MiddleGaugeInfos />
             });
         case DISPLAY_MIDDLELEFTTILE_INFOS:
@@ -113,6 +137,10 @@ function infosPanelOptions(
                 middleGaugeShown: false,
                 middleLeftTileShown: !state.middleLeftTileShown,
                 middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
                 defaultBody: <MiddleLeftTileInfos />
             });
         case DISPLAY_MIDDLELEFTTILE_ALERTS:
@@ -122,8 +150,66 @@ function infosPanelOptions(
                 middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: !state.middleLeftTileAlerts,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
                 defaultBody: <MiddleLeftTileAlerts />
             });
+        case DISPLAY_MIDDLERIGHTTILE_INFOS:
+            return Object.assign({}, state, {
+                leftGaugeShown: false,
+                leftTileShown: false,
+                middleGaugeShown: false,
+                middleLeftTileShown: false,
+                middleLeftTileAlerts: false,
+                middleRightTileShown: !state.middleRightTileShown,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
+                defaultBody: <MiddleRightTileInfos />
+            });
+        case DISPLAY_MIDDLERIGHTTILE_ALERTS:
+            return Object.assign({}, state, {
+                leftGaugeShown: false,
+                leftTileShown: false,
+                middleGaugeShown: false,
+                middleLeftTileShown: false,
+                middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: !state.middleRightTileAlerts,
+                rightTileShown: false,
+                rightTileAlerts: false,
+                defaultBody: <MiddleRightTileAlerts />
+            });
+        case DISPLAY_RIGHTTILE_INFOS:
+            return Object.assign({}, state, {
+                leftGaugeShown: false,
+                leftTileShown: false,
+                middleGaugeShown: false,
+                middleLeftTileShown: false,
+                middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: !state.RightTileShown,
+                rightTileAlerts: false,
+                defaultBody: <RightTileInfos />
+            });
+        case DISPLAY_RIGHTTILE_ALERTS:
+            return Object.assign({}, state, {
+                leftGaugeShown: false,
+                leftTileShown: false,
+                middleGaugeShown: false,
+                middleLeftTileShown: false,
+                middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: !state.RightTileAlerts,
+                defaultBody: <RightTileAlerts />
+            });
+
+
         case RESET_MOREINFOS_TO_DEFAULT:
             return Object.assign({}, state, {
                 defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
@@ -132,6 +218,10 @@ function infosPanelOptions(
                 middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
             });
         default:
             return state;

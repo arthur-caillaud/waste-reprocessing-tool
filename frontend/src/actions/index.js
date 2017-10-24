@@ -15,7 +15,10 @@ export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
 export const DISPLAY_LEFTTILE_INFOS = 'DISPLAY_LEFTTILE_INFOS';
 export const DISPLAY_MIDDLELEFTTILE_INFOS = 'DISPLAY_MIDDLELEFTTILE_INFOS';
 export const DISPLAY_MIDDLELEFTTILE_ALERTS = 'DISPLAY_MIDDLELEFTTILE_ALERTS';
-
+export const DISPLAY_MIDDLERIGHTTILE_INFOS = 'DISPLAY_MIDDLERIGHTTILE_INFOS';
+export const DISPLAY_MIDDLERIGHTTILE_ALERTS = 'DISPLAY_MIDDLERIGHTTILE_ALERTS';
+export const DISPLAY_RIGHTTILE_INFOS = 'DISPLAY_RIGHTTILE_INFOS';
+export const DISPLAY_RIGHTTILE_ALERTS = 'DISPLAY_RIGHTTILE_ALERTS';
 
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
@@ -205,6 +208,26 @@ export function displayMiddleLeftTileInfos(){
 export function displayMiddleLeftTileAlerts(){
     return {
         type: DISPLAY_MIDDLELEFTTILE_ALERTS
+    }
+}
+export function displayMiddleRightTileInfos(){
+    return {
+        type: DISPLAY_MIDDLERIGHTTILE_INFOS
+    }
+}
+export function displayMiddleRightTileAlerts(){
+    return {
+        type: DISPLAY_MIDDLERIGHTTILE_ALERTS
+    }
+}
+export function displayRightTileInfos(){
+    return {
+        type: DISPLAY_RIGHTTILE_INFOS
+    }
+}
+export function displayRightTileAlerts(){
+    return {
+        type: DISPLAY_RIGHTTILE_ALERTS
     }
 }
 

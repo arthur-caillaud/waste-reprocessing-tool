@@ -26,7 +26,7 @@ export default class LeftTileInfos extends Component {
     render() {
         if (window.store.getState().infosPanelOptions.leftTileShown == true){
         return (
-            <BootstrapTable data={this.state.data} scrollTop={ 'Bottom' }>
+            <BootstrapTable data={this.state.data} scrollTop={ 'Top' }>
                 <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
                 <TableHeaderColumn dataField="Qte_estimee" dataAlign="center"> Qté Est.</TableHeaderColumn>
                 <TableHeaderColumn dataField="Qte_recue" dataAlign="center">Qté Reç.</TableHeaderColumn>

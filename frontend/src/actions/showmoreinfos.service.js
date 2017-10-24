@@ -27,10 +27,34 @@ function displayMiddleLeftTileAlerts() {
         dispatch(actions.displayMiddleLeftTileAlerts())
     }
 }
+function displayMiddleRightTileInfos() {
+    return dispatch => {
+        dispatch(actions.displayMiddleRightTileInfos())
+    }
+}
+function displayMiddleRightTileAlerts() {
+    return dispatch => {
+        dispatch(actions.displayMiddleRightTileAlerts())
+    }
+}
+function displayRightTileInfos() {
+    return dispatch => {
+        dispatch(actions.displayRightTileInfos())
+    }
+}
+function displayRightTileAlerts() {
+    return dispatch => {
+        dispatch(actions.displayRightTileAlerts())
+    }
+}
 
 MoreInfosService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
 MoreInfosService.displayLeftGaugeInfos = displayLeftGaugeInfos;
 MoreInfosService.displayMiddleLeftTileInfos = displayMiddleLeftTileInfos;
 MoreInfosService.displayMiddleLeftTileAlerts = displayMiddleLeftTileAlerts;
 MoreInfosService.displayLeftTileInfos = displayLeftTileInfos;
+MoreInfosService.displayMiddleRightTileAlerts = displayMiddleRightTileAlerts;
+MoreInfosService.displayMiddleRightTileInfos = displayMiddleRightTileInfos;
+MoreInfosService.displayRightTileAlerts = displayRightTileAlerts;
+MoreInfosService.displayRightTileInfos = displayRightTileInfos;
 export default MoreInfosService

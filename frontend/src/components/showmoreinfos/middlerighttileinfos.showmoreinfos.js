@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import '../../styles/tile.css';
 
-export default class MiddleLeftTileInfos extends Component {
+export default class MiddleRightTileInfos extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            filieres_interdites_norm: window.store.getState().pageOptions.bordereaux.filieres_interdites_norm,
+            retards_norm: window.store.getState().pageOptions.bordereaux.retards_norm,
             data: []
         }
     }
     componentWillMount() {
         let data = []
-        this.state.filieres_interdites_norm.forEach(function(element) {
+        this.state.retards_norm.forEach(function(element) {
             data.push({
                 Num_Bdx: element.num_bordereau.substring(0, 10),
                 Code_Interne: element.dechet.codeinterne.substring(0, 10),
@@ -23,7 +23,7 @@ export default class MiddleLeftTileInfos extends Component {
     }
 
     render() {
-        if (window.store.getState().infosPanelOptions.middleLeftTileShown == true){
+        if (window.store.getState().infosPanelOptions.middleRightTileShown == true){
 
         return (
             <BootstrapTable data={this.state.data} scrollTop={ 'Top' }>

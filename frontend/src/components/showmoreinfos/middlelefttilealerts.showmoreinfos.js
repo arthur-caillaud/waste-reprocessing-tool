@@ -27,9 +27,9 @@ export default class MiddleLeftTileAlerts extends Component {
         if (window.store.getState().infosPanelOptions.middleLeftTileAlerts == true){
 
         return (
-            <BootstrapTable data={this.state.data} scrollTop={ 'Bottom' }>
+            <BootstrapTable data={this.state.data} scrollTop={ 'Top' }>
                 <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
-                <TableHeaderColumn dataField="Code_Interne" dataAlign="center">Code Interne</TableHeaderColumn>
+                <TableHeaderColumn dataField="Code_Interne" dataAlign="center">CodeInt.</TableHeaderColumn>
                 <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
             </BootstrapTable>
         );
