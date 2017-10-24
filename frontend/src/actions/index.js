@@ -4,7 +4,7 @@
 export const CHANGE_SCALE = 'CHANGE_SCALE';
 export const CHANGE_URL = 'CHANGE_URL';
 export const SAVE_ARCHITECTURE = 'SAVE_ARCHITECTURE';
-
+export const SAVE_BORDEREAUX_FOR_SITE = 'SAVE_BORDEREAUX_FOR_SITE';
 
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
@@ -12,6 +12,10 @@ export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 export const RESET_MOREINFOS_TO_DEFAULT = 'RESET_MOREINFOS_TO_DEFAULT'
 export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
 export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
+export const DISPLAY_LEFTTILE_INFOS = 'DISPLAY_LEFTTILE_INFOS';
+export const DISPLAY_LEFTTILE_ALERTS = 'DISPLAY_LEFTTILE_ALERTS';
+
+
 export const ADD_GRAPH_TAG = 'ADD_GRAPH_TAG';
 export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 
@@ -79,6 +83,12 @@ export function saveArchitecture(architecture) {
     return {
         type: SAVE_ARCHITECTURE,
         architecture
+    }
+}
+export function saveBordereauxForSite(bordereaux) {
+    return {
+        type: SAVE_BORDEREAUX_FOR_SITE,
+        bordereaux
     }
 }
 
@@ -166,6 +176,11 @@ export function updateRightTile(values) {
         values
     }
 }
+
+
+
+
+
 export function displayLeftGaugeInfos(){
     return {
         type: DISPLAY_LEFTGAUGE_INFOS
@@ -176,6 +191,16 @@ export function displayMiddleGaugeInfos(){
         type: DISPLAY_MIDDLEGAUGE_INFOS
     }
 }
+export function displayLeftTileInfos(){
+    return {
+        type: DISPLAY_LEFTTILE_INFOS
+    }
+}
+export function displayLeftTileAlerts(){
+    return {
+        type: DISPLAY_LEFTTILE_ALERTS
+    }
+}
 
 
 export function resetMoreInfosToDefault() {
@@ -183,6 +208,8 @@ export function resetMoreInfosToDefault() {
         type: RESET_MOREINFOS_TO_DEFAULT
     }
 }
+
+
 
 /*
  * SearchBar (present on every frontpage)

@@ -3,7 +3,7 @@ import '../styles/gauge.css';
 import * as d3 from 'd3';
 import { connect } from "react-redux";
 import * as actions from '../actions';
-import  HelperService from '../actions/service';
+import MoreInfosService from '../actions/showmoreinfos.service.js';
 
 
 
@@ -232,7 +232,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 
     return {showMoreInfos: () => {
-        dispatch(HelperService.displayLeftGaugeInfos())
+        dispatch(MoreInfosService.displayLeftGaugeInfos())
     }
 
     }

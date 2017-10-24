@@ -190,11 +190,11 @@ function presentDataForNewSite(json) {
 
     dataForLeftTile.ecarts_pesee = ecarts_pesee;
     dataForRightTile.incoherences_filieres_dd = incoherences_filieres_dd;
-    dataForRightTile.incoherences_filieres_norm = incoherences_filieres_norm;
+    dataForRightTile.incoherences_filieres_norm = incoherences_filieres_norm + incoherences_filieres_dd;
     dataForMiddleLeftTile.filieres_interdites_dd = filieres_interdites_dd;
-    dataForMiddleLeftTile.filieres_interdites_norm = filieres_interdites_norm;
+    dataForMiddleLeftTile.filieres_interdites_norm = filieres_interdites_norm + filieres_interdites_dd;
     dataForMiddleRightTile.retards_dd = retards_dd;
-    dataForMiddleRightTile.retards_norm = retards_norm;
+    dataForMiddleRightTile.retards_norm = retards_norm + retards_dd;
 
 
     if (!(volume_total == 0.0000)) {
@@ -227,24 +227,14 @@ function presentDataForNewSite(json) {
 
 }
 
-function displayLeftGaugeInfos() {
-    return dispatch => {
-        dispatch(actions.displayLeftGaugeInfos())
-    }
-}
 
-function displayMiddleGaugeInfos() {
-    return dispatch => {
-        dispatch(actions.displayMiddleGaugeInfos())
-    }
-}
+
+
 
 HelperService.getMenuForMetiers = getMenuForMetiers;
 HelperService.getMenuForUp = getMenuForUp;
 HelperService.getMenuForUnite = getMenuForUnite;
 HelperService.getMenuForSite = getMenuForSite;
-HelperService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
-HelperService.displayLeftGaugeInfos = displayLeftGaugeInfos;
 HelperService.presentDataForNewSite = presentDataForNewSite;
 HelperService.filterByValue = filterByValue;
 HelperService.getAllLevelNames = getAllLevelNames;
