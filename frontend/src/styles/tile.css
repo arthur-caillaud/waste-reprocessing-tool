@@ -1,3 +1,15 @@
+.react-bs-container {
+height:150px !important;
+}
+.react-bs-table{
+    max-height: 150px !important
+}
+.react-bs-container-body {
+    height:150px !important;
+    max-height: 100% !important;
+    overflow:auto;
+}
+
 .dashboard-tile{
     position: relative;
     background-color: #E6E6E6;
@@ -35,7 +47,7 @@
     font-size: 250%;
 }
 
-.dashboard-tile .notifValue{
+.notifValue{
     position: absolute;
     top: -5%;
     right: -5%;
@@ -47,9 +59,11 @@
     text-align: center;
     font-size: 1.8em;
     vertical-align: middle;
+    cursor: pointer;
+    z-index: 1;
 }
 
-.dashboard-tile .notifValue:hover {
+.notifValue:hover {
     background-color: #E60000;
 }
 

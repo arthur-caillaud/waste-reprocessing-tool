@@ -13,43 +13,28 @@ class TileElement extends Component {
       );
   }
 
-  // forgetPercentage(value) {
-  //     if(value.slice(-1) === "%"){
-  //         return(
-  //             <div className="valueTitle">
-  //                 <div style={{position:"relative"}}>
-  //                     <span className="value">{value.slice(0,-1)}</span><span className="percentage">%</span>
-  //                     {this.getArrow(isGrowing)}
-  //                 </div>
-  //             </div>
-  //         )
-  //     }
-  //     return(
-  //         <div className="valueTitle">
-  //             <span className="value">{value}</span>
-  //             {this.getArrow(isGrowing)}
-  //         </div>
-  //     )
-  // }
-
   render() {
 
       const { value,
           isGrowing,
           notifValue,
-          title
+          title,
+          onClickNotif,
+          onClickTile,
       } = this.props;
-      var notifCircle = notifValue > 0 ? <span className="notifValue" >{notifValue}</span> : null;
+      var notifCircle = notifValue > 0 ? <span className="notifValue" onClick={onClickNotif}>{notifValue}</span> : null;
 
 
       return (
-        <div ref="tile" className="dashboard-tile" >
+        <div>
           {notifCircle}
+          <div ref="tile" className="dashboard-tile" onClick={onClickTile}>
           <div className="valueTitle">
               <span className="value">{value}</span>
               {this.getArrow(isGrowing)}
           </div>
           <h5 className="title"> {title}</h5>
+      </div>
         </div>
       );
   }

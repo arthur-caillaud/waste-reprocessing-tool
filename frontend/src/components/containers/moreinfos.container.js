@@ -5,7 +5,6 @@ import MoreInfos from '../moreinfos.component';
 
 function mapStateToProps(state, ownProps) {
     return {
-        title: state.infosPanelOptions.title,
         defaultBody: state.infosPanelOptions.defaultBody
     };
 }

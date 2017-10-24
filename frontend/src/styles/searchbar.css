@@ -1,6 +1,6 @@
 .react-autosuggest__container {
   position: relative;
-
+  padding-top: 2px;
 
 }
 
@@ -32,8 +32,6 @@
 }
 
 .react-autosuggest__suggestions-container--open {
-    margin-left: 60%;
-    margin-right: 10%;
     display: block;
     position: absolute;
     top: 51px;

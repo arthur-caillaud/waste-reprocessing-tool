@@ -67,6 +67,12 @@ export function updateSite(site) {
                 dispatch(actions.updateMiddleRightTile(middleRightTileValues))
                 dispatch(actions.resetMoreInfosToDefault())
 
+
+                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-03-01&endDate=2017-04-01')
+                    .then(response => response.json())
+                    .then(json => {
+                        dispatch(actions.saveBordereauxForSite(json))
+                    });
             })
     };
 }
@@ -232,8 +238,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                             let values = [];
                             let volumes = [];
                             let dechet = json.sites.quantity[i];
-                            columnNames.forEach(name => {
-                                if(json[name].quantity[i]){
+                            if(dechet && json[name] && json[name].quantity[i]){
+                                columnNames.forEach(name => {
                                     let tauxDeValorisation = 0;
                                     let quantiteeValorisee = 0;
                                     if(json[name].recycled.length > 0){
@@ -246,15 +252,17 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                             };
                                         });
                                     };
-                                }
-                            });
-                            dechetColumn = {
-                                title: dechet.dechet.libelle,
-                                keys: [prestataire.nom,"GLOBAL","REGIONAL"],
-                                values: values,
-                                volumes: volumes
-                            };
-                            valuesArray.push(dechetColumn);
+                                });
+                            }
+                            if(dechet){
+                                dechetColumn = {
+                                    title: dechet.dechet.libelle,
+                                    keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                                    values: values,
+                                    volumes: volumes
+                                };
+                                valuesArray.push(dechetColumn);
+                            }
                         }
                     }
                     dispatch(actions.updatePrestataireGraphValues(valuesArray));
