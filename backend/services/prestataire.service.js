@@ -54,11 +54,17 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
 
     var prestatairesId = [];
 
-    var query1 = {
-        attributes: [],
+    var query = {
+        attributes: ['id'],
         where: {
             id_site: {$in: sitesArray},
         },
+        order: [
+            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'DESC']
+        ],
+        group: [
+            sequelize.literal('traitementFinal.id_prestataire')
+        ],
         include: [
             {
                 model: traitement,
@@ -69,30 +75,23 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
                         $gte: beginDate
                     }
                 },
-            }
+                include: [
+                    {
+                        model: prestataire
+                    }
+                ]
+            },
         ]
     };
 
-    var query2 = {
-        where: {
-            id: {$in: prestatairesId}
-        }
-    };
-
     var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll(query1)
-            .then((traitements) => {
-                traitements.forEach((traitement) => {
-                    prestatairesId.push(traitement.dataValues.traitementFinal.id_prestataire);
+        bordereau.findAll(query)
+            .then((bordereaux) => {
+                bordereaux.forEach((bordereau) => {
+                    bordereau.dataValues = bordereau.dataValues.traitementFinal.dataValues.prestataire.dataValues;
                 })
-                prestataire.findAll(query2)
-                    .then((prestataires) => {
-                        obs.onNext(prestataires);
-                        obs.onCompleted();
-                    })
-                    .catch((error) => {
-                        obs.onError(error);
-                    })
+                obs.onNext(bordereaux);
+                obs.onCompleted();
             })
             .catch((error) => {
                 obs.onError(error);
