@@ -8,6 +8,7 @@ var Site = models.site
 var localisation = models.localisation;
 
 var location = require('../utilities/location');
+var config = require('../config/config.json');
 
 function getAllSites(queryParameters) {
     /* This function creates an Observable and returns it. It searches for all
@@ -77,8 +78,7 @@ function getSiteById(id) {
    return observable;
 }
 
-function getSitesCloseToSite(id) {
-    var dMax = 100000; // should maybe be km
+function getSitesCloseToSite(id, distanceMax) {
     var result = [];
     var observable = Rx.Observable.create((observer) => {
         Site.findAll({
@@ -113,9 +113,8 @@ function getSitesCloseToSite(id) {
                                 var lat = site.dataValues.localisation.dataValues.latitude;
                                 var long = site.dataValues.localisation.dataValues.longitude;
                                 location.getDistance(longitude, latitude, long, lat, (distance) => {
-                                    console.log(site.dataValues.nom);
-                                    console.log(distance);
-                                    if (distance < dMax) {
+                                    if (distance < distanceMax) {
+                                        site.dataValues.localisation = undefined;
                                         result.push(site);
                                     }
                                 })

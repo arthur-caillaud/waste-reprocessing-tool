@@ -1,6 +1,7 @@
 {
     "computing": {
-        "tolerance": 5
+        "tolerance": 5,
+        "maxDistance": 300
     },
     "development": {
         "username": "root",

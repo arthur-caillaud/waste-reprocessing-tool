@@ -4,6 +4,7 @@ var router = express.Router();
 var Rx = require('rx');
 var sitesService = require('../services/sites.service');
 var utilities = require('../utilities/routes');
+var config = require('../config/config.json');
 
 /*
 This is a controller entirely dedicated to error handling when it comes
@@ -87,6 +88,12 @@ function getSiteById(req, res) {
 
 
 function getSitesCloseToSite(req, res) {
+    if (typeof req.query.distance != 'undefined') {
+        var distance = req.query.distance;
+    }
+    else {
+        var distance = config.computing.maxDistance;
+    }
     var id = req.params.id;
     var onNext = (data) => {
         res.json(data);
@@ -98,7 +105,7 @@ function getSitesCloseToSite(req, res) {
     };
     var onCompleted = () => {};
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
-    sitesService.getSitesCloseToSite(id).subscribe(observer);
+    sitesService.getSitesCloseToSite(id, distance).subscribe(observer);
 }
 
 // Routes to functions
