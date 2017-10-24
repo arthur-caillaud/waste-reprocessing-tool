@@ -436,10 +436,6 @@ function countBordereaux(idArray, beginDate, endDate, label) {
          }
      }
 
-     console.log(idArray);
-     console.log(beginDate);
-     console.log(endDate);
-
     var observable = Rx.Observable.create((observer) => {
         bordereau.count(query)
             .then((n) => {
