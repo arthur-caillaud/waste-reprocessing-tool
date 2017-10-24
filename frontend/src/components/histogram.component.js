@@ -22,11 +22,9 @@ function clone(obj) {
     return copy;
 }
 
-class Histogram extends Component {
+export default class Histogram extends Component {
     // valuesArray is an array of JS objects defined as {title: 'title', keys: ['key1','key2','key3',...], values: [value1,value2,value3,...]}
     // each object in valuesArray is stack of N columns labelled with Object.title
-    graphTitle = this.props.title;
-    valuesArray = this.props.values;
 
     toNullArray(valuesArray){
         return valuesArray.map(bundle => {
@@ -39,6 +37,8 @@ class Histogram extends Component {
         const histogramTitle = this.props.title;
         const nullData = this.toNullArray(data);
         // We also save the previous state for dynamic transitions
+
+        console.log(data);
 
         const width = getChartSize("#"+this.props.id).width;
         const height = getChartSize("#"+this.props.id).height;
@@ -220,20 +220,18 @@ class Histogram extends Component {
 
     }
 
-    redrawHistogram() {
+    redrawAndEraseHistogram(values) {
         d3.select("#"+this.props.id).select("svg").remove("svg")
-        this.drawHistogram(this.valuesArray);
+        this.__initHistogram(values);
     };
 
-    componentDidMount() {
-        window.addEventListener("resize", this.__initHistogram(this.valuesArray));
-    };
+    componentWillUpdate(nextProps, nextState){
+        this.redrawAndEraseHistogram(nextProps.values);
+    }
 
-    componentDidUpdate() {
-        this.redrawHistogram(this.valuesArray);
-    };
 
     render() {
+
         return (
         <div id="histogram-container">
             <h2 className="chart-title">Valorisation {this.graphTitle}</h2>
@@ -242,5 +240,3 @@ class Histogram extends Component {
         );
     };
 }
-
-export default Histogram;

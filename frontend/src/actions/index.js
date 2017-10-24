@@ -52,6 +52,7 @@ export const REMOVE_PRESTATAIRE_GRAPH_TAG = "REMOVE_PRESTATAIRE_GRAPH_TAG";
 export const UPDATE_PRESTATAIRETAGS_INPUTARRAY = "UPDATE_PRESTATAIRETAGS_INPUTARRAY";
 
 export const LOAD_PRESTATAIREGRAPH_VALUES_BEGIN = "LOAD_PRESTATAIREGRAPH_VALUES_BEGIN";
+export const UPDATE_PRESTATAIREGRAPH_VALUES = "UPDATE_PRESTATAIREGRAPH_VALUES";
 /*
  * other constants
  */
@@ -358,5 +359,12 @@ export function updatePrestataireTagsInputArray(inputArray){
 export function loadPrestataireGraphValuesBegin(){
     return {
         type: LOAD_PRESTATAIREGRAPH_VALUES_BEGIN
+    }
+}
+
+export function updatePrestataireGraphValues(valuesArray){
+    return {
+        type: UPDATE_PRESTATAIREGRAPH_VALUES,
+        valuesArray
     }
 }

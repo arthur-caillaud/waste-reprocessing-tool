@@ -101,14 +101,150 @@ export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire
     }
 }
 
-export function loadPrestataireGraphValues(level,name,idPrestataire,chosenDechets){
+export function loadPrestataireGraphValues(level,name,prestataire = null,chosenDechets = null){
     return dispatch => {
         dispatch(actions.loadPrestataireGraphValuesBegin());
-        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+idPrestataire)
-            .then(response => response.json())
-            .then(json => {
+        if(prestataire){
+            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+prestataire.id)
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                    let valuesArray = [];
 
-            });
+                    /*
+                     * We start by computing the two taux de valorisation
+                     */
+                    let tauxDeValorisationGlobal = 0;
+                    let tauxDeValorisationListeVerte = 0;
+                    let quantiteeTotale = 0;
+                    let quantiteeTotaleListeVerte = 0;
+                    let quantiteeTotaleRecyclee = 0;
+                    let quantiteeTotaleRecycleeListeVerte = 0;
+
+                    if(json.quantity.length > 0){
+                        json.quantity.forEach(dechet => {
+                            quantiteeTotale += parseFloat(dechet.quantitee_traitee);
+                            if(dechet.dechet.is_listeverte){
+                                quantiteeTotaleListeVerte += parseFloat(dechet.quantitee_traitee);
+                            }
+                        })
+                    }
+                    else{
+                        quantiteeTotale = 0.;
+                        quantiteeTotaleListeVerte = 0.;
+                    }
+                    if(json.recycled.length > 0){
+                        json.recycled.forEach(dechet => {
+                            quantiteeTotaleRecyclee += parseFloat(dechet.quantitee_traitee);
+                            if(dechet.dechet.is_listeverte){
+                                quantiteeTotaleRecycleeListeVerte += parseFloat(dechet.quantitee_traitee);
+                            }
+                        })
+                    }
+                    else{
+                        quantiteeTotaleRecyclee = 0.;
+                        quantiteeTotaleRecycleeListeVerte = 0.;
+                    }
+
+                    if(quantiteeTotaleRecyclee > 0 && quantiteeTotale > 0){
+                        tauxDeValorisationGlobal = 100*(quantiteeTotaleRecyclee/quantiteeTotale);
+                    }
+                    else {
+                        tauxDeValorisationGlobal = 0;
+                    }
+
+                    if(quantiteeTotaleListeVerte > 0 && quantiteeTotaleRecycleeListeVerte > 0){
+                        tauxDeValorisationListeVerte = 100*(quantiteeTotaleRecycleeListeVerte/quantiteeTotaleListeVerte);
+                    }
+                    else {
+                        tauxDeValorisationListeVerte = 0;
+                    }
+
+                    /*
+                     * We insert both these two values to create the first two
+                     * columns of this histogram
+                     */
+                     const tauxDeValorisationGlobalColumn = {
+                         title: "Taux de valorisation global",
+                         keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                         values: [parseFloat(tauxDeValorisationGlobal.toPrecision(1)), 100, 100],
+                         volumes: [parseFloat(quantiteeTotaleRecyclee.toPrecision(1)), 100, 100]
+                     };
+                     valuesArray.push(tauxDeValorisationGlobalColumn);
+                     const tauxDeValorisationListeVerteColumn = {
+                         title: "Taux de valorisation Liste Verte",
+                         keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                         values: [parseFloat(tauxDeValorisationListeVerte.toPrecision(1)), 100, 100],
+                         volumes: [parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(1)), 100, 100]
+                     };
+                     valuesArray.push(tauxDeValorisationListeVerteColumn);
+                    /*
+                     * Now we see if some dechets have been chosen to be displayed
+                     */
+                    if(chosenDechets){
+                        chosenDechets.forEach(chosenDechet => {
+                            const chosenDechetColumn = chosenDechet => {
+                                let tauxDeValorisation = 0;
+                                let quantiteeValorisee = 0;
+                                if(json.quantity.length > 0){
+                                    json.quantity.forEach(dechet => {
+                                        if(chosenDechet.id === dechet.dechet.id){
+                                            if(json.recycled.length > 0){
+                                                json.recycled.forEach(dechetRecycle => {
+                                                    if(dechetRecycle.dechet.id === dechet.dechet.id){
+                                                        tauxDeValorisation = 100*(parseFloat(dechetRecycle.quantitee_traitee))/(parseFloat(dechet.quantitee_traitee));
+                                                        quantiteeValorisee = parseFloat(dechetRecycle.quantitee_traitee);
+                                                        const column = {
+                                                            title: dechet.dechet.libelle,
+                                                            keys: [prestataire.nom,'GLOBAL','REGIONAL'],
+                                                            values: [parseFloat(tauxDeValorisation.toPrecision(1)), 100, 100],
+                                                            volumes: [parseFloat(quantiteeValorisee.toPrecision(1)), 100, 100]
+                                                        }
+                                                        return column;
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            };
+                            valuesArray.push(chosenDechetColumn);
+                        })
+                    }
+                    else{
+                        for (let i = 0; i < 3; i++) {
+                            if(json.quantity[i]){
+                                let dechet = json.quantity[i];
+                                let tauxDeValorisation = 0;
+                                let quantiteeValorisee = 0;
+                                if(json.recycled.length > 0){
+                                    json.recycled.forEach(dechetRecycle => {
+                                        if(dechetRecycle.dechet.id === dechet.dechet.id){
+                                            tauxDeValorisation = 100*(parseFloat(dechetRecycle.quantitee_traitee))/(parseFloat(dechet.quantitee_traitee));
+                                            quantiteeValorisee = parseFloat(dechetRecycle.quantitee_traitee);
+                                        };
+                                    });
+                                };
+                                const dechetColumn = {
+                                    title: dechet.dechet.libelle,
+                                    keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                                    values: [parseFloat(tauxDeValorisation.toPrecision(1)), 100, 100],
+                                    volumes: [parseFloat(quantiteeValorisee.toPrecision(1)), 100, 100]
+                                };
+                                valuesArray.push(dechetColumn);
+                            }
+                        }
+                    }
+                    dispatch(actions.updatePrestataireGraphValues(valuesArray));
+                });
+
+        }
+        /*else{
+            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/')
+                .then(response => response.json())
+                .then(json => {
+                });
+        }*/
     }
 }
 
@@ -123,9 +259,9 @@ export function loadDechetList(level,name){
             .then(response => response.json())
             .then(json => {
                 let newInputArray = [];
-                json.dechets.forEach(dechet => {
-                    const newDechet = Object.assign({}, dechet, {nom: dechet.libelle});
-                    newInputArray.push(newDechet);
+                json.dechets.forEach(row => {
+                    let newRow = Object.assign({}, row.dechet, {nom: row.libelle});
+                    newInputArray.push(newRow);
                 })
                 dispatch(actions.updateDechetList(newInputArray));
             });
@@ -137,13 +273,6 @@ export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
         dispatch(actions.loadPrestataireListBegin());
         return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name+'/prestataires/'+idDechet)
             .then(response => response.json())
-            .then(json => {
-                let inputArray = [];
-                json.quantity.forEach(row => {
-                    inputArray.push(row.prestataire);
-                });
-                console.log(inputArray);
-                dispatch(actions.updatePrestataireTagsInputArray(inputArray));
-            });
+            .then(json => dispatch(actions.updatePrestataireTagsInputArray(json)));
     }
 }
