@@ -10,27 +10,26 @@ export default class LeftTileInfos extends Component {
             data: []
         }
     }
-    componentWillUpdate() {
+    componentWillMount() {
         let data = []
         this.state.ecarts_pesee.forEach(function(element) {
             data.push({
-                Num_Bdx: element.num_bordereau,
+                Num_Bdx: element.num_bordereau.substring(0, 10),
                 Qte_estimee: parseFloat(element.quantitee_transportee).toFixed(2),
                 Qte_recue: parseFloat(element.quantitee_finale).toFixed(2),
         })
     })
         this.state.data = data
-        console.log(data)
+
     }
 
     render() {
         if (window.store.getState().infosPanelOptions.leftTileShown == true){
-            console.log(this.state.data)
         return (
-            <BootstrapTable data={this.state.data} striped hover condensed bordered={false}>
-                <TableHeaderColumn isKey={true} dataField="Num_Bdx">#Bdx</TableHeaderColumn>
-                <TableHeaderColumn dataField="Qte_estimee"> Qté Estimée</TableHeaderColumn>
-                <TableHeaderColumn dataField="Qte_recue">Qté_reçue</TableHeaderColumn>
+            <BootstrapTable data={this.state.data} scrollTop={ 'Bottom' }>
+                <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
+                <TableHeaderColumn dataField="Qte_estimee" dataAlign="center"> Qté Est.</TableHeaderColumn>
+                <TableHeaderColumn dataField="Qte_recue" dataAlign="center">Qté Reç.</TableHeaderColumn>
             </BootstrapTable>
         );
     }

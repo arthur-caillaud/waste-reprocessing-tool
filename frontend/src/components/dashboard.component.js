@@ -49,7 +49,7 @@ componentDidMount(){
                   <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
                 </Row>
               </Col>
-              <Col sm={3}  className="show-more-infos" > <MoreInfosContainer/> </Col>
+              <Col sm={3}> <MoreInfosContainer/> </Col>
             </Row>
           </Grid>
         </div>

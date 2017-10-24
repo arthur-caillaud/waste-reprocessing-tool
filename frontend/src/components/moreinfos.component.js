@@ -11,7 +11,7 @@ class MoreInfos extends Component {
             defaultBody
         } = this.props;
         return (
-            <div>
+            <div className="more-infos">
                     {defaultBody}
             </div>
         )

@@ -6,31 +6,30 @@ export default class MiddleLeftTileInfos extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ecarts_pesee: window.store.getState().pageOptions.bordereaux.ecarts_pesee,
+            filieres_interdites_norm: window.store.getState().pageOptions.bordereaux.filieres_interdites_norm,
             data: []
         }
     }
-    componentWillUpdate() {
+    componentWillMount() {
         let data = []
-        this.state.ecarts_pesee.forEach(function(element) {
+        this.state.filieres_interdites_norm.forEach(function(element) {
             data.push({
-                Num_Bdx: element.num_bordereau,
-                Qte_estimee: parseFloat(element.quantitee_transportee).toFixed(2),
-                Qte_recue: parseFloat(element.quantitee_finale).toFixed(2),
+                Num_Bdx: element.num_bordereau.substring(0, 10),
+                Code_Interne: element.dechet.codeinterne.substring(0, 10),
+                Site: parseFloat(element.id_site).toFixed(0),
         })
     })
         this.state.data = data
-        console.log(data)
     }
 
     render() {
-        if (window.store.getState().infosPanelOptions.leftTileShown == true){
-            console.log(this.state.data)
+        if (window.store.getState().infosPanelOptions.middleLeftTileShown == true){
+
         return (
-            <BootstrapTable data={this.state.data} striped hover condensed bordered={false}>
-                <TableHeaderColumn isKey={true} dataField="Num_Bdx">#Bdx</TableHeaderColumn>
-                <TableHeaderColumn dataField="Qte_estimee"> Qté Estimée</TableHeaderColumn>
-                <TableHeaderColumn dataField="Qte_recue">Qté_reçue</TableHeaderColumn>
+            <BootstrapTable data={this.state.data} scrollTop={ 'Bottom' }>
+                <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
+                <TableHeaderColumn dataField="Code_Interne" dataAlign="center">CodeInt.</TableHeaderColumn>
+                <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
             </BootstrapTable>
         );
     }

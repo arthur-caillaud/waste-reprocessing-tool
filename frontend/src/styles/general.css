@@ -2,6 +2,7 @@
     background-color: rgb(250,250,250);
 }
 
+
 button {
     outline-width: 0px;
 }
@@ -11,7 +12,9 @@ button {
   padding-bottom: 0%;
   background-color: #a5c7ff;
 }
-
+.more-infos {
+    height:100%;
+}
 
 .row-eq-height {
   vertical-align: middle;
