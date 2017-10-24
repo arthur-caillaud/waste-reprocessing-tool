@@ -289,6 +289,7 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
                 isLoading: true
             });
         case UPDATE_DECHETLIST:
+            console.log(action.json);
             return Object.assign({}, state, {
                 selectedInput: '',
                 inputArray: action.json,
@@ -322,32 +323,51 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
                 isLoading: true
             })
         case ADD_PRESTATAIRE_GRAPH_TAG:
+            let newInputArray = [];
+            let newTagsArray = [];
             const newTag = Object.assign({}, action.dechetTag, {
                 shortenedName: action.dechetTag.codeinterne +
                 ' - ' +
                 action.dechetTag.libelle.slice(0,6) +
                 '...'
             });
-            return Object.assign({}, state, {
-                tagsArray: [...state.tagsArray, newTag]
-            });
+            if(state.tagsArray.includes(newTag)){
+                return state;
+            }
+            else{
+                /*
+                 * We remove the tag from the inputArray so that we can't click on it anymore
+                 */
+                newInputArray = [];
+                state.inputArray.forEach(input => {
+                    if (input.id !== newTag.id){
+                        newInputArray.push(input);
+                    }
+                });
+                return Object.assign({}, state, {
+                    inputArray: newInputArray,
+                    tagsArray: [...state.tagsArray, newTag]
+                });
+            }
         case REMOVE_PRESTATAIRE_GRAPH_TAG:
-            let newTagsArray = []
+            newTagsArray = [];
             state.tagsArray.forEach(tag => {
                 if(tag !== action.dechetTag){
                     newTagsArray.push(tag);
                 }
             });
             return Object.assign({}, state, {
+                inputArray: [...state.inputArray,action.dechetTag],
                 tagsArray: newTagsArray
             });
         case UPDATE_DECHETTAGS_INPUTARRAY:
-            const newInputArray = action.inputArray.map(tag => {
+            newInputArray = action.inputArray.map(tag => {
                 return Object.assign({}, tag, {nom: tag.libelle});
-            })
+            });
             return Object.assign({}, state, {
+                isLoading: false,
                 inputArray: newInputArray
-            })
+            });
         default:
             return state;
     }
@@ -360,27 +380,49 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
                 isLoading: true
             })
         case ADD_DECHET_GRAPH_TAG:
+            let newInputArray = [];
+            let newTagsArray = [];
             const newTag = Object.assign({}, action.prestataireTag, {
                 shortenedName: action.prestataireTag.nom.slice(0,11) + '...'
             });
-            return Object.assign({}, state, {
-                tagsArray: [...state.tagsArray, newTag]
-            });
+            if(state.tagsArray.includes(newTag)){
+                return state;
+            }
+            else{
+                /*
+                 * We remove the tag from the inputArray so that we can't click on it anymore
+                 */
+                console.log(state.inputArray);
+                newInputArray = [];
+                state.inputArray.forEach(input => {
+                    if (input.id !== newTag.id){
+                        newInputArray.push(input);
+                    }
+                });
+                return Object.assign({}, state, {
+                    inputArray: newInputArray,
+                    tagsArray: [...state.tagsArray, newTag]
+                });
+            }
         case REMOVE_DECHET_GRAPH_TAG:
-            let newTagsArray = []
+            newTagsArray = [];
+            newInputArray = [];
             state.tagsArray.forEach(tag => {
                 if(tag !== action.prestataireTag){
                     newTagsArray.push(tag);
                 }
             });
+            newInputArray = [...state.inputArray, action.prestataireTag];
             return Object.assign({}, state, {
+                inputArray: newInputArray,
                 tagsArray: newTagsArray
             })
         case UPDATE_PRESTATAIRETAGS_INPUTARRAY:
-            const newInputArray = action.inputArray.map(prestataire => {
+            newInputArray = action.inputArray.map(prestataire => {
                 return Object.assign({},prestataire,{codeinterne: prestataire.id});
             });
             return Object.assign({}, state, {
+                isLoading: false,
                 inputArray: newInputArray
             })
         default:
