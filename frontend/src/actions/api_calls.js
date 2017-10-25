@@ -116,7 +116,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                 .then(json => {
                     console.log(json);
                     let valuesArray = [];
-                    const columnNames = ["sites","global","region"];
+                    const columnNames = (json.region.quantity.length > 0) ? ["sites","global","region"] : ["sites","global"];
+                    const keys = (json.region.quantity.length > 0) ? [prestataire.nom, "GLOBAL", "REGIONAL"] : [prestataire.nom, "GLOBAL"];
                     /*
                      * We start by computing the two taux de valorisation
                      */
@@ -170,10 +171,10 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                         else {
                             tauxDeValorisationListeVerte = 0;
                         }
-                        values.push(tauxDeValorisationGlobal);
-                        valuesListeVerte.push(tauxDeValorisationListeVerte);
-                        volumes.push(quantiteeTotaleRecyclee);
-                        volumesListeVerte.push(quantiteeTotaleRecycleeListeVerte);
+                        values.push(parseFloat(tauxDeValorisationGlobal.toPrecision(6)));
+                        valuesListeVerte.push(parseFloat(tauxDeValorisationListeVerte.toPrecision(6)));
+                        volumes.push(parseFloat(quantiteeTotaleRecyclee.toPrecision(6)));
+                        volumesListeVerte.push(parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(6)));
                     })
 
 
@@ -183,14 +184,14 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                      */
                      const tauxDeValorisationGlobalColumn = {
                          title: "Taux de valorisation global",
-                         keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                         keys: keys,
                          values: values,
                          volumes: volumes
                      };
                      valuesArray.push(tauxDeValorisationGlobalColumn);
                      const tauxDeValorisationListeVerteColumn = {
                          title: "Taux de valorisation Liste Verte",
-                         keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                         keys: keys,
                          values: valuesListeVerte,
                          volumes: volumesListeVerte
                      };
@@ -224,8 +225,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                 }
                             });
                             chosenDechetColumn = {
-                                title: chosenDechet.libelle,
-                                keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                                title: chosenDechet.codeinterne + ' - ' + chosenDechet.libelle.slice(0,12) + '...',
+                                keys: keys,
                                 values: values,
                                 volumes: volumes
                             }
@@ -234,11 +235,11 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                     }
                     else{
                         for (let i = 0; i < 3; i++) {
-                            let dechetColumn;
-                            let values = [];
-                            let volumes = [];
-                            let dechet = json.sites.quantity[i];
-                            if(dechet && json[name] && json[name].quantity[i]){
+                            if(json.sites.quantity[i]){
+                                let dechetColumn;
+                                let values = [];
+                                let volumes = [];
+                                let dechet = json.sites.quantity[i];
                                 columnNames.forEach(name => {
                                     let tauxDeValorisation = 0;
                                     let quantiteeValorisee = 0;
@@ -253,11 +254,9 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                         });
                                     };
                                 });
-                            }
-                            if(dechet){
                                 dechetColumn = {
-                                    title: dechet.dechet.libelle,
-                                    keys: [prestataire.nom,"GLOBAL","REGIONAL"],
+                                    title: dechet.dechet.codeinterne + ' - ' + dechet.dechet.libelle.slice(0,12) + '...',
+                                    keys: keys,
                                     values: values,
                                     volumes: volumes
                                 };

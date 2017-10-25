@@ -7,7 +7,7 @@ function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
     const idGraph = ownProps.idGraph;
     return {
-        title: state[branchName].graphTitle,
+        title: state[branchName].title,
         values: state[branchName].values,
         isLoading: state[branchName].isLoading
     }

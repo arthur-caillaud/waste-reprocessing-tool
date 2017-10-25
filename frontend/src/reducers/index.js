@@ -414,7 +414,7 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
         });
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
-                selectedInput: action.prestataire
+                selectedInput: action.prestataire.id
             });
         default :
             return state;
@@ -448,7 +448,7 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
             });
         case UPDATE_SELECTEDDECHET:
             return Object.assign({}, state, {
-                selectedInput: action.dechet
+                selectedInput: action.dechet.id
             });
         default :
             return state;
@@ -574,7 +574,7 @@ function prestataireGraphOptions(state = {title: '', values: [], isLoading: fals
         case LOAD_PRESTATAIREGRAPH_VALUES_BEGIN:
             return Object.assign({}, state, {isLoading: true});
         case UPDATE_SELECTEDPRESTATAIRE:
-            return Object.assign({}, state, {title: action.prestataire});
+            return Object.assign({}, state, {title: action.prestataire.nom});
         case UPDATE_PRESTATAIREGRAPH_VALUES:
             return Object.assign({}, state, {isLoading: false, values: action.valuesArray});
         default:
