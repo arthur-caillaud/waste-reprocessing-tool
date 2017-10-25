@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import HelperService from '../actions/service';
 import * as ArrowUp from 'react-icons/lib/go/arrow-up';
 import * as ArrowDown from 'react-icons/lib/go/arrow-down';
 import '../styles/tile.css';
@@ -22,7 +22,11 @@ class TileElement extends Component {
           onClickNotif,
           onClickTile,
       } = this.props;
-      var notifCircle = notifValue > 0 ? <span className="notifValue" onClick={onClickNotif}>{notifValue}</span> : null;
+      var notifCircle = notifValue > 0 ? (<div>
+          <span className="notifValue" onClick={onClickNotif}>{HelperService.trimAbove99(notifValue)}</span>
+          <span className="notifDD"onClick={onClickNotif}>DD</span>
+      </div>
+  ) : null;
 
 
       return (

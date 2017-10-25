@@ -17,9 +17,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onRenderMetierClickHandler: () => {
+            console.log(window.store.getState().updateSearchBar.site.real_level)
             dispatch(apiCalls.updateSite({
                     nom: "National",
                     level: 0,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: null,
@@ -37,6 +39,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.metier_dependance,
                     level: 1,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: null,
@@ -54,6 +57,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.up_dependance,
                     level: 2,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: null,
@@ -71,6 +75,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
                     level: 3,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
@@ -95,6 +100,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: evt
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(1,evt));
             dispatch(apiCalls.loadDechetList(1,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(1,evt));
@@ -110,6 +116,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(2,evt));
             dispatch(apiCalls.loadDechetList(2,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(2,evt));
@@ -125,6 +132,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(3,evt));
             dispatch(apiCalls.loadDechetList(3,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(3,evt));
@@ -140,6 +148,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(4,evt));
             dispatch(apiCalls.loadDechetList(4,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(4,evt));

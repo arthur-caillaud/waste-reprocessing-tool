@@ -1,6 +1,13 @@
 import * as actions from './index';
 var HelperService = {}
 
+function trimAbove99(value) {
+    if (value > 99) {
+        return "99+"
+    } else {
+        return value
+    }
+}
 
 function getAllLevelNames(architecture) {
     /*
@@ -11,60 +18,82 @@ function getAllLevelNames(architecture) {
     let levelNames = []
 
     for (let metier_dependance in architecture) {
-        levelNames.push({
-            nom: metier_dependance,
-            architecture: {
-                metier_dependance: metier_dependance,
-                up_dependance: null,
-                unite_dependance: null,
-                site: null
-            },
-            level: 1
-        })
-        let metier = architecture[metier_dependance]
-
-        for (let up_dependance in metier) {
+        if (metier_dependance!="niveau") {
+            let metier = architecture[metier_dependance]
             levelNames.push({
-                nom: up_dependance,
+                nom: metier_dependance,
                 architecture: {
                     metier_dependance: metier_dependance,
-                    up_dependance: up_dependance,
+                    up_dependance: null,
                     unite_dependance: null,
                     site: null
                 },
-                level: 2
+                level: 1,
+                real_level: metier.niveau
             })
-            let up = metier[up_dependance]
 
-            for (let unite_dependance in up) {
-                levelNames.push({
-                    nom: unite_dependance,
-                    architecture: {
-                        metier_dependance: metier_dependance,
-                        up_dependance: up_dependance,
-                        unite_dependance: unite_dependance,
-                        site: null
-                    },
-                    level: 3
-                })
-                let unite = up[unite_dependance]
 
-                for (let site in unite) {
+
+            for (let up_dependance in metier) {
+                if(up_dependance !="niveau") {
+                    let up = metier[up_dependance]
                     levelNames.push({
-                        nom: site,
+                        nom: up_dependance,
                         architecture: {
                             metier_dependance: metier_dependance,
                             up_dependance: up_dependance,
-                            unite_dependance: unite_dependance,
-                            site: site
+                            unite_dependance: null,
+                            site: null
                         },
-                        level: 4
+                        level: 2,
+                        real_level: up.niveau
                     })
 
+
+                    for (let unite_dependance in up) {
+                        if(unite_dependance!="niveau") {
+                            let unite = up[unite_dependance]
+                            levelNames.push({
+                                nom: unite_dependance,
+                                architecture: {
+                                    metier_dependance: metier_dependance,
+                                    up_dependance: up_dependance,
+                                    unite_dependance: unite_dependance,
+                                    site: null
+                                },
+                                level: 3,
+                                real_level: unite.niveau
+                            })
+
+
+                            for (let site in unite) {
+                                if(site!="niveau") {
+                                    levelNames.push({
+                                        nom: site,
+                                        architecture: {
+                                            metier_dependance: metier_dependance,
+                                            up_dependance: up_dependance,
+                                            unite_dependance: unite_dependance,
+                                            site: site
+                                        },
+                                        level: 4,
+                                        real_level: 4
+                                    })
+
+                                }
+
+
+                            }
+                        }
+
+                    }
                 }
+
             }
         }
+
     }
+
     return levelNames;
 }
 
@@ -74,7 +103,10 @@ function getMenuForMetiers() {
     let architecture = window.store.getState().pageOptions.architecture;
 
     for(let metier in architecture) {
-        menuMetier.push(metier)
+        if(metier!="niveau") {
+            menuMetier.push(metier)
+        }
+
     }
     return menuMetier;
 }
@@ -82,31 +114,38 @@ function getMenuForMetiers() {
 function getMenuForUp(site) {
     let menuUp = [];
     let architecture = window.store.getState().pageOptions.architecture;
-
     let entries = Object.entries(architecture)
+    entries.splice(0, 1)
+
     entries.forEach(function(element) {
         if (element[0] === site.architecture.metier_dependance) {
 
             for (let up in element[1]) {
-                menuUp.push(up)
+                if(up!="niveau"){
+                    menuUp.push(up)
+                }
+
             }
         }
 
     })
-
     return menuUp
 }
 
 function getMenuForUnite(site) {
     let menuUnite = []
     let entries = Object.entries(window.store.getState().pageOptions.architecture)
+    entries.splice(0, 1)
     entries.forEach(function(element) {
         if (element[0] === site.architecture.metier_dependance) {
             let entries2 = Object.entries(element[1])
+            entries2.splice(0, 1);
             entries2.forEach(function(element2) {
                 if (element2[0] === site.architecture.up_dependance) {
                     for (let unite in element2[1]) {
-                        menuUnite.push(unite)
+                        if (unite!="niveau") {
+                            menuUnite.push(unite)
+                        }
                     }
                 }
             })
@@ -118,16 +157,21 @@ function getMenuForUnite(site) {
 function getMenuForSite(site) {
     let menuSite = []
     let entries = Object.entries(window.store.getState().pageOptions.architecture)
+    entries.splice(0,1)
     entries.forEach(function(element) {
         if (element[0] === site.architecture.metier_dependance) {
             let entries2 = Object.entries(element[1])
+            entries2.splice(0,1)
             entries2.forEach(function(element2) {
                 if (element2[0] === site.architecture.up_dependance) {
                     let entries3 = Object.entries(element2[1])
+                    entries3.splice(0,1)
                     entries3.forEach(function(element3) {
                         if (element3[0] === site.architecture.unite_dependance) {
-                            for (let site in element3[1]) {
-                                menuSite.push(site)
+                            for (let Site in element3[1]) {
+                                if (Site!="niveau"){
+                                    menuSite.push(Site)
+                                }
                             }
                         }
                     })
@@ -212,6 +256,14 @@ function presentDataForNewSite(json) {
     } else {
          dataForLeftGauge.details = "Pas de Bordereaux sur la période sélectionnée"
          dataForMiddleGauge.details = "Pas de Bordereaux sur la période sélectionnée"
+         dataForLeftGauge.leftvalue = 100
+         dataForLeftGauge.leftvalueBefore = 12
+         dataForLeftGauge.leftvalueAnte = 0
+         dataForLeftGauge.leftvalueBeforeAnte = 0
+         dataForMiddleGauge.middlevalue = 100
+         dataForMiddleGauge.middlevalueBefore = 12
+         dataForMiddleGauge.middlevalueAnte = 0
+         dataForMiddleGauge.middlevalueBeforeAnte = 0
      }
 
     let response = {
@@ -230,7 +282,7 @@ function presentDataForNewSite(json) {
 
 
 
-
+HelperService.trimAbove99 = trimAbove99;
 HelperService.getMenuForMetiers = getMenuForMetiers;
 HelperService.getMenuForUp = getMenuForUp;
 HelperService.getMenuForUnite = getMenuForUnite;

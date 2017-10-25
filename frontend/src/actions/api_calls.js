@@ -51,7 +51,6 @@ export function updateSite(site) {
             .then(response => response.json())
             .then(json => {
                 let newValues = HelperService.presentDataForNewSite(json)
-
                 let leftValues = newValues.dataForLeftGauge;
                 let middleValues = newValues.dataForMiddleGauge;
                 let leftTileValues = newValues.dataForLeftTile;
@@ -101,7 +100,7 @@ export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire
                 json.sites.quantity.forEach(row => {
                     inputArray.push(row.dechet);
                 });
-                console.log(inputArray);
+
                 dispatch(actions.updateDechetTagsInputArray(inputArray));
             });
     }
@@ -114,7 +113,6 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
             return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+prestataire.id)
                 .then(response => response.json())
                 .then(json => {
-                    console.log(json);
                     let valuesArray = [];
                     const columnNames = (json.region.quantity.length > 0) ? ["sites","global","region"] : ["sites","global"];
                     const keys = (json.region.quantity.length > 0) ? [prestataire.nom, "GLOBAL", "REGIONAL"] : [prestataire.nom, "GLOBAL"];
@@ -283,7 +281,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                             }
                         }
                     }
-                    console.log(valuesArray);
+                    
                     dispatch(actions.updatePrestataireGraphValues(valuesArray));
                 });
 
