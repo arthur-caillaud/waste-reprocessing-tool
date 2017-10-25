@@ -43,33 +43,33 @@ class App extends Component {
 
 
       return (<BrowserRouter>
-                <div>
-                  <Row>
-                      <Navbar style={{marginBottom: "1"}} staticTop>
-                      <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
-                          <NavItem style={{height: "2vh"}} eventKey="1" href="/">Dashboard</NavItem>
-                          <NavItem style={{height: "2vh"}} eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
-                          <NavItem style={{height: "2vh"}} eventKey="3" href="/dechet">Vision Déchet</NavItem>
-                      </Nav>
-                      </Navbar>
-                  </Row>
-                  <Row>
-                      <div className="searchbar-container" >
-                          <Col sm={7}>
-                              <SearchTree/>
+                  <div>
+                      <Row>
+                          <Navbar style={{marginBottom: "1"}} staticTop>
+                          <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
+                              <NavItem style={{height: "2vh"}} eventKey="1" href="/">Dashboard</NavItem>
+                              <NavItem style={{height: "2vh"}} eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
+                              <NavItem style={{height: "2vh"}} eventKey="3" href="/dechet">Vision Déchet</NavItem>
+                          </Nav>
+                          </Navbar>
+                      </Row>
+                      <Row>
+                          <div className="searchbar-container" >
+                              <Col sm={7}>
+                                  <SearchTree/>
+                              </Col>
+                              <Col sm={5}>
+                                  <SearchBar id="MainSearchBar"/>
+                              </Col>
+                          </div>
+                      </Row>
+                      <Row className="row-eq-height">
+                          <Col sm={12}>
+                              <MainRouter className="main-container" />
                           </Col>
-                          <Col sm={5}>
-                              <SearchBar id="MainSearchBar"/>
-                          </Col>
-                      </div>
-                  </Row>
-                  <Row className="row-eq-height">
-                      <Col sm={12}>
-                          <MainRouter className="main-container" />
-                      </Col>
-                  </Row>
-              </div>
-            </BrowserRouter>)
+                      </Row>
+                  </div>
+              </BrowserRouter>)
   }
 }
 

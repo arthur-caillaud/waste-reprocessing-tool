@@ -53,8 +53,8 @@ function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
         where: {
             id_site: {$in: idArray},
             $or: [
-                sequelize.where(sequelize.literal('quantitee_finale - quantitee_transportee'), '>', tolerance),
-                sequelize.where(sequelize.literal('quantitee_transportee - quantitee_finale'), '>', tolerance)
+                sequelize.where(sequelize.literal('quantitee_finale - quantitee_transportee'), '>=', tolerance),
+                sequelize.where(sequelize.literal('quantitee_transportee - quantitee_finale'), '>=', tolerance)
             ]
         }
     };

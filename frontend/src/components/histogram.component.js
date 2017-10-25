@@ -232,9 +232,11 @@ export default class Histogram extends Component {
 
     render() {
 
+        const graphTitle = (this.props.title.length < 35) ? this.props.title : this.props.title.slice(0,35) + '...';
+
         return (
         <div id="histogram-container">
-            <h2 className="chart-title">Valorisation {this.graphTitle}</h2>
+            <h2 className="chart-title">Valorisation {graphTitle}</h2>
             <div id={this.props.id} className="chart-container"></div>
         </div>
         );
