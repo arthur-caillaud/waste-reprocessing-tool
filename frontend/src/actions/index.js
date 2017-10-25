@@ -66,6 +66,9 @@ export const LOAD_PRESTATAIREGRAPH_VALUES_BEGIN = "LOAD_PRESTATAIREGRAPH_VALUES_
 export const UPDATE_PRESTATAIREGRAPH_VALUES = "UPDATE_PRESTATAIREGRAPH_VALUES";
 export const LOAD_DECHETGRAPH_VALUES_BEGIN = "LOAD_DECHETGRAPH_VALUES_BEGIN";
 export const UPDATE_DECHETGRAPH_VALUES = "UPDATE_DECHETGRAPH_VALUES";
+
+export const CHANGE_BEGIN_DATE = "CHANGE_BEGIN_DATE";
+export const CHANGE_END_DATE = "CHANGE_END_DATE";
 /*
  * other constants
  */
@@ -452,5 +455,19 @@ export function cleanDechetsChosenTagsArray(){
 export function cleanPrestatairesChosenTagsArray(){
     return {
         type: CLEAN_PRESTATAIRES_CHOSENTAGS_ARRAY
+    }
+}
+
+export function changeBeginDate(beginDate){
+    return {
+        type: CHANGE_BEGIN_DATE,
+        beginDate
+    }
+}
+
+export function changeEndDate(endDate){
+    return {
+        type: CHANGE_END_DATE,
+        endDate
     }
 }

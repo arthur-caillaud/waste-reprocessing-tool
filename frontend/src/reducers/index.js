@@ -232,8 +232,8 @@ function infosPanelOptions(
             return state;
     }
 }
-
-function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, bordereaux: {}, lateralmenuIsVisible: true}, action){
+let today = new Date();
+function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, bordereaux: {}, lateralmenuIsVisible: true, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
     switch (action.type) {
         case CHANGE_URL:
             return Object.assign({}, state, {url: action.url});
