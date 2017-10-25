@@ -18,9 +18,9 @@ import '../styles/general.css';
 
 class DashboardElement extends Component {
     componentDidMount(){
-        if (window.store.getState().pageOptions.architecture == {}) {
+
         this.props.getArchitecture()
-    }
+    
 }
 
   render() {

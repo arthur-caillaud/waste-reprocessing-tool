@@ -326,6 +326,7 @@ function updateSearchBar(
         site: {
             nom: "National",
             level: 0,
+            real_level:0,
             architecture: {
                 nom: null,
                 unite_dependance: null,
@@ -430,7 +431,7 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
                 isLoading: true
             });
         case UPDATE_DECHETLIST:
-            console.log(action.json);
+
             return Object.assign({}, state, {
                 selectedInput: '',
                 inputArray: action.json,
@@ -539,7 +540,7 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
                 /*
                  * We remove the tag from the inputArray so that we can't click on it anymore
                  */
-                console.log(state.inputArray);
+
                 newInputArray = [];
                 state.inputArray.forEach(input => {
                     if (input.id !== newTag.id){
