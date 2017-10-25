@@ -451,7 +451,7 @@ function countBordereaux(idArray, beginDate, endDate, label) {
 
 
 function getUndated(idArray, label) {
-    var query = {
+    var query1 = {
         include: [
             {
                 model: traitement,
@@ -470,11 +470,24 @@ function getUndated(idArray, label) {
         }
     };
 
+    var query2 = {
+        where: {
+            id_site: {$in: idArray},
+            id_traitement_final: null
+        }
+    }
+
     var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll(query)
-            .then((bordereaux) => {
-                obs.onNext([bordereaux, label]);
-                obs.onCompleted();
+        bordereau.findAll(query1)
+            .then((bordereaux1) => {
+                bordereau.findAll(query2)
+                    .then((bordereaux2) => {
+                        obs.onNext([bordereaux1.concat(bordereaux2), label]);
+                        obs.onCompleted();
+                    })
+                    .catch((error) => {
+                        throw error;
+                    })
             })
             .catch((error) => {
                 obs.onError(error);
