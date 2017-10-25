@@ -21,27 +21,27 @@
 }
 
 .first-rect{
-    fill: #66bb6a;
+    fill: #90caf9;
 }
 
 .first-rect:hover{
-    fill: #4caf50;
+    fill: #64b5f6;
 }
 
 .second-rect{
-    fill: #ffeb3b;
+    fill: #ffe082;
 }
 
 .second-rect:hover{
-    fill: #fdd835
+    fill: #ffd54f;
 }
 
 .third-rect{
-    fill: #ff9800;
+    fill: #ffab91;
 }
 
 .third-rect:hover{
-    fill: #fb8c00;
+    fill: #ff8a65;
 }
 
 .d3-tip {

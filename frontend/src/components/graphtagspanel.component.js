@@ -41,10 +41,10 @@ class GraphTagsPanel extends Component {
 
     render() {
 
-        const id= this.props.id
-        const inputArray = this.props.inputArray
-        const tagsArray = this.props.tagsArray
-        const searchPlaceholder = this.props.searchPlaceholder
+        const id= this.props.id;
+        const inputArray = this.props.inputArray;
+        const tagsArray = this.props.tagsArray;
+        const searchPlaceholder = this.props.searchPlaceholder;
         const onTagClick = this.props.onTagClick;
         const onLoaded = this.props.onLoaded;
         const onRemove = this.props.onRemove;
@@ -131,7 +131,6 @@ class GraphTagsPanel extends Component {
     }
 
     componentDidMount() {
-        this.props.onLoaded();
         document.body.addEventListener('click', e => this.hideTagsSearchContainer(e));
     };
 }

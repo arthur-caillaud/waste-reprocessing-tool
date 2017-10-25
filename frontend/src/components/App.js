@@ -56,10 +56,10 @@ class App extends Component {
                       </Row>
                       <Row>
                           <div className="searchbar-container" >
-                              <Col sm={7}>
+                              <Col sm={4}>
                                   <SearchTree/>
                               </Col>
-                              <Col sm={5}>
+                              <Col sm={4}>
                                   <SearchBar id="MainSearchBar"/>
                               </Col>
                           </div>
