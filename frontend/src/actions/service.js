@@ -16,7 +16,6 @@ function getAllLevelNames(architecture) {
     the names of All the different levels.
     */
     let levelNames = []
-    console.log(architecture)
 
     for (let metier_dependance in architecture) {
         levelNames.push({
