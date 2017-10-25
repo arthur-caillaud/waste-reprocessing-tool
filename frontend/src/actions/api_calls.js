@@ -171,10 +171,10 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                         else {
                             tauxDeValorisationListeVerte = 0;
                         }
-                        values.push(parseFloat(tauxDeValorisationGlobal.toPrecision(6)));
-                        valuesListeVerte.push(parseFloat(tauxDeValorisationListeVerte.toPrecision(6)));
-                        volumes.push(parseFloat(quantiteeTotaleRecyclee.toPrecision(6)));
-                        volumesListeVerte.push(parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(6)));
+                        values.push(parseFloat(tauxDeValorisationGlobal.toPrecision(4)));
+                        valuesListeVerte.push(parseFloat(tauxDeValorisationListeVerte.toPrecision(5)));
+                        volumes.push(parseFloat(quantiteeTotaleRecyclee.toPrecision(4)));
+                        volumesListeVerte.push(parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(5)));
                     })
 
 
@@ -207,25 +207,33 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                             columnNames.forEach(name => {
                                 let tauxDeValorisation = 0;
                                 let quantiteeValorisee = 0;
+                                let quantiteeTotale = 0;
                                 if(json[name].quantity.length > 0){
                                     json[name].quantity.forEach(dechet => {
                                         if(chosenDechet.id === dechet.dechet.id){
                                             if(json[name].recycled.length > 0){
                                                 json[name].recycled.forEach(dechetRecycle => {
                                                     if(dechetRecycle.dechet.id === dechet.dechet.id){
-                                                        tauxDeValorisation = 100*(parseFloat(dechetRecycle.quantitee_traitee))/(parseFloat(dechet.quantitee_traitee));
-                                                        quantiteeValorisee = parseFloat(dechetRecycle.quantitee_traitee);
-                                                        values.push(tauxDeValorisation);
-                                                        volumes.push(quantiteeValorisee);
+                                                        quantiteeValorisee += parseFloat(dechetRecycle.quantitee_traitee);
+                                                    }
+                                                });
+                                            }
+                                            if(json[name].quantity.length > 0){
+                                                json[name].quantity.forEach(dechetQuantity => {
+                                                    if(dechetQuantity.dechet.id === dechet.dechet.id){
+                                                        quantiteeTotale += parseFloat(dechetQuantity.quantitee_traitee);
                                                     }
                                                 });
                                             }
                                         }
                                     });
                                 }
+                                tauxDeValorisation = 100*(parseFloat(quantiteeValorisee))/(parseFloat(quantiteeTotale));
+                                values.push(parseFloat(tauxDeValorisation.toPrecision(4)));
+                                volumes.push(parseFloat(quantiteeValorisee.toPrecision(5)));
                             });
                             chosenDechetColumn = {
-                                title: chosenDechet.codeinterne + ' - ' + chosenDechet.libelle.slice(0,12) + '...',
+                                title: chosenDechet.codeinterne + ' - ' + chosenDechet.libelle.slice(0,20) + '...',
                                 keys: keys,
                                 values: values,
                                 volumes: volumes
@@ -248,14 +256,14 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                             if(dechetRecycle.dechet.id === dechet.dechet.id){
                                                 tauxDeValorisation = 100*(parseFloat(dechetRecycle.quantitee_traitee))/(parseFloat(dechet.quantitee_traitee));
                                                 quantiteeValorisee = parseFloat(dechetRecycle.quantitee_traitee);
-                                                values.push(tauxDeValorisation);
-                                                volumes.push(quantiteeValorisee);
+                                                values.push(parseFloat(tauxDeValorisation.toPrecision(4)));
+                                                volumes.push(parseFloat(quantiteeValorisee.toPrecision(5)));
                                             };
                                         });
                                     };
                                 });
                                 dechetColumn = {
-                                    title: dechet.dechet.codeinterne + ' - ' + dechet.dechet.libelle.slice(0,12) + '...',
+                                    title: dechet.dechet.codeinterne + ' - ' + dechet.dechet.libelle.slice(0,20) + '...',
                                     keys: keys,
                                     values: values,
                                     volumes: volumes
