@@ -1,6 +1,13 @@
 import * as actions from './index';
 var HelperService = {}
 
+function trimAbove99(value) {
+    if (value > 99) {
+        return "99+"
+    } else {
+        return value
+    }
+}
 
 function getAllLevelNames(architecture) {
     /*
@@ -9,6 +16,7 @@ function getAllLevelNames(architecture) {
     the names of All the different levels.
     */
     let levelNames = []
+    console.log(architecture)
 
     for (let metier_dependance in architecture) {
         levelNames.push({
@@ -212,6 +220,14 @@ function presentDataForNewSite(json) {
     } else {
          dataForLeftGauge.details = "Pas de Bordereaux sur la période sélectionnée"
          dataForMiddleGauge.details = "Pas de Bordereaux sur la période sélectionnée"
+         dataForLeftGauge.leftvalue = 100
+         dataForLeftGauge.leftvalueBefore = 12
+         dataForLeftGauge.leftvalueAnte = 0
+         dataForLeftGauge.leftvalueBeforeAnte = 0
+         dataForMiddleGauge.middlevalue = 100
+         dataForMiddleGauge.middlevalueBefore = 12
+         dataForMiddleGauge.middlevalueAnte = 0
+         dataForMiddleGauge.middlevalueBeforeAnte = 0
      }
 
     let response = {
@@ -230,7 +246,7 @@ function presentDataForNewSite(json) {
 
 
 
-
+HelperService.trimAbove99 = trimAbove99;
 HelperService.getMenuForMetiers = getMenuForMetiers;
 HelperService.getMenuForUp = getMenuForUp;
 HelperService.getMenuForUnite = getMenuForUnite;
