@@ -281,7 +281,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                             }
                         }
                     }
-                    console.log(valuesArray);
+                    
                     dispatch(actions.updatePrestataireGraphValues(valuesArray));
                 });
 

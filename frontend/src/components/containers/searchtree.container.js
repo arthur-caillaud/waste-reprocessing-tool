@@ -17,9 +17,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onRenderMetierClickHandler: () => {
+            console.log(window.store.getState().updateSearchBar.site.real_level)
             dispatch(apiCalls.updateSite({
                     nom: "National",
                     level: 0,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: null,
@@ -37,6 +39,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.metier_dependance,
                     level: 1,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: null,
@@ -54,6 +57,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.up_dependance,
                     level: 2,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: null,
@@ -71,6 +75,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
                     level: 3,
+                    real_level: window.store.getState().updateSearchBar.site.real_level,
                     architecture: {
                         nom: null,
                         unite_dependance: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
