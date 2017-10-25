@@ -109,8 +109,8 @@ module.exports = function(sequelize, DataTypes) {
       bordereau.belongsTo(models.dechet, {foreignKey: 'id_dechet', targetKey: 'id'});
       bordereau.hasOne(models.type_traitement, {foreignKey: 'id', targetKey: 'id_traitement_prevu', through: 'bordereauxForTraitementPrevu'});
       bordereau.belongsTo(models.site, {foreignKey: 'id_site', targetKey: 'id'});
-      bordereau.hasOne(models.transport, {as: 'transport1', foreignKey: 'id', targetKey: 'id_transport_1'});
-      bordereau.hasOne(models.transport, {as: 'transport2', foreignKey: 'id', targetKey: 'id_transport_2'});
+      bordereau.belongsTo(models.transport, {as: 'transport1', foreignKey: 'id_transport_1', targetKey: 'id'});
+      bordereau.belongsTo(models.transport, {as: 'transport2', foreignKey: 'id_transport_2', targetKey: 'id'});
       bordereau.belongsTo(models.traitement, {as: 'traitementInter', foreignKey: 'id_traitement_inter', targetKey: 'id'});
       bordereau.belongsTo(models.traitement, {as: 'traitementFinal', foreignKey: 'id_traitement_final', targetKey: 'id'});
   }

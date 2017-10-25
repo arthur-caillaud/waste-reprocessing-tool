@@ -179,38 +179,65 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
 // NOTE: the limit depends on the type of waste (30 days if dangerous, 60 if not)
 function getAllRetards(idArray, dangereux, date, label) {
 
+    // console.log(date);
+
+    var ms = Date.parse(date);
+    var date = new Date(Date.parse(date));
+
+    var month =  30 * 24 * 60 * 60 * 1000;
+
+
     if (dangereux==1) {
-        var maxDelay = 30 * 60 * 60 * 1000;
+        var maxDelay = 30 * 24 * 60 * 60 * 1000;
     }
     else {
-        var maxDelay = 60 * 60 * 60 * 1000;
+        var maxDelay = 60 * 24 * 60 * 60 * 1000;
     }
 
-    var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll({
-            include: [
-                {
-                    model: traitement,
-                    as: 'traitementFinal',
-                    where: {
-                        date_priseencharge: {$lt: (date - maxDelay)}
-                }},
-                {
-                    model: dechet,
-                    where: {
-                        is_dangereux: dangereux
-                    }
-                },
-                {
-                    model: site
+    var lastDate = (new Date(ms-maxDelay));
+    var firstDate = (new Date(ms-month-maxDelay));
+    firstDate.setDate(1);
+
+    // console.log(lastDate);
+    // console.log(firstDate);
+
+    var query = {
+        include: [
+            {
+                model: dechet,
+                where: {
+                    is_dangereux: dangereux
                 }
-                ],
-            where: {
-                id_site: {$in: idArray},
-                bordereau_finished: false
+            },
+            {
+                model: site
+            },
+            {
+                model: transport,
+                as: 'transport1',
+                where: {
+                    date: {
+                        $lt: lastDate,
+                        $gt: firstDate
+                    }
+                }
             }
-        })
+            ],
+        where: {
+            id_site: {$in: idArray},
+            bordereau_finished: 0
+        }
+    };
+
+    // console.log(query.include[2].where.date);
+
+    // console.log(Date.getUTCDate(date-maxDelay));
+    // console.log(Date.getUTCDate(date-maxDelay-month));
+
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.findAll(query)
         .then((bordereaux) => {
+            // console.log(bordereaux);
             obs.onNext([bordereaux, label]);
             obs.onCompleted();
         })
@@ -581,11 +608,11 @@ function getDetailsForSites(beginDate, endDate, idArray) {
             .subscribe(observerFilieresInterditesDD);
 
         var observerRetards = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetards(idArray, 0, date, "retards_norm")
+        getAllRetards(idArray, 0, endDate, "retards_norm")
             .subscribe(observerRetards);
 
         var observerRetardsDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetards(idArray, 1, date, "retards_dd")
+        getAllRetards(idArray, 1, endDate, "retards_dd")
             .subscribe(observerRetardsDD);
 
         var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);

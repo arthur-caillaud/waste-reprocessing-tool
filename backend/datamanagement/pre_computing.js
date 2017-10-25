@@ -190,11 +190,11 @@ function computeForSite(beginDate, endDate, siteId, callback) {
         .subscribe(observerFilieresInterditesDD);
 
     var observerRetards = Rx.Observer.create(onNextArray, onError, onCompleted);
-    DashboardService.getAllRetards([siteId], 0, date, "retards_norm")
+    DashboardService.getAllRetards([siteId], 0, endDate, "retards_norm")
         .subscribe(observerRetards);
 
     var observerRetardsDD = Rx.Observer.create(onNextArray, onError, onCompleted);
-    DashboardService.getAllRetards([siteId], 1, date, "retards_dd")
+    DashboardService.getAllRetards([siteId], 1, endDate, "retards_dd")
         .subscribe(observerRetardsDD);
 
     var observerVolume = Rx.Observer.create(onNextNumber, onError, onCompleted);
