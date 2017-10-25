@@ -248,6 +248,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                 let values = [];
                                 let volumes = [];
                                 let dechet = json.sites.quantity[i];
+                                dispatch(actions.addPrestataireGraphTag(dechet.dechet));
                                 columnNames.forEach(name => {
                                     let tauxDeValorisation = 0;
                                     let quantiteeValorisee = 0;

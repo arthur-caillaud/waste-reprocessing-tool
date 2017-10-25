@@ -19,40 +19,58 @@ function getSiteArchitecture(){
     var getSiteArchitectureObservable = Rx.Observable.create(obs => {
         site.findAll()
         .then(sites => {
-            let siteArchitecture = {};
+            let siteArchitecture = {niveau: 0};
             sites.forEach(site => {
                 let metierDependance = site.dataValues.metier_dependance;
                 let upDependance = site.dataValues.up_dependance;
                 let uniteDependance = site.dataValues.unite_dependance;
                 let nomSite = site.dataValues.nom;
-                if(!uniteDependance){
-                    uniteDependance = nomSite;
-                    nomSite = null;
+                let niveaux = [];
+                let values = [];
+
+                if (metierDependance) {
+                    niveaux.push(1);
+                    values.push(metierDependance);
                 }
-                if(!upDependance){
-                    upDependance = uniteDependance;
-                    uniteDependance = nomSite;
-                    nomSite = null;
+                if (upDependance) {
+                    niveaux.push(2);
+                    values.push(upDependance);
                 }
-                if(!metierDependance){
-                    metierDependance = upDependance;
-                    upDependance = uniteDependance;
-                    uniteDependance = nomSite;
-                    nomSite = null;
+                if (uniteDependance) {
+                    niveaux.push(3);
+                    values.push(uniteDependance)
+                }
+                if (nomSite) {
+                    niveaux.push(4);
+                    values.push(nomSite);
                 }
 
-                if (metierDependance && !siteArchitecture[metierDependance]){
-                    siteArchitecture[metierDependance] = {};
+                const n = niveaux.length;
+
+                if (n>0) {
+                    if (!siteArchitecture[values[0]]) {
+                        siteArchitecture[values[0]] = {niveau: niveaux[0]}
+                    }
                 }
-                if(upDependance && !siteArchitecture[metierDependance][upDependance]){
-                    siteArchitecture[metierDependance][upDependance] = {};
+
+                if (n>1) {
+                    if (!siteArchitecture[values[0]][values[1]]) {
+                        siteArchitecture[values[0]][values[1]] = {niveau: niveaux[1]}
+                    }
                 }
-                if(uniteDependance && !siteArchitecture[metierDependance][upDependance][uniteDependance]){
-                    siteArchitecture[metierDependance][upDependance][uniteDependance] = {};
+
+                if (n>2) {
+                    if (!siteArchitecture[values[0]][values[1]][values[2]]) {
+                        siteArchitecture[values[0]][values[1]][values[2]] = {niveau: niveaux[2]}
+                    }
                 }
-                if(nomSite && !siteArchitecture[metierDependance][upDependance][uniteDependance][nomSite]){
-                    siteArchitecture[metierDependance][upDependance][uniteDependance][nomSite] = nomSite;
+
+                if (n>3) {
+                    if (!siteArchitecture[values[0]][values[1]][values[2]][values[3]]) {
+                        siteArchitecture[values[0]][values[1]][values[2]][values[3]] = {niveau: niveaux[3]}
+                    }
                 }
+
             })
             obs.onNext(siteArchitecture);
             obs.onCompleted();
