@@ -46,7 +46,7 @@ class App extends Component {
               <BrowserRouter>
                   <div>
                       <Row>
-                          <Navbar style={{marginBottom: "1"}} staticTop>
+                          <Navbar style={{marginBottom: "0"}} staticTop>
                           <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
                               <NavItem style={{height: "2vh"}} eventKey="1" href="/">Dashboard</NavItem>
                               <NavItem style={{height: "2vh"}} eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
