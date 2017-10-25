@@ -64,6 +64,8 @@ export const CLEAN_DECHETS_CHOSENTAGS_ARRAY = "CLEAN_PRESTATAIRES_CHOSENTAGS_ARR
 
 export const LOAD_PRESTATAIREGRAPH_VALUES_BEGIN = "LOAD_PRESTATAIREGRAPH_VALUES_BEGIN";
 export const UPDATE_PRESTATAIREGRAPH_VALUES = "UPDATE_PRESTATAIREGRAPH_VALUES";
+export const LOAD_DECHETGRAPH_VALUES_BEGIN = "LOAD_DECHETGRAPH_VALUES_BEGIN";
+export const UPDATE_DECHETGRAPH_VALUES = "UPDATE_DECHETGRAPH_VALUES";
 /*
  * other constants
  */
@@ -424,6 +426,19 @@ export function loadPrestataireGraphValuesBegin(){
 export function updatePrestataireGraphValues(valuesArray){
     return {
         type: UPDATE_PRESTATAIREGRAPH_VALUES,
+        valuesArray
+    }
+}
+
+export function loadDechetGraphValuesBegin(){
+    return {
+        type: LOAD_DECHETGRAPH_VALUES_BEGIN
+    }
+}
+
+export function updateDechetGraphValues(valuesArray){
+    return {
+        type: UPDATE_DECHETGRAPH_VALUES,
         valuesArray
     }
 }

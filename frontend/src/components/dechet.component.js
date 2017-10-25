@@ -5,7 +5,7 @@ import { Button } from 'react-bootstrap';
 
 import { array } from '../utilities/text-generator.component';
 
-import Histogram from '../components/histogram.component';
+import Histogram from '../components/containers/histogram.container';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 
@@ -15,7 +15,6 @@ class Dechet extends Component {
 
     return (
       <div>
-        <div>
           <Grid fluid>
             <Row>
                 <Col sm={3}>
@@ -24,38 +23,18 @@ class Dechet extends Component {
                       onClickActionName="updateSelectedDechet"
                       onLoadActionName="loadPrestatairesConsideringChosenDechet"
                       onSearchActionName="updateDechetPanelSearchbarInput"
+                      loadGraphValuesActionName="loadDechetGraphValues"
                       branchName="updateDechetSelectionPanel"
                       searchPlaceholder="Rechercher un déchet"
                       emptyContainerMessage="Aucun déchet trouvé à cette échelle"
+                      cleanActionName="cleanPrestatairesChosenTagsArray"
                   />
                 </Col>
                 <Col sm={9}>
-                  <Histogram title="FER ET ACIER" id="dechet-hist" values={[{
-                        title: 'Taux de valorisation global',
-                        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [78,82,73],
-                        volumes: [230,4839,1020]
-                    },{
-                        title: 'Fer et acier',
-                        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [54,65,43],
-                        volumes: [230,4839,1020]
-                    },{
-                        title: 'Carton',
-                        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [90,95,86],
-                        volumes: [230,4839,1020]
-                    },{
-                        title: "Aluminium",
-                        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [10,65,90],
-                        volumes: [230,4839,1020]
-                    },{
-                        title: "Déchets dangereux",
-                        keys: ['VEOLIA','GLOBAL','REGIONAL'],
-                        values: [30,40,33],
-                        volumes: [230,4839,1020]
-                    }]}/>
+                  <Histogram
+                      branchName="prestataireGraphOptions"
+                      idGraph="prestataire-histogram-graph"
+                  />
                 </Col>
                 <Col sm={9} smOffset={3}>
                    <GraphTagsPanel
@@ -68,11 +47,11 @@ class Dechet extends Component {
                        inputGraphPanelBranch="updateDechetSelectionPanel"
                        defaultOnLoadActionName="loadPrestataireList"
                        emptyContainerMessage="Aucun prestataire pour ce déchet"
+                       loadGraphValuesActionName="loadDechetGraphValues"
                   />
                 </Col>
             </Row>
         </Grid>
-        </div>
     </div>
     );
   }
