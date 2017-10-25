@@ -2,18 +2,16 @@
     background-color: rgb(250,250,250);
 }
 
-
-button {
+* {
     outline-width: 0px;
 }
 
-.navBar {
-  vertical-align: middle;
-  padding-bottom: 0%;
-  background-color: #a5c7ff;
-}
 .more-infos {
     height:100%;
+}
+
+button .btn.btn-sm.btn-default {
+    background-color: white !important;
 }
 
 .row-eq-height {
@@ -49,4 +47,14 @@ div.no-right-padding{
 }
 #tmp {
     display: none;
+}
+
+.DateRangePickerInput {
+    height: 40px;
+}
+.DateInput {
+    height: 38px;
+}
+.DateInput_input {
+    height: 38px;
 }
