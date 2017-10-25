@@ -95,6 +95,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: evt
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(1,evt));
             dispatch(apiCalls.loadDechetList(1,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(1,evt));
@@ -110,6 +111,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(2,evt));
             dispatch(apiCalls.loadDechetList(2,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(2,evt));
@@ -125,6 +127,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(3,evt));
             dispatch(apiCalls.loadDechetList(3,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(3,evt));
@@ -140,6 +143,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
                 }
             }));
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(4,evt));
             dispatch(apiCalls.loadDechetList(4,evt));
             dispatch(apiCalls.loadPrestataireGraphValues(4,evt));
