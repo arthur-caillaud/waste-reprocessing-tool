@@ -41,6 +41,7 @@
     "prop-types": "^15.6.0",
     "react-addons-test-utils": "^15.6.2",
     "react-router": "^4.2.0",
+    "remote-redux-devtools": "^0.5.12",
     "should": "^13.1.0",
     "supertest": "^3.0.0"
   }
