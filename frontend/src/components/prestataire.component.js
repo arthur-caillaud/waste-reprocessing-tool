@@ -27,6 +27,7 @@ class Prestataire extends Component {
                     branchName="updatePrestataireSelectionPanel"
                     searchPlaceholder="Rechercher un prestataire"
                     emptyContainerMessage="Aucun prestataire trouvé à cette échelle"
+                    cleanActionName="cleanDechetsChosenTagsArray"
                 />
               </Col>
               <Col sm={9}>
@@ -46,6 +47,7 @@ class Prestataire extends Component {
                      inputGraphPanelBranch="updatePrestataireSelectionPanel"
                      defaultOnLoadActionName="loadDechetList"
                      emptyContainerMessage="Aucun déchet pour ce prestataire"
+                     loadGraphValuesActionName="loadPrestataireGraphValues"
                 />
               </Col>
             </Row>
