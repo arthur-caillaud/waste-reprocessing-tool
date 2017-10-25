@@ -20,26 +20,27 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
     const onRemoveActionName = ownProps.onRemoveActionName;
+    const branchName = ownProps.branchName;
     const onLoadActionName = ownProps.onLoadActionName;
     const defaultOnLoadActionName = ownProps.defaultOnLoadActionName;
     const inputGraphPanelBranch = ownProps.inputGraphPanelBranch;
-    const idChosenInput = window.store.getState()[inputGraphPanelBranch].selectedInput;
-    const localisationLevel = window.store.getState().pageOptions.scale.level;
-    const localisationName = window.store.getState().pageOptions.scale.name;
+    const loadGraphValuesActionName = ownProps.loadGraphValuesActionName;
     return ({
         onTagClick: (tag) => {
             dispatch(actions[onClickActionName](tag));
-        },
-        onLoaded: () => {
-            if(idChosenInput !== ''){
-                dispatch(apiCalls[onLoadActionName](localisationLevel,localisationName,idChosenInput));
-            }
-            else{
-                dispatch(apiCalls[defaultOnLoadActionName](localisationLevel,localisationName));
-            }
+            dispatch(apiCalls[loadGraphValuesActionName](
+                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.nom,
+                window.store.getState()[inputGraphPanelBranch].selectedInput,
+                window.store.getState()[branchName].tagsArray));
         },
         onRemove: (tag) => {
             dispatch(actions[onRemoveActionName](tag));
+            dispatch(apiCalls[loadGraphValuesActionName](
+                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.nom,
+                window.store.getState()[inputGraphPanelBranch].selectedInput,
+                window.store.getState()[branchName].tagsArray));
         }
     });
 };

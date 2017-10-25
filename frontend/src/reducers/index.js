@@ -64,11 +64,13 @@ import {
     ADD_DECHET_GRAPH_TAG,
     REMOVE_DECHET_GRAPH_TAG,
     UPDATE_DECHETTAGS_INPUTARRAY,
+    CLEAN_DECHETS_CHOSENTAGS_ARRAY,
 
     LOAD_DECHETGRAPH_TAGS_BEGIN,
     ADD_PRESTATAIRE_GRAPH_TAG,
     REMOVE_PRESTATAIRE_GRAPH_TAG,
     UPDATE_PRESTATAIRETAGS_INPUTARRAY,
+    CLEAN_PRESTATAIRES_CHOSENTAGS_ARRAY,
 
     LOAD_PRESTATAIREGRAPH_VALUES_BEGIN,
     UPDATE_PRESTATAIREGRAPH_VALUES,
@@ -414,7 +416,7 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
         });
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
-                selectedInput: action.prestataire.id
+                selectedInput: action.prestataire
             });
         default :
             return state;
@@ -448,7 +450,7 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
             });
         case UPDATE_SELECTEDDECHET:
             return Object.assign({}, state, {
-                selectedInput: action.dechet.id
+                selectedInput: action.dechet
             });
         default :
             return state;
@@ -495,9 +497,15 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
                     newTagsArray.push(tag);
                 }
             });
+            action.dechetTag.nom = action.dechetTag.libelle;
             return Object.assign({}, state, {
                 inputArray: [...state.inputArray,action.dechetTag],
                 tagsArray: newTagsArray
+            });
+        case CLEAN_DECHETS_CHOSENTAGS_ARRAY:
+            return Object.assign({}, state, {
+                tagsArray: [],
+                inputArray: [...state.inputArray, ...state.tagsArray]
             });
         case UPDATE_DECHETTAGS_INPUTARRAY:
             newInputArray = action.inputArray.map(tag => {
@@ -555,7 +563,12 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
             return Object.assign({}, state, {
                 inputArray: newInputArray,
                 tagsArray: newTagsArray
-            })
+            });
+        case CLEAN_PRESTATAIRES_CHOSENTAGS_ARRAY:
+            return Object.assign({}, state, {
+                tagsArray: [],
+                inputArray: [...state.inputArray, ...state.tagsArray]
+            });
         case UPDATE_PRESTATAIRETAGS_INPUTARRAY:
             newInputArray = action.inputArray.map(prestataire => {
                 return Object.assign({},prestataire,{codeinterne: prestataire.id});

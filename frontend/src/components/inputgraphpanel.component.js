@@ -37,7 +37,7 @@ class InputGraphPanel extends Component {
         if(containerArray.length > 0){
             containerArray.forEach(input => {
                 let listItem;
-                if (input.id === selectedInput){
+                if (input.id === selectedInput.id){
                     listItem = ( <ListGroupItem onClick={() => selectInputFunction(input)} active>{input.nom}</ListGroupItem> )
                     list.unshift(listItem);
                 }
@@ -52,7 +52,7 @@ class InputGraphPanel extends Component {
             if(isLoading){
                 listItem = (
                     <ListGroupItem>
-                        
+
                     </ListGroupItem>
                 )
             }
