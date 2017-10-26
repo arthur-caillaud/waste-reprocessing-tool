@@ -4,7 +4,6 @@ import * as apiCalls from '../../actions/api_calls';
 import SearchTreeElement from '../searchtree.component'
 
 function mapStateToProps(state) {
-
     return {
         site: state.updateSearchBar.site.architecture.nom,
         unite_dependance: state.updateSearchBar.site.architecture.unite_dependance,
@@ -51,7 +50,7 @@ function mapDispatchToProps(dispatch) {
                     }
                 }
             ));
-            dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.metier_dependance.name));
+            dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.metier_dependance));
             dispatch(apiCalls.loadPrestataireList(1,window.store.getState().updateSearchBar.site.architecture.metier_dependance));
             dispatch(apiCalls.loadDechetList(1,window.store.getState().updateSearchBar.site.architecture.metier_dependance));
             dispatch(apiCalls.loadPrestataireGraphValues(1,window.store.getState().updateSearchBar.site.architecture.metier_dependance));
@@ -75,7 +74,7 @@ function mapDispatchToProps(dispatch) {
                     }
                 }
             ));
-            dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.up_dependance.name));
+            dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.up_dependance));
             dispatch(apiCalls.loadPrestataireList(2,window.store.getState().updateSearchBar.site.architecture.up_dependance));
             dispatch(apiCalls.loadDechetList(2,window.store.getState().updateSearchBar.site.architecture.up_dependance));
             dispatch(apiCalls.loadPrestataireGraphValues(2,window.store.getState().updateSearchBar.site.architecture.up_dependance));
@@ -86,7 +85,7 @@ function mapDispatchToProps(dispatch) {
                     level: 3,
                     real_level: 3,
                     architecture: {
-                        nom: {name: "", real_level: 0},
+                        nom: null,
                         unite_dependance: {
                             name: window.store.getState().updateSearchBar.site.architecture.unite_dependance.name,
                             real_level: window.store.getState().updateSearchBar.site.architecture.unite_dependance.real_level,
@@ -102,7 +101,7 @@ function mapDispatchToProps(dispatch) {
                     }
                 }
             ));
-            dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.unite_dependance.name));
+            dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.unite_dependance));
             dispatch(apiCalls.loadPrestataireList(3,window.store.getState().updateSearchBar.site.architecture.unite_dependance));
             dispatch(apiCalls.loadDechetList(3,window.store.getState().updateSearchBar.site.architecture.unite_dependance));
             dispatch(apiCalls.loadPrestataireGraphValues(3,window.store.getState().updateSearchBar.site.architecture.unite_dependance));
@@ -119,7 +118,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: {name: evt.name, real_level: evt.real_level},
                 }
             }));
-            dispatch(actions.updateInputValue(evt.name))
+            dispatch(actions.updateInputValue(evt))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
@@ -194,7 +193,6 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
         },
     }
-
 }
 
 const SearchTree = connect(mapStateToProps, mapDispatchToProps)(SearchTreeElement);
