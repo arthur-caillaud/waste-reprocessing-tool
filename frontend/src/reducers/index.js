@@ -74,6 +74,8 @@ import {
 
     LOAD_PRESTATAIREGRAPH_VALUES_BEGIN,
     UPDATE_PRESTATAIREGRAPH_VALUES,
+    LOAD_DECHETGRAPH_VALUES_BEGIN,
+    UPDATE_DECHETGRAPH_VALUES,
 
     GraphTypes
 } from '../actions'
@@ -230,8 +232,8 @@ function infosPanelOptions(
             return state;
     }
 }
-
-function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, bordereaux: {}, lateralmenuIsVisible: true}, action){
+let today = new Date();
+function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, bordereaux: {}, lateralmenuIsVisible: true, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
     switch (action.type) {
         case CHANGE_URL:
             return Object.assign({}, state, {url: action.url});
@@ -431,7 +433,6 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
                 isLoading: true
             });
         case UPDATE_DECHETLIST:
-
             return Object.assign({}, state, {
                 selectedInput: '',
                 inputArray: action.json,
@@ -596,6 +597,19 @@ function prestataireGraphOptions(state = {title: '', values: [], isLoading: fals
     }
 }
 
+function dechetGraphOptions(state = {title: '', values: [], isLoading: false}, action){
+    switch(action.type){
+        case LOAD_DECHETGRAPH_VALUES_BEGIN:
+            return Object.assign({}, state, {isLoading: true});
+        case UPDATE_SELECTEDDECHET:
+            return Object.assign({}, state, {title: action.dechet.libelle});
+        case UPDATE_DECHETGRAPH_VALUES:
+            return Object.assign({}, state, {isLoading: false, values: action.valuesArray});
+        default:
+            return state;
+    }
+}
+
 
 const akkaApp = combineReducers({
     pageOptions,
@@ -607,7 +621,8 @@ const akkaApp = combineReducers({
     updateDechetSelectionPanel,
     updatePrestataireGraphTagsPanel,
     updateDechetGraphTagsPanel,
-    prestataireGraphOptions
+    prestataireGraphOptions,
+    dechetGraphOptions
 })
 
 export default akkaApp

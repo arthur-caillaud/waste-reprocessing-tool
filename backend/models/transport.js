@@ -43,8 +43,8 @@ module.exports = function(sequelize, DataTypes) {
 
   transport.associate = function(models) {
       transport.belongsTo(models.transporteur, {foreignKey: 'id_transporteur', targetKey: 'id'});
-      transport.belongsTo(models.bordereau, {as: 'transport1', foreignKey: 'id', targetKey: 'id_transport_1'});
-      transport.belongsTo(models.bordereau, {as: 'transport2', foreignKey: 'id', targetKey: 'id_transport_2'});
+      transport.hasOne(models.bordereau, {as: 'transport1', foreignKey: 'id_transport_1', sourceKey: 'id'});
+      transport.hasOne(models.bordereau, {as: 'transport2', foreignKey: 'id_transport_2', sourceKey: 'id'});
   };
   return transport;
 };

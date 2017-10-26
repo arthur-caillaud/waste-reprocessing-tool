@@ -1,6 +1,7 @@
 import React from 'react'
 import { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import 'react-dates/initialize';
 
 
 import MainRouter from '../utilities/router.component';
@@ -11,10 +12,12 @@ import SearchTree from './containers/searchtree.container';
 import { Button } from 'react-bootstrap';
 import { Glyphicon } from 'react-bootstrap';
 import { Nav, NavItem, Navbar } from 'react-bootstrap';
-
 import { Col, Row } from 'react-bootstrap';
 
+import { DateRangePicker } from 'react-dates';
+
 import '../styles/general.css';
+import 'react-dates/lib/css/_datepicker.css';
 
 class App extends Component {
   constructor() {
@@ -60,6 +63,15 @@ class App extends Component {
                               </Col>
                               <Col sm={4}>
                                   <SearchBar id="MainSearchBar"/>
+                              </Col>
+                              <Col sm={4}>
+                                  <DateRangePicker
+                                      startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+                                      endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+                                      onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
+                                      focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+                                      onFocusChange={focusedInput => this.setState({ focusedInput })}
+                                  />
                               </Col>
                           </div>
                       </Row>
