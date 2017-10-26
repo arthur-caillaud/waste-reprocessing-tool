@@ -286,7 +286,6 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
 
         }
         else{
-            console.log("No prestataire given for graph values. Searching for biggest prestataire...");
             return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
                 .then(response => response.json())
                 .then(json => {
@@ -430,7 +429,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                         dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                     else{
-                        for (let i = 0; i < 4; i++) {
+                        for (let i = 0; i < 3; i++) {
                             if(json.sites.quantity[i]){
                                 let tauxDeValorisation = 0;
                                 let quantiteeTotale = 0;
@@ -466,6 +465,21 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                         dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                 });
+            }
+            else{
+                return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
+                    .then(response => response.json())
+                    .then(json => {
+                        const biggestDechet = (json.dechets && json.dechets[0]) ? json.dechets[0] : null ;
+                        if(biggestDechet){
+                            console.log(biggestDechet);
+                            dispatch(actions.updateSelectedDechet(biggestDechet));
+                            dispatch(loadDechetGraphValues(level, name, biggestDechet));
+                        }
+                        else{
+                            dispatch(actions.updateDechetGraphValues([]));
+                        }
+                    });
             }
     };
 }
