@@ -31,16 +31,15 @@ export default class Histogram extends Component {
     toNullArray(valuesArray){
         return valuesArray.map(bundle => {
             let nullBundle = clone(bundle);
-            nullBundle.values = [0,0,0];
+            nullBundle.values = nullBundle.values.map(int => {return 0})
             return nullBundle;
         })
     }
     __initHistogram(data) {
         const histogramTitle = this.props.title;
         const nullData = this.toNullArray(data);
+
         // We also save the previous state for dynamic transitions
-
-
 
         const width = getChartSize("#"+this.props.id).width;
         const height = getChartSize("#"+this.props.id).height;
@@ -104,6 +103,8 @@ export default class Histogram extends Component {
         x1.domain(keys).rangeRound([0, x0.bandwidth()]);
 
         y.domain([0,100]).nice();
+
+        console.log(nullData);
 
         //Creating empty collumn bundles
         g.append('g')
@@ -191,8 +192,6 @@ export default class Histogram extends Component {
                 .attr("font-weight", "bold")
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
-
-        //setTimeout(() => {this.doTransition(this.newValuesArray)},2000);
     };
 
     doTransition(newValues){
