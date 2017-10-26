@@ -177,13 +177,7 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
 // current date (passed in the arguments) and the moment when the bordereau was
 // received is bigger than a limit
 // NOTE: the limit depends on the type of waste (30 days if dangerous, 60 if not)
-function getAllRetards(idArray, dangereux, date, label) {
-
-    // console.log(date);
-
-    var ms = Date.parse(date);
-    var date = new Date(Date.parse(date));
-
+function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
 
     if (dangereux==1) {
         var maxDelay = 30 * 24 * 60 * 60 * 1000;
@@ -192,11 +186,93 @@ function getAllRetards(idArray, dangereux, date, label) {
         var maxDelay = 60 * 24 * 60 * 60 * 1000;
     }
 
+    var ms = Date.parse(date);
+    var dateLimit = new Date(ms - maxDelay);
+
+    var month = dateLimit.getMonth() + 1;
+
+    if (month < 10) {
+        month = '0' + month;
+    }
+
+    var day = dateLimit.getDate();
+    if (day < 10) {
+        day = '0' + day;
+    }
+
+    var dateLimitString = '' + dateLimit.getFullYear() + '-' + month + '-' + day;
+    //
+    // console.log(minComputingDateString);
+    // console.log(maxComputingDateString);
+    // console.log(dateLimitString);
+    // console.log('\n');
+
+    // console.log("looking for " + dangereux + " bordereaux before " + dateLimitString + " and between " + beginDate + " and " + endDate);
+
+    var query = {
+        include: [
+            {
+                model: dechet,
+                where: {
+                    is_dangereux: dangereux
+                }
+            },
+            {
+                model: site
+            },
+            {
+                model: transport,
+                as: 'transport1',
+                where: {
+                    date: {
+                        $lt: endDate,
+                        $gte: beginDate,
+                        $lte: dateLimitString
+                    }
+                }
+            }
+            ],
+        where: {
+            id_site: {$in: idArray},
+            bordereau_finished: 0
+        }
+    };
+
+    // console.log(query.include[2].where.date);
+
+    // console.log(Date.getUTCDate(date-maxDelay));
+    // console.log(Date.getUTCDate(date-maxDelay-month));
+
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.findAll(query)
+        .then((bordereaux) => {
+            // console.log(bordereaux[0].dataValues);
+            // console.log("total " + dangereux + ": " + bordereaux.length);
+            // console.log(result.length);
+            obs.onNext([bordereaux, label]);
+            obs.onCompleted();
+        })
+        .catch((err) => {
+            obs.onError(err);
+        })
+    });
+    return observable;
+};
+
+
+function getAllRetardsDetails(idArray, dangereux, date, label) {
+
+    // console.log(date);
+
+    if (dangereux==1) {
+        var maxDelay = 30 * 24 * 60 * 60 * 1000;
+    }
+    else {
+        var maxDelay = 60 * 24 * 60 * 60 * 1000;
+    }
+
+    var ms = Date.parse(date);
     var lastDate = (new Date(ms-maxDelay));
-    var firstDate = new Date(lastDate);
-    var month = firstDate.getMonth() - 1;
-    firstDate.setMonth(month);
-    firstDate.setDate(1);
 
     // console.log("dangereux: " + dangereux);
     // console.log("before " +lastDate);
@@ -219,7 +295,6 @@ function getAllRetards(idArray, dangereux, date, label) {
                 where: {
                     date: {
                         $lt: lastDate,
-                        $gt: firstDate
                     }
                 }
             }
@@ -249,7 +324,6 @@ function getAllRetards(idArray, dangereux, date, label) {
     });
     return observable;
 };
-
 
 
 // this function looks for all the bordereaux and sums the total volume
@@ -610,11 +684,11 @@ function getDetailsForSites(beginDate, endDate, idArray) {
             .subscribe(observerFilieresInterditesDD);
 
         var observerRetards = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetards(idArray, 0, endDate, "retards_norm")
+        getAllRetardsDetails(idArray, 0, endDate, "retards_norm")
             .subscribe(observerRetards);
 
         var observerRetardsDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetards(idArray, 1, endDate, "retards_dd")
+        getAllRetardsDetails(idArray, 1, endDate, "retards_dd")
             .subscribe(observerRetardsDD);
 
         var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);

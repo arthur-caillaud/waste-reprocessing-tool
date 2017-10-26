@@ -554,7 +554,7 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
             let newInputArray = [];
             let newTagsArray = [];
             const newTag = Object.assign({}, action.prestataireTag, {
-                shortenedName: action.prestataireTag.nom.slice(0,11) + '...'
+                shortenedName: action.prestataireTag.nom.slice(0,10) + '...'
             });
             if(state.tagsArray.includes(newTag)){
                 return state;
