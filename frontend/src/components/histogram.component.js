@@ -6,6 +6,7 @@ import * as d3tip from 'd3-tip';
 import Loading from '../resources/Rolling.gif';
 
 function getChartSize(el) {
+    console.log(el);
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
     let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
@@ -161,13 +162,13 @@ export default class Histogram extends Component {
             .attr("transform", (d, i) => { return "translate(0," + i * 20 + ")"; });
 
         legend.append("rect")
-            .attr("x", width - 19)
+            .attr("x", width)
             .attr("width", 19)
             .attr("height", 19)
             .attr("class", z);
 
         legend.append("text")
-            .attr("x", width - 24)
+            .attr("x", width - 10)
             .attr("y", 9.5)
             .attr("dy", "0.32vw")
             .text(function(d) { return d; });
@@ -184,7 +185,7 @@ export default class Histogram extends Component {
             .call(d3.axisLeft(y).ticks(null, "s"))
             .append("text")
                 .attr("x", 2)
-                .attr("y", y(y.ticks().pop()) + 0.5)
+                .attr("y", y(y.ticks().pop()) - 7)
                 .attr("dy", "0.32em")
                 .attr("fill", "#000")
                 .attr("font-weight", "bold")
@@ -243,13 +244,14 @@ export default class Histogram extends Component {
             return (
                 <div id="histogram-container">
                     <img className="loading-gif" src={Loading} />
+                    <div id={this.props.id} className="chart-container"></div>
                 </div>
             );
         }
         else{
             return (
                 <div id="histogram-container">
-                    <h2 className="chart-title">Valorisation {graphTitle}</h2>
+                    <h2 className="chart-title">Valorisation <b>{graphTitle}</b></h2>
                     <div id={this.props.id} className="chart-container"></div>
                 </div>
             );

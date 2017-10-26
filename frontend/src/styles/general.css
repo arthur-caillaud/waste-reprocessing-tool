@@ -24,7 +24,6 @@ button .btn.btn-sm.btn-default {
 
 .searchbar-container{
     position: relative;
-    height: 7vh;
     vertical-align: center;
     padding-bottom: 5vh;
     border-bottom: 1px solid rgb(221,221,221);
@@ -35,7 +34,7 @@ button .btn.btn-sm.btn-default {
 
 .main-app{
     position: relative;
-    
+
     height: 89vh;
 }
 
