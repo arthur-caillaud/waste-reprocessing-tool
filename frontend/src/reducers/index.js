@@ -28,6 +28,7 @@ import {
 
     CHANGE_LEFTGAUGE_INPUT,
     CHANGE_MIDDLEGAUGE_INPUT,
+    CHANGE_RIGHTGAUGE_INPUT,
     CHANGE_LEFTTILE_INPUT,
     CHANGE_RIGHTTILE_INPUT,
     CHANGE_MIDDLELEFTTILE_INPUT,
@@ -244,6 +245,10 @@ function updateGauge(
         middlevalueBefore: 0,
         middlevalueAnte: 0,
         middlevalueBeforeAnte: 0,
+        rightvalue: 0,
+        rightvalueBefore: 0,
+        rightvalueAnte: 0,
+        rightvalueBeforeAnte: 0,
         v_total: 0,
         v_listeverte: 0,
         details: "",
@@ -267,6 +272,15 @@ function updateGauge(
                 middlevalueAnte: action.values.middlevalueAnte,
                 middlevalueBeforeAnte: action.values.middlevalueBeforeAnte,
                 v_total: action.values.v_total
+            });
+        case CHANGE_RIGHTGAUGE_INPUT:
+
+            return Object.assign({}, state, {
+                rightvalue: action.values.rightvalue,
+                rightvalueBefore: action.values.rightvalueBefore,
+                rightvalueAnte: action.values.rightvalueAnte,
+                rightvalueBeforeAnte: action.values.rightvalueBeforeAnte,
+                
             });
         default:
             return state;

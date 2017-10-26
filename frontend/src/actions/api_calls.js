@@ -50,6 +50,7 @@ export function updateSite(site) {
                 let newValues = HelperService.presentDataForNewSite(json)
                 let leftValues = newValues.dataForLeftGauge;
                 let middleValues = newValues.dataForMiddleGauge;
+                let rightValues = newValues.dataForRightGauge;
                 let leftTileValues = newValues.dataForLeftTile;
                 let middleLeftTileValues = newValues.dataForMiddleLeftTile;
                 let middleRightTileValues = newValues.dataForMiddleRightTile;
@@ -62,6 +63,7 @@ export function updateSite(site) {
                 dispatch(actions.resetMoreInfosToDefault())
                 dispatch(actions.updateLeftGauge(leftValues))
                 dispatch(actions.updateMiddleGauge(middleValues))
+                dispatch(actions.updateRightGauge(rightValues))
 
 
                 return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-03-01&endDate=2017-04-01')

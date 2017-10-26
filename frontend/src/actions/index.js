@@ -26,6 +26,7 @@ export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
+export const CHANGE_RIGHTGAUGE_INPUT = 'CHANGE_RIGHTGAUGE_INPUT';
 export const CHANGE_MIDDLEGAUGE_INPUT = 'CHANGE_MIDDLEGAUGE_INPUT';
 export const CHANGE_LEFTTILE_INPUT = 'CHANGE_LEFTTILE_INPUT';
 export const CHANGE_RIGHTTILE_INPUT = 'CHANGE_RIGHTTILE_INPUT';
@@ -152,6 +153,13 @@ export function updateLeftGauge(values) {
     // values is an object containing value and valueBefore, valueAnte and valueBeforeAnte
     return {
         type: CHANGE_LEFTGAUGE_INPUT,
+        values
+    }
+}
+export function updateRightGauge(values) {
+    // values is an object containing value and valueBefore, valueAnte and valueBeforeAnte
+    return {
+        type: CHANGE_RIGHTGAUGE_INPUT,
         values
     }
 }

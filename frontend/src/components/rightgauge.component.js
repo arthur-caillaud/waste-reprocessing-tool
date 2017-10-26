@@ -1,18 +1,16 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
-import { connect } from "react-redux"
-import * as actions from '../actions'
-
+import { connect } from "react-redux";
+import MoreInfosService from '../actions/showmoreinfos.service.js';
 
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
-
-        return  [width,height];
-    }
+    let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
+    return  [width,height];
+};
 
 
 class RightGauged3 extends Component {
@@ -24,11 +22,15 @@ class RightGauged3 extends Component {
         */
 
 
-        var value = 88;
-        var valueBefore = 90;
-        var margin = {top: 20, right: 20, bottom: 40, left: 20};
+        var rightvalue = this.props.rightvalue;
+        var rightvalueBefore = this.props.rightvalueBefore;
+        var rightvalueAnte = this.props.rightvalueAnte;
+        var rightvalueBeforeAnte = this.props.rightvalueBeforeAnte;
+        var v_listeverte = this.props.v_listeverte;
+        var margin = {top: 10, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
+
 
 
 
@@ -70,23 +72,34 @@ class RightGauged3 extends Component {
                 innerRadius: (width/2) - margin.top - 15,
                 outerRadius: (width/2)- margin.top,
                 startAngle: scale(0),
-                endAngle: scale(value)
+                endAngle: scale(rightvalue),
+                valueAnte: scale(rightvalueAnte)
             },
             {
-                innerRadius: (width/2) -margin.top-10 - margin.bottom/2,
-                outerRadius: (width/2)-margin.top - margin.bottom/2,
+                innerRadius: (width/2) -margin.top-10 - margin.bottom/3,
+                outerRadius: (width/2)-margin.top - margin.bottom/2 +3,
                 startAngle: scale(0),
-                endAngle: scale(valueBefore)
+                endAngle: scale(rightvalueBefore),
+                valueAnte: scale(rightvalueBeforeAnte)
             }
         ]
 
         var middleTextCount=g.append('text')
                 .style("fill",function (d) { return color(d); })
-                .style('font-size', '40px')
+                .style('font-size', '5vmin')
                 .datum(0)
                 .attr("class",'middleText')
                 .attr("text-anchor", 'middle')
                 .attr("dy", 12)
+                .attr("dx",0)
+                .attr("transform", 'rotate(180)');
+        var volumeTotal= g.append('text')
+                .style("fill",function (d) { return color(d); })
+                .style('font-size', '2vmin')
+                .datum(0)
+                .attr("class",'middleText')
+                .attr("text-anchor", 'middle')
+                .attr("dy", 50)
                 .attr("dx",0)
                 .attr("transform", 'rotate(180)');
 
@@ -95,9 +108,9 @@ class RightGauged3 extends Component {
 
         var percentage = g.append('text')
                 .style("fill", function (d) { return color(d); })
-                .style('font-size', '10px')
+                .style('font-size', '1.5vmin')
                 .attr('text-anchor', 'middle')
-                .attr('dx', -28)
+                .attr('dx', '-4.7vmin')
                 .attr('dy', -3)
         /*
         Important part.
@@ -119,7 +132,6 @@ class RightGauged3 extends Component {
         */
 
 
-
         function doTransition() {
             g.selectAll("path.arc")
                 .data(data)
@@ -133,7 +145,7 @@ class RightGauged3 extends Component {
                     .transition().duration(2500)
                     .attrTween("d", function(d) {
 
-                        var start = {startAngle: scale(0), endAngle: scale(0)};
+                        var start = {startAngle: scale(0), endAngle: d.valueAnte};
 
                         var interpolate = d3.interpolate(start, d)
                         return function (t) {
@@ -141,8 +153,9 @@ class RightGauged3 extends Component {
                         };
                     })
                     .styleTween("fill", function() {
+                        var interpolate = d3.interpolateRgb(color(rightvalueAnte), color(rightvalue))
                         return function(t) {
-                            return color(t*value)
+                            return interpolate(t)
                         }
                       })
 
@@ -153,12 +166,30 @@ class RightGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(that.text().replace(/,/g, ""), value);
+                            i = d3.interpolateNumber(rightvalueAnte, rightvalue);
                         return function(t) { that.text(format(i(t))); };
                       })
                       .styleTween("fill", function() {
+                          var interpolate = d3.interpolateRgb(color(rightvalueAnte), color(rightvalue))
                           return function(t) {
-                              return color(t*value)
+                              return interpolate(t)
+                          }
+                        })
+                });
+            volumeTotal
+                .transition()
+                .duration(2500)
+                .on("start", function () {
+                  d3.active(this)
+                      .tween("text", function() {
+                        var that = d3.select(this),
+                            i = d3.interpolateNumber(0, v_listeverte);
+                        return function(t) { that.text("Total Bdx: " + format(i(t))); };
+                      })
+                      .styleTween("fill", function() {
+                          var interpolate = d3.interpolateRgb(color(rightvalueAnte), color(rightvalue))
+                          return function(t) {
+                              return interpolate(t)
                           }
                         })
                 });
@@ -172,17 +203,19 @@ class RightGauged3 extends Component {
                             return function(t) {that.text('%')}
                         })
                         .styleTween("fill", function() {
+                            var interpolate = d3.interpolateRgb(color(rightvalueAnte), color(rightvalue))
                             return function(t) {
-                                return color(t*value)
+                                return interpolate(t)
                             }
-                        })
+                          })
                     })
             }
 
-        setTimeout(doTransition, 750)
-        }
+        doTransition()
+    }
 
     redrawJauge() {
+
         d3.select("#"+this.props.id).select("svg").remove("svg")
         this.drawJauge();
     };
@@ -191,40 +224,54 @@ class RightGauged3 extends Component {
 
         this.drawJauge()
 
+
+    };
+
+    componentDidUpdate() {
+
+        this.redrawJauge();
+
     };
 
 
-
-
-
-      render() {
+    render() {
 
         return (
             <div className="gauge-container">
-                <h2 className="gauge-title">Valorisation Globale</h2>
+                <h2 className="gauge-title">Valorisation Liste Verte</h2>
             <div id={this.props.id} className="chart-container"></div>
 
           </div>
       )
 
-      }
+  };
 }
 
 function mapStateToProps(state) {
     return {
-        value: 0
+        rightvalue: state.updateGauge.rightvalue,
+        rightvalueBefore: state.updateGauge.rightvalueBefore,
+        rightvalueAnte: state.updateGauge.rightvalueAnte,
+        rightvalueBeforeAnte: state.updateGauge.rightvalueBeforeAnte,
+        v_listeverte: state.updateGauge.v_listeverte,
+
     }
 };
+
+
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => dispatch(actions.displayLeftGaugeInfos())
+
+    return {showMoreInfos: () => {
+        dispatch(MoreInfosService.displayRightGaugeInfos())
+    }
 
     }
-}
+};
 
-const RightGauge = ({showMoreInfos}) => {
+const RightGauge = ({showMoreInfos, rightvalue, rightvalueBefore, rightvalueBeforeAnte, rightvalueAnte, v_listeverte}) => {
     return(
         <div onClick={showMoreInfos}>
-            <RightGauged3 id="rightgauge"/>
+            <RightGauged3 id="rightgauge" rightvalue={rightvalue} rightvalueBefore={rightvalueBefore} rightvalueAnte={rightvalueAnte} rightvalueBeforeAnte={rightvalueBeforeAnte} v_listeverte={v_listeverte}/>
         </div>
     )
 }

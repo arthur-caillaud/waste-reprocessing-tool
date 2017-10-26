@@ -96,7 +96,6 @@ function getAllLevelNames(architecture) {
     return levelNames;
 }
 
-
 function getMenuForMetiers(site) {
     let menuMetier = [];
     let architecture = window.store.getState().pageOptions.architecture;
@@ -183,7 +182,6 @@ function getMenuForSite(site) {
     return menuSite
 }
 
-
 function filterByValue(array, value) {
 
 
@@ -213,6 +211,9 @@ function presentDataForNewSite(json) {
     let incoherences_filieres_norm = 0;
     let retards_dd = 0;
     let retards_norm = 0;
+    let total_bdx = 0;
+    let total_lost = 0;
+    let date = json[0].date
 
     json.forEach(function(element) {
         volume_total += parseFloat(element.volume_total);
@@ -226,11 +227,17 @@ function presentDataForNewSite(json) {
         incoherences_filieres_norm += parseFloat(element.incoherences_filieres_norm);
         retards_dd += parseFloat(element.retards_dd);
         retards_norm += parseFloat(element.retards_norm);
+        if (element.date === date) {
+            total_lost += parseFloat(element.non_dates);
+        }
+        total_bdx += parseFloat(element.bordereaux);
+
     });
+
 
     let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: "", v_listeverte: 0};
     let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0, v_total: 0};
-    //let dataForRightGauge = {};
+    let dataForRightGauge = {rightvalue: 0, rightvalueBefore: 0, rightvalueAnte: 0, rightvalueBeforeAnte: 0};
     let dataForLeftTile = {};
     let dataForMiddleLeftTile = {};
     let dataForMiddleRightTile = {};
@@ -254,6 +261,11 @@ function presentDataForNewSite(json) {
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
         dataForLeftGauge.v_listeverte = volume_listeverte
 
+        dataForRightGauge.rightvalue = total_lost*100/(total_bdx + total_lost)
+        dataForRightGauge.rightvalueBefore = 12
+        dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
+        dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
+
         dataForMiddleGauge.middlevalue = valorisation_totale*100/volume_total
         dataForMiddleGauge.middlevalueBefore = 12
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
@@ -274,11 +286,16 @@ function presentDataForNewSite(json) {
          dataForMiddleGauge.middlevalueAnte = 0
          dataForMiddleGauge.middlevalueBeforeAnte = 0
          dataForMiddleGauge.v_total = volume_total
+         dataForRightGauge.rightvalue = 100
+         dataForRightGauge.rightvalueBefore = 12
+         dataForRightGauge.rightvalueAnte = 0
+         dataForRightGauge.rightvalueBeforeAnte = 0
      }
 
     let response = {
         dataForLeftGauge: dataForLeftGauge,
         dataForMiddleGauge: dataForMiddleGauge,
+        dataForRightGauge: dataForRightGauge,
         dataForLeftTile: dataForLeftTile,
         dataForRightTile: dataForRightTile,
         dataForMiddleRightTile: dataForMiddleRightTile,
