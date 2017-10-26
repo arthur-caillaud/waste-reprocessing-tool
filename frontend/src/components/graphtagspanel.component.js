@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
 
@@ -43,12 +43,12 @@ class GraphTagsPanel extends Component {
 
     render() {
 
-        const id= this.props.id;
+        //const id= this.props.id;
         const inputArray = this.props.inputArray;
         const tagsArray = this.props.tagsArray;
-        const searchPlaceholder = this.props.searchPlaceholder;
+        //const searchPlaceholder = this.props.searchPlaceholder;
         const onTagClick = this.props.onTagClick;
-        const onLoaded = this.props.onLoaded;
+        //const onLoaded = this.props.onLoaded;
         const onRemove = this.props.onRemove;
         const isLoading = this.props.isLoading;
         const suggestionArray = this.state.suggestion;
@@ -80,7 +80,7 @@ class GraphTagsPanel extends Component {
             if(isLoading){
                 const tagComponent = ( <ListGroupItem
                     className="tag-container-element">
-                        <img className="loading-gif" src={Loading} />
+                        <img className="loading-gif" src={Loading} alt=""/>
                     </ListGroupItem>)
                 list.push(tagComponent);
             }

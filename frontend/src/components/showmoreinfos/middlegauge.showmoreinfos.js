@@ -5,7 +5,7 @@ import React, { Component } from "react";
 
 export default class MiddleGaugeInfos extends Component {
     render () {
-        if (window.store.getState().infosPanelOptions.middleGaugeShown == true){
+        if (window.store.getState().infosPanelOptions.middleGaugeShown === true){
         return (
             <div>
                 <h3>

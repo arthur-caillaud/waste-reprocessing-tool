@@ -7,8 +7,8 @@ import Loading from '../resources/Rolling.gif';
 
 function getChartSize(el) {
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
-    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
     return  ({
         width: width,
         height: height
@@ -36,7 +36,7 @@ export default class Histogram extends Component {
         })
     }
     __initHistogram(data) {
-        const histogramTitle = this.props.title;
+
         const nullData = this.toNullArray(data);
         // We also save the previous state for dynamic transitions
 
@@ -91,9 +91,7 @@ export default class Histogram extends Component {
         let z = d3.scaleOrdinal()
         .range(["first-rect", "second-rect", "third-rect"]);
 
-        let bundleLabels = data.map(bundle => {
-            return bundle.title;
-        });
+
 
         const keys = data[0].keys;
 
@@ -242,7 +240,7 @@ export default class Histogram extends Component {
         if(isLoading){
             return (
                 <div id="histogram-container">
-                    <img className="loading-gif" src={Loading} />
+                    <img className="loading-gif" src={Loading} alt=""/>
                 </div>
             );
         }

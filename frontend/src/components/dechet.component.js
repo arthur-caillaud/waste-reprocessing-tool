@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Col, Row } from 'react-bootstrap';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
 
-import { array } from '../utilities/text-generator.component';
 
 import Histogram from '../components/containers/histogram.container';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';

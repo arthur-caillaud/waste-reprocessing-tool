@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class LeftGaugeInfos extends Component {
     render() {
-        if (window.store.getState().infosPanelOptions.leftGaugeShown == true){
+        if (window.store.getState().infosPanelOptions.leftGaugeShown ===true){
         return (
             <div>
                 <h3>

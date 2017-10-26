@@ -54,7 +54,7 @@ class InputGraphPanel extends Component {
             if(isLoading){
                 listItem = (
                     <ListGroupItem>
-                        <img className="loading-gif" src={Loading} />
+                        <img className="loading-gif" src={Loading} alt="" />
                     </ListGroupItem>
                 )
             }
