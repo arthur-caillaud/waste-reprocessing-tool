@@ -37,6 +37,9 @@ button .btn.btn-sm.btn-default {
     height: 89vh;
 }
 
+img.grenouille-logo {
+    width: 100%;
+}
 
 div.no-left-padding{
     padding-left: 0;

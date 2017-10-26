@@ -86,7 +86,9 @@ export function loadPrestataireList(level,name){
         dispatch(actions.loadPrestataireListBegin());
         return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name)
             .then(response => response.json())
-            .then(json => dispatch(actions.updatePrestataireList(json)));
+            .then(json => {
+                dispatch(actions.updatePrestataireList(json))
+            });
     }
 }
 
@@ -97,11 +99,12 @@ export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire
             .then(response => response.json())
             .then(json => {
                 let inputArray = [];
-                json.sites.quantity.forEach(row => {
-                    inputArray.push(row.dechet);
-                });
-
-                dispatch(actions.updateDechetTagsInputArray(inputArray));
+                if(json.sites){
+                    json.sites.quantity.forEach(row => {
+                        inputArray.push(row.dechet);
+                    });
+                    dispatch(actions.updateDechetTagsInputArray(inputArray));
+                }
             });
     }
 }
@@ -300,11 +303,13 @@ export function loadDechetList(level,name){
             .then(response => response.json())
             .then(json => {
                 let newInputArray = [];
-                json.dechets.forEach(row => {
-                    let newRow = Object.assign({}, row.dechet, {nom: row.libelle});
-                    newInputArray.push(newRow);
-                })
-                dispatch(actions.updateDechetList(newInputArray));
+                if(json.dechets){
+                    json.dechets.forEach(row => {
+                        let newRow = Object.assign({}, row.dechet, {nom: row.libelle});
+                        newInputArray.push(newRow);
+                    });
+                    dispatch(actions.updateDechetList(newInputArray));
+                }
             });
     }
 }

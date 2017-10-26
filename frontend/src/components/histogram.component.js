@@ -38,8 +38,6 @@ export default class Histogram extends Component {
         const nullData = this.toNullArray(data);
         // We also save the previous state for dynamic transitions
 
-        console.log(data);
-
         const width = getChartSize("#"+this.props.id).width;
         const height = getChartSize("#"+this.props.id).height;
         const margin = {top: 40, right: 40, bottom: 40, left: 40};
@@ -222,7 +220,10 @@ export default class Histogram extends Component {
 
     redrawAndEraseHistogram(values) {
         d3.select("#"+this.props.id).select("svg").remove("svg")
-        this.__initHistogram(values);
+        if(values.length > 0){
+            console.log(values);
+            this.__initHistogram(values);
+        }
     };
 
     componentWillUpdate(nextProps, nextState){

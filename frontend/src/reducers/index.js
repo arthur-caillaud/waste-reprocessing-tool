@@ -397,7 +397,10 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
     switch(action.type){
         case LOAD_PRESTATAIRELIST_BEGIN:
             return Object.assign({}, state, {
-                isLoading: true
+                isLoading: true,
+                inputArray: [],
+                suggestion: [],
+                selectedInput: ''
             });
         case UPDATE_PRESTATAIRELIST:
             return Object.assign({}, state, {
@@ -430,7 +433,10 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
     switch(action.type){
         case LOAD_DECHETLIST_BEGIN:
             return Object.assign({}, state, {
-                isLoading: true
+                isLoading: true,
+                inputArray: [],
+                suggestion: [],
+                selectedInput: ''
             });
         case UPDATE_DECHETLIST:
             return Object.assign({}, state, {
@@ -463,7 +469,9 @@ function updatePrestataireGraphTagsPanel(state = {tagsArray: [], inputArray:[], 
     switch (action.type) {
         case LOAD_PRESTATAIREGRAPH_TAGS_BEGIN:
             return Object({}, state, {
-                isLoading: true
+                isLoading: true,
+                tagsArray: [],
+                inputArray: []
             })
         case ADD_PRESTATAIRE_GRAPH_TAG:
             let newInputArray = [];
@@ -526,7 +534,9 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
     switch (action.type) {
         case LOAD_DECHETGRAPH_TAGS_BEGIN:
             return Object({}, state, {
-                isLoading: true
+                isLoading: true,
+                inputArray: [],
+                tagsArray: []
             })
         case ADD_DECHET_GRAPH_TAG:
             let newInputArray = [];
@@ -587,7 +597,7 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
 function prestataireGraphOptions(state = {title: '', values: [], isLoading: false}, action){
     switch(action.type){
         case LOAD_PRESTATAIREGRAPH_VALUES_BEGIN:
-            return Object.assign({}, state, {isLoading: true});
+            return Object.assign({}, state, {isLoading: true, values: []});
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {title: action.prestataire.nom});
         case UPDATE_PRESTATAIREGRAPH_VALUES:
@@ -600,7 +610,7 @@ function prestataireGraphOptions(state = {title: '', values: [], isLoading: fals
 function dechetGraphOptions(state = {title: '', values: [], isLoading: false}, action){
     switch(action.type){
         case LOAD_DECHETGRAPH_VALUES_BEGIN:
-            return Object.assign({}, state, {isLoading: true});
+            return Object.assign({}, state, {isLoading: true, values: []});
         case UPDATE_SELECTEDDECHET:
             return Object.assign({}, state, {title: action.dechet.libelle});
         case UPDATE_DECHETGRAPH_VALUES:

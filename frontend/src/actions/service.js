@@ -181,7 +181,6 @@ function getMenuForSite(site) {
         }
 
     })
-    console.log(menuSite)
     return menuSite
 }
 

@@ -12,8 +12,10 @@ import LeftTile from './containers/lefttile.container';
 import RightTile from './containers/righttile.container';
 import MiddleRightTile from './containers/middlerighttile.container';
 import MiddleLeftTile from './containers/middlelefttile.container';
-import { persistStore } from 'redux-persist'
+import { persistStore } from 'redux-persist';
 import '../styles/general.css';
+
+import grenouille from '../resources/grenouille-edf.png';
 
 
 class DashboardElement extends Component {
@@ -34,7 +36,7 @@ class DashboardElement extends Component {
                 <Col sm={3}> <LeftGauge/> </Col>
                 <Col sm={3}> <MiddleGauge/> </Col>
                 <Col sm={3}> <RightGauge/> </Col>
-                <Col sm={3}> <Info paragraphs="1" /> </Col>
+                <Col sm={3}> <img className="grenouille-logo" src={grenouille} /> </Col>
             </Row>
 
             <Row className="show-grid">
@@ -62,7 +64,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getNationalState: () => {
-            
+
             dispatch(apiCalls.updateSite({
                     nom: "National",
                     level: 0,
