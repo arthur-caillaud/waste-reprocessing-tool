@@ -20,7 +20,8 @@ class DashboardElement extends Component {
     componentDidMount(){
 
         this.props.getArchitecture()
-    
+        this.props.getNationalState()
+
 }
 
   render() {
@@ -61,14 +62,16 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getNationalState: () => {
+            
             dispatch(apiCalls.updateSite({
                     nom: "National",
                     level: 0,
+                    real_level:0,
                     architecture: {
-                        nom: null,
-                        unite_dependance: null,
-                        up_dependance: null,
-                        metier_dependance: null
+                        nom: {name: "", real_level:0},
+                        unite_dependance: {name: "", real_level:0},
+                        up_dependance: {name: "", real_level:0},
+                        metier_dependance: {name: "", real_level:0}
                     }
                 }
             ))

@@ -17,16 +17,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onRenderMetierClickHandler: () => {
-            console.log(window.store.getState().updateSearchBar.site.real_level)
             dispatch(apiCalls.updateSite({
                     nom: "National",
                     level: 0,
-                    real_level: window.store.getState().updateSearchBar.site.real_level,
+                    real_level: 0,
                     architecture: {
-                        nom: null,
-                        unite_dependance: null,
-                        up_dependance: null,
-                        metier_dependance: null
+                        nom: {name: "", real_level: 0},
+                        unite_dependance: {name: "", real_level: 0},
+                        up_dependance: {name: "", real_level: 0},
+                        metier_dependance: {name: "National", real_level: 0}
                     }
                 }
             ));
@@ -37,14 +36,17 @@ function mapDispatchToProps(dispatch) {
         },
         onRenderUpClickHandler: () => {
             dispatch(apiCalls.updateSite({
-                    nom: window.store.getState().updateSearchBar.site.architecture.metier_dependance,
+                    nom: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
                     level: 1,
-                    real_level: window.store.getState().updateSearchBar.site.real_level,
+                    real_level: 1,
                     architecture: {
-                        nom: null,
-                        unite_dependance: null,
-                        up_dependance: null,
-                        metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                        nom: {name: "", real_level: 0},
+                        unite_dependance: {name: "", real_level: 0},
+                        up_dependance: {name: "", real_level: 0},
+                        metier_dependance: {
+                            name: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
+                            real_level: window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level
+                        }
                     }
                 }
             ));
@@ -55,14 +57,20 @@ function mapDispatchToProps(dispatch) {
         },
         onRenderUniteClickHandler: () => {
             dispatch(apiCalls.updateSite({
-                    nom: window.store.getState().updateSearchBar.site.architecture.up_dependance,
+                    nom: window.store.getState().updateSearchBar.site.architecture.up_dependance.name,
                     level: 2,
-                    real_level: window.store.getState().updateSearchBar.site.real_level,
+                    real_level: 2,
                     architecture: {
-                        nom: null,
-                        unite_dependance: null,
-                        up_dependance: window.store.getState().updateSearchBar.site.architecture.up_dependance,
-                        metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                        nom: {name: "", real_level: 0},
+                        unite_dependance: {name: "", real_level: 0},
+                        up_dependance: {
+                            name: window.store.getState().updateSearchBar.site.architecture.up_dependance.name,
+                            real_level: window.store.getState().updateSearchBar.site.architecture.up_dependance.real_level,
+                        },
+                        metier_dependance: {
+                            name: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
+                            real_level: window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
+                        }
                     }
                 }
             ));
@@ -75,12 +83,21 @@ function mapDispatchToProps(dispatch) {
             dispatch(apiCalls.updateSite({
                     nom: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
                     level: 3,
-                    real_level: window.store.getState().updateSearchBar.site.real_level,
+                    real_level: 3,
                     architecture: {
                         nom: null,
-                        unite_dependance: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
-                        up_dependance: window.store.getState().updateSearchBar.site.architecture.up_dependance,
-                        metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                        unite_dependance: {
+                            name: window.store.getState().updateSearchBar.site.architecture.unite_dependance.name,
+                            real_level: window.store.getState().updateSearchBar.site.architecture.unite_dependance.real_level,
+                        },
+                        up_dependance: {
+                            name: window.store.getState().updateSearchBar.site.architecture.up_dependance.name,
+                            real_level: window.store.getState().updateSearchBar.site.architecture.up_dependance.real_level,
+                        },
+                        metier_dependance: {
+                            name: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
+                            real_level: window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
+                        }
                     }
                 }
             ));
@@ -91,13 +108,14 @@ function mapDispatchToProps(dispatch) {
         },
         updateMetier:  (evt) => {
             dispatch(apiCalls.updateSite({
-                nom: evt,
+                nom: evt.name,
                 level: 1,
+                real_level: evt.real_level,
                 architecture: {
-                    nom: null,
-                    unite_dependance: null,
-                    up_dependance: null,
-                    metier_dependance: evt
+                    nom: {name: "", real_level: 0},
+                    unite_dependance: {name: "", real_level: 0},
+                    up_dependance: {name: "", real_level: 0},
+                    metier_dependance: {name: evt.name, real_level: evt.real_level},
                 }
             }));
             dispatch(actions.updateInputValue(evt))
@@ -107,13 +125,17 @@ function mapDispatchToProps(dispatch) {
         },
         updateUp: (evt) => {
             dispatch(apiCalls.updateSite({
-                nom: evt,
+                nom: evt.name,
                 level: 2,
+                real_level: evt.real_level,
                 architecture: {
-                    nom: null,
-                    unite_dependance: null,
-                    up_dependance: evt,
-                    metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                    nom: {name: "", real_level: 0},
+                    unite_dependance: {name: "", real_level: 0},
+                    up_dependance: {name: evt.name, real_level: evt.real_level},
+                    metier_dependance: {
+                        name: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
+                        real_level: window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
+                    },
                 }
             }));
             dispatch(actions.updateInputValue(evt))
@@ -123,13 +145,20 @@ function mapDispatchToProps(dispatch) {
         },
         updateUnite: (evt) => {
             dispatch(apiCalls.updateSite({
-                nom: evt,
+                nom: evt.name,
                 level: 3,
+                real_level: evt.real_level,
                 architecture: {
-                    nom: null,
-                    unite_dependance: evt,
-                    up_dependance: window.store.getState().updateSearchBar.site.architecture.up_dependance,
-                    metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                    nom: {name: "", real_level: 0},
+                    unite_dependance: {name: evt.name, real_level: evt.real_level},
+                    up_dependance: {
+                        name: window.store.getState().updateSearchBar.site.architecture.up_dependance.name,
+                        real_level: window.store.getState().updateSearchBar.site.architecture.up_dependance.real_level,
+                    },
+                    metier_dependance: {
+                        name: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
+                        real_level: window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
+                }
                 }
             }));
             dispatch(actions.updateInputValue(evt))
@@ -139,13 +168,23 @@ function mapDispatchToProps(dispatch) {
         },
         updateSite: (evt) => {
             dispatch(apiCalls.updateSite({
-                nom: evt,
+                nom: evt.name,
                 level: 4,
+                real_level: evt.real_level,
                 architecture: {
-                    nom: evt,
-                    unite_dependance: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
-                    up_dependance: window.store.getState().updateSearchBar.site.architecture.up_dependance,
-                    metier_dependance: window.store.getState().updateSearchBar.site.architecture.metier_dependance
+                    nom: {name: evt.name, real_level: evt.real_level},
+                    unite_dependance: {
+                        name: window.store.getState().updateSearchBar.site.architecture.unite_dependance.name,
+                        real_level: window.store.getState().updateSearchBar.site.architecture.unite_dependance.real_level,
+                    },
+                    up_dependance: {
+                        name: window.store.getState().updateSearchBar.site.architecture.up_dependance.name,
+                        real_level: window.store.getState().updateSearchBar.site.architecture.up_dependance.real_level,
+                    },
+                    metier_dependance: {
+                        name: window.store.getState().updateSearchBar.site.architecture.metier_dependance.name,
+                        real_level: window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
+                }
                 }
             }));
             dispatch(actions.updateInputValue(evt))

@@ -34,12 +34,12 @@ export function loadSuggestions(value) {
 export function updateSite(site) {
 
     /*Here we get data in order to update the dashboard with new site*/
-    let level = site.level
+    let level = site.real_level
     let name = site.nom
 
     site.suggestions = {}
     return dispatch => {
-        site.suggestions.metier_dependance = HelperService.getMenuForMetiers()
+        site.suggestions.metier_dependance = HelperService.getMenuForMetiers(site)
         site.suggestions.up_dependance = HelperService.getMenuForUp(site)
         site.suggestions.unite_dependance = HelperService.getMenuForUnite(site)
         site.suggestions.nom = HelperService.getMenuForSite(site)
@@ -281,7 +281,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                             }
                         }
                     }
-                    
+
                     dispatch(actions.updatePrestataireGraphValues(valuesArray));
                 });
 

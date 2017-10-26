@@ -98,16 +98,14 @@ function getAllLevelNames(architecture) {
 }
 
 
-function getMenuForMetiers() {
+function getMenuForMetiers(site) {
     let menuMetier = [];
     let architecture = window.store.getState().pageOptions.architecture;
-
-    for(let metier in architecture) {
-        if(metier!="niveau") {
-            menuMetier.push(metier)
-        }
-
-    }
+    let entries = Object.entries(architecture)
+    entries.splice(0, 1)
+    entries.forEach(function(element) {
+        menuMetier.push({name: element[0], real_level: element[1].niveau})
+    })
     return menuMetier;
 }
 
@@ -116,69 +114,74 @@ function getMenuForUp(site) {
     let architecture = window.store.getState().pageOptions.architecture;
     let entries = Object.entries(architecture)
     entries.splice(0, 1)
-
     entries.forEach(function(element) {
-        if (element[0] === site.architecture.metier_dependance) {
-
-            for (let up in element[1]) {
-                if(up!="niveau"){
-                    menuUp.push(up)
-                }
-
-            }
+        if (element[0] === site.architecture.metier_dependance.name) {
+            let entries2 = Object.entries(element[1]);
+            entries2.splice(0, 1);
+            entries2.forEach(function(element2) {
+                menuUp.push({name: element2[0], real_level: element2[1].niveau})
+            })
         }
 
     })
+
     return menuUp
 }
 
 function getMenuForUnite(site) {
     let menuUnite = []
-    let entries = Object.entries(window.store.getState().pageOptions.architecture)
+    let architecture = window.store.getState().pageOptions.architecture;
+    let entries = Object.entries(architecture)
     entries.splice(0, 1)
     entries.forEach(function(element) {
-        if (element[0] === site.architecture.metier_dependance) {
-            let entries2 = Object.entries(element[1])
+        if (element[0] === site.architecture.metier_dependance.name) {
+            let entries2 = Object.entries(element[1]);
             entries2.splice(0, 1);
             entries2.forEach(function(element2) {
-                if (element2[0] === site.architecture.up_dependance) {
-                    for (let unite in element2[1]) {
-                        if (unite!="niveau") {
-                            menuUnite.push(unite)
-                        }
-                    }
+                if (element2[0] === site.architecture.up_dependance.name) {
+                    let entries3 = Object.entries(element2[1])
+
+                    entries3.splice(0,1);
+                    entries3.forEach(function(element3) {
+                        menuUnite.push({name: element3[0], real_level: element3[1].niveau})
+                    })
                 }
             })
         }
+
     })
+
     return menuUnite
 }
 
 function getMenuForSite(site) {
     let menuSite = []
-    let entries = Object.entries(window.store.getState().pageOptions.architecture)
-    entries.splice(0,1)
+    let architecture = window.store.getState().pageOptions.architecture;
+    let entries = Object.entries(architecture)
+    entries.splice(0, 1)
     entries.forEach(function(element) {
-        if (element[0] === site.architecture.metier_dependance) {
-            let entries2 = Object.entries(element[1])
-            entries2.splice(0,1)
+        if (element[0] === site.architecture.metier_dependance.name) {
+            let entries2 = Object.entries(element[1]);
+            entries2.splice(0, 1);
             entries2.forEach(function(element2) {
-                if (element2[0] === site.architecture.up_dependance) {
+                if (element2[0] === site.architecture.up_dependance.name) {
                     let entries3 = Object.entries(element2[1])
-                    entries3.splice(0,1)
+                    entries3.splice(0,1);
                     entries3.forEach(function(element3) {
-                        if (element3[0] === site.architecture.unite_dependance) {
-                            for (let Site in element3[1]) {
-                                if (Site!="niveau"){
-                                    menuSite.push(Site)
-                                }
-                            }
+                        if (element3[0] === site.architecture.unite_dependance.name) {
+                            let entries4 = Object.entries(element3[1]);
+                            entries4.splice(0, 1);
+                            entries4.forEach(function(element4) {
+                                menuSite.push({name: element4[0], real_level: element4[1].niveau})
+                            })
                         }
                     })
                 }
             })
         }
+
     })
+    console.log(menuSite)
     return menuSite
 }
 
