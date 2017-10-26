@@ -12,11 +12,6 @@ import RightTileInfos from '../components/showmoreinfos/righttileinfos.showmorei
 import RightTileAlerts from '../components/showmoreinfos/righttilealerts.showmoreinfos';
 
 import {
-    CHANGE_SCALE,
-    CHANGE_URL,
-
-    CHANGE_GRAPH_INPUT,
-    CHANGE_GRAPH_TYPE,
     SAVE_ARCHITECTURE,
     SAVE_BORDEREAUX_FOR_SITE,
 
@@ -37,10 +32,6 @@ import {
     CHANGE_RIGHTTILE_INPUT,
     CHANGE_MIDDLELEFTTILE_INPUT,
     CHANGE_MIDDLERIGHTTILE_INPUT,
-
-    ADD_GRAPH_TAG,
-    REMOVE_GRAPH_TAG,
-    TOGGLE_LATERALMENU,
 
     UPDATE_INPUT_VALUE,
     CLEAR_SUGGESTIONS,
@@ -77,7 +68,6 @@ import {
     LOAD_DECHETGRAPH_VALUES_BEGIN,
     UPDATE_DECHETGRAPH_VALUES,
 
-    GraphTypes
 } from '../actions'
 
 function infosPanelOptions(
@@ -196,7 +186,7 @@ function infosPanelOptions(
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
-                rightTileShown: !state.RightTileShown,
+                rightTileShown: !state.rightTileShown,
                 rightTileAlerts: false,
                 defaultBody: <RightTileInfos />
             });
@@ -210,7 +200,7 @@ function infosPanelOptions(
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
-                rightTileAlerts: !state.RightTileAlerts,
+                rightTileAlerts: !state.rightTileAlerts,
                 defaultBody: <RightTileAlerts />
             });
 
@@ -233,18 +223,12 @@ function infosPanelOptions(
     }
 }
 let today = new Date();
-function pageOptions(state = {url: '/', scale: {level: 0, name: ''}, architecture: {}, bordereaux: {}, lateralmenuIsVisible: true, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
+function pageOptions(state = {architecture: {}, bordereaux: {}, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
     switch (action.type) {
-        case CHANGE_URL:
-            return Object.assign({}, state, {url: action.url});
-        case CHANGE_SCALE:
-            return Object.assign({}, state, {scale: action.scale});
         case SAVE_ARCHITECTURE:
             return Object.assign({}, state, {architecture: action.architecture});
         case SAVE_BORDEREAUX_FOR_SITE:
             return Object.assign({}, state, {bordereaux: action.bordereaux})
-        case TOGGLE_LATERALMENU:
-            return Object.assign({}, state, {lateralmenuIsVisible: !state.lateralmenuIsVisible});
         default:
             return state;
     }
@@ -367,7 +351,7 @@ And UPDATE_SITE (see HelperService again)
                 return Object.assign({}, state, {
                     value: action.value
                 });
-            } else if (typeof(action.value) === 'object') {
+            } else {
                 return Object.assign({}, state, {
                     value: action.value.name
                 });

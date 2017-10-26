@@ -7,8 +7,6 @@ import GraphTagsPanel from '../graphtagspanel.component';
 function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
     const idTagsPanel = ownProps.idTagsPanel;
-    const searchPlaceholder = ownProps.placeholder;
-    const emptyContainerMessage = ownProps.emptyContainerMessage;
     return {
         tagsArray: state[branchName].tagsArray,
         inputArray: state[branchName].inputArray,

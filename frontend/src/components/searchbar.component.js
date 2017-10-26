@@ -22,7 +22,6 @@ class SearchBarElement extends Component {
 
         const { value,
             suggestions,
-            isLoading,
             onChange,
             onSuggestionsFetchRequested,
             onSuggestionsClearRequested,

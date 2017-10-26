@@ -1,4 +1,3 @@
-import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import TileElement from '../tile.component';
 import MoreInfosService from '../../actions/showmoreinfos.service';

@@ -8,8 +8,8 @@ import * as actions from '../actions'
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-        let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-        let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+        let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
+        let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
 
         return  [width,height];
     }
@@ -190,24 +190,12 @@ class RightGauged3 extends Component {
     componentDidMount() {
 
         this.drawJauge()
-        window.addEventListener('resize',this.handleResize())
 
     };
-    handleResize() {
-        var svgDoc = d3.select("#"+this.props.id)
-            .attr("width", getChartSize("#"+this.props.id)[0] - 30)
-            .attr("height", getChartSize("#"+this.props.id)[1] - 60)
 
-    }
 
-    componentDidUpdate() {
 
-        this.handleResize();
-    };
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize);
-    }
 
       render() {
 

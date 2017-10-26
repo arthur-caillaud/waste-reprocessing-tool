@@ -1,6 +1,4 @@
 import { connect } from "react-redux";
-import * as actions from '../../actions';
-import * as apiCalls from '../../actions/api_calls';
 import MoreInfos from '../moreinfos.component';
 
 function mapStateToProps(state, ownProps) {
