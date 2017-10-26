@@ -286,7 +286,6 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
 
         }
         else{
-            console.log("No prestataire given for graph values. Searching for biggest prestataire...");
             return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
                 .then(response => response.json())
                 .then(json => {
@@ -331,15 +330,24 @@ export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
         dispatch(actions.loadPrestataireListBegin());
         return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
             .then(response => response.json())
-            .then(json => dispatch(actions.updatePrestataireTagsInputArray(json)));
+            .then(json => {
+                let inputArray = [];
+                if(json.sites){
+                    json.sites.quantity.forEach(row => {
+                        inputArray.push(row.prestataire);
+                    });
+                    dispatch(actions.updateDechetTagsInputArray(inputArray));
+                }
+            });
     }
 }
+
 
 export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataires = null){
     return dispatch => {
         dispatch(actions.loadDechetGraphValuesBegin());
         if(dechet){
-            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+dechet.id)
+            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id)
                 .then(response => response.json())
                 .then(json => {
                     /*
@@ -357,36 +365,38 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     let volumes = [];
                     if(json.global.quantity.length > 0){
                         json.global.quantity.forEach(prestataire => {
-                            quantiteeTotaleNation += prestataire.quantitee_traitee;
+                            quantiteeTotaleNation += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(json.global.recycled.length > 0){
                         json.global.recycled.forEach(prestataire => {
-                            quantiteeTotaleNationRecyclee += prestataire.quantitee_traitee;
+                            quantiteeTotaleNationRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(quantiteeTotaleNation > 0){
                         tauxDeValorisationNation = 100*(parseFloat(quantiteeTotaleNationRecyclee))/(parseFloat(quantiteeTotaleNation));
-                        values.push(tauxDeValorisationNation);
+                        values.push(tauxDeValorisationNation.toPrecision(4));
+                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
                         keys.push("NATIONAL");
                     }
                     if(json.global.quantity.length > 0){
                         json.global.quantity.forEach(prestataire => {
-                            quantiteeTotaleRegion += prestataire.quantitee_traitee;
+                            quantiteeTotaleRegion += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(json.global.recycled.length > 0){
                         json.global.recycled.forEach(prestataire => {
-                            quantiteeTotaleRegionRecyclee += prestataire.quantitee_traitee;
+                            quantiteeTotaleRegionRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(quantiteeTotaleRegion > 0){
                         tauxDeValorisationRegion = 100*(parseFloat(quantiteeTotaleRegionRecyclee))/(parseFloat(quantiteeTotaleRegion));
-                        values.push(tauxDeValorisationRegion);
+                        values.push(tauxDeValorisationRegion.toPrecision(4));
+                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
                         keys.push("REGIONAL");
                     }
                     /*
-                     * Now we see if some dechets have been chosen to be displayed
+                     * Now we see if some prestataires have been chosen to be displayed
                      */
                     if(chosenPrestataires){
                         chosenPrestataires.forEach(chosenPrestataire => {
@@ -396,19 +406,19 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             if(json.sites.quantity.length > 0){
                                 json.sites.quantity.forEach(prestataire => {
                                     if(chosenPrestataire.id === prestataire.prestataire.id){
-                                        quantiteeTotale += prestataire.quantitee_traitee;
+                                        quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
                                     }
                                 });
                                 json.sites.recycled.forEach(prestataire => {
                                     if(chosenPrestataire.id === prestataire.prestataire.id){
-                                        quantiteeRecyclee += prestataire.quantitee_traitee;
+                                        quantiteeRecyclee += parseFloat(prestataire.quantitee_traitee);
                                     }
                                 })
                                 if(quantiteeTotale > 0){
                                     tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                 }
-                                values.push(tauxDeValorisation);
-                                volumes.push(quantiteeRecyclee);
+                                values.push(tauxDeValorisation.toPrecision(4));
+                                volumes.push(quantiteeRecyclee.toPrecision(5));
                                 keys.push(chosenPrestataire.nom);
                             }
                         });
@@ -421,7 +431,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                         dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                     else{
-                        for (let i = 0; i < 4; i++) {
+                        for (let i = 0; i < 3; i++) {
                             if(json.sites.quantity[i]){
                                 let tauxDeValorisation = 0;
                                 let quantiteeTotale = 0;
@@ -430,21 +440,27 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                 dispatch(actions.addDechetGraphTag(chosenPrestataire.prestataire));
                                 if(json.sites.quantity.length > 0){
                                     json.sites.quantity.forEach(prestataire => {
-                                        if(chosenPrestataire.id === prestataire.prestataire.id){
-                                            quantiteeTotale += prestataire.quantitee_traitee;
+                                        if(chosenPrestataire.prestataire.id === prestataire.prestataire.id){
+                                            quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
+                                            console.log(prestataire.prestataire.nom);
+                                            console.log("Quantitee totale ", quantiteeTotale);
                                         }
                                     });
                                     json.sites.recycled.forEach(prestataire => {
-                                        if(chosenPrestataire.id === prestataire.prestataire.id){
-                                            quantiteeRecyclee += prestataire.quantitee_traitee;
+                                        if(chosenPrestataire.prestataire.id === prestataire.prestataire.id){
+                                            quantiteeRecyclee += parseFloat(prestataire.quantitee_traitee);
                                         }
                                     });
                                     if(quantiteeTotale > 0){
+                                        console.log(chosenPrestataire.prestataire.nom);
+                                        console.log("Quantitee recyclée ", quantiteeRecyclee);
                                         tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                     }
-                                    values.push(tauxDeValorisation);
-                                    volumes.push(quantiteeRecyclee);
-                                    keys.push(chosenPrestataire.nom);
+                                    values.push(tauxDeValorisation.toPrecision(4));
+                                    console.log(values);
+                                    volumes.push(quantiteeRecyclee.toPrecision(5));
+                                    console.log(volumes);
+                                    keys.push(chosenPrestataire.prestataire.nom);
                                 }
                             }
                         };
@@ -457,6 +473,20 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                         dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                 });
+            }
+            else{
+                return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
+                    .then(response => response.json())
+                    .then(json => {
+                        const biggestDechet = (json.dechets && json.dechets[0]) ? json.dechets[0] : null ;
+                        if(biggestDechet){
+                            dispatch(actions.updateSelectedDechet(biggestDechet));
+                            dispatch(loadDechetGraphValues(level, name, biggestDechet));
+                        }
+                        else{
+                            dispatch(actions.updateDechetGraphValues([]));
+                        }
+                    });
             }
     };
 }

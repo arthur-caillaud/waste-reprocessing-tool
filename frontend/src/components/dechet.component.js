@@ -29,8 +29,8 @@ class Dechet extends Component {
                 </Col>
                 <Col sm={9}>
                   <Histogram
-                      branchName="prestataireGraphOptions"
-                      idGraph="prestataire-histogram-graph"
+                      branchName="dechetGraphOptions"
+                      idGraph="dechet-histogram-graph"
                   />
                 </Col>
                 <Col sm={9} smOffset={3}>
