@@ -19,11 +19,11 @@ export default class MiddleRightTileInfos extends Component {
                 Site: parseFloat(element.id_site).toFixed(0),
         })
     })
-        this.state.data = data
+        this.setState({data: data});
     }
 
     render() {
-        if (window.store.getState().infosPanelOptions.middleRightTileShown == true){
+        if (window.store.getState().infosPanelOptions.middleRightTileShown === true){
 
         return (
             <BootstrapTable data={this.state.data} scrollTop={ 'Top' }>

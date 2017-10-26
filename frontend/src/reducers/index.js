@@ -250,7 +250,7 @@ function updateGauge(
     }, action
 ) {
     switch(action.type) {
-        case 'CHANGE_LEFTGAUGE_INPUT':
+        case CHANGE_LEFTGAUGE_INPUT:
             return Object.assign({}, state, {
                 leftvalue: action.values.leftvalue,
                 leftvalueBefore: action.values.leftvalueBefore,
@@ -259,7 +259,7 @@ function updateGauge(
                 v_listeverte: action.values.v_listeverte,
                 details: action.values.details
             });
-        case 'CHANGE_MIDDLEGAUGE_INPUT':
+        case CHANGE_MIDDLEGAUGE_INPUT:
 
             return Object.assign({}, state, {
                 middlevalue: action.values.middlevalue,
@@ -285,21 +285,21 @@ function updateTile(
     }, action
 ) {
     switch(action.type) {
-        case 'CHANGE_LEFTTILE_INPUT':
+        case CHANGE_LEFTTILE_INPUT:
             return Object.assign({}, state, {
                 ecarts_pesee: action.values.ecarts_pesee
             });
-        case 'CHANGE_RIGHTTILE_INPUT':
+        case CHANGE_RIGHTTILE_INPUT:
             return Object.assign({}, state, {
                 incoherences_filieres_dd: action.values.incoherences_filieres_dd,
                 incoherences_filieres_norm: action.values.incoherences_filieres_norm,
             });
-        case 'CHANGE_MIDDLELEFTTILE_INPUT':
+        case CHANGE_MIDDLELEFTTILE_INPUT:
             return Object.assign({}, state, {
                 filieres_interdites_norm: action.values.filieres_interdites_norm,
                 filieres_interdites_dd: action.values.filieres_interdites_dd
             });
-        case 'CHANGE_MIDDLERIGHTTILE_INPUT':
+        case CHANGE_MIDDLERIGHTTILE_INPUT:
             return Object.assign({}, state, {
                 retards_dd: action.values.retards_dd,
                 retards_norm: action.values.retards_norm

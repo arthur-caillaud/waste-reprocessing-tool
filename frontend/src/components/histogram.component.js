@@ -241,7 +241,7 @@ export default class Histogram extends Component {
         if(isLoading){
             return (
                 <div id="histogram-container">
-                    <img className="loading-gif" src={Loading} />
+                    <img className="loading-gif" src={Loading} alt=""/>
                     <div id={this.props.id} className="chart-container"></div>
                 </div>
             );

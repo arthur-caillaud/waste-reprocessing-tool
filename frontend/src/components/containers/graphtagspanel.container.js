@@ -19,8 +19,6 @@ function mapDispatchToProps(dispatch, ownProps) {
     const onClickActionName = ownProps.onClickActionName;
     const onRemoveActionName = ownProps.onRemoveActionName;
     const branchName = ownProps.branchName;
-    const onLoadActionName = ownProps.onLoadActionName;
-    const defaultOnLoadActionName = ownProps.defaultOnLoadActionName;
     const inputGraphPanelBranch = ownProps.inputGraphPanelBranch;
     const loadGraphValuesActionName = ownProps.loadGraphValuesActionName;
     return ({

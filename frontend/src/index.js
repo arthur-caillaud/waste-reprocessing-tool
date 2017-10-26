@@ -29,8 +29,6 @@ render((
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-let unsubscribe = window.store.subscribe(() =>
-  {}
-);
+
 
 registerServiceWorker();
