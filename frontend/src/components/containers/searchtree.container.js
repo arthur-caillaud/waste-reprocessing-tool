@@ -138,7 +138,7 @@ function mapDispatchToProps(dispatch) {
                     },
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
@@ -161,7 +161,7 @@ function mapDispatchToProps(dispatch) {
                 }
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
@@ -187,7 +187,7 @@ function mapDispatchToProps(dispatch) {
                 }
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
