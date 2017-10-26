@@ -64,7 +64,7 @@ export function updateSite(site) {
                 dispatch(actions.updateMiddleGauge(middleValues))
 
 
-                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-03-01&endDate=2017-04-01')
+                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-01-01&endDate=2017-10-01')
                     .then(response => response.json())
                     .then(json => {
                         dispatch(actions.saveBordereauxForSite(json))
