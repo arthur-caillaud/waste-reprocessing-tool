@@ -198,9 +198,24 @@ function getAllRetards(idArray, dangereux, date, label) {
     firstDate.setMonth(month);
     firstDate.setDate(1);
 
-    // console.log("dangereux: " + dangereux);
-    // console.log("before " +lastDate);
-    // console.log("after " + firstDate);
+
+    var month = firstDate.getMonth() + 1;
+    if (month < 10) {
+        month = '0' + month;
+    }
+    var firstDateString = '' + firstDate.getFullYear() + '-' + month + '-01';
+    var month = lastDate.getMonth() + 1;
+    if (month < 10) {
+        month = '0' + month;
+    }
+    var day = lastDate.getDate();
+    if (day < 10) {
+        day = '0' + day;
+    }
+    var lastDateString = '' + lastDate.getFullYear() + '-' + month + '-' + day;
+
+    console.log(firstDateString);
+    console.log(lastDateString);
 
     var query = {
         include: [
@@ -218,8 +233,8 @@ function getAllRetards(idArray, dangereux, date, label) {
                 as: 'transport1',
                 where: {
                     date: {
-                        $lt: lastDate,
-                        $gt: firstDate
+                        $lt: lastDateString,
+                        $gte: firstDateString
                     }
                 }
             }
@@ -235,9 +250,12 @@ function getAllRetards(idArray, dangereux, date, label) {
     // console.log(Date.getUTCDate(date-maxDelay));
     // console.log(Date.getUTCDate(date-maxDelay-month));
 
+    console.log("will do my shit");
+
     var observable = Rx.Observable.create((obs) => {
         bordereau.findAll(query)
         .then((bordereaux) => {
+            console.log("done my shit")
             // console.log(bordereaux[0].dataValues);
             // console.log("total: " + bordereaux.length);
             obs.onNext([bordereaux, label]);
