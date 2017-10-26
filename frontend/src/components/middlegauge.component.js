@@ -13,9 +13,6 @@ function getChartSize(el) {
     return  [width,height];
     }
 
-var valueAnteG = 0;
-var valueBeforeAnteG = 0;
-
 
 class MiddleGauged3 extends Component {
 
@@ -30,14 +27,11 @@ class MiddleGauged3 extends Component {
         var middlevalueBefore = this.props.middlevalueBefore;
         var middlevalueAnte = this.props.middlevalueAnte;
         var middlevalueBeforeAnte = this.props.middlevalueBeforeAnte;
+        var v_total = this.props.v_total
         var margin = {top: 10, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
-        /*
-        Here we just save previous state
-        */
-        valueAnteG = this.props.middlevalue
-        valueBeforeAnteG = this.props.middlevalueBefore
+
 
 
 
@@ -98,6 +92,15 @@ class MiddleGauged3 extends Component {
                 .attr("class",'middleText')
                 .attr("text-anchor", 'middle')
                 .attr("dy", 12)
+                .attr("dx",0)
+                .attr("transform", 'rotate(180)');
+        var volumeTotal= g.append('text')
+                .style("fill",function (d) { return color(d); })
+                .style('font-size', '2vmin')
+                .datum(0)
+                .attr("class",'middleText')
+                .attr("text-anchor", 'middle')
+                .attr("dy", 50)
                 .attr("dx",0)
                 .attr("transform", 'rotate(180)');
 
@@ -174,6 +177,24 @@ class MiddleGauged3 extends Component {
                           }
                         })
                 });
+            volumeTotal
+                .transition()
+                .duration(2500)
+                .on("start", function () {
+                  d3.active(this)
+                      .tween("text", function() {
+                        var that = d3.select(this),
+                            i = d3.interpolateNumber(0, v_total);
+                        return function(t) { that.text("Volume Total : " + format(i(t)) + "t"); };
+                      })
+                      .styleTween("fill", function() {
+                          var interpolate = d3.interpolateRgb(color(middlevalueAnte), color(middlevalue))
+                          return function(t) {
+                              return interpolate(t)
+                          }
+                        })
+                });
+
             percentage
               .transition()
                   .duration(2500)
@@ -233,7 +254,8 @@ function mapStateToProps(state) {
         middlevalue: state.updateGauge.middlevalue,
         middlevalueBefore: state.updateGauge.middlevalueBefore,
         middlevalueAnte: state.updateGauge.middlevalueAnte,
-        middlevalueBeforeAnte: state.updateGauge.middlevalueBeforeAnte
+        middlevalueBeforeAnte: state.updateGauge.middlevalueBeforeAnte,
+        v_total: state.updateGauge.v_total
 
     }
 };
@@ -245,10 +267,10 @@ function mapDispatchToProps(dispatch) {
 };
 }
 
-const MiddleGauge = ({showMoreInfos, middlevalue, middlevalueBefore, middlevalueBeforeAnte, middlevalueAnte}) => {
+const MiddleGauge = ({showMoreInfos, middlevalue, middlevalueBefore, middlevalueBeforeAnte, middlevalueAnte, v_total}) => {
     return(
         <div onClick={showMoreInfos}>
-            <MiddleGauged3 id="middlegauge" middlevalue={middlevalue} middlevalueBefore={middlevalueBefore} middlevalueAnte={middlevalueAnte} middlevalueBeforeAnte={middlevalueBeforeAnte}/>
+            <MiddleGauged3 id="middlegauge" middlevalue={middlevalue} middlevalueBefore={middlevalueBefore} middlevalueAnte={middlevalueAnte} middlevalueBeforeAnte={middlevalueBeforeAnte} v_total={v_total}/>
         </div>
     )
 }

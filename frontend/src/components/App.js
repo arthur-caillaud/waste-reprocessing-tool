@@ -48,7 +48,7 @@ class App extends Component {
       return (<BrowserRouter>
                   <div>
                       <Row>
-                          <Navbar style={{marginBottom: "1"}} staticTop>
+                          <Navbar style={{marginBottom: "0", paddingBottom: "-2"}} staticTop>
                           <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
                               <NavItem style={{height: "2vh"}} eventKey="1" href="/">Dashboard</NavItem>
                               <NavItem style={{height: "2vh"}} eventKey="2" href="/prestataire">Vision Prestataire</NavItem>
@@ -58,13 +58,13 @@ class App extends Component {
                       </Row>
                       <Row>
                           <div className="searchbar-container" >
-                              <Col sm={4} className='no-right-padding'>
+                              <Col sm={5}>
                                   <SearchTree/>
                               </Col>
                               <Col sm={4} className='no-left-padding'>
                                   <SearchBar id="MainSearchBar"/>
                               </Col>
-                              <Col sm={4}>
+                              <Col sm={3}>
                                   <DateRangePicker
                                       startDate={this.state.startDate} // momentPropTypes.momentObj or null,
                                       endDate={this.state.endDate} // momentPropTypes.momentObj or null,

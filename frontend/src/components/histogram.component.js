@@ -40,6 +40,8 @@ export default class Histogram extends Component {
         const nullData = this.toNullArray(data);
         // We also save the previous state for dynamic transitions
 
+
+
         const width = getChartSize("#"+this.props.id).width;
         const height = getChartSize("#"+this.props.id).height;
         const margin = {top: 40, right: 40, bottom: 40, left: 40};
@@ -197,10 +199,9 @@ export default class Histogram extends Component {
         let g = svgDoc.select('g');
         const keys = newValues[0].keys;
         const height = getChartSize("#histogram-container").height;
-        console.log("Height",height);
         let y = d3.scaleLinear()
         .rangeRound([height, 0]);
-        console.log(y);
+
 
         g.select("g").selectAll("g")
             .data(newValues)
@@ -215,7 +216,7 @@ export default class Histogram extends Component {
                 })
             })
             .transition().duration(1500)
-            .attr("y", d => { console.log(d); return y(d.value); })
+            .attr("y", d => {  return y(d.value); })
             .attr("height", d => { return (height - y(d.value)); });
 
     }
