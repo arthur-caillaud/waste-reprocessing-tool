@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
 
+import Loading from '../resources/Rolling.gif';
+
 //import searchComponent
 
 class InputGraphPanel extends Component {
@@ -52,7 +54,7 @@ class InputGraphPanel extends Component {
             if(isLoading){
                 listItem = (
                     <ListGroupItem>
-                        Loading...
+                        <img className="loading-gif" src={Loading} />
                     </ListGroupItem>
                 )
             }

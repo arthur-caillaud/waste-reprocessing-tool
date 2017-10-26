@@ -3,7 +3,6 @@ import config from '../config.json';
 import HelperService from './service';
 import * as actions from './index';
 
-
 export function getArchitecture() {
     return dispatch => {
         return fetch(config.backend.adress+'dashboard/architecture')
@@ -13,7 +12,6 @@ export function getArchitecture() {
             })
     }
 }
-
 
 /*
 Main Search Bar API calls
@@ -406,7 +404,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             values: values,
                             volumes: volumes
                         }
-                        dispatch(actions.updateDechetGraphValues(mainColumn));
+                        dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                     else{
                         for (let i = 0; i < 4; i++) {
@@ -442,7 +440,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             values: values,
                             volumes: volumes
                         }
-                        dispatch(actions.updateDechetGraphValues(mainColumn));
+                        dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                 });
             }

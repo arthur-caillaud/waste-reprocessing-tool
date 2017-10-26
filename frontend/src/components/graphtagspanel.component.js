@@ -3,6 +3,8 @@ import { Col, Row } from 'react-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
 
+import Loading from '../resources/Rolling.gif';
+
 class GraphTagsPanel extends Component {
     constructor(props) {
         super(props);
@@ -75,11 +77,20 @@ class GraphTagsPanel extends Component {
             })
         }
         else {
-            const tagComponent = ( <ListGroupItem
-                className="tag-container-element">
-                    <i>{emptyContainerMessage}</i>
-                </ListGroupItem>)
-            list.push(tagComponent);
+            if(isLoading){
+                const tagComponent = ( <ListGroupItem
+                    className="tag-container-element">
+                        <img className="loading-gif" src={Loading} />
+                    </ListGroupItem>)
+                list.push(tagComponent);
+            }
+            else {
+                const tagComponent = ( <ListGroupItem
+                    className="tag-container-element">
+                        <i>{emptyContainerMessage}</i>
+                    </ListGroupItem>)
+                list.push(tagComponent);
+            }
         }
 
         let chosenTags = [];

@@ -41,6 +41,10 @@ img.grenouille-logo {
     width: 100%;
 }
 
+img.loading-gif {
+    width: 30px;
+}
+
 div.no-left-padding{
     padding-left: 0;
 }

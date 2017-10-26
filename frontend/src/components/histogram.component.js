@@ -3,6 +3,8 @@ import '../styles/histogram.css';
 import * as d3 from 'd3';
 import * as d3tip from 'd3-tip';
 
+import Loading from '../resources/Rolling.gif';
+
 function getChartSize(el) {
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
@@ -233,13 +235,23 @@ export default class Histogram extends Component {
 
     render() {
 
+        const isLoading = this.props.isLoading;
         const graphTitle = (this.props.title.length < 35) ? this.props.title : this.props.title.slice(0,35) + '...';
 
-        return (
-        <div id="histogram-container">
-            <h2 className="chart-title">Valorisation {graphTitle}</h2>
-            <div id={this.props.id} className="chart-container"></div>
-        </div>
-        );
+        if(isLoading){
+            return (
+                <div id="histogram-container">
+                    <img className="loading-gif" src={Loading} />
+                </div>
+            );
+        }
+        else{
+            return (
+                <div id="histogram-container">
+                    <h2 className="chart-title">Valorisation {graphTitle}</h2>
+                    <div id={this.props.id} className="chart-container"></div>
+                </div>
+            );
+        }
     };
 }
