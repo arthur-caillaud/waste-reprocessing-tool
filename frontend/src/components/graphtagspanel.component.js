@@ -98,7 +98,7 @@ class GraphTagsPanel extends Component {
         }
         else {
             if(isLoading){
-                chosenTags.push((<img className="loading-gif" src={Loading} />));
+                chosenTags.push((<img className="loading-gif" src={Loading} alt=""/>));
             }
         }
 
