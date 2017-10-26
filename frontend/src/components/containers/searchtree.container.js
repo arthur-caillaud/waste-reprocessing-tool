@@ -119,9 +119,9 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt))
-            dispatch(apiCalls.loadPrestataireList(1,evt));
-            dispatch(apiCalls.loadDechetList(1,evt));
-            dispatch(apiCalls.loadPrestataireGraphValues(1,evt));
+            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
         },
         updateUp: (evt) => {
             dispatch(apiCalls.updateSite({
@@ -139,9 +139,9 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt))
-            dispatch(apiCalls.loadPrestataireList(2,evt));
-            dispatch(apiCalls.loadDechetList(2,evt));
-            dispatch(apiCalls.loadPrestataireGraphValues(2,evt));
+            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
         },
         updateUnite: (evt) => {
             dispatch(apiCalls.updateSite({
@@ -162,9 +162,9 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt))
-            dispatch(apiCalls.loadPrestataireList(3,evt));
-            dispatch(apiCalls.loadDechetList(3,evt));
-            dispatch(apiCalls.loadPrestataireGraphValues(3,evt));
+            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
         },
         updateSite: (evt) => {
             dispatch(apiCalls.updateSite({
@@ -188,9 +188,9 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt))
-            dispatch(apiCalls.loadPrestataireList(4,evt));
-            dispatch(apiCalls.loadDechetList(4,evt));
-            dispatch(apiCalls.loadPrestataireGraphValues(4,evt));
+            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
+            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
         },
     }
 
