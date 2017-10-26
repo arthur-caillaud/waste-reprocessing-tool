@@ -18,14 +18,14 @@ function mapDispatchToProps(dispatch) {
     return {
         onRenderMetierClickHandler: () => {
             dispatch(apiCalls.updateSite({
-                    nom: "National",
+                    nom: "",
                     level: 0,
                     real_level: 0,
                     architecture: {
                         nom: {name: "", real_level: 0},
                         unite_dependance: {name: "", real_level: 0},
                         up_dependance: {name: "", real_level: 0},
-                        metier_dependance: {name: "National", real_level: 0}
+                        metier_dependance: {name: "", real_level: 0}
                     }
                 }
             ));
