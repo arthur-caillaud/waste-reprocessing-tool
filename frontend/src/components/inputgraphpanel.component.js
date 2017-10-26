@@ -52,7 +52,7 @@ class InputGraphPanel extends Component {
             if(isLoading){
                 listItem = (
                     <ListGroupItem>
-
+                        Loading...
                     </ListGroupItem>
                 )
             }

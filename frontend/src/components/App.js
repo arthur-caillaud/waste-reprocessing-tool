@@ -58,10 +58,10 @@ class App extends Component {
                       </Row>
                       <Row>
                           <div className="searchbar-container" >
-                              <Col sm={4}>
+                              <Col sm={4} className='no-right-padding'>
                                   <SearchTree/>
                               </Col>
-                              <Col sm={4}>
+                              <Col sm={4} className='no-left-padding'>
                                   <SearchBar id="MainSearchBar"/>
                               </Col>
                               <Col sm={4}>
