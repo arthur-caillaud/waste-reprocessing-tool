@@ -90,7 +90,7 @@ export default class Histogram extends Component {
         .rangeRound([height, 0]);
 
         let z = d3.scaleOrdinal()
-        .range(["first-rect", "second-rect", "third-rect"]);
+        .range(["first-rect", "second-rect", "third-rect","fourth-rect","fifth-rect","sixth-rect","seventh-rect","heigth-rect","ninth-rect"]);
 
         let bundleLabels = data.map(bundle => {
             return bundle.title;
@@ -163,13 +163,14 @@ export default class Histogram extends Component {
 
         legend.append("rect")
             .attr("x", width)
+            .attr("y", -40)
             .attr("width", 19)
             .attr("height", 19)
             .attr("class", z);
 
         legend.append("text")
             .attr("x", width - 10)
-            .attr("y", 9.5)
+            .attr("y", -30)
             .attr("dy", "0.32vw")
             .text(function(d) { return d; });
 
@@ -251,7 +252,7 @@ export default class Histogram extends Component {
         else{
             return (
                 <div id="histogram-container">
-                    <h2 className="chart-title">Valorisation <b>{graphTitle}</b></h2>
+                    <h3 className="chart-title">Valorisation <b>{graphTitle}</b></h3>
                     <div id={this.props.id} className="chart-container"></div>
                 </div>
             );

@@ -331,15 +331,24 @@ export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
         dispatch(actions.loadPrestataireListBegin());
         return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
             .then(response => response.json())
-            .then(json => dispatch(actions.updatePrestataireTagsInputArray(json)));
+            .then(json => {
+                let inputArray = [];
+                if(json.sites){
+                    json.sites.quantity.forEach(row => {
+                        inputArray.push(row.prestataire);
+                    });
+                    dispatch(actions.updateDechetTagsInputArray(inputArray));
+                }
+            });
     }
 }
+
 
 export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataires = null){
     return dispatch => {
         dispatch(actions.loadDechetGraphValuesBegin());
         if(dechet){
-            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+dechet.id)
+            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id)
                 .then(response => response.json())
                 .then(json => {
                     /*

@@ -77,20 +77,11 @@ class GraphTagsPanel extends Component {
             })
         }
         else {
-            if(isLoading){
-                const tagComponent = ( <ListGroupItem
-                    className="tag-container-element">
-                        <img className="loading-gif" src={Loading} />
-                    </ListGroupItem>)
-                list.push(tagComponent);
-            }
-            else {
-                const tagComponent = ( <ListGroupItem
-                    className="tag-container-element">
-                        <i>{emptyContainerMessage}</i>
-                    </ListGroupItem>)
-                list.push(tagComponent);
-            }
+            const tagComponent = ( <ListGroupItem
+                className="tag-container-element">
+                    <i>{emptyContainerMessage}</i>
+                </ListGroupItem>)
+            list.push(tagComponent);
         }
 
         let chosenTags = [];
@@ -104,6 +95,11 @@ class GraphTagsPanel extends Component {
                 )
                 chosenTags.push(tagDiv);
             })
+        }
+        else {
+            if(isLoading){
+                chosenTags.push((<img className="loading-gif" src={Loading} />));
+            }
         }
 
         return (
