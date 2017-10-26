@@ -77,28 +77,11 @@ class GraphTagsPanel extends Component {
             })
         }
         else {
-<<<<<<< HEAD
-            if(isLoading){
-                const tagComponent = ( <ListGroupItem
-                    className="tag-container-element">
-                        <img className="loading-gif" src={Loading} alt=""/>
-                    </ListGroupItem>)
-                list.push(tagComponent);
-            }
-            else {
-                const tagComponent = ( <ListGroupItem
-                    className="tag-container-element">
-                        <i>{emptyContainerMessage}</i>
-                    </ListGroupItem>)
-                list.push(tagComponent);
-            }
-=======
             const tagComponent = ( <ListGroupItem
                 className="tag-container-element">
                     <i>{emptyContainerMessage}</i>
                 </ListGroupItem>)
             list.push(tagComponent);
->>>>>>> dechet.component
         }
 
         let chosenTags = [];
