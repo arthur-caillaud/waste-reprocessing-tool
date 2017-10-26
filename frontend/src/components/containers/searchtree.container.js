@@ -99,11 +99,11 @@ function mapDispatchToProps(dispatch) {
         },
         onRenderSiteClickHandler: () => {
             dispatch(apiCalls.updateSite({
-                    nom: window.store.getState().updateSearchBar.site.architecture.unite_dependance,
+                    nom: window.store.getState().updateSearchBar.site.architecture.unite_dependance.name,
                     level: 3,
                     real_level: 3,
                     architecture: {
-                        nom: null,
+                        nom: {name: "", real_level: 0},
                         unite_dependance: {
                             name: window.store.getState().updateSearchBar.site.architecture.unite_dependance.name,
                             real_level: window.store.getState().updateSearchBar.site.architecture.unite_dependance.real_level,
