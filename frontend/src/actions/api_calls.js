@@ -365,32 +365,34 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     let volumes = [];
                     if(json.global.quantity.length > 0){
                         json.global.quantity.forEach(prestataire => {
-                            quantiteeTotaleNation += prestataire.quantitee_traitee;
+                            quantiteeTotaleNation += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(json.global.recycled.length > 0){
                         json.global.recycled.forEach(prestataire => {
-                            quantiteeTotaleNationRecyclee += prestataire.quantitee_traitee;
+                            quantiteeTotaleNationRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(quantiteeTotaleNation > 0){
                         tauxDeValorisationNation = 100*(parseFloat(quantiteeTotaleNationRecyclee))/(parseFloat(quantiteeTotaleNation));
-                        values.push(tauxDeValorisationNation);
+                        values.push(tauxDeValorisationNation.toPrecision(4));
+                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
                         keys.push("NATIONAL");
                     }
                     if(json.global.quantity.length > 0){
                         json.global.quantity.forEach(prestataire => {
-                            quantiteeTotaleRegion += prestataire.quantitee_traitee;
+                            quantiteeTotaleRegion += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(json.global.recycled.length > 0){
                         json.global.recycled.forEach(prestataire => {
-                            quantiteeTotaleRegionRecyclee += prestataire.quantitee_traitee;
+                            quantiteeTotaleRegionRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(quantiteeTotaleRegion > 0){
                         tauxDeValorisationRegion = 100*(parseFloat(quantiteeTotaleRegionRecyclee))/(parseFloat(quantiteeTotaleRegion));
-                        values.push(tauxDeValorisationRegion);
+                        values.push(tauxDeValorisationRegion.toPrecision(4));
+                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
                         keys.push("REGIONAL");
                     }
                     /*
@@ -404,12 +406,12 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             if(json.sites.quantity.length > 0){
                                 json.sites.quantity.forEach(prestataire => {
                                     if(chosenPrestataire.id === prestataire.prestataire.id){
-                                        quantiteeTotale += prestataire.quantitee_traitee;
+                                        quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
                                     }
                                 });
                                 json.sites.recycled.forEach(prestataire => {
                                     if(chosenPrestataire.id === prestataire.prestataire.id){
-                                        quantiteeRecyclee += prestataire.quantitee_traitee;
+                                        quantiteeRecyclee += parseFloat(prestataire.quantitee_traitee);
                                     }
                                 })
                                 if(quantiteeTotale > 0){
@@ -439,12 +441,12 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                 if(json.sites.quantity.length > 0){
                                     json.sites.quantity.forEach(prestataire => {
                                         if(chosenPrestataire.id === prestataire.prestataire.id){
-                                            quantiteeTotale += prestataire.quantitee_traitee;
+                                            quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
                                         }
                                     });
                                     json.sites.recycled.forEach(prestataire => {
                                         if(chosenPrestataire.id === prestataire.prestataire.id){
-                                            quantiteeRecyclee += prestataire.quantitee_traitee;
+                                            quantiteeRecyclee += parseFloat(prestataire.quantitee_traitee);
                                         }
                                     });
                                     if(quantiteeTotale > 0){
@@ -472,7 +474,6 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     .then(json => {
                         const biggestDechet = (json.dechets && json.dechets[0]) ? json.dechets[0] : null ;
                         if(biggestDechet){
-                            console.log(biggestDechet);
                             dispatch(actions.updateSelectedDechet(biggestDechet));
                             dispatch(loadDechetGraphValues(level, name, biggestDechet));
                         }

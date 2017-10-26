@@ -6,7 +6,6 @@ import * as d3tip from 'd3-tip';
 import Loading from '../resources/Rolling.gif';
 
 function getChartSize(el) {
-    console.log(el);
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
     let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
@@ -226,7 +225,6 @@ export default class Histogram extends Component {
     redrawAndEraseHistogram(values) {
         d3.select("#"+this.props.id).select("svg").remove("svg")
         if(values.length > 0){
-            console.log(values);
             this.__initHistogram(values);
         }
     };
