@@ -1,4 +1,3 @@
-import * as actions from './index';
 var HelperService = {}
 
 function trimAbove99(value) {
@@ -18,15 +17,15 @@ function getAllLevelNames(architecture) {
     let levelNames = []
 
     for (let metier_dependance in architecture) {
-        if (metier_dependance!="niveau") {
+        if (metier_dependance!=="niveau") {
             let metier = architecture[metier_dependance]
             levelNames.push({
                 nom: metier_dependance,
                 architecture: {
-                    metier_dependance: metier_dependance,
-                    up_dependance: null,
-                    unite_dependance: null,
-                    site: null
+                    metier_dependance: {name: metier_dependance, real_level: metier.niveau},
+                    up_dependance: {name:"", real_level:0},
+                    unite_dependance: {name:"", real_level:0},
+                    nom: {name:"", real_level:0}
                 },
                 level: 1,
                 real_level: metier.niveau
@@ -35,15 +34,15 @@ function getAllLevelNames(architecture) {
 
 
             for (let up_dependance in metier) {
-                if(up_dependance !="niveau") {
+                if(up_dependance !=="niveau") {
                     let up = metier[up_dependance]
                     levelNames.push({
                         nom: up_dependance,
                         architecture: {
-                            metier_dependance: metier_dependance,
-                            up_dependance: up_dependance,
-                            unite_dependance: null,
-                            site: null
+                            metier_dependance: {name: metier_dependance, real_level: metier.niveau},
+                            up_dependance: {name: up_dependance, real_level: up.niveau},
+                            unite_dependance: {name:"", real_level:0},
+                            nom: {name:"", real_level:0}
                         },
                         level: 2,
                         real_level: up.niveau
@@ -51,15 +50,15 @@ function getAllLevelNames(architecture) {
 
 
                     for (let unite_dependance in up) {
-                        if(unite_dependance!="niveau") {
+                        if(unite_dependance!=="niveau") {
                             let unite = up[unite_dependance]
                             levelNames.push({
                                 nom: unite_dependance,
                                 architecture: {
-                                    metier_dependance: metier_dependance,
-                                    up_dependance: up_dependance,
-                                    unite_dependance: unite_dependance,
-                                    site: null
+                                    metier_dependance: {name: metier_dependance, real_level: metier.niveau},
+                                    up_dependance: {name: up_dependance, real_level: up.niveau},
+                                    unite_dependance: {name: unite_dependance, real_level: unite.niveau},
+                                    nom: {name:"", real_level:0}
                                 },
                                 level: 3,
                                 real_level: unite.niveau
@@ -67,14 +66,14 @@ function getAllLevelNames(architecture) {
 
 
                             for (let site in unite) {
-                                if(site!="niveau") {
+                                if(site!=="niveau") {
                                     levelNames.push({
                                         nom: site,
                                         architecture: {
-                                            metier_dependance: metier_dependance,
-                                            up_dependance: up_dependance,
-                                            unite_dependance: unite_dependance,
-                                            site: site
+                                            metier_dependance: {name: metier_dependance, real_level: metier.niveau},
+                                            up_dependance: {name: up_dependance, real_level: up.niveau},
+                                            unite_dependance: {name: up_dependance, real_level: up.niveau},
+                                            nom: {name: site, real_level: site.niveau}
                                         },
                                         level: 4,
                                         real_level: 4
@@ -181,7 +180,6 @@ function getMenuForSite(site) {
         }
 
     })
-    console.log(menuSite)
     return menuSite
 }
 
@@ -196,13 +194,16 @@ function filterByValue(array, value) {
 
             Liste.push(element)
 
+
         }
     });
+
     return Liste
 }
 
 function presentDataForNewSite(json) {
     let volume_total = 0.0000;
+    let volume_listeverte = 0.0000;
     let valorisation_l_verte = 0.0000;
     let valorisation_totale = 0.0000;
     let ecarts_pesee = 0;
@@ -215,6 +216,7 @@ function presentDataForNewSite(json) {
 
     json.forEach(function(element) {
         volume_total += parseFloat(element.volume_total);
+        volume_listeverte += parseFloat(element.volume_l_verte);
         valorisation_l_verte += parseFloat(element.valorisation_l_verte);
         valorisation_totale += parseFloat(element.valorisation_totale);
         ecarts_pesee += parseFloat(element.ecarts_pesee);
@@ -226,9 +228,9 @@ function presentDataForNewSite(json) {
         retards_norm += parseFloat(element.retards_norm);
     });
 
-    let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: ""};
-    let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0};
-    let dataForRightGauge = {};
+    let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: "", v_listeverte: 0};
+    let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0, v_total: 0};
+    //let dataForRightGauge = {};
     let dataForLeftTile = {};
     let dataForMiddleLeftTile = {};
     let dataForMiddleRightTile = {};
@@ -244,17 +246,20 @@ function presentDataForNewSite(json) {
     dataForMiddleRightTile.retards_norm = retards_norm + retards_dd;
 
 
-    if (!(volume_total == 0.0000)) {
+    if (!(volume_total === 0.0000)) {
 
         dataForLeftGauge.leftvalue = valorisation_l_verte*100/volume_total
         dataForLeftGauge.leftvalueBefore = 12
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
+        dataForLeftGauge.v_listeverte = volume_listeverte
 
         dataForMiddleGauge.middlevalue = valorisation_totale*100/volume_total
         dataForMiddleGauge.middlevalueBefore = 12
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
         dataForMiddleGauge.middlevalueBeforeAnte = window.store.getState().updateGauge.middlevalueBefore
+        dataForMiddleGauge.v_total = volume_total
+
 
     } else {
          dataForLeftGauge.details = "Pas de Bordereaux sur la période sélectionnée"
@@ -263,10 +268,12 @@ function presentDataForNewSite(json) {
          dataForLeftGauge.leftvalueBefore = 12
          dataForLeftGauge.leftvalueAnte = 0
          dataForLeftGauge.leftvalueBeforeAnte = 0
+         dataForLeftGauge.v_listeverte = volume_listeverte
          dataForMiddleGauge.middlevalue = 100
          dataForMiddleGauge.middlevalueBefore = 12
          dataForMiddleGauge.middlevalueAnte = 0
          dataForMiddleGauge.middlevalueBeforeAnte = 0
+         dataForMiddleGauge.v_total = volume_total
      }
 
     let response = {

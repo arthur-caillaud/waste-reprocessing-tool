@@ -30,6 +30,7 @@ class LeftGauged3 extends Component {
         var leftvalueBefore = this.props.leftvalueBefore;
         var leftvalueAnte = this.props.leftvalueAnte;
         var leftvalueBeforeAnte = this.props.leftvalueBeforeAnte;
+        var v_listeverte = this.props.v_listeverte;
         var margin = {top: 10, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
@@ -94,6 +95,15 @@ class LeftGauged3 extends Component {
                 .attr("class",'middleText')
                 .attr("text-anchor", 'middle')
                 .attr("dy", 12)
+                .attr("dx",0)
+                .attr("transform", 'rotate(180)');
+        var volumeTotal= g.append('text')
+                .style("fill",function (d) { return color(d); })
+                .style('font-size', '2vmin')
+                .datum(0)
+                .attr("class",'middleText')
+                .attr("text-anchor", 'middle')
+                .attr("dy", 50)
                 .attr("dx",0)
                 .attr("transform", 'rotate(180)');
 
@@ -170,6 +180,23 @@ class LeftGauged3 extends Component {
                           }
                         })
                 });
+            volumeTotal
+                .transition()
+                .duration(2500)
+                .on("start", function () {
+                  d3.active(this)
+                      .tween("text", function() {
+                        var that = d3.select(this),
+                            i = d3.interpolateNumber(0, v_listeverte);
+                        return function(t) { that.text("Volume Total : " + format(i(t)) + "t"); };
+                      })
+                      .styleTween("fill", function() {
+                          var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
+                          return function(t) {
+                              return interpolate(t)
+                          }
+                        })
+                });
             percentage
               .transition()
                   .duration(2500)
@@ -223,7 +250,8 @@ function mapStateToProps(state) {
         leftvalue: state.updateGauge.leftvalue,
         leftvalueBefore: state.updateGauge.leftvalueBefore,
         leftvalueAnte: state.updateGauge.leftvalueAnte,
-        leftvalueBeforeAnte: state.updateGauge.leftvalueBeforeAnte
+        leftvalueBeforeAnte: state.updateGauge.leftvalueBeforeAnte,
+        v_listeverte: state.updateGauge.v_listeverte,
 
     }
 };
@@ -238,10 +266,10 @@ function mapDispatchToProps(dispatch) {
     }
 };
 
-const LeftGauge = ({showMoreInfos, leftvalue, leftvalueBefore, leftvalueBeforeAnte, leftvalueAnte}) => {
+const LeftGauge = ({showMoreInfos, leftvalue, leftvalueBefore, leftvalueBeforeAnte, leftvalueAnte, v_listeverte}) => {
     return(
         <div onClick={showMoreInfos}>
-            <LeftGauged3 id="leftgauge" leftvalue={leftvalue} leftvalueBefore={leftvalueBefore} leftvalueAnte={leftvalueAnte} leftvalueBeforeAnte={leftvalueBeforeAnte}/>
+            <LeftGauged3 id="leftgauge" leftvalue={leftvalue} leftvalueBefore={leftvalueBefore} leftvalueAnte={leftvalueAnte} leftvalueBeforeAnte={leftvalueBeforeAnte} v_listeverte={v_listeverte}/>
         </div>
     )
 }

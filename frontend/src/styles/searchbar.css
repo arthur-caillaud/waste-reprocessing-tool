@@ -1,6 +1,6 @@
 .react-autosuggest__container {
   position: relative;
-  padding-top: 5px;
+  padding-top: 1vh;
 
 }
 
@@ -14,7 +14,7 @@
   font-weight: 300;
   font-size: 2vmin;
   border: 1px solid #aaa;
-  border-radius: 4px;
+  border-radius: 5px;
 
 }
 
@@ -35,7 +35,7 @@
 .react-autosuggest__suggestions-container--open {
     display: block;
     position: absolute;
-    top: 51px;
+    top: 41px;
     width: 80%;
     margin-left: 10%;
     border: 1px solid #aaa;

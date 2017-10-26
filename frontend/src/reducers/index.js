@@ -260,6 +260,8 @@ function updateGauge(
         middlevalueBefore: 0,
         middlevalueAnte: 0,
         middlevalueBeforeAnte: 0,
+        v_total: 0,
+        v_listeverte: 0,
         details: "",
     }, action
 ) {
@@ -270,14 +272,17 @@ function updateGauge(
                 leftvalueBefore: action.values.leftvalueBefore,
                 leftvalueAnte: action.values.leftvalueAnte,
                 leftvalueBeforeAnte: action.values.leftvalueBeforeAnte,
+                v_listeverte: action.values.v_listeverte,
                 details: action.values.details
             });
         case 'CHANGE_MIDDLEGAUGE_INPUT':
+
             return Object.assign({}, state, {
                 middlevalue: action.values.middlevalue,
                 middlevalueBefore: action.values.middlevalueBefore,
                 middlevalueAnte: action.values.middlevalueAnte,
-                middlevalueBeforeAnte: action.values.middlevalueBeforeAnte
+                middlevalueBeforeAnte: action.values.middlevalueBeforeAnte,
+                v_total: action.values.v_total
             });
         default:
             return state;
@@ -357,9 +362,17 @@ And UPDATE_SITE (see HelperService again)
 
     switch (action.type) {
         case UPDATE_INPUT_VALUE:
-            return Object.assign({}, state, {
-                value: action.value
-            });
+
+            if (typeof(action.value) ==='string') {
+                return Object.assign({}, state, {
+                    value: action.value
+                });
+            } else if (typeof(action.value) === 'object') {
+                return Object.assign({}, state, {
+                    value: action.value.name
+                });
+            }
+
 
         case CLEAR_SUGGESTIONS:
             return Object.assign({}, state, {
