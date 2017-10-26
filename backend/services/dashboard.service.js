@@ -251,6 +251,71 @@ function getAllRetards(idArray, dangereux, date, label) {
 };
 
 
+function getAllRetardsDetails(idArray, dangereux, date, label) {
+
+    // console.log(date);
+
+    if (dangereux==1) {
+        var maxDelay = 30 * 24 * 60 * 60 * 1000;
+    }
+    else {
+        var maxDelay = 60 * 24 * 60 * 60 * 1000;
+    }
+
+    var ms = Date.parse(date);
+    var lastDate = (new Date(ms-maxDelay));
+
+    // console.log("dangereux: " + dangereux);
+    // console.log("before " +lastDate);
+    // console.log("after " + firstDate);
+
+    var query = {
+        include: [
+            {
+                model: dechet,
+                where: {
+                    is_dangereux: dangereux
+                }
+            },
+            {
+                model: site
+            },
+            {
+                model: transport,
+                as: 'transport1',
+                where: {
+                    date: {
+                        $lt: lastDate,
+                    }
+                }
+            }
+            ],
+        where: {
+            id_site: {$in: idArray},
+            bordereau_finished: 0
+        }
+    };
+
+    // console.log(query.include[2].where.date);
+
+    // console.log(Date.getUTCDate(date-maxDelay));
+    // console.log(Date.getUTCDate(date-maxDelay-month));
+
+    var observable = Rx.Observable.create((obs) => {
+        bordereau.findAll(query)
+        .then((bordereaux) => {
+            // console.log(bordereaux[0].dataValues);
+            // console.log("total: " + bordereaux.length);
+            obs.onNext([bordereaux, label]);
+            obs.onCompleted();
+        })
+        .catch((err) => {
+            obs.onError(err);
+        })
+    });
+    return observable;
+};
+
 
 // this function looks for all the bordereaux and sums the total volume
 // processed. If no bordereau exists for the given site, returns 0
@@ -610,11 +675,11 @@ function getDetailsForSites(beginDate, endDate, idArray) {
             .subscribe(observerFilieresInterditesDD);
 
         var observerRetards = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetards(idArray, 0, endDate, "retards_norm")
+        getAllRetardsDetails(idArray, 0, endDate, "retards_norm")
             .subscribe(observerRetards);
 
         var observerRetardsDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetards(idArray, 1, endDate, "retards_dd")
+        getAllRetardsDetails(idArray, 1, endDate, "retards_dd")
             .subscribe(observerRetardsDD);
 
         var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);
