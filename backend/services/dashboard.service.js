@@ -177,15 +177,7 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
 // current date (passed in the arguments) and the moment when the bordereau was
 // received is bigger than a limit
 // NOTE: the limit depends on the type of waste (30 days if dangerous, 60 if not)
-function getAllRetards(idArray, dangereux, date, label) {
-
-    // console.log(date);
-
-    var ms = Date.parse(date);
-    var date = new Date(Date.parse(date));
-
-    var monthDuration = 30 * 24 * 60 * 60 * 1000;
-
+function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
 
     if (dangereux==1) {
         var maxDelay = 30 * 24 * 60 * 60 * 1000;
@@ -194,44 +186,20 @@ function getAllRetards(idArray, dangereux, date, label) {
         var maxDelay = 60 * 24 * 60 * 60 * 1000;
     }
 
-    var dateLimit = new Date(ms-maxDelay);
-
-    var maxMonth = date.getMonth();
-    if (dangereux==1) {
-        var computingMonth = maxMonth - 1;
-    }
-    else {
-        var computingMonth = maxMonth - 2;
-    }
-
-    var maxComputingDate = new Date(ms);
-    var minComputingDate = new Date(ms);
-
-    maxComputingDate.setMonth(computingMonth);
-    minComputingDate.setMonth(computingMonth-1);
-
-    var maxComputingMonth = maxComputingDate.getMonth() + 1;
-    var minComputingMonth = minComputingDate.getMonth() + 1;
-
-    if (maxComputingMonth < 10) {
-        maxComputingMonth = '0' + maxComputingMonth;
-    }
-    if (minComputingMonth < 10) {
-        minComputingMonth = '0' + minComputingMonth;
-     }
-
-    var maxComputingDateString = '' + maxComputingDate.getFullYear() + '-' + maxComputingMonth + '-01';
-    var minComputingDateString = '' + minComputingDate.getFullYear() + '-' + minComputingMonth + '-01';
-
+    var ms = Date.parse(date);
+    var dateLimit = new Date(ms - maxDelay);
 
     var month = dateLimit.getMonth() + 1;
+
     if (month < 10) {
         month = '0' + month;
     }
+
     var day = dateLimit.getDate();
     if (day < 10) {
         day = '0' + day;
     }
+
     var dateLimitString = '' + dateLimit.getFullYear() + '-' + month + '-' + day;
     //
     // console.log(minComputingDateString);
@@ -239,7 +207,7 @@ function getAllRetards(idArray, dangereux, date, label) {
     // console.log(dateLimitString);
     // console.log('\n');
 
-    // console.log("looking for " + dangereux + " bordereaux before " + dateLimitString + " and between " + minComputingDateString + " and " + maxComputingDateString);
+    // console.log("looking for " + dangereux + " bordereaux before " + dateLimitString + " and between " + beginDate + " and " + endDate);
 
     var query = {
         include: [
@@ -257,9 +225,9 @@ function getAllRetards(idArray, dangereux, date, label) {
                 as: 'transport1',
                 where: {
                     date: {
-                        $lt: maxComputingDateString,
-                        $gte: minComputingDateString,
-                        $lt: dateLimitString
+                        $lt: endDate,
+                        $gte: beginDate,
+                        $lte: dateLimitString
                     }
                 }
             }
@@ -280,15 +248,8 @@ function getAllRetards(idArray, dangereux, date, label) {
         .then((bordereaux) => {
             // console.log(bordereaux[0].dataValues);
             // console.log("total " + dangereux + ": " + bordereaux.length);
-            var result = [];
-            bordereaux.forEach((bordereau) => {
-                var usedDate = (bordereaux[0].dataValues.transport1.dataValues.date);
-                if (usedDate<maxComputingDateString && usedDate>=minComputingDateString) {
-                    result.push(bordereau);
-                }
-            })
             // console.log(result.length);
-            obs.onNext([result, label]);
+            obs.onNext([bordereaux, label]);
             obs.onCompleted();
         })
         .catch((err) => {
