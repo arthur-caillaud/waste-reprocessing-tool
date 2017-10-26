@@ -239,7 +239,7 @@ function getAllRetards(idArray, dangereux, date, label) {
     // console.log(dateLimitString);
     // console.log('\n');
 
-    // console.log("looking for bordereaux before " + dateLimitString + " and between " + minComputingDateString + " and " + maxComputingDateString);
+    // console.log("looking for " + dangereux + " bordereaux before " + dateLimitString + " and between " + minComputingDateString + " and " + maxComputingDateString);
 
     var query = {
         include: [
@@ -257,8 +257,8 @@ function getAllRetards(idArray, dangereux, date, label) {
                 as: 'transport1',
                 where: {
                     date: {
-                        $lt: maxComputingDate,
-                        $gte: minComputingDate,
+                        $lt: maxComputingDateString,
+                        $gte: minComputingDateString,
                         $lt: dateLimitString
                     }
                 }
@@ -279,8 +279,16 @@ function getAllRetards(idArray, dangereux, date, label) {
         bordereau.findAll(query)
         .then((bordereaux) => {
             // console.log(bordereaux[0].dataValues);
-            // console.log("total: " + bordereaux.length);
-            obs.onNext([bordereaux, label]);
+            // console.log("total " + dangereux + ": " + bordereaux.length);
+            var result = [];
+            bordereaux.forEach((bordereau) => {
+                var usedDate = (bordereaux[0].dataValues.transport1.dataValues.date);
+                if (usedDate<maxComputingDateString && usedDate>=minComputingDateString) {
+                    result.push(bordereau);
+                }
+            })
+            // console.log(result.length);
+            obs.onNext([result, label]);
             obs.onCompleted();
         })
         .catch((err) => {
