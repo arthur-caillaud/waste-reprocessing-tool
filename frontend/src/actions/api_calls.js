@@ -22,7 +22,6 @@ export function loadSuggestions(value) {
     return fetch(config.backend.adress+'dashboard/architecture')
         .then(response => response.json())
         .then(json => {
-
             dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json), value), value))
         })
 
@@ -287,12 +286,14 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
 
         }
         else{
+            console.log("No prestataire given for graph values. Searching for biggest prestataire...");
             return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
                 .then(response => response.json())
                 .then(json => {
-                    const biggestPrestataireId = (json.prestataires[0]) ? json.prestataires[0].id : null ;
-                    if(biggestPrestataireId){
-                        loadPrestataireGraphValues(level, name, biggestPrestataireId);
+                    const biggestPrestataire = (json.prestataires && json.prestataires[0]) ? json.prestataires[0] : null ;
+                    if(biggestPrestataire){
+                        dispatch(actions.updateSelectedPrestataire(biggestPrestataire));
+                        dispatch(loadPrestataireGraphValues(level, name, biggestPrestataire));
                     }
                     else{
                         dispatch(actions.updatePrestataireGraphValues([]));
@@ -316,7 +317,7 @@ export function loadDechetList(level,name){
                 let newInputArray = [];
                 if(json.dechets){
                     json.dechets.forEach(row => {
-                        let newRow = Object.assign({}, row.dechet, {nom: row.libelle});
+                        let newRow = Object.assign({}, row, {nom: row.libelle});
                         newInputArray.push(newRow);
                     });
                     dispatch(actions.updateDechetList(newInputArray));
