@@ -330,10 +330,10 @@ function updateSearchBar(
             level: 0,
             real_level:0,
             architecture: {
-                nom: null,
-                unite_dependance: null,
-                up_dependance: null,
-                metier_dependance: null
+                nom: {name: "", real_level: 0},
+                unite_dependance: {name: "", real_level: 0},
+                up_dependance: {name: "", real_level: 0},
+                metier_dependance: {name: "", real_level: 0},
             },
             suggestions: {
                 nom: [],

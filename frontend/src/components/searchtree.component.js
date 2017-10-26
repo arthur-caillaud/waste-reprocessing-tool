@@ -5,7 +5,7 @@ import '../styles/searchtree.css';
 
 function trimString(string, value, defaultString) {
 
-    return string == null ? defaultString : string.substring(0, value)+'...';
+    return string == '' ? defaultString : string.substring(0, value)+'...';
 }
 
 class SearchTreeElement extends Component {
@@ -40,24 +40,21 @@ class SearchTreeElement extends Component {
                                 bsSize="small"
                                 bsStyle='default'
                                 onClick={onRenderMetierClickHandler}
-                                title={trimString(metier_dependance, 8, 'National')}
+                                title={trimString(metier_dependance.name, 8, 'National')}
                                 key={1}>
-                                <MenuItem eventKey="SEI" onSelect={updateMetier}>SEI</MenuItem>
-                                <MenuItem eventKey="ENEDIS" onSelect={updateMetier}>ENEDIS</MenuItem>
-                                <MenuItem eventKey="DPN" onSelect={updateMetier}>DPN</MenuItem>
-                                <MenuItem eventKey="DPIH" onSelect={updateMetier}>DPIH</MenuItem>
-                                <MenuItem eventKey="DPIT" onSelect={updateMetier}>DPIT</MenuItem>
-                                <MenuItem eventKey="DIPNN" onSelect={updateMetier}>DIPNN</MenuItem>
+                                {suggestions.metier_dependance.map(function(metier){
+                                    return <MenuItem eventKey={metier} onSelect={updateMetier}>{metier.name}</MenuItem>
+                                })}
                             </SplitButton>;
 
         var RenderUp = <SplitButton
                             bsSize="small"
                             bsStyle='default'
                             onClick={onRenderUpClickHandler}
-                            title={trimString(up_dependance, 8, 'Choix Up')}
+                            title={trimString(up_dependance.name, 8, 'Choix Up')}
                             key={2}>
-                            {suggestions.up_dependance.map(function(name){
-                                return <MenuItem eventKey={name} onSelect={updateUp}>{name}</MenuItem>
+                            {suggestions.up_dependance.map(function(up){
+                                return <MenuItem eventKey={up} onSelect={updateUp}>{up.name}</MenuItem>
                             })}
                         </SplitButton>;
 
@@ -65,10 +62,10 @@ class SearchTreeElement extends Component {
                                 bsSize="small"
                                 bsStyle='default'
                                 onClick={onRenderUniteClickHandler}
-                                title={trimString(unite_dependance, 8, 'ChxUnite')}
+                                title={trimString(unite_dependance.name, 8, 'ChxUnite')}
                                 key={3}>
-                                {suggestions.unite_dependance.map(function(name){
-                                    return <MenuItem eventKey={name} onSelect={updateUnite}>{name}</MenuItem>
+                                {suggestions.unite_dependance.map(function(unite){
+                                    return <MenuItem eventKey={unite} onSelect={updateUnite}>{unite.name}</MenuItem>
                                 })}
                             </SplitButton>;
 
@@ -76,16 +73,16 @@ class SearchTreeElement extends Component {
                             bsSize="small"
                             bsStyle='default'
                             onClick={onRenderSiteClickHandler}
-                            title={trimString(site, 8, 'Nom Site')}
+                            title={trimString(site.name, 8, 'Nom Site')}
                             key={4}>
-                            {suggestions.nom.map(function(name){
-                                return <MenuItem eventKey={name} onSelect={updateSite}>{name}</MenuItem>
+                            {suggestions.nom.map(function(site){
+                                return <MenuItem eventKey={site} onSelect={updateSite}>{site.name}</MenuItem>
                             })}
                         </SplitButton>;
 
         //We define different renders to display things accordingly
 
-        if (site ==null && unite_dependance==null && up_dependance==null && metier_dependance==null) {
+        if (site.name =="" && unite_dependance.name =="" && up_dependance.name =="" && metier_dependance.name =="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>
@@ -93,7 +90,7 @@ class SearchTreeElement extends Component {
                     </ButtonToolbar>
                 </div>
             )
-        } else if (site ==null && unite_dependance==null && up_dependance==null && metier_dependance!=null) {
+        } else if (site.name =="" && unite_dependance.name =="" && up_dependance.name =="" && metier_dependance.name!="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>
@@ -102,7 +99,7 @@ class SearchTreeElement extends Component {
                     </ButtonToolbar>
                 </div>
             )
-        } else if (site ==null && unite_dependance==null && up_dependance!=null && metier_dependance!=null) {
+        } else if (site.name =="" && unite_dependance.name =="" && up_dependance.name!="" && metier_dependance.name!="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>
