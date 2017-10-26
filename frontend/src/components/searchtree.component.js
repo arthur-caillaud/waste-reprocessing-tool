@@ -39,9 +39,10 @@ class SearchTreeElement extends Component {
                                 bsStyle='default'
                                 onClick={onRenderMetierClickHandler}
                                 title={trimString(metier_dependance.name, 8, 'National')}
-                                key={1}>
-                                {suggestions.metier_dependance.map(function(metier){
-                                    return <MenuItem eventKey={metier} onSelect={updateMetier}>{metier.name}</MenuItem>
+                                key={1}
+                                id={1}>
+                                {suggestions.metier_dependance.map(function(metier, i){
+                                    return <MenuItem eventKey={metier} key={i} onSelect={updateMetier}>{metier.name}</MenuItem>
                                 })}
                             </SplitButton>;
 
@@ -50,9 +51,10 @@ class SearchTreeElement extends Component {
                             bsStyle='default'
                             onClick={onRenderUpClickHandler}
                             title={trimString(up_dependance.name, 8, 'Choix Up')}
-                            key={2}>
-                            {suggestions.up_dependance.map(function(up){
-                                return <MenuItem eventKey={up} onSelect={updateUp}>{up.name}</MenuItem>
+                            key={2}
+                            id={2}>
+                            {suggestions.up_dependance.map(function(up, i){
+                                return <MenuItem eventKey={up} key={i} onSelect={updateUp}>{up.name}</MenuItem>
                             })}
                         </SplitButton>;
 
@@ -61,9 +63,10 @@ class SearchTreeElement extends Component {
                                 bsStyle='default'
                                 onClick={onRenderUniteClickHandler}
                                 title={trimString(unite_dependance.name, 8, 'ChxUnite')}
-                                key={3}>
-                                {suggestions.unite_dependance.map(function(unite){
-                                    return <MenuItem eventKey={unite} onSelect={updateUnite}>{unite.name}</MenuItem>
+                                key={3}
+                                id={3}>
+                                {suggestions.unite_dependance.map(function(unite, i){
+                                    return <MenuItem eventKey={unite} key={i} onSelect={updateUnite}>{unite.name}</MenuItem>
                                 })}
                             </SplitButton>;
 
@@ -72,15 +75,16 @@ class SearchTreeElement extends Component {
                             bsStyle='default'
                             onClick={onRenderSiteClickHandler}
                             title={trimString(site.name, 8, 'Nom Site')}
-                            key={4}>
-                            {suggestions.nom.map(function(site){
-                                return <MenuItem eventKey={site} onSelect={updateSite}>{site.name}</MenuItem>
+                            key={4}
+                            id={4}>
+                            {suggestions.nom.map(function(site, i){
+                                return <MenuItem eventKey={site} key={i} onSelect={updateSite}>{site.name}</MenuItem>
                             })}
                         </SplitButton>;
 
         //We define different renders to display things accordingly
 
-        if (site.name =="" && unite_dependance.name =="" && up_dependance.name =="" && metier_dependance.name =="") {
+        if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name ==="" && metier_dependance.name ==="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>
@@ -88,7 +92,7 @@ class SearchTreeElement extends Component {
                     </ButtonToolbar>
                 </div>
             )
-        } else if (site.name =="" && unite_dependance.name =="" && up_dependance.name =="" && metier_dependance.name!="") {
+        } else if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name ==="" && metier_dependance.name!="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>
@@ -97,7 +101,7 @@ class SearchTreeElement extends Component {
                     </ButtonToolbar>
                 </div>
             )
-        } else if (site.name =="" && unite_dependance.name =="" && up_dependance.name!="" && metier_dependance.name!="") {
+        } else if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name!="" && metier_dependance.name!="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>

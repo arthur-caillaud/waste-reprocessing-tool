@@ -2,14 +2,13 @@ import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
 import { connect } from "react-redux";
-import * as actions from '../actions';
 import showMoreInfos from '../actions/showmoreinfos.service';
 
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
-    let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
-    let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
+    let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
+    let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
     return  [width,height];
     }
 

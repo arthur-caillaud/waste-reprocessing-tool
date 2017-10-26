@@ -5,12 +5,9 @@ import 'react-dates/initialize';
 
 
 import MainRouter from '../utilities/router.component';
-import LateralMenu from './lateralmenu.component';
 import SearchBar from './containers/searchbar.main.container';
 import SearchTree from './containers/searchtree.container';
 
-import { Button } from 'react-bootstrap';
-import { Glyphicon } from 'react-bootstrap';
 import { Nav, NavItem, Navbar } from 'react-bootstrap';
 import { Col, Row } from 'react-bootstrap';
 
@@ -48,7 +45,7 @@ class App extends Component {
       return (<BrowserRouter>
                   <div>
                       <Row>
-                          <Navbar style={{marginBottom: "0", paddingBottom: "-2"}} staticTop>
+                          <Navbar style={{marginBottom: "0"}} staticTop>
                           <Nav bsStyle="tabs" justified activeKey={activeKey} onSelect={this.handleSelect}>
                               <NavItem style={{height: "2vh"}} eventKey="1" href="/">Dashboard</NavItem>
                               <NavItem style={{height: "2vh"}} eventKey="2" href="/prestataire">Vision Prestataire</NavItem>

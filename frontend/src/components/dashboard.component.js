@@ -6,13 +6,11 @@ import * as apiCalls from '../actions/api_calls';
 import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
 import RightGauge from './rightgauge.component';
-import Info from './info.component';
 import MoreInfosContainer from './containers/moreinfos.container';
 import LeftTile from './containers/lefttile.container';
 import RightTile from './containers/righttile.container';
 import MiddleRightTile from './containers/middlerighttile.container';
 import MiddleLeftTile from './containers/middlelefttile.container';
-import { persistStore } from 'redux-persist';
 import '../styles/general.css';
 
 import grenouille from '../resources/grenouille-edf.png';
@@ -36,7 +34,7 @@ class DashboardElement extends Component {
                 <Col sm={3}> <LeftGauge/> </Col>
                 <Col sm={3}> <MiddleGauge/> </Col>
                 <Col sm={3}> <RightGauge/> </Col>
-                <Col sm={3}> <img className="grenouille-logo" src={grenouille} /> </Col>
+                <Col sm={3}> <img className="grenouille-logo" src={grenouille} alt=""/> </Col>
             </Row>
 
             <Row className="show-grid">
