@@ -5,14 +5,13 @@ import Autosuggest from 'react-autosuggest';
 import '../styles/searchbar.css'
 
 function getSuggestionValue(suggestion) {
-
-
     return suggestion.nom;
 }
+
 function renderSuggestion(suggestion) {
-    return(
-        <span>{suggestion.nom}</span>
-    );
+        return(
+            <span>{suggestion.nom}</span>
+        );
 }
 
 

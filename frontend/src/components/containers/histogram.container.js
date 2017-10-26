@@ -1,11 +1,9 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import * as actions from '../../actions';
 import Histogram from '../histogram.component';
 
 function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
-    const idGraph = ownProps.idGraph;
     return {
         title: state[branchName].title,
         values: state[branchName].values,

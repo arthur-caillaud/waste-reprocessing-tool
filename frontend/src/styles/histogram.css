@@ -9,8 +9,7 @@
 
 .chart-title{
     position: absolute;
-    right: 5%;
-    top: 5px;
+    left: 1.5%;
     margin-top: 0;
 }
 
@@ -23,25 +22,56 @@
 .first-rect{
     fill: #90caf9;
 }
-
 .first-rect:hover{
     fill: #64b5f6;
 }
-
 .second-rect{
     fill: #ffe082;
 }
-
 .second-rect:hover{
     fill: #ffd54f;
 }
-
 .third-rect{
     fill: #ffab91;
 }
-
 .third-rect:hover{
     fill: #ff8a65;
+}
+.fourth-rect{
+    fill: #e6ee9c;
+}
+.fourth-rect:hover{
+    fill: #dce775;
+}
+.fifth-rect{
+    fill: #ef9a9a;
+}
+.fifth-rect:hover{
+    fill: #e57373;
+}
+.sixth-rect{
+    fill: #a5d6a7;
+}
+.sixth-rect:hover{
+    fill: #81c784;
+}
+.seventh-rect{
+    fill: #80cbc4;
+}
+.seventh-rect:hover{
+    fill: #4db6ac;
+}
+.heigth-rect{
+    fill: #b39ddb;
+}
+.height-rect:hover{
+    fill: #9575cd;
+}
+.ninth-rect{
+    fill: #81d4fa;
+}
+.ninth-rect:hover{
+    fill: #4fc3f7;
 }
 
 .d3-tip {

@@ -11,6 +11,7 @@ export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 
 export const RESET_MOREINFOS_TO_DEFAULT = 'RESET_MOREINFOS_TO_DEFAULT'
 export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
+export const DISPLAY_RIGHTGAUGE_INFOS = 'DISPLAY_RIGHTGAUGE_INFOS';
 export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
 export const DISPLAY_LEFTTILE_INFOS = 'DISPLAY_LEFTTILE_INFOS';
 export const DISPLAY_MIDDLELEFTTILE_INFOS = 'DISPLAY_MIDDLELEFTTILE_INFOS';
@@ -26,6 +27,7 @@ export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
+export const CHANGE_RIGHTGAUGE_INPUT = 'CHANGE_RIGHTGAUGE_INPUT';
 export const CHANGE_MIDDLEGAUGE_INPUT = 'CHANGE_MIDDLEGAUGE_INPUT';
 export const CHANGE_LEFTTILE_INPUT = 'CHANGE_LEFTTILE_INPUT';
 export const CHANGE_RIGHTTILE_INPUT = 'CHANGE_RIGHTTILE_INPUT';
@@ -155,6 +157,13 @@ export function updateLeftGauge(values) {
         values
     }
 }
+export function updateRightGauge(values) {
+    // values is an object containing value and valueBefore, valueAnte and valueBeforeAnte
+    return {
+        type: CHANGE_RIGHTGAUGE_INPUT,
+        values
+    }
+}
 export function updateMiddleGauge(values) {
     return {
         type: CHANGE_MIDDLEGAUGE_INPUT,
@@ -188,11 +197,14 @@ export function updateRightTile(values) {
 
 
 
-
-
 export function displayLeftGaugeInfos(){
     return {
         type: DISPLAY_LEFTGAUGE_INFOS
+    }
+}
+export function displayRightGaugeInfos(){
+    return {
+        type: DISPLAY_RIGHTGAUGE_INFOS
     }
 }
 export function displayMiddleGaugeInfos(){

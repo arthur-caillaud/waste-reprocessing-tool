@@ -6,7 +6,6 @@ import * as d3tip from 'd3-tip';
 import Loading from '../resources/Rolling.gif';
 
 function getChartSize(el) {
-    console.log(el);
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
     let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
     let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
@@ -32,16 +31,15 @@ export default class Histogram extends Component {
     toNullArray(valuesArray){
         return valuesArray.map(bundle => {
             let nullBundle = clone(bundle);
-            nullBundle.values = [0,0,0];
+            nullBundle.values = nullBundle.values.map(int => {return 0})
             return nullBundle;
         })
     }
     __initHistogram(data) {
 
         const nullData = this.toNullArray(data);
+
         // We also save the previous state for dynamic transitions
-
-
 
         const width = getChartSize("#"+this.props.id).width;
         const height = getChartSize("#"+this.props.id).height;
@@ -90,7 +88,7 @@ export default class Histogram extends Component {
         .rangeRound([height, 0]);
 
         let z = d3.scaleOrdinal()
-        .range(["first-rect", "second-rect", "third-rect"]);
+        .range(["first-rect", "second-rect", "third-rect","fourth-rect","fifth-rect","sixth-rect","seventh-rect","heigth-rect","ninth-rect"]);
 
 
 
@@ -103,6 +101,8 @@ export default class Histogram extends Component {
         x1.domain(keys).rangeRound([0, x0.bandwidth()]);
 
         y.domain([0,100]).nice();
+
+        console.log(nullData);
 
         //Creating empty collumn bundles
         g.append('g')
@@ -161,13 +161,14 @@ export default class Histogram extends Component {
 
         legend.append("rect")
             .attr("x", width)
+            .attr("y", -40)
             .attr("width", 19)
             .attr("height", 19)
             .attr("class", z);
 
         legend.append("text")
             .attr("x", width - 10)
-            .attr("y", 9.5)
+            .attr("y", -30)
             .attr("dy", "0.32vw")
             .text(function(d) { return d; });
 
@@ -189,8 +190,6 @@ export default class Histogram extends Component {
                 .attr("font-weight", "bold")
                 .attr("text-anchor", "start")
                 .text("Taux de valorisation (%)");
-
-        //setTimeout(() => {this.doTransition(this.newValuesArray)},2000);
     };
 
     doTransition(newValues){
@@ -223,7 +222,6 @@ export default class Histogram extends Component {
     redrawAndEraseHistogram(values) {
         d3.select("#"+this.props.id).select("svg").remove("svg")
         if(values.length > 0){
-            console.log(values);
             this.__initHistogram(values);
         }
     };
@@ -241,7 +239,7 @@ export default class Histogram extends Component {
         if(isLoading){
             return (
                 <div id="histogram-container">
-                    <img className="loading-gif" src={Loading} />
+                    <img className="loading-gif" src={Loading} alt=""/>
                     <div id={this.props.id} className="chart-container"></div>
                 </div>
             );
@@ -249,7 +247,7 @@ export default class Histogram extends Component {
         else{
             return (
                 <div id="histogram-container">
-                    <h2 className="chart-title">Valorisation <b>{graphTitle}</b></h2>
+                    <h3 className="chart-title">Valorisation <b>{graphTitle}</b></h3>
                     <div id={this.props.id} className="chart-container"></div>
                 </div>
             );

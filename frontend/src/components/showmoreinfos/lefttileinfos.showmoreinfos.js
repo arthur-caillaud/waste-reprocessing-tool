@@ -19,7 +19,7 @@ export default class LeftTileInfos extends Component {
                 Qte_recue: parseFloat(element.quantitee_finale).toFixed(2),
         })
     })
-        this.state.data = data
+        this.setState({data: data});
 
     }
 

@@ -5,15 +5,12 @@ import { connect } from "react-redux";
 import MoreInfosService from '../actions/showmoreinfos.service.js';
 
 
-
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};
     let width = parseInt(d3.select(el).style('width'), 10) - margin.left - margin.right;
     let height = parseInt(d3.select(el).style('height'), 10) - margin.top - margin.bottom;
     return  [width,height];
 };
-
-
 
 
 class LeftGauged3 extends Component {
@@ -187,7 +184,7 @@ class LeftGauged3 extends Component {
                       .tween("text", function() {
                         var that = d3.select(this),
                             i = d3.interpolateNumber(0, v_listeverte);
-                        return function(t) { that.text("Volume Total : " + format(i(t)) + "t"); };
+                        return function(t) { that.text("Volume L. Verte: " + format(i(t)) + "t"); };
                       })
                       .styleTween("fill", function() {
                           var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
@@ -223,6 +220,12 @@ class LeftGauged3 extends Component {
         this.drawJauge();
     };
 
+    componentDidMount() {
+
+        this.drawJauge()
+
+
+    };
 
     componentDidUpdate() {
 

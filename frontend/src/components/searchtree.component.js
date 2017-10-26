@@ -4,7 +4,7 @@ import { SplitButton, MenuItem, ButtonToolbar } from 'react-bootstrap';
 import '../styles/searchtree.css';
 
 function trimString(string, value, defaultString) {
-    return string == '' ? defaultString : string.substring(0, value)+'...';
+    return string === '' ? defaultString : string.substring(0, value)+'...';
 }
 
 class SearchTreeElement extends Component {
@@ -17,7 +17,6 @@ class SearchTreeElement extends Component {
             unite_dependance,
             up_dependance,
             metier_dependance,
-            id,
             suggestions,
             onRenderMetierClickHandler,
             onRenderUpClickHandler,
@@ -92,7 +91,7 @@ class SearchTreeElement extends Component {
                     </ButtonToolbar>
                 </div>
             )
-        } else if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name ==="" && metier_dependance.name!="") {
+        } else if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name ==="" && metier_dependance.name!=="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>
@@ -101,7 +100,7 @@ class SearchTreeElement extends Component {
                     </ButtonToolbar>
                 </div>
             )
-        } else if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name!="" && metier_dependance.name!="") {
+        } else if (site.name ==="" && unite_dependance.name ==="" && up_dependance.name!=="" && metier_dependance.name!=="") {
             return (
                 <div className="searchtree-container">
                     <ButtonToolbar>

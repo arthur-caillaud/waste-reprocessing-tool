@@ -28,6 +28,7 @@ import {
 
     CHANGE_LEFTGAUGE_INPUT,
     CHANGE_MIDDLEGAUGE_INPUT,
+    CHANGE_RIGHTGAUGE_INPUT,
     CHANGE_LEFTTILE_INPUT,
     CHANGE_RIGHTTILE_INPUT,
     CHANGE_MIDDLELEFTTILE_INPUT,
@@ -244,13 +245,18 @@ function updateGauge(
         middlevalueBefore: 0,
         middlevalueAnte: 0,
         middlevalueBeforeAnte: 0,
+        rightvalue: 0,
+        rightvalueBefore: 0,
+        rightvalueAnte: 0,
+        rightvalueBeforeAnte: 0,
         v_total: 0,
         v_listeverte: 0,
+        bdx: 0,
         details: "",
     }, action
 ) {
     switch(action.type) {
-        case 'CHANGE_LEFTGAUGE_INPUT':
+        case CHANGE_LEFTGAUGE_INPUT:
             return Object.assign({}, state, {
                 leftvalue: action.values.leftvalue,
                 leftvalueBefore: action.values.leftvalueBefore,
@@ -259,7 +265,7 @@ function updateGauge(
                 v_listeverte: action.values.v_listeverte,
                 details: action.values.details
             });
-        case 'CHANGE_MIDDLEGAUGE_INPUT':
+        case CHANGE_MIDDLEGAUGE_INPUT:
 
             return Object.assign({}, state, {
                 middlevalue: action.values.middlevalue,
@@ -267,6 +273,15 @@ function updateGauge(
                 middlevalueAnte: action.values.middlevalueAnte,
                 middlevalueBeforeAnte: action.values.middlevalueBeforeAnte,
                 v_total: action.values.v_total
+            });
+        case CHANGE_RIGHTGAUGE_INPUT:
+
+            return Object.assign({}, state, {
+                rightvalue: action.values.rightvalue,
+                rightvalueBefore: action.values.rightvalueBefore,
+                rightvalueAnte: action.values.rightvalueAnte,
+                rightvalueBeforeAnte: action.values.rightvalueBeforeAnte,
+                bdx: action.values.bdx,
             });
         default:
             return state;
@@ -285,21 +300,21 @@ function updateTile(
     }, action
 ) {
     switch(action.type) {
-        case 'CHANGE_LEFTTILE_INPUT':
+        case CHANGE_LEFTTILE_INPUT:
             return Object.assign({}, state, {
                 ecarts_pesee: action.values.ecarts_pesee
             });
-        case 'CHANGE_RIGHTTILE_INPUT':
+        case CHANGE_RIGHTTILE_INPUT:
             return Object.assign({}, state, {
                 incoherences_filieres_dd: action.values.incoherences_filieres_dd,
                 incoherences_filieres_norm: action.values.incoherences_filieres_norm,
             });
-        case 'CHANGE_MIDDLELEFTTILE_INPUT':
+        case CHANGE_MIDDLELEFTTILE_INPUT:
             return Object.assign({}, state, {
                 filieres_interdites_norm: action.values.filieres_interdites_norm,
                 filieres_interdites_dd: action.values.filieres_interdites_dd
             });
-        case 'CHANGE_MIDDLERIGHTTILE_INPUT':
+        case CHANGE_MIDDLERIGHTTILE_INPUT:
             return Object.assign({}, state, {
                 retards_dd: action.values.retards_dd,
                 retards_norm: action.values.retards_norm
@@ -539,7 +554,7 @@ function updateDechetGraphTagsPanel(state = {tagsArray: [], inputArray:[], isLoa
             let newInputArray = [];
             let newTagsArray = [];
             const newTag = Object.assign({}, action.prestataireTag, {
-                shortenedName: action.prestataireTag.nom.slice(0,11) + '...'
+                shortenedName: action.prestataireTag.nom.slice(0,10) + '...'
             });
             if(state.tagsArray.includes(newTag)){
                 return state;

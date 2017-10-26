@@ -6,6 +6,11 @@ function displayLeftGaugeInfos() {
         dispatch(actions.displayLeftGaugeInfos())
     }
 }
+function displayRightGaugeInfos() {
+    return dispatch => {
+        dispatch(actions.displayRightGaugeInfos())
+    }
+}
 
 function displayMiddleGaugeInfos() {
     return dispatch => {
@@ -50,6 +55,7 @@ function displayRightTileAlerts() {
 
 MoreInfosService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
 MoreInfosService.displayLeftGaugeInfos = displayLeftGaugeInfos;
+MoreInfosService.displayRightGaugeInfos = displayRightGaugeInfos;
 MoreInfosService.displayMiddleLeftTileInfos = displayMiddleLeftTileInfos;
 MoreInfosService.displayMiddleLeftTileAlerts = displayMiddleLeftTileAlerts;
 MoreInfosService.displayLeftTileInfos = displayLeftTileInfos;

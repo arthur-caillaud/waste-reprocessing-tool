@@ -7,8 +7,6 @@ import InputGraphPanel from '../inputgraphpanel.component';
 function mapStateToProps(state, ownProps) {
     const branchName = ownProps.branchName;
     const idInputPanel = ownProps.idInputPanel;
-    const searchPlaceholder = ownProps.placeholder;
-    const emptyContainerMessage = ownProps.emptyContainerMessage;
     return {
         inputArray: state[branchName].inputArray,
         selectedInput: state[branchName].selectedInput,
