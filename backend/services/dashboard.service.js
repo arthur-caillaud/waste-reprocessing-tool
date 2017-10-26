@@ -184,8 +184,6 @@ function getAllRetards(idArray, dangereux, date, label) {
     var ms = Date.parse(date);
     var date = new Date(Date.parse(date));
 
-    var month =  30 * 24 * 60 * 60 * 1000;
-
 
     if (dangereux==1) {
         var maxDelay = 30 * 24 * 60 * 60 * 1000;
@@ -195,11 +193,14 @@ function getAllRetards(idArray, dangereux, date, label) {
     }
 
     var lastDate = (new Date(ms-maxDelay));
-    var firstDate = (new Date(ms-month-maxDelay));
+    var firstDate = new Date(lastDate);
+    var month = firstDate.getMonth() - 1;
+    firstDate.setMonth(month);
     firstDate.setDate(1);
 
-    // console.log(lastDate);
-    // console.log(firstDate);
+    // console.log("dangereux: " + dangereux);
+    // console.log("before " +lastDate);
+    // console.log("after " + firstDate);
 
     var query = {
         include: [
@@ -237,7 +238,8 @@ function getAllRetards(idArray, dangereux, date, label) {
     var observable = Rx.Observable.create((obs) => {
         bordereau.findAll(query)
         .then((bordereaux) => {
-            // console.log(bordereaux);
+            // console.log(bordereaux[0].dataValues);
+            // console.log("total: " + bordereaux.length);
             obs.onNext([bordereaux, label]);
             obs.onCompleted();
         })
