@@ -3,7 +3,6 @@ import config from '../config.json';
 import HelperService from './service';
 import * as actions from './index';
 
-
 export function getArchitecture() {
     return dispatch => {
         return fetch(config.backend.adress+'dashboard/architecture')
@@ -13,7 +12,6 @@ export function getArchitecture() {
             })
     }
 }
-
 
 /*
 Main Search Bar API calls
@@ -58,13 +56,13 @@ export function updateSite(site) {
                 let middleRightTileValues = newValues.dataForMiddleRightTile;
                 let rightTileValues = newValues.dataForRightTile;
 
-                dispatch(actions.updateLeftGauge(leftValues))
-                dispatch(actions.updateMiddleGauge(middleValues))
                 dispatch(actions.updateLeftTile(leftTileValues))
                 dispatch(actions.updateRightTile(rightTileValues))
                 dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
                 dispatch(actions.updateMiddleRightTile(middleRightTileValues))
                 dispatch(actions.resetMoreInfosToDefault())
+                dispatch(actions.updateLeftGauge(leftValues))
+                dispatch(actions.updateMiddleGauge(middleValues))
 
 
                 return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-01-01&endDate=2017-10-01')
@@ -84,7 +82,7 @@ API calls for Prestataire Vision
 export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
-        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name)
+        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
             .then(response => response.json())
             .then(json => {
                 dispatch(actions.updatePrestataireList(json))
@@ -95,7 +93,7 @@ export function loadPrestataireList(level,name){
 export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
-        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+idPrestataire)
+        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+idPrestataire)
             .then(response => response.json())
             .then(json => {
                 let inputArray = [];
@@ -113,7 +111,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
     return dispatch => {
         dispatch(actions.loadPrestataireGraphValuesBegin());
         if(prestataire){
-            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+name+'/dechets/'+prestataire.id)
+            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+prestataire.id)
                 .then(response => response.json())
                 .then(json => {
                     let valuesArray = [];
@@ -288,6 +286,19 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                 });
 
         }
+        else{
+            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
+                .then(response => response.json())
+                .then(json => {
+                    const biggestPrestataireId = (json.prestataires[0]) ? json.prestataires[0].id : null ;
+                    if(biggestPrestataireId){
+                        loadPrestataireGraphValues(level, name, biggestPrestataireId);
+                    }
+                    else{
+                        dispatch(actions.updatePrestataireGraphValues([]));
+                    }
+                });
+        }
     }
 }
 
@@ -299,7 +310,7 @@ API calls for Dechet Vision
 export function loadDechetList(level,name){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
-        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name)
+        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
             .then(response => response.json())
             .then(json => {
                 let newInputArray = [];
@@ -317,7 +328,7 @@ export function loadDechetList(level,name){
 export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
-        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name+'/prestataires/'+idDechet)
+        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
             .then(response => response.json())
             .then(json => dispatch(actions.updatePrestataireTagsInputArray(json)));
     }
@@ -327,7 +338,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
     return dispatch => {
         dispatch(actions.loadDechetGraphValuesBegin());
         if(dechet){
-            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+name+'/dechets/'+dechet.id)
+            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+dechet.id)
                 .then(response => response.json())
                 .then(json => {
                     /*
@@ -406,7 +417,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             values: values,
                             volumes: volumes
                         }
-                        dispatch(actions.updateDechetGraphValues(mainColumn));
+                        dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                     else{
                         for (let i = 0; i < 4; i++) {
@@ -442,7 +453,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             values: values,
                             volumes: volumes
                         }
-                        dispatch(actions.updateDechetGraphValues(mainColumn));
+                        dispatch(actions.updateDechetGraphValues([mainColumn]));
                     }
                 });
             }

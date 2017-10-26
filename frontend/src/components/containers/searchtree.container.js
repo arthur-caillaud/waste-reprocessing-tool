@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch) {
     return {
         onRenderMetierClickHandler: () => {
             dispatch(apiCalls.updateSite({
-                    nom: "",
+                    nom: "National",
                     level: 0,
                     real_level: 0,
                     architecture: {
@@ -118,7 +118,7 @@ function mapDispatchToProps(dispatch) {
                     metier_dependance: {name: evt.name, real_level: evt.real_level},
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
@@ -138,7 +138,7 @@ function mapDispatchToProps(dispatch) {
                     },
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
@@ -161,7 +161,7 @@ function mapDispatchToProps(dispatch) {
                 }
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
@@ -187,13 +187,12 @@ function mapDispatchToProps(dispatch) {
                 }
                 }
             }));
-            dispatch(actions.updateInputValue(evt))
+            dispatch(actions.updateInputValue(evt.name))
             dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
             dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
             dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
         },
     }
-
 }
 
 const SearchTree = connect(mapStateToProps, mapDispatchToProps)(SearchTreeElement);

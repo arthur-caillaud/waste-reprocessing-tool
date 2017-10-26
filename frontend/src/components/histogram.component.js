@@ -3,7 +3,10 @@ import '../styles/histogram.css';
 import * as d3 from 'd3';
 import * as d3tip from 'd3-tip';
 
+import Loading from '../resources/Rolling.gif';
+
 function getChartSize(el) {
+    console.log(el);
     var margin = {top: 40, right: 40, bottom: 40, left: 40};
     let width = parseInt(d3.select(el).style('width')) - margin.left - margin.right;
     let height = parseInt(d3.select(el).style('height')) - margin.top - margin.bottom;
@@ -37,6 +40,8 @@ export default class Histogram extends Component {
         const histogramTitle = this.props.title;
         const nullData = this.toNullArray(data);
         // We also save the previous state for dynamic transitions
+
+
 
         const width = getChartSize("#"+this.props.id).width;
         const height = getChartSize("#"+this.props.id).height;
@@ -157,13 +162,13 @@ export default class Histogram extends Component {
             .attr("transform", (d, i) => { return "translate(0," + i * 20 + ")"; });
 
         legend.append("rect")
-            .attr("x", width - 19)
+            .attr("x", width)
             .attr("width", 19)
             .attr("height", 19)
             .attr("class", z);
 
         legend.append("text")
-            .attr("x", width - 24)
+            .attr("x", width - 10)
             .attr("y", 9.5)
             .attr("dy", "0.32vw")
             .text(function(d) { return d; });
@@ -180,7 +185,7 @@ export default class Histogram extends Component {
             .call(d3.axisLeft(y).ticks(null, "s"))
             .append("text")
                 .attr("x", 2)
-                .attr("y", y(y.ticks().pop()) + 0.5)
+                .attr("y", y(y.ticks().pop()) - 7)
                 .attr("dy", "0.32em")
                 .attr("fill", "#000")
                 .attr("font-weight", "bold")
@@ -195,10 +200,9 @@ export default class Histogram extends Component {
         let g = svgDoc.select('g');
         const keys = newValues[0].keys;
         const height = getChartSize("#histogram-container").height;
-        console.log("Height",height);
         let y = d3.scaleLinear()
         .rangeRound([height, 0]);
-        console.log(y);
+
 
         g.select("g").selectAll("g")
             .data(newValues)
@@ -213,7 +217,7 @@ export default class Histogram extends Component {
                 })
             })
             .transition().duration(1500)
-            .attr("y", d => { console.log(d); return y(d.value); })
+            .attr("y", d => {  return y(d.value); })
             .attr("height", d => { return (height - y(d.value)); });
 
     }
@@ -233,13 +237,24 @@ export default class Histogram extends Component {
 
     render() {
 
+        const isLoading = this.props.isLoading;
         const graphTitle = (this.props.title.length < 35) ? this.props.title : this.props.title.slice(0,35) + '...';
 
-        return (
-        <div id="histogram-container">
-            <h2 className="chart-title">Valorisation {graphTitle}</h2>
-            <div id={this.props.id} className="chart-container"></div>
-        </div>
-        );
+        if(isLoading){
+            return (
+                <div id="histogram-container">
+                    <img className="loading-gif" src={Loading} />
+                    <div id={this.props.id} className="chart-container"></div>
+                </div>
+            );
+        }
+        else{
+            return (
+                <div id="histogram-container">
+                    <h2 className="chart-title">Valorisation <b>{graphTitle}</b></h2>
+                    <div id={this.props.id} className="chart-container"></div>
+                </div>
+            );
+        }
     };
 }

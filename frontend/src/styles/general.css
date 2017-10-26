@@ -24,6 +24,7 @@ button .btn.btn-sm.btn-default {
 
 .searchbar-container{
     position: relative;
+    vertical-align: center;
     padding-bottom: 5vh;
     border-bottom: 1px solid rgb(221,221,221);
     border-radius: 5px;
@@ -33,12 +34,16 @@ button .btn.btn-sm.btn-default {
 
 .main-app{
     position: relative;
-    top: 1vh;
+
     height: 89vh;
 }
 
 img.grenouille-logo {
     width: 100%;
+}
+
+img.loading-gif {
+    width: 30px;
 }
 
 div.no-left-padding{

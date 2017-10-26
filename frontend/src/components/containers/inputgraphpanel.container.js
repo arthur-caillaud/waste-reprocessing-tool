@@ -29,11 +29,11 @@ function mapDispatchToProps(dispatch, ownProps) {
             dispatch(actions[onClickActionName](input));
             dispatch(actions[cleanActionName]());
             dispatch(apiCalls[loadTagsOfInputActionName](
-                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.real_level,
                 window.store.getState().updateSearchBar.site.nom,
                 input.id));
             dispatch(apiCalls[loadGraphValuesActionName](
-                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.real_level,
                 window.store.getState().updateSearchBar.site.nom,
                 input));
         },
