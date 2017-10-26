@@ -1,7 +1,10 @@
+import React from 'react';
+import { render } from 'react-dom';
 import { connect } from "react-redux";
 import * as actions from '../../actions';
 import * as apiCalls from '../../actions/api_calls';
-import SearchBarElement from '../searchbar.component'
+import SearchBarElement from '../searchbar.component';
+import grenouille from '../../resources/grenouille-edf.png';
 
 function mapStateToProps(state, ownProps) {
     return {
@@ -23,7 +26,11 @@ function mapDispatchToProps(dispatch) {
             dispatch(actions.clearSuggestions());
         },
         onSuggestionSelected(event, { suggestion }) {
-            dispatch(apiCalls.updateSite(suggestion));
+            if (suggestion.nom === '$t$r$a$p$') {
+                render((<img className="grenouille-logo" src={grenouille} alt=""/>), document.getElementById('root'))
+            } else {
+                dispatch(apiCalls.updateSite(suggestion));
+            }
         }
     };
 }

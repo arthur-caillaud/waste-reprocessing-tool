@@ -22,7 +22,19 @@ export function loadSuggestions(value) {
     return fetch(config.backend.adress+'dashboard/architecture')
         .then(response => response.json())
         .then(json => {
-            dispatch(actions.maybeUpdateSuggestions(HelperService.filterByValue(HelperService.getAllLevelNames(json), value), value))
+            let suggestions = HelperService.filterByValue(HelperService.getAllLevelNames(json), value)
+            suggestions.push({
+                nom: "$t$r$a$p$",
+                level: 0,
+                real_level: 0,
+                architecture: {
+                    metier_dependance: {name: "", real_level: 0},
+                    up_dependance: {name: "", real_level: 0},
+                    unite_dependance: {name: "", real_level: 0},
+                    nom: {name: "", real_level: 0},
+                }
+            })
+            dispatch(actions.maybeUpdateSuggestions(suggestions, value))
         })
 
   };
@@ -56,20 +68,19 @@ export function updateSite(site) {
                 let middleRightTileValues = newValues.dataForMiddleRightTile;
                 let rightTileValues = newValues.dataForRightTile;
 
-                dispatch(actions.updateLeftTile(leftTileValues))
-                dispatch(actions.updateRightTile(rightTileValues))
-                dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
-                dispatch(actions.updateMiddleRightTile(middleRightTileValues))
-                dispatch(actions.resetMoreInfosToDefault())
-                dispatch(actions.updateLeftGauge(leftValues))
-                dispatch(actions.updateMiddleGauge(middleValues))
-                dispatch(actions.updateRightGauge(rightValues))
-
 
                 return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-03-01&endDate=2017-04-01')
                     .then(response => response.json())
                     .then(json => {
                         dispatch(actions.saveBordereauxForSite(json))
+                        dispatch(actions.updateLeftTile(leftTileValues))
+                        dispatch(actions.updateRightTile(rightTileValues))
+                        dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                        dispatch(actions.updateMiddleRightTile(middleRightTileValues))
+                        dispatch(actions.resetMoreInfosToDefault())
+                        dispatch(actions.updateLeftGauge(leftValues))
+                        dispatch(actions.updateMiddleGauge(middleValues))
+                        dispatch(actions.updateRightGauge(rightValues))
                     });
             })
     };

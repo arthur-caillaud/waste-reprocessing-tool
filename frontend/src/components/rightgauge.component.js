@@ -26,7 +26,7 @@ class RightGauged3 extends Component {
         var rightvalueBefore = this.props.rightvalueBefore;
         var rightvalueAnte = this.props.rightvalueAnte;
         var rightvalueBeforeAnte = this.props.rightvalueBeforeAnte;
-        var v_listeverte = this.props.v_listeverte;
+        var bdx = this.props.bdx;
         var margin = {top: 10, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
@@ -183,8 +183,8 @@ class RightGauged3 extends Component {
                   d3.active(this)
                       .tween("text", function() {
                         var that = d3.select(this),
-                            i = d3.interpolateNumber(0, v_listeverte);
-                        return function(t) { that.text("Total Bdx: " + format(i(t))); };
+                            i = d3.interpolateNumber(0, bdx);
+                        return function(t) { that.text("Sans Date: " + format(i(t))); };
                       })
                       .styleTween("fill", function() {
                           var interpolate = d3.interpolateRgb(color(rightvalueAnte), color(rightvalue))
@@ -253,7 +253,7 @@ function mapStateToProps(state) {
         rightvalueBefore: state.updateGauge.rightvalueBefore,
         rightvalueAnte: state.updateGauge.rightvalueAnte,
         rightvalueBeforeAnte: state.updateGauge.rightvalueBeforeAnte,
-        v_listeverte: state.updateGauge.v_listeverte,
+        bdx: state.updateGauge.bdx,
 
     }
 };
@@ -268,10 +268,10 @@ function mapDispatchToProps(dispatch) {
     }
 };
 
-const RightGauge = ({showMoreInfos, rightvalue, rightvalueBefore, rightvalueBeforeAnte, rightvalueAnte, v_listeverte}) => {
+const RightGauge = ({showMoreInfos, rightvalue, rightvalueBefore, rightvalueBeforeAnte, rightvalueAnte, bdx}) => {
     return(
         <div onClick={showMoreInfos}>
-            <RightGauged3 id="rightgauge" rightvalue={rightvalue} rightvalueBefore={rightvalueBefore} rightvalueAnte={rightvalueAnte} rightvalueBeforeAnte={rightvalueBeforeAnte} v_listeverte={v_listeverte}/>
+            <RightGauged3 id="rightgauge" rightvalue={rightvalue} rightvalueBefore={rightvalueBefore} rightvalueAnte={rightvalueAnte} rightvalueBeforeAnte={rightvalueBeforeAnte} bdx={bdx}/>
         </div>
     )
 }

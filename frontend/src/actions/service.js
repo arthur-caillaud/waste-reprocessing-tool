@@ -237,7 +237,7 @@ function presentDataForNewSite(json) {
 
     let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: "", v_listeverte: 0};
     let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0, v_total: 0};
-    let dataForRightGauge = {rightvalue: 0, rightvalueBefore: 0, rightvalueAnte: 0, rightvalueBeforeAnte: 0};
+    let dataForRightGauge = {rightvalue: 0, rightvalueBefore: 0, rightvalueAnte: 0, rightvalueBeforeAnte: 0, bdx: 0};
     let dataForLeftTile = {};
     let dataForMiddleLeftTile = {};
     let dataForMiddleRightTile = {};
@@ -261,10 +261,11 @@ function presentDataForNewSite(json) {
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
         dataForLeftGauge.v_listeverte = volume_listeverte
 
-        dataForRightGauge.rightvalue = total_lost*100/(total_bdx + total_lost)
+        dataForRightGauge.rightvalue = 100 - (total_lost*100/(total_bdx + total_lost))
         dataForRightGauge.rightvalueBefore = 12
         dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
         dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
+        dataForRightGauge.bdx = total_lost
 
         dataForMiddleGauge.middlevalue = valorisation_totale*100/volume_total
         dataForMiddleGauge.middlevalueBefore = 12
@@ -286,10 +287,11 @@ function presentDataForNewSite(json) {
          dataForMiddleGauge.middlevalueAnte = 0
          dataForMiddleGauge.middlevalueBeforeAnte = 0
          dataForMiddleGauge.v_total = volume_total
-         dataForRightGauge.rightvalue = 100
+         dataForRightGauge.rightvalue = 100 - (total_lost*100/(total_bdx + total_lost))
          dataForRightGauge.rightvalueBefore = 12
-         dataForRightGauge.rightvalueAnte = 0
-         dataForRightGauge.rightvalueBeforeAnte = 0
+         dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
+         dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
+         dataForRightGauge.bdx = total_lost
      }
 
     let response = {

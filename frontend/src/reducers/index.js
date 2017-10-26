@@ -251,6 +251,7 @@ function updateGauge(
         rightvalueBeforeAnte: 0,
         v_total: 0,
         v_listeverte: 0,
+        bdx: 0,
         details: "",
     }, action
 ) {
@@ -280,7 +281,7 @@ function updateGauge(
                 rightvalueBefore: action.values.rightvalueBefore,
                 rightvalueAnte: action.values.rightvalueAnte,
                 rightvalueBeforeAnte: action.values.rightvalueBeforeAnte,
-                
+                bdx: action.values.bdx,
             });
         default:
             return state;

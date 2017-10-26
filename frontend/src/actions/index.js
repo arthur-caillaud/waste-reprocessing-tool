@@ -11,6 +11,7 @@ export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
 
 export const RESET_MOREINFOS_TO_DEFAULT = 'RESET_MOREINFOS_TO_DEFAULT'
 export const DISPLAY_LEFTGAUGE_INFOS = 'DISPLAY_LEFTGAUGE_INFOS';
+export const DISPLAY_RIGHTGAUGE_INFOS = 'DISPLAY_RIGHTGAUGE_INFOS';
 export const DISPLAY_MIDDLEGAUGE_INFOS = 'DISPLAY_MIDDLEGAUGE_INFOS';
 export const DISPLAY_LEFTTILE_INFOS = 'DISPLAY_LEFTTILE_INFOS';
 export const DISPLAY_MIDDLELEFTTILE_INFOS = 'DISPLAY_MIDDLELEFTTILE_INFOS';
@@ -196,11 +197,14 @@ export function updateRightTile(values) {
 
 
 
-
-
 export function displayLeftGaugeInfos(){
     return {
         type: DISPLAY_LEFTGAUGE_INFOS
+    }
+}
+export function displayRightGaugeInfos(){
+    return {
+        type: DISPLAY_RIGHTGAUGE_INFOS
     }
 }
 export function displayMiddleGaugeInfos(){
