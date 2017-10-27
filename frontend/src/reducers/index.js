@@ -14,6 +14,7 @@ import RightTileAlerts from '../components/showmoreinfos/righttilealerts.showmor
 import {
     SAVE_ARCHITECTURE,
     SAVE_BORDEREAUX_FOR_SITE,
+    DISPLAY_CALENDAR,
 
     DISPLAY_LEFTGAUGE_INFOS,
     DISPLAY_MIDDLEGAUGE_INFOS,
@@ -224,12 +225,14 @@ function infosPanelOptions(
     }
 }
 let today = new Date();
-function pageOptions(state = {architecture: {}, bordereaux: {}, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
+function pageOptions(state = {architecture: {}, focusedInput: false, bordereaux: {}, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
     switch (action.type) {
         case SAVE_ARCHITECTURE:
             return Object.assign({}, state, {architecture: action.architecture});
         case SAVE_BORDEREAUX_FOR_SITE:
-            return Object.assign({}, state, {bordereaux: action.bordereaux})
+            return Object.assign({}, state, {bordereaux: action.bordereaux});
+        case DISPLAY_CALENDAR:
+            return Object.assign({}, state, {focusedInput: !state.focusedInput})
         default:
             return state;
     }

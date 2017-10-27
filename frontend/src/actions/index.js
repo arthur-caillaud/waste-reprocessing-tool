@@ -5,6 +5,7 @@ export const CHANGE_SCALE = 'CHANGE_SCALE';
 export const CHANGE_URL = 'CHANGE_URL';
 export const SAVE_ARCHITECTURE = 'SAVE_ARCHITECTURE';
 export const SAVE_BORDEREAUX_FOR_SITE = 'SAVE_BORDEREAUX_FOR_SITE';
+export const DISPLAY_CALENDAR = 'DISPLAY_CALENDAR';
 
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
@@ -100,6 +101,12 @@ export function saveBordereauxForSite(bordereaux) {
     return {
         type: SAVE_BORDEREAUX_FOR_SITE,
         bordereaux
+    }
+}
+
+export function displayCalendar() {
+    return {
+        type: DISPLAY_CALENDAR
     }
 }
 
