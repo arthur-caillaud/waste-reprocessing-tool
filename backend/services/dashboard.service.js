@@ -355,7 +355,7 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 // processed. If no bordereau exists for the given site, returns 0
 function getTotalVolume(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_transportee', {
+        bordereau.findAll({
             include: [
                 {
                     model: traitement,
@@ -378,10 +378,18 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
                 id_site: {$in: idArray}
             }
         })
-        .then((sum) => {
-            if (isNaN(sum)) {
-                sum = 0;
-            }
+        .then((bordereaux) => {
+            var sum = 0
+            bordereaux.forEach((bordereau) => {
+                var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                if (quantitee_finale == 0) {
+                    sum += quantitee_transportee;
+                }
+                else {
+                    sum += quantitee_finale;
+                }
+            })
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
@@ -399,7 +407,7 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
 // site, returns 0
 function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_transportee', {
+        bordereau.findAll({
             include: [
                 {
                     model: traitement,
@@ -429,10 +437,19 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
                 id_site: {$in: idArray}
             }
         })
-        .then((sum) => {
-            if (isNaN(sum)) {
-                sum = 0;
-            }
+        .then((bordereaux) => {
+            var sum = 0
+            bordereaux.forEach((bordereau) => {
+                var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                if (quantitee_finale == 0) {
+                    sum += quantitee_transportee;
+                }
+                else {
+                    sum += quantitee_finale;
+                }
+            })
+            console.log(sum);
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
@@ -449,15 +466,16 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
 // recycled. If no bordereau exists for the given site, returns 0
 function getValorisationTotale(idArray, beginDate, endDate, label) {
     var query = {
+        attributes: ['id', 'quantitee_finale', 'quantitee_transportee'],
         include: [
             {
                 model: traitement,
                 as: 'traitementFinal',
-                attributes: [],
+                attributes: ['id'],
                 include: [
                     {
                         model: type_traitement,
-                        attributes: [],
+                        attributes: ['id', 'qualification'],
                         where: {
                             qualification: "Recyclage"
                         }
@@ -477,15 +495,24 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
             }
         ],
         where: {
-            id_site: {$in: idArray}
+            id_site: {$in: idArray},
+            type_traitement: sequelize.where(sequelize.literal('qualification'), 'Recyclage')
         }
     };
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_transportee', query)
-            .then((sum) => {
-                if (isNaN(sum)) {
-                    sum = 0;
-                }
+        bordereau.findAll(query)
+            .then((bordereaux) => {
+                var sum = 0
+                bordereaux.forEach((bordereau) => {
+                    var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                    var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                    if (quantitee_finale == 0) {
+                        sum += quantitee_transportee;
+                    }
+                    else {
+                        sum += quantitee_finale;
+                    }
+                })
                 obs.onNext([sum, label]);
                 obs.onCompleted();
             })
@@ -507,11 +534,11 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
             {
                 model: traitement,
                 as: 'traitementFinal',
-                attributes: [],
+                attributes: ['id'],
                 include: [
                     {
                         model: type_traitement,
-                        attributes: [],
+                        attributes: ['id', 'qualification'],
                         where: {
                             qualification: "Recyclage"
                         }
@@ -538,15 +565,24 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
             }
         ],
         where: {
-            id_site: {$in: idArray}
+            id_site: {$in: idArray},
+            type_traitement: sequelize.where(sequelize.literal('qualification'), 'Recyclage')
         }
     };
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_transportee', query)
-            .then((sum) => {
-                if (isNaN(sum)) {
-                    sum = 0;
-                }
+        bordereau.findAll(query)
+            .then((bordereaux) => {
+                var sum = 0
+                bordereaux.forEach((bordereau) => {
+                    var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                    var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                    if (quantitee_finale == 0) {
+                        sum += quantitee_transportee;
+                    }
+                    else {
+                        sum += quantitee_finale;
+                    }
+                })
                 obs.onNext([sum, label]);
                 obs.onCompleted();
             })
