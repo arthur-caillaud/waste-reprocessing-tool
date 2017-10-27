@@ -306,27 +306,35 @@ function updateTile(
         filieres_interdites_norm: 0,
         retards_dd: 0,
         retards_norm: 0,
+        isGrowingLeft: false,
+        isGrowingMiddleLeft: false,
+        isGrowingMiddleRight: false,
+        isGrowingRight: false,
     }, action
 ) {
     switch(action.type) {
         case CHANGE_LEFTTILE_INPUT:
             return Object.assign({}, state, {
-                ecarts_pesee: action.values.ecarts_pesee
+                ecarts_pesee: action.values.ecarts_pesee,
+                isGrowingLeft: action.values.isGrowingLeft
             });
         case CHANGE_RIGHTTILE_INPUT:
             return Object.assign({}, state, {
                 incoherences_filieres_dd: action.values.incoherences_filieres_dd,
                 incoherences_filieres_norm: action.values.incoherences_filieres_norm,
+                isGrowingRight: action.values.isGrowingRight
             });
         case CHANGE_MIDDLELEFTTILE_INPUT:
             return Object.assign({}, state, {
                 filieres_interdites_norm: action.values.filieres_interdites_norm,
-                filieres_interdites_dd: action.values.filieres_interdites_dd
+                filieres_interdites_dd: action.values.filieres_interdites_dd,
+                isGrowingMiddleLeft: action.values.isGrowingMiddleLeft
             });
         case CHANGE_MIDDLERIGHTTILE_INPUT:
             return Object.assign({}, state, {
                 retards_dd: action.values.retards_dd,
-                retards_norm: action.values.retards_norm
+                retards_norm: action.values.retards_norm,
+                isGrowingMiddleRight: action.values.isGrowingMiddleRight
             });
         default:
             return state;
