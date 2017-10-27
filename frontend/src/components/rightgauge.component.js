@@ -238,7 +238,7 @@ class RightGauged3 extends Component {
 
         return (
             <div className="gauge-container">
-                <h2 className="gauge-title">Valorisation Liste Verte</h2>
+                <h2 className="gauge-title">Bordereaux Datés</h2>
             <div id={this.props.id} className="chart-container"></div>
 
           </div>

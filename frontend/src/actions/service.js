@@ -199,42 +199,47 @@ function filterByValue(array, value) {
     return Liste
 }
 
-function presentDataForNewSite(json) {
-    let volume_total = 0.0000;
-    let volume_listeverte = 0.0000;
-    let valorisation_l_verte = 0.0000;
-    let valorisation_totale = 0.0000;
-    let ecarts_pesee = 0;
-    let filieres_interdites_dd = 0;
-    let filieres_interdites_norm = 0;
-    let incoherences_filieres_dd = 0;
-    let incoherences_filieres_norm = 0;
-    let retards_dd = 0;
-    let retards_norm = 0;
-    let total_bdx = 0;
-    let total_lost = 0;
-    let date = json[0].date
+function presentDataForNewSite(actualJson, lastYearJson) {
+    /*
+    values for current year
+    */
+    let volume_total_actual = 0.0000;
+    let volume_listeverte_actual = 0.0000;
+    let valorisation_l_verte_actual = 0.0000;
+    let valorisation_totale_actual = 0.0000;
+    let ecarts_pesee_actual = 0;
+    let filieres_interdites_dd_actual = 0;
+    let filieres_interdites_norm_actual = 0;
+    let incoherences_filieres_dd_actual = 0;
+    let incoherences_filieres_norm_actual = 0;
+    let retards_dd_actual = 0;
+    let retards_norm_actual = 0;
+    let total_bdx_actual = 0;
+    let total_lost_actual = 0;
+    let date = actualJson[0].date
 
-    json.forEach(function(element) {
-        volume_total += parseFloat(element.volume_total);
-        volume_listeverte += parseFloat(element.volume_l_verte);
-        valorisation_l_verte += parseFloat(element.valorisation_l_verte);
-        valorisation_totale += parseFloat(element.valorisation_totale);
-        ecarts_pesee += parseFloat(element.ecarts_pesee);
-        filieres_interdites_dd += parseFloat(element.filieres_interdites_dd);
-        filieres_interdites_norm += parseFloat(element.filieres_interdites_norm);
-        incoherences_filieres_dd += parseFloat(element.incoherences_filieres_dd);
-        incoherences_filieres_norm += parseFloat(element.incoherences_filieres_norm);
-        retards_dd += parseFloat(element.retards_dd);
-        retards_norm += parseFloat(element.retards_norm);
+    actualJson.forEach(function(element) {
+        volume_total_actual += parseFloat(element.volume_total);
+        volume_listeverte_actual += parseFloat(element.volume_l_verte);
+        valorisation_l_verte_actual += parseFloat(element.valorisation_l_verte);
+        valorisation_totale_actual += parseFloat(element.valorisation_totale);
+        ecarts_pesee_actual += parseFloat(element.ecarts_pesee);
+        filieres_interdites_dd_actual += parseFloat(element.filieres_interdites_dd);
+        filieres_interdites_norm_actual += parseFloat(element.filieres_interdites_norm);
+        incoherences_filieres_dd_actual += parseFloat(element.incoherences_filieres_dd);
+        incoherences_filieres_norm_actual += parseFloat(element.incoherences_filieres_norm);
+        retards_dd_actual += parseFloat(element.retards_dd);
+        retards_norm_actual += parseFloat(element.retards_norm);
         if (element.date === date) {
-            total_lost += parseFloat(element.non_dates);
+            total_lost_actual += parseFloat(element.non_dates);
         }
-        total_bdx += parseFloat(element.bordereaux);
+        total_bdx_actual += parseFloat(element.bordereaux);
 
     });
 
-
+    /*
+        Data Receivers for each component
+    */
     let dataForLeftGauge = {leftvalue: 0, leftvalueBefore: 0, leftvalueAnte: 0, leftvalueBeforeAnte: 0, details: "", v_listeverte: 0};
     let dataForMiddleGauge = {middlevalue: 0, middlevalueBefore: 0, middlevalueAnte: 0, middlevalueBeforeAnte: 0, v_total: 0};
     let dataForRightGauge = {rightvalue: 0, rightvalueBefore: 0, rightvalueAnte: 0, rightvalueBeforeAnte: 0, bdx: 0};
@@ -244,34 +249,34 @@ function presentDataForNewSite(json) {
     let dataForRightTile = {};
 
 
-    dataForLeftTile.ecarts_pesee = ecarts_pesee;
-    dataForRightTile.incoherences_filieres_dd = incoherences_filieres_dd;
-    dataForRightTile.incoherences_filieres_norm = incoherences_filieres_norm + incoherences_filieres_dd;
-    dataForMiddleLeftTile.filieres_interdites_dd = filieres_interdites_dd;
-    dataForMiddleLeftTile.filieres_interdites_norm = filieres_interdites_norm + filieres_interdites_dd;
-    dataForMiddleRightTile.retards_dd = retards_dd;
-    dataForMiddleRightTile.retards_norm = retards_norm + retards_dd;
+    dataForLeftTile.ecarts_pesee = ecarts_pesee_actual;
+    dataForRightTile.incoherences_filieres_dd = incoherences_filieres_dd_actual;
+    dataForRightTile.incoherences_filieres_norm = incoherences_filieres_norm_actual + incoherences_filieres_dd_actual;
+    dataForMiddleLeftTile.filieres_interdites_dd = filieres_interdites_dd_actual;
+    dataForMiddleLeftTile.filieres_interdites_norm = filieres_interdites_norm_actual + filieres_interdites_dd_actual;
+    dataForMiddleRightTile.retards_dd = retards_dd_actual;
+    dataForMiddleRightTile.retards_norm = retards_norm_actual + retards_dd_actual;
 
 
-    if (!(volume_total === 0.0000)) {
+    if (!(volume_total_actual === 0.0000)) {
 
-        dataForLeftGauge.leftvalue = valorisation_l_verte*100/volume_total
+        dataForLeftGauge.leftvalue = valorisation_l_verte_actual*100/volume_total_actual
         dataForLeftGauge.leftvalueBefore = 12
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
-        dataForLeftGauge.v_listeverte = volume_listeverte
+        dataForLeftGauge.v_listeverte = volume_listeverte_actual
 
-        dataForRightGauge.rightvalue = 100 - (total_lost*100/(total_bdx + total_lost))
+        dataForRightGauge.rightvalue = 100 - (total_lost_actual*100/(total_bdx_actual + total_lost_actual))
         dataForRightGauge.rightvalueBefore = 12
         dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
         dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
-        dataForRightGauge.bdx = total_lost
+        dataForRightGauge.bdx = total_lost_actual
 
-        dataForMiddleGauge.middlevalue = valorisation_totale*100/volume_total
+        dataForMiddleGauge.middlevalue = valorisation_totale_actual*100/volume_total_actual
         dataForMiddleGauge.middlevalueBefore = 12
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
         dataForMiddleGauge.middlevalueBeforeAnte = window.store.getState().updateGauge.middlevalueBefore
-        dataForMiddleGauge.v_total = volume_total
+        dataForMiddleGauge.v_total = volume_total_actual
 
 
     } else {
@@ -281,17 +286,17 @@ function presentDataForNewSite(json) {
          dataForLeftGauge.leftvalueBefore = 12
          dataForLeftGauge.leftvalueAnte = 0
          dataForLeftGauge.leftvalueBeforeAnte = 0
-         dataForLeftGauge.v_listeverte = volume_listeverte
+         dataForLeftGauge.v_listeverte = volume_listeverte_actual
          dataForMiddleGauge.middlevalue = 100
          dataForMiddleGauge.middlevalueBefore = 12
          dataForMiddleGauge.middlevalueAnte = 0
          dataForMiddleGauge.middlevalueBeforeAnte = 0
-         dataForMiddleGauge.v_total = volume_total
-         dataForRightGauge.rightvalue = 100 - (total_lost*100/(total_bdx + total_lost))
+         dataForMiddleGauge.v_total = volume_total_actual
+         dataForRightGauge.rightvalue = 100 - (total_lost_actual*100/(total_bdx_actual + total_lost_actual))
          dataForRightGauge.rightvalueBefore = 12
          dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
          dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
-         dataForRightGauge.bdx = total_lost
+         dataForRightGauge.bdx = total_lost_actual
      }
 
     let response = {
