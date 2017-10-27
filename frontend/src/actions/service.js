@@ -7,6 +7,11 @@ function trimAbove99(value) {
         return value
     }
 }
+function substractYear(date){
+    let split = date.split('-');
+    split[0] -= 1
+    return split.join('-')
+}
 
 function getAllLevelNames(architecture) {
     /*
@@ -232,6 +237,10 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     let total_bdx_before = 0;
     let total_lost_before = 0;
 
+    let dateBefore = (lastYearJson.length !== 0) ? lastYearJson[0].date : date
+
+
+
     actualJson.forEach(function(element) {
         volume_total_actual += parseFloat(element.volume_total);
         volume_listeverte_actual += parseFloat(element.volume_l_verte);
@@ -263,7 +272,7 @@ function presentDataForNewSite(actualJson, lastYearJson) {
         incoherences_filieres_norm_before += parseFloat(element.incoherences_filieres_norm);
         retards_dd_before += parseFloat(element.retards_dd);
         retards_norm_before += parseFloat(element.retards_norm);
-        if (element.date === date) {
+        if (element.date === dateBefore) {
             total_lost_before += parseFloat(element.non_dates);
         }
         total_bdx_before += parseFloat(element.bordereaux);

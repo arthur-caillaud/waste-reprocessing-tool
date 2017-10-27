@@ -55,10 +55,6 @@ export function updateSite(site) {
     let EndDate = endDate.format().toString().substring(0,10)
     let StartDate = startDate.format().toString().substring(0, 10)
 
-
-
-
-
     site.suggestions = {}
     return dispatch => {
         site.suggestions.metier_dependance = HelperService.getMenuForMetiers(site)
@@ -73,33 +69,35 @@ export function updateSite(site) {
             .then(response => response.json())
             .then(json => {
                 const actualJson = json
-                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                     .then(response => response.json())
                     .then(json => {
-                        dispatch(actions.saveBordereauxForSite(json))
+                        const lastYearJson = json
+                        let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
+                        let leftValues = newValues.dataForLeftGauge;
+                        let middleValues = newValues.dataForMiddleGauge;
+                        let rightValues = newValues.dataForRightGauge;
+                        let leftTileValues = newValues.dataForLeftTile;
+                        let middleLeftTileValues = newValues.dataForMiddleLeftTile;
+                        let middleRightTileValues = newValues.dataForMiddleRightTile;
+                        let rightTileValues = newValues.dataForRightTile;
 
-                        return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
+                        dispatch(actions.updateLeftTile(leftTileValues))
+                        dispatch(actions.updateRightTile(rightTileValues))
+                        dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                        dispatch(actions.updateMiddleRightTile(middleRightTileValues))
+                        dispatch(actions.resetMoreInfosToDefault())
+                        dispatch(actions.updateLeftGauge(leftValues))
+                        dispatch(actions.updateMiddleGauge(middleValues))
+                        dispatch(actions.updateRightGauge(rightValues))
+            
+                        return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                             .then(response => response.json())
                             .then(json => {
-                                const lastYearJson = json
-                                let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
-                                let leftValues = newValues.dataForLeftGauge;
-                                let middleValues = newValues.dataForMiddleGauge;
-                                let rightValues = newValues.dataForRightGauge;
-                                let leftTileValues = newValues.dataForLeftTile;
-                                let middleLeftTileValues = newValues.dataForMiddleLeftTile;
-                                let middleRightTileValues = newValues.dataForMiddleRightTile;
-                                let rightTileValues = newValues.dataForRightTile;
-
-                                dispatch(actions.updateLeftTile(leftTileValues))
-                                dispatch(actions.updateRightTile(rightTileValues))
-                                dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
-                                dispatch(actions.updateMiddleRightTile(middleRightTileValues))
-                                dispatch(actions.resetMoreInfosToDefault())
-                                dispatch(actions.updateLeftGauge(leftValues))
-                                dispatch(actions.updateMiddleGauge(middleValues))
-                                dispatch(actions.updateRightGauge(rightValues))
+                                dispatch(actions.saveBordereauxForSite(json))
                             })
+
+
                     });
             })
     };
