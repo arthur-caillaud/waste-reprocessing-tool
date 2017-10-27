@@ -471,15 +471,6 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
                 model: traitement,
                 as: 'traitementFinal',
                 attributes: ['id'],
-                include: [
-                    {
-                        model: type_traitement,
-                        attributes: ['id', 'qualification'],
-                        where: {
-                            qualification: "Recyclage"
-                        }
-                    }
-                ]
             },
             {
                 model: transport,
@@ -490,6 +481,13 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
                         $lt: endDate,
                         $gte: beginDate
                     }
+                }
+            },
+            {
+                model: type_traitement,
+                attributes: ['id', 'qualification'],
+                where: {
+                    qualification: "Recyclage"
                 }
             }
         ],
@@ -534,15 +532,6 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
                 model: traitement,
                 as: 'traitementFinal',
                 attributes: ['id'],
-                include: [
-                    {
-                        model: type_traitement,
-                        attributes: ['id', 'qualification'],
-                        where: {
-                            qualification: "Recyclage"
-                        }
-                    }
-                ]
             },
             {
                 model: transport,
@@ -560,6 +549,13 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
                 attributes: [],
                 where: {
                     is_listeverte: 1
+                }
+            },
+            {
+                model: type_traitement,
+                attributes: ['id', 'qualification'],
+                where: {
+                    qualification: "Recyclage"
                 }
             }
         ],
