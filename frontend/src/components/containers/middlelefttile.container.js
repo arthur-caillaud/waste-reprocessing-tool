@@ -5,7 +5,7 @@ import MoreInfosService from '../../actions/showmoreinfos.service';
 
 const mapStateToProps = state => {
   return {value: state.updateTile.filieres_interdites_norm,
-          isGrowing: true,
+          isGrowing: state.updateTile.isGrowingMiddleLeft,
           notifValue: state.updateTile.filieres_interdites_dd,
           title: "Filières Interdites"
   }

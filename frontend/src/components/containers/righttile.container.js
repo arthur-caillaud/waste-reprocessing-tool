@@ -6,7 +6,7 @@ import MoreInfosService from '../../actions/showmoreinfos.service';
 
 const mapStateToProps = state => {
   return {value: state.updateTile.incoherences_filieres_norm,
-          isGrowing: true,
+          isGrowing: state.updateTile.isGrowingRight,
           notifValue: state.updateTile.incoherences_filieres_dd,
           title: "Incohérences Filières"
   }

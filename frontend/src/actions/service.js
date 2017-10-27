@@ -299,23 +299,41 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     dataForMiddleRightTile.retards_dd = retards_dd_actual;
     dataForMiddleRightTile.retards_norm = retards_norm_actual + retards_dd_actual;
 
+    dataForLeftTile.isGrowingLeft = (ecarts_pesee_actual >= ecarts_pesee_before) ? true : false;
+    dataForRightTile.isGrowingRight = (incoherences_filieres_norm_actual + incoherences_filieres_dd_actual >= incoherences_filieres_norm_before + incoherences_filieres_dd_before) ? true : false;
+    dataForMiddleLeftTile.isGrowingMiddleLeft = (filieres_interdites_norm_actual + filieres_interdites_dd_actual >= filieres_interdites_norm_before + filieres_interdites_dd_before) ? true : false;
+    dataForMiddleRightTile.isGrowingMiddleRight = (retards_norm_actual + retards_dd_actual >= retards_norm_before + retards_dd_before) ? true : false;
+
 
     if (!(volume_total_actual === 0.0000)) {
 
         dataForLeftGauge.leftvalue = valorisation_l_verte_actual*100/volume_listeverte_actual
-        dataForLeftGauge.leftvalueBefore = 12
+        if(!(volume_total_before === 0.0000)) {
+            dataForLeftGauge.leftvalueBefore = valorisation_l_verte_before*100/volume_listeverte_before
+        } else {
+            dataForLeftGauge.leftvalueBefore = 0
+        }
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
         dataForLeftGauge.v_listeverte = volume_listeverte_actual
 
         dataForRightGauge.rightvalue = 100 - (total_lost_actual*100/(total_bdx_actual + total_lost_actual))
-        dataForRightGauge.rightvalueBefore = 12
+        if(!(total_bdx_before + total_lost_before === 0.0000)) {
+            dataForRightGauge.rightvalueBefore = 100 - (total_lost_before*100/(total_bdx_before + total_lost_before))
+        } else {
+            dataForRightGauge.rightvalueBefore = 0
+        }
         dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
         dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
         dataForRightGauge.bdx = total_lost_actual
 
         dataForMiddleGauge.middlevalue = valorisation_totale_actual*100/volume_total_actual
-        dataForMiddleGauge.middlevalueBefore = 12
+        if (!(volume_total_before === 0.0000)) {
+            dataForMiddleGauge.middlevalueBefore = valorisation_totale_before*100/volume_total_before
+        } else {
+            dataForMiddleGauge.middlevalueBefore = 0
+        }
+
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue
         dataForMiddleGauge.middlevalueBeforeAnte = window.store.getState().updateGauge.middlevalueBefore
         dataForMiddleGauge.v_total = volume_total_actual
@@ -325,17 +343,17 @@ function presentDataForNewSite(actualJson, lastYearJson) {
          dataForLeftGauge.details = "Pas de Bordereaux sur la période sélectionnée"
          dataForMiddleGauge.details = "Pas de Bordereaux sur la période sélectionnée"
          dataForLeftGauge.leftvalue = 100
-         dataForLeftGauge.leftvalueBefore = 12
+         dataForLeftGauge.leftvalueBefore = 100
          dataForLeftGauge.leftvalueAnte = 0
          dataForLeftGauge.leftvalueBeforeAnte = 0
          dataForLeftGauge.v_listeverte = volume_listeverte_actual
          dataForMiddleGauge.middlevalue = 100
-         dataForMiddleGauge.middlevalueBefore = 12
+         dataForMiddleGauge.middlevalueBefore = 100
          dataForMiddleGauge.middlevalueAnte = 0
          dataForMiddleGauge.middlevalueBeforeAnte = 0
          dataForMiddleGauge.v_total = volume_total_actual
          dataForRightGauge.rightvalue = 100 - (total_lost_actual*100/(total_bdx_actual + total_lost_actual))
-         dataForRightGauge.rightvalueBefore = 12
+         dataForRightGauge.rightvalueBefore = 100 - (total_lost_before*100/(total_bdx_before + total_lost_before))
          dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
          dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
          dataForRightGauge.bdx = total_lost_actual

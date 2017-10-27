@@ -6,7 +6,7 @@ import MoreInfosService from '../../actions/showmoreinfos.service';
 
 const mapStateToProps = state => {
     return {value: state.updateTile.ecarts_pesee,
-            isGrowing: true,
+            isGrowing: state.updateTile.isGrowingLeft,
             notifValue: 0,
             title: "Ecarts de Pesée"
     }

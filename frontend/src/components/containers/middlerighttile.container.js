@@ -5,7 +5,7 @@ import MoreInfosService from '../../actions/showmoreinfos.service';
 
 const mapStateToProps = state => {
   return {value: state.updateTile.retards_norm,
-          isGrowing: true,
+          isGrowing: state.updateTile.isGrowingMiddleRight,
           notifValue: state.updateTile.retards_dd,
           title: "Retards de Bordereaux"
   }
