@@ -597,9 +597,7 @@ const convertRowIntoTraitementSequelize = function(excelRow){
 
 const convertRowIntoBordereauSequelize = function(excelRow){
     let newBordereau = {
-        num_bordereau: excelRow[1],
         cas: excelRow[2],
-        nom_emetteur: excelRow[3],
         bordereau_finished: toBordereauFinished(excelRow[4]),
         mode_suivi: excelRow[5],
         ref_dossier: excelRow[14],
@@ -608,9 +606,20 @@ const convertRowIntoBordereauSequelize = function(excelRow){
         quantitee_estimee: toQuantiteeEstimee(excelRow[29])
     }
 
+    const primaryKeyBordereau = {
+        num_bordereau: excelRow[1],
+        nom_emetteur: excelRow[3]
+    }
+
     const findOrCreateBordereau = function(obs){
-        if(typeof newBordereau.id_dechet !== "undefined" && typeof newBordereau.id_site !== "undefined" && typeof newBordereau.id_transport_1 !== "undefined" && typeof newBordereau.id_transport_2 !== "undefined" && typeof newBordereau.id_traitement_final !== "undefined" && typeof newBordereau.id_traitement_prevu !== "undefined" && typeof newBordereau.id_traitement_inter !== "undefined" ){
-            bordereau.findOrCreate({where: newBordereau})
+        if(typeof primaryKeyBordereau.id_dechet !== "undefined"
+        && typeof primaryKeyBordereau.id_site !== "undefined"
+        && typeof newBordereau.id_transport_1 !== "undefined"
+        && typeof newBordereau.id_transport_2 !== "undefined"
+        && typeof newBordereau.id_traitement_final !== "undefined"
+        && typeof newBordereau.id_traitement_prevu !== "undefined"
+        && typeof newBordereau.id_traitement_inter !== "undefined" ){
+            bordereau.findOrCreate({where: primaryKeyBordereau, defaults: newBordereau})
             .spread((bordereau, created) => {
                 obs.onNext(bordereau);
                 obs.onCompleted();
@@ -632,11 +641,11 @@ const convertRowIntoBordereauSequelize = function(excelRow){
             dechetObservable.subscribe({
                 onNext: value => {
                     if(value.dechet){
-                        newBordereau.id_dechet = value.dechet.dataValues.id;
+                        primaryKeyBordereau.id_dechet = value.dechet.dataValues.id;
                         findOrCreateBordereau(obs);
                     }
                     if(value.dechet_isNull){
-                        newBordereau.id_dechet = null;
+                        primaryKeyBordereau.id_dechet = null;
                         findOrCreateBordereau(obs);
                     }
                 },
@@ -669,11 +678,11 @@ const convertRowIntoBordereauSequelize = function(excelRow){
             siteObservable.subscribe({
                 onNext: value => {
                     if(value){
-                        newBordereau.id_site = value.id;
+                        primaryKeyBordereau.id_site = value.id;
                         findOrCreateBordereau(obs);
                     }
                     if(value === null){
-                        newBordereau.id_site = null;
+                        primaryKeyBordereau.id_site = null;
                         findOrCreateBordereau(obs);
                     }
                 },
