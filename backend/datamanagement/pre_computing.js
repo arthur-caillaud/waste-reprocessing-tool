@@ -318,7 +318,7 @@ function preCompute() {
         const duration = end - begin;
 
         printDuration(duration);
-        process.exit();
+        process.exit(0);
     });
 
 }
