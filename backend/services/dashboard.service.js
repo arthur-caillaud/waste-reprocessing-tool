@@ -449,7 +449,6 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
                     sum += quantitee_finale;
                 }
             })
-            console.log(sum);
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
