@@ -32,10 +32,9 @@ export function loadSuggestions(value) {
                     unite_dependance: {name: "", real_level: 0},
                     nom: {name: "", real_level: 0},
                 }
-            })
+            });
             dispatch(actions.maybeUpdateSuggestions(suggestions, value))
-        })
-
+        });
   };
 }
 
@@ -64,11 +63,12 @@ export function updateSite(site) {
 
         //Here we must have a dispatch that updates the search tree according to new site
         //Which means that we need the new architecture
-        dispatch(actions.updateSiteName(site))
+        dispatch(actions.updateSiteName(site));
+        dispatch(actions.updateDashboardBegin());
         return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
             .then(response => response.json())
             .then(json => {
-                const actualJson = json
+                const actualJson = json;
                 return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                     .then(response => response.json())
                     .then(json => {
@@ -90,7 +90,7 @@ export function updateSite(site) {
                         dispatch(actions.updateLeftGauge(leftValues))
                         dispatch(actions.updateMiddleGauge(middleValues))
                         dispatch(actions.updateRightGauge(rightValues))
-            
+
                         return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                             .then(response => response.json())
                             .then(json => {

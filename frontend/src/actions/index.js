@@ -27,6 +27,7 @@ export const REMOVE_GRAPH_TAG = 'REMOVE_GRAPH_TAG';
 
 export const TOGGLE_LATERALMENU = 'TOGGLE_LATERALMENU';
 
+export const UPDATE_DASHBOARD_BEGIN = "UPDATE_DASHBOARD_BEGIN";
 export const CHANGE_LEFTGAUGE_INPUT = 'CHANGE_LEFTGAUGE_INPUT';
 export const CHANGE_RIGHTGAUGE_INPUT = 'CHANGE_RIGHTGAUGE_INPUT';
 export const CHANGE_MIDDLEGAUGE_INPUT = 'CHANGE_MIDDLEGAUGE_INPUT';
@@ -155,6 +156,12 @@ export function toggleLateralMenu(isVisible){
     return {
         type: TOGGLE_LATERALMENU,
         isVisible
+    }
+}
+
+export function updateDashboardBegin(){
+    return {
+        type: UPDATE_DASHBOARD_BEGIN
     }
 }
 
