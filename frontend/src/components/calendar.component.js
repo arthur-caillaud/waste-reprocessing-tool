@@ -25,6 +25,7 @@ class CalendarElement extends Component {
             isOutsideRange={() => false}
             minimumNights= {28}
             onClose= {onClose}
+            displayFormat='DD-MM-YYYY'
             onDatesChange={onDatesChange} // PropTypes.func.isRequired,
             focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
             onFocusChange={focusedInput => {

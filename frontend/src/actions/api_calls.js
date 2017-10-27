@@ -69,7 +69,6 @@ export function updateSite(site) {
         return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
             .then(response => response.json())
             .then(json => {
-                console.log("ljvbsovjbovubjzeofubz")
                 let newValues = HelperService.presentDataForNewSite(json)
                 let leftValues = newValues.dataForLeftGauge;
                 let middleValues = newValues.dataForMiddleGauge;
@@ -80,7 +79,7 @@ export function updateSite(site) {
                 let rightTileValues = newValues.dataForRightTile;
 
 
-                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-01-01&endDate=2017-10-01')
+                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                     .then(response => response.json())
                     .then(json => {
                         dispatch(actions.saveBordereauxForSite(json))
