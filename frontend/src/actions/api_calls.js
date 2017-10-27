@@ -2,7 +2,6 @@ import fetch from 'isomorphic-fetch';
 import config from '../config.json';
 import HelperService from './service';
 import * as actions from './index';
-import * as moment from 'moment';
 
 export function getArchitecture() {
     return dispatch => {
@@ -40,7 +39,11 @@ export function loadSuggestions(value) {
   };
 }
 
-
+function substractYear(date){
+    let split = date.split('-');
+    split[0] -= 1
+    return split.join('-')
+}
 export function updateSite(site) {
 
     /*Here we get data in order to update the dashboard with new site*/
@@ -69,28 +72,34 @@ export function updateSite(site) {
         return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
             .then(response => response.json())
             .then(json => {
-                let newValues = HelperService.presentDataForNewSite(json)
-                let leftValues = newValues.dataForLeftGauge;
-                let middleValues = newValues.dataForMiddleGauge;
-                let rightValues = newValues.dataForRightGauge;
-                let leftTileValues = newValues.dataForLeftTile;
-                let middleLeftTileValues = newValues.dataForMiddleLeftTile;
-                let middleRightTileValues = newValues.dataForMiddleRightTile;
-                let rightTileValues = newValues.dataForRightTile;
-
-
+                const actualJson = json
                 return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                     .then(response => response.json())
                     .then(json => {
                         dispatch(actions.saveBordereauxForSite(json))
-                        dispatch(actions.updateLeftTile(leftTileValues))
-                        dispatch(actions.updateRightTile(rightTileValues))
-                        dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
-                        dispatch(actions.updateMiddleRightTile(middleRightTileValues))
-                        dispatch(actions.resetMoreInfosToDefault())
-                        dispatch(actions.updateLeftGauge(leftValues))
-                        dispatch(actions.updateMiddleGauge(middleValues))
-                        dispatch(actions.updateRightGauge(rightValues))
+
+                        return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
+                            .then(response => response.json())
+                            .then(json => {
+                                const lastYearJson = json
+                                let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
+                                let leftValues = newValues.dataForLeftGauge;
+                                let middleValues = newValues.dataForMiddleGauge;
+                                let rightValues = newValues.dataForRightGauge;
+                                let leftTileValues = newValues.dataForLeftTile;
+                                let middleLeftTileValues = newValues.dataForMiddleLeftTile;
+                                let middleRightTileValues = newValues.dataForMiddleRightTile;
+                                let rightTileValues = newValues.dataForRightTile;
+
+                                dispatch(actions.updateLeftTile(leftTileValues))
+                                dispatch(actions.updateRightTile(rightTileValues))
+                                dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                                dispatch(actions.updateMiddleRightTile(middleRightTileValues))
+                                dispatch(actions.resetMoreInfosToDefault())
+                                dispatch(actions.updateLeftGauge(leftValues))
+                                dispatch(actions.updateMiddleGauge(middleValues))
+                                dispatch(actions.updateRightGauge(rightValues))
+                            })
                     });
             })
     };

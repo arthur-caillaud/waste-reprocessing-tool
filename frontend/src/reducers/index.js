@@ -224,7 +224,6 @@ function infosPanelOptions(
             return state;
     }
 }
-let today = new Date();
 function pageOptions(state = {
     architecture: {},
     bordereaux: {},

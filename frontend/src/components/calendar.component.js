@@ -2,7 +2,6 @@ import React from 'react';
 import { Component } from 'react';
 import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
-import * as moment from 'moment';
 
 import 'react-dates/lib/css/_datepicker.css';
 
