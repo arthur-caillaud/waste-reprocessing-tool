@@ -6,6 +6,10 @@
     outline-width: 0px;
 }
 
+.show-grid{
+    margin-top: 3vh;
+}
+
 .more-infos {
     height:100%;
 }
