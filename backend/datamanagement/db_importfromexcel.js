@@ -76,7 +76,6 @@ const toIndicateurNationalValorisation = function(indicateurNationalValorisation
     return null;
 }
 const toQuantitee = function(quantiteeNumber){
-    console.log("quantiteeNumber", quantiteeNumber);
     if(quantiteeNumber){
         if(typeof quantiteeNumber == "number" && quantiteeNumber !== 0){
             return parseFloat((quantiteeNumber).toFixed(5))
@@ -97,13 +96,11 @@ const convertRowIntoDechetSequelize = function(excelRow){
         indicateur_national_valorisation: toIndicateurNationalValorisation(excelRow[12]),
         famille: excelRow[13]
     };
-    console.log("Code interne", newDechet.codeinterne);
     var dechetObservable = Rx.Observable.create(obs => {
         try{
             if (excelRow[8]){
                 dechet.findOrCreate({where: {codeinterne: excelRow[8]}, defaults: newDechet})
                 .spread((dechet, created) => {
-                    console.log("Dechet found or created");
                     obs.onNext({
                         dechet: dechet
                     });
@@ -116,7 +113,6 @@ const convertRowIntoDechetSequelize = function(excelRow){
                 obs.onNext({
                     dechet_isNull: true
                 });
-                console.log("Dechet is null");
             }
         }
         catch(Exception){
@@ -140,7 +136,6 @@ const convertRowIntoSiteSequelize = function(excelRow){
                 const nom = excelRow[15].toUpperCase();
                 site.findOrCreate({where: {nom: nom}, defaults: newSite})
                 .spread((site, created) => {
-                    console.log("Site found or created");
                     obs.onNext(site);
                 })
                 .catch(error => {
@@ -148,7 +143,6 @@ const convertRowIntoSiteSequelize = function(excelRow){
                 })
             }
             else{
-                console.log("Site is null");
                 obs.onNext(null);
             }
         }
@@ -161,36 +155,40 @@ const convertRowIntoSiteSequelize = function(excelRow){
 
 const convertRowIntoPrestataireSequelize = function(excelRow){
     var newPrestataireInter = {
-        nom: (typeof excelRow[30] == "string" ? excelRow[30].toUpperCase() : excelRow[30]),
+        siret: excelRow[32],
         localisation: (typeof excelRow[31] == "string" ? excelRow[31].toUpperCase() : excelRow[31])
     };
     var newPrestataireFinal = {
-        nom: (typeof excelRow[42] == "string" ? excelRow[42].toUpperCase() : excelRow[42]),
+        siret: excelRow[44],
         localisation: (typeof excelRow[43] == "string" ? excelRow[43].toUpperCase() : excelRow[43])
     };
 
     var prestataireObservable = Rx.Observable.create((obs) => {
         try{
-            if(excelRow[32] && newPrestataireInter.nom){
-                prestataire.findOrCreate({where: {siret: excelRow[32]}, defaults: newPrestataireInter})
+            if(excelRow[30] && newPrestataireInter.siret){
+                prestataire.findOrCreate({
+                    where: {nom: (typeof excelRow[30] == "string" ? excelRow[30].toUpperCase() : excelRow[30])},
+                    defaults: newPrestataireInter
+                })
                 .spread((prestataireInter, created) => {
-                    console.log("prestataireInter found or created");
                     obs.onNext({
                         prestataireInter: prestataireInter,
-                        prestataireFinal: null
                     });
-                    if(excelRow[44] && newPrestataireFinal.nom){
-                        prestataire.findOrCreate({where: {siret: excelRow[44]}, defaults: newPrestataireFinal})
+                    if(excelRow[42] && newPrestataireFinal.siret){
+                        prestataire.findOrCreate({
+                            where: {nom: (typeof excelRow[42] == "string" ? excelRow[42].toUpperCase() : excelRow[42])},
+                            defaults: newPrestataireFinal
+                        })
                         .spread((prestataireFinal, created) => {
-                            console.log("prestataireFinal found or created");
                             obs.onNext({
-                                prestataireInter: null,
                                 prestataireFinal: prestataireFinal
                             });
+                        })
+                        .catch(err => {
+                            obs.onError(err);
                         });
                     }
                     else {
-                        console.log("prestataireFinal is null");
                         obs.onNext({
                             prestataireFinal_isNull: true
                         });
@@ -198,28 +196,27 @@ const convertRowIntoPrestataireSequelize = function(excelRow){
                 })
                 .catch(error => {
                     obs.onError(error);
-                })
+                });
             }
             else {
-                console.log("prestataireInter is null");
                 obs.onNext({
                     prestataireInter_isNull: true
                 });
-                if(excelRow[44] && newPrestataireFinal.nom){
-                    prestataire.findOrCreate({where: {siret: excelRow[44]}, defaults: newPrestataireFinal})
+                if(excelRow[42] && newPrestataireFinal.siret){
+                    prestataire.findOrCreate({
+                        where: {nom: (typeof excelRow[42] == "string" ? excelRow[42].toUpperCase() : excelRow[42])},
+                        defaults: newPrestataireFinal
+                     })
                     .spread((prestataireFinal, created) => {
-                        console.log("prestataireFinal found or created");
                         obs.onNext({
-                            prestataireInter: null,
                             prestataireFinal: prestataireFinal
                         });
                     })
                     .catch(error => {
                         obs.onError(error);
-                    })
+                    });
                 }
                 else {
-                    console.log("prestataireFinal is null");
                     obs.onNext({
                         prestataireFinal_isNull: true
                     });
@@ -233,11 +230,38 @@ const convertRowIntoPrestataireSequelize = function(excelRow){
     return prestataireObservable;
 };
 
-const convertRowIntoTypeTraitementSequelize = function(excelRow){
+const convertRowIntoTypeTraitementPrevuSequelize = function(excelRow){
     var typeTraitementPrevu = {
         code_edf: excelRow[7],
         qualification: toQualification(excelRow[6])
     };
+
+    return Rx.Observable.create(obs => {
+        try{
+            if(excelRow[6]){
+                type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, defaults: typeTraitementPrevu})
+                .spread((typeTraitementPrevu, created) => {
+                    obs.onNext({
+                        typeTraitementPrevu: typeTraitementPrevu
+                    });
+                })
+                .catch(err => {
+                    obs.onError(err);
+                });
+            }
+            else{
+                obs.onNext({
+                    typeTraitementPrevu_isNull: true
+                });
+            }
+        }
+        catch(Exception){
+            obs.onError(Exception);
+        }
+    })
+}
+
+const convertRowIntoTypeTraitementSequelize = function(excelRow){
     var typeTraitementFinal = {
         code_edf: excelRow[49],
         qualification: toQualification(excelRow[48])
@@ -249,132 +273,52 @@ const convertRowIntoTypeTraitementSequelize = function(excelRow){
 
     var typeTraitementObservable = Rx.Observable.create(obs => {
         try{
-            if(excelRow[6]){
-                type_traitement.findOrCreate({where: {code_dr: excelRow[6]}, defaults: typeTraitementPrevu})
-                .spread((typeTraitementPrevu, created) => {
-                    console.log("typeTraitement found or created");
+            if(excelRow[35]){
+                type_traitement.findOrCreate({where: {code_dr: excelRow[35]}, defaults: typeTraitementInter})
+                .spread((typeTraitementInter, created) => {
                     obs.onNext({
-                        typeTraitementPrevu: typeTraitementPrevu,
-                        typeTraitementInter: null,
-                        typeTraitementFinal: null
+                        typeTraitementInter: typeTraitementInter
                     });
                     if(excelRow[48]){
                         type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
                         .spread((typeTraitementFinal, created) => {
-                            console.log("typeTraitement found or created");
                             obs.onNext({
-                                typeTraitementPrevu: null,
-                                typeTraitementInter: null,
                                 typeTraitementFinal: typeTraitementFinal
                             });
-                            if(excelRow[36]){
-                                type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
-                                .spread((typeTraitementInter, created) => {
-                                    console.log("typeTraitement found or created");
-                                    obs.onNext({
-                                        typeTraitementPrevu: null,
-                                        typeTraitementInter: typeTraitementInter,
-                                        typeTraitementFinal: null
-                                    })
-                                })
-                            }
-                            else{
-                                console.log("typeTraitement is null");
-                                obs.onNext({
-                                    typeTraitementInter_isNull: true
-                                });
-                            }
                         })
+                        .catch(err => {
+                            obs.onError(err);
+                        });
                     }
                     else {
-                        console.log("typeTraitement is null");
                         obs.onNext({
                             typeTraitementFinal_isNull: true
                         });
-                        if(excelRow[36]){
-                            type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
-                            .spread((typeTraitementInter, created) => {
-                                console.log("typeTraitement found or created");
-                                obs.onNext({
-                                    typeTraitementPrevu: null,
-                                    typeTraitementInter: typeTraitementInter,
-                                    typeTraitementFinal: null
-                                })
-                            })
-                        }
-                        else{
-                            console.log("typeTraitement is null");
-                            obs.onNext({
-                                typeTraitementInter_isNull: true
-                            });
-                        }
                     }
                 })
                 .catch(error => {
                     obs.onError(error);
-                })
+                });
             }
             else{
-                console.log("typeTraitement is null");
                 obs.onNext({
-                    typeTraitementPrevu_isNull: true
+                    typeTraitementInter_isNull: true
                 });
                 if(excelRow[48]){
                     type_traitement.findOrCreate({where: {code_dr: excelRow[48]}, defaults: typeTraitementFinal})
                     .spread((typeTraitementFinal, created) => {
-                        console.log("typeTraitement found or created");
                         obs.onNext({
-                            typeTraitementPrevu: null,
-                            typeTraitementInter: null,
                             typeTraitementFinal: typeTraitementFinal
                         });
-                        if(excelRow[36]){
-                            type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
-                            .spread((typeTraitementInter, created) => {
-                                console.log("typeTraitement found or created");
-                                obs.onNext({
-                                    typeTraitementPrevu: null,
-                                    typeTraitementInter: typeTraitementInter,
-                                    typeTraitementFinal: null
-                                })
-                            })
-                        }
-                        else{
-                            console.log("typeTraitement is null");
-                            obs.onNext({
-                                typeTraitementInter_isNull: true
-                            });
-                        }
                     })
-                    .catch(error => {
-                        obs.onError(error);
-                    })
+                    .catch(err => {
+                        obs.onError(err);
+                    });
                 }
                 else {
-                    console.log("typeTraitement is null");
                     obs.onNext({
                         typeTraitementFinal_isNull: true
                     });
-                    if(excelRow[36]){
-                        type_traitement.findOrCreate({where: {code_dr: excelRow[36]}, defaults: typeTraitementInter})
-                        .spread((typeTraitementInter, created) => {
-                            console.log("typeTraitement found or created");
-                            obs.onNext({
-                                typeTraitementPrevu: null,
-                                typeTraitementInter: typeTraitementInter,
-                                typeTraitementFinal: null
-                            })
-                        })
-                        .catch(error => {
-                            obs.onError(error);
-                        })
-                    }
-                    else{
-                        console.log("typeTraitement is null");
-                        obs.onNext({
-                            typeTraitementInter_isNull: true
-                        });
-                    }
                 }
             }
         }
@@ -400,7 +344,6 @@ const convertRowIntoTransporteurSequelize = function(excelRow){
             if(excelRow[26] && newTransporteur1.nom){
                 transporteur.findOrCreate({where: {siret: excelRow[26]}, defaults: newTransporteur1})
                 .spread((transporteur1, created) => {
-                    console.log("transporteur1 found or created");
                     obs.onNext({
                         transporteur1: transporteur1,
                         transporteur2: null
@@ -408,15 +351,16 @@ const convertRowIntoTransporteurSequelize = function(excelRow){
                     if(excelRow[40] && newTransporteur2.nom){
                         transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
                         .spread((transporteur2, created) => {
-                            console.log("transporteur1 found or created");
                             obs.onNext({
                                 transporteur1: null,
                                 transporteur2: transporteur2
                             });
+                        })
+                        .catch(err => {
+                            obs.onError(err);
                         });
                     }
                     else{
-                        console.log("transporteur2 is null");
                         obs.onNext({
                             transporteur2_isNull: true
                         });
@@ -424,17 +368,15 @@ const convertRowIntoTransporteurSequelize = function(excelRow){
                 })
                 .catch(error => {
                     obs.onError(error);
-                })
+                });
             }
             else{
-                console.log("transporteur1 is null");
                 obs.onNext({
                     transporteur1_isNull: true
                 });
                 if(excelRow[40] && newTransporteur2.nom){
                     transporteur.findOrCreate({where: {siret: excelRow[40]}, defaults: newTransporteur2})
                     .spread((transporteur2, created) => {
-                        console.log("transporteur2 found or created");
                         obs.onNext({
                             transporteur1: null,
                             transporteur2: transporteur2
@@ -442,10 +384,9 @@ const convertRowIntoTransporteurSequelize = function(excelRow){
                     })
                     .catch(error => {
                         obs.onError(error)
-                    })
+                    });
                 }
                 else{
-                    console.log("transporteur2 is null");
                     obs.onNext({
                         transporteur2_isNull: true
                     });
@@ -464,15 +405,13 @@ const convertRowIntoTransportSequelize = function(excelRow){
         date: toSequelizeDate(excelRow[20]),
         mode: excelRow[21],
         recepisse: excelRow[24],
-        immatriculation: excelRow[25],
-        adr: excelRow[27]
+        immatriculation: excelRow[25]
     };
     var transport2 = {
         date: null,
         mode: excelRow[38],
         recepisse: excelRow[41],
-        immatriculation: null,
-        adr: null
+        immatriculation: null
     };
     var transportObservable = Rx.Observable.create(obs => {
         try{
@@ -483,7 +422,6 @@ const convertRowIntoTransportSequelize = function(excelRow){
                         transport1.id_transporteur = value.transporteur1.dataValues.id;
                         transport.findOrCreate({where: transport1})
                         .spread((transport1, created) => {
-                            console.log("transport found or created");
                             obs.onNext({
                                 transport1: transport1,
                                 transport2: null
@@ -491,10 +429,9 @@ const convertRowIntoTransportSequelize = function(excelRow){
                         })
                         .catch(error => {
                             obs.onError(error);
-                        })
+                        });
                     }
                     if(value.transporteur1_isNull){
-                        console.log("transport is null");
                         obs.onNext({
                             transport1_isNull: true
                         })
@@ -503,7 +440,6 @@ const convertRowIntoTransportSequelize = function(excelRow){
                         transport2.id_transporteur = value.transporteur2.dataValues.id;
                         transport.findOrCreate({where: transport2})
                         .spread((transport2, created) => {
-                            console.log("transport found or created");
                             obs.onNext({
                                 transport1: null,
                                 transport2: transport2
@@ -511,17 +447,16 @@ const convertRowIntoTransportSequelize = function(excelRow){
                         })
                         .catch(error => {
                             obs.onError(error);
-                        })
+                        });
                     }
                     if(value.transporteur2_isNull){
-                        console.log("transport is null");
                         obs.onNext({
                             transport2_isNull: true
                         })
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 }
             })
         }
@@ -545,10 +480,8 @@ const convertRowIntoTraitementSequelize = function(excelRow){
     const findOrCreateTraitementInter = obs => {
         traitement.findOrCreate({where: traitementInter})
         .spread((traitementInter, created) => {
-            console.log("traitement found or created");
             obs.onNext({
-                traitementInter: traitementInter,
-                traitementFinal: null
+                traitementInter: traitementInter
             })
         })
         .catch(error => {
@@ -559,9 +492,7 @@ const convertRowIntoTraitementSequelize = function(excelRow){
     const findOrCreateTraitementFinal = obs => {
         traitement.findOrCreate({where: traitementFinal})
         .spread((traitementFinal, created) => {
-            console.log("traitement found or created");
             obs.onNext({
-                traitementInter: null,
                 traitementFinal: traitementFinal
             })
         })
@@ -578,10 +509,7 @@ const convertRowIntoTraitementSequelize = function(excelRow){
                 onNext: value => {
                     if(value.typeTraitementInter){
                         traitementInter.id_type_traitement = value.typeTraitementInter.dataValues.id;
-                        if(traitementInter.id_prestataire){
-                            findOrCreateTraitementInter(obs);
-                        }
-                        if(traitementInter.id_prestataire === null){
+                        if(traitementInter.id_prestataire || traitementInter.id_prestataire === null){
                             findOrCreateTraitementInter(obs);
                         }
                     }
@@ -591,18 +519,14 @@ const convertRowIntoTraitementSequelize = function(excelRow){
                             findOrCreateTraitementInter(obs);
                         }
                         if(traitementInter.id_prestataire === null){
-                            console.log("traitement is null");
                             obs.onNext({
                                 traitementInter_isNull: true
-                            })
+                            });
                         }
                     }
                     if(value.typeTraitementFinal){
                         traitementFinal.id_type_traitement = value.typeTraitementFinal.dataValues.id;
-                        if(traitementFinal.id_prestataire){
-                            findOrCreateTraitementFinal(obs);
-                        }
-                        if(traitementFinal.id_prestataire === null){
+                        if(traitementFinal.id_prestataire || traitementFinal.id_prestataire === null){
                             findOrCreateTraitementFinal(obs);
                         }
                     }
@@ -612,25 +536,21 @@ const convertRowIntoTraitementSequelize = function(excelRow){
                             findOrCreateTraitementFinal(obs);
                         }
                         if(traitementFinal.id_prestataire === null){
-                            console.log("traitement is null");
                             obs.onNext({
                                 traitementFinal_isNull: true
-                            })
+                            });
                         }
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 }
             });
             prestataireObservable.subscribe({
                 onNext: value => {
                     if(value.prestataireInter){
                         traitementInter.id_prestataire = value.prestataireInter.dataValues.id;
-                        if(traitementInter.id_type_traitement){
-                            findOrCreateTraitementInter(obs);
-                        }
-                        if (traitementInter.id_type_traitement === null){
+                        if(traitementInter.id_type_traitement || traitementInter.id_type_traitement === null){
                             findOrCreateTraitementInter(obs);
                         }
                     }
@@ -640,7 +560,6 @@ const convertRowIntoTraitementSequelize = function(excelRow){
                             findOrCreateTraitementInter(obs);
                         }
                         if(traitementInter.id_type_traitement === null){
-                            console.log("traitement is null");
                             obs.next({
                                 traitementInter_isNull: true
                             });
@@ -648,10 +567,7 @@ const convertRowIntoTraitementSequelize = function(excelRow){
                     }
                     if(value.prestataireFinal){
                         traitementFinal.id_prestataire = value.prestataireFinal.dataValues.id;
-                        if(traitementFinal.id_type_traitement){
-                            findOrCreateTraitementFinal(obs);
-                        }
-                        if(traitementFinal.id_type_traitement === null){
+                        if(traitementFinal.id_type_traitement || traitementFinal.id_type_traitement === null){
                             findOrCreateTraitementFinal(obs);
                         }
                     }
@@ -661,15 +577,14 @@ const convertRowIntoTraitementSequelize = function(excelRow){
                             findOrCreateTraitementFinal(obs);
                         }
                         if(traitementFinal.id_type_traitement === null){
-                            console.log("traitement is null");
                             obs.next({
                                 traitementFinal_isNull: true
-                            })
+                            });
                         }
                     }
                 },
                 onError: err => {
-                    console.error(err);
+                    obs.onError(err);
                 }
             });
         })
@@ -692,59 +607,28 @@ const convertRowIntoBordereauSequelize = function(excelRow){
         quantitee_finale: toQuantitee(excelRow[46]),
         quantitee_estimee: toQuantiteeEstimee(excelRow[29])
     }
-    console.log(newBordereau);
+
     const findOrCreateBordereau = function(obs){
-        console.log(newBordereau);
         if(typeof newBordereau.id_dechet !== "undefined" && typeof newBordereau.id_site !== "undefined" && typeof newBordereau.id_transport_1 !== "undefined" && typeof newBordereau.id_transport_2 !== "undefined" && typeof newBordereau.id_traitement_final !== "undefined" && typeof newBordereau.id_traitement_prevu !== "undefined" && typeof newBordereau.id_traitement_inter !== "undefined" ){
             bordereau.findOrCreate({where: newBordereau})
             .spread((bordereau, created) => {
-                console.log("bordereau found or created");
                 obs.onNext(bordereau);
                 obs.onCompleted();
             })
             .catch(error => {
-                console.error(error);
                 obs.onError(error);
             });
         }
     }
 
     let bordereauObservable = Rx.Observable.create(obs => {
-        console.log("traitementObservable");
         let traitementObservable = convertRowIntoTraitementSequelize(excelRow);
-        console.log("dechetObservable");
         let dechetObservable = convertRowIntoDechetSequelize(excelRow);
-        console.log("transportObservable");
         let transportObservable = convertRowIntoTransportSequelize(excelRow);
-        console.log("siteObservable");
         let siteObservable = convertRowIntoSiteSequelize(excelRow);
-        console.log("typeTraitementObservable");
-        let typeTraitementObservable = convertRowIntoTypeTraitementSequelize(excelRow);
+        let typeTraitementPrevuObservable = convertRowIntoTypeTraitementPrevuSequelize(excelRow);
 
         try{
-            traitementObservable.subscribe({
-                onNext: value => {
-                    if(value.traitementInter){
-                        newBordereau.id_traitement_inter = value.traitementInter.dataValues.id;
-                        findOrCreateBordereau(obs);
-                    }
-                    if(value.traitementFinal){
-                        newBordereau.id_traitement_final = value.traitementFinal.dataValues.id;
-                        findOrCreateBordereau(obs);
-                    }
-                    if(value.traitementInter_isNull){
-                        newBordereau.id_traitement_inter = null;
-                        findOrCreateBordereau(obs);
-                    }
-                    if(value.traitementFinal_isNull){
-                        newBordereau.id_traitement_final = null;
-                        findOrCreateBordereau(obs);
-                    }
-                },
-                onError: err => {
-                    obs.onError(err);
-                }
-            });
             dechetObservable.subscribe({
                 onNext: value => {
                     if(value.dechet){
@@ -795,21 +679,39 @@ const convertRowIntoBordereauSequelize = function(excelRow){
                 },
                 onError: err => {
                     obs.onError(err);
-                },
-                onCompleted: () => {
-
                 }
             });
-            typeTraitementObservable.subscribe({
+            typeTraitementPrevuObservable.subscribe({
                 onNext: value => {
                     if(value.typeTraitementPrevu){
                         newBordereau.id_traitement_prevu = value.typeTraitementPrevu.dataValues.id;
-                        findOrCreateBordereau(obs);
                     }
                     if(value.typeTraitementPrevu_isNull){
                         newBordereau.id_traitement_prevu = null;
-                        findOrCreateBordereau(obs);
                     }
+                    traitementObservable.subscribe({
+                        onNext: value => {
+                            if(value.traitementInter){
+                                newBordereau.id_traitement_inter = value.traitementInter.dataValues.id;
+                                findOrCreateBordereau(obs);
+                            }
+                            if(value.traitementFinal){
+                                newBordereau.id_traitement_final = value.traitementFinal.dataValues.id;
+                                findOrCreateBordereau(obs);
+                            }
+                            if(value.traitementInter_isNull){
+                                newBordereau.id_traitement_inter = null;
+                                findOrCreateBordereau(obs);
+                            }
+                            if(value.traitementFinal_isNull){
+                                newBordereau.id_traitement_final = null;
+                                findOrCreateBordereau(obs);
+                            }
+                        },
+                        onError: err => {
+                            obs.onError(err);
+                        }
+                    });
                 },
                 onError: err => {
                     obs.onError(err);
@@ -921,7 +823,6 @@ const readXlsx = function (filepath, sheetNumber, startingRow) {
         workBook.xlsx.readFile(filepath)
             .then(() => {
                 // use workbook
-                console.log("Start reading excel file...");
                 workBook.getWorksheet(sheetNumber).eachRow(function(row,rowNumber) {
                     if(rowNumber >= startingRow){
                         let newRow = [null];
@@ -929,8 +830,8 @@ const readXlsx = function (filepath, sheetNumber, startingRow) {
                             let newCell = cell;
                             if (typeof cell == "string"){
                                 newCell = cell.trim();
-                                newCell = newCell.toUpperCase();
                                 newCell = newCell.replace(/[\u0300-\u036f]/g, "");
+                                newCell = newCell.toUpperCase();
                             }
                             if (cell == ""){
                                 newCell = null;
@@ -963,7 +864,6 @@ const readReferentielDechetXlsx = function (filepath, sheetNumber, startingRow) 
         workBook.xlsx.readFile(filepath)
             .then(() => {
                 // use workbook
-                console.log("Start reading excel file...");
                 workBook.getWorksheet(sheetNumber).eachRow(function(row,rowNumber) {
                     if(rowNumber >= startingRow){
                         newRow = [null];
@@ -986,9 +886,7 @@ const writeReferentielDechetIntoBdd = function (filepath) {
     const sequelize = db.mySqlConnect();
     sequelize.authenticate()
     .then(() => {
-        console.log('Connection has been established successfully.');
         let readXlsxObservable = readReferentielDechetXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
-        console.log("readXlsxObservable built");
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
                 console.log("Successfully loaded excel data in RAM");
@@ -1018,11 +916,11 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                 async.series(tasksArray, (err,res) => {
                     console.log("Async tasks done");
                     db.mysqlDisconnect(sequelize);
+                    process.exit();
                 });
             },
             onError: error => {
-                console.error("Error in writeReferentielDechetIntoBdd")
-                console.error(error);
+                console.error("Error in writeReferentielDechetIntoBdd");
             },
             onCompleted: () => {
                 console.log("readXlsx completed");
@@ -1030,67 +928,92 @@ const writeReferentielDechetIntoBdd = function (filepath) {
         })
     })
     .catch(err => {
-        console.error('Database connection lost or unable to start');
+        console.error('Database connection lost or unable to start', err);
     });
 };
 
 const writeIntoBdd = function(excelName) {
     //The input is an excelname located in the data/ directory
     //The function enables pushing raw data in the database by converting it to the database model
-
-    const sequelize = db.mySqlConnect();
-    sequelize.authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully.');
-        let readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
-        console.log("readXlsxObservable built");
-        readXlsxObservable.subscribe({
-            onNext: (jsonExcel) => {
-                console.log("Successfully loaded excel data in RAM");
-                let tasksArray = [];
-                jsonExcel.forEach(bordereau => {
-                    let task = function(callback){
-                        console.log("Building observable...");
-                        let bordereauObservable = convertRowIntoBordereauSequelize(bordereau);
-                        bordereauObservable.subscribe({
-                            onNext: bordereau => {
-                                console.log("Successfully pushed excel whole row into database");
-                            },
-                            onError: error => {
-                                console.error("Error thrown by bordereauObservable", error);
-                                process.nextTick(() => {
-                                    callback(null, true);
-                                });
-                            },
-                            onCompleted: () => {
-                                process.nextTick(() => {
-                                    callback(null, true);
-                                });
-                            }
-                        });
-                    };
-                    tasksArray.push(task);
-                });
-                console.log("Starting importing data...");
-                async.series(tasksArray, (err,res) => {
-                    console.log("Async tasks done");
-                    db.mysqlDisconnect(sequelize);
-                });
-            },
-            onError: error => {
-                console.error("Error in writeIntoBdd")
-                console.error(error);
-            },
-            onCompleted: () => {
-                console.log("Successfully read whole excel");
-            }
+    return Rx.Observable.create(obs => {
+        const sequelize = db.mySqlConnect();
+        sequelize.authenticate()
+        .then(() => {
+            console.log('Connection has been established successfully.');
+            let readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
+            console.log("readXlsxObservable built");
+            readXlsxObservable.subscribe({
+                onNext: (jsonExcel) => {
+                    console.log("Successfully loaded excel data in RAM");
+                    let tasksArray = [];
+                    jsonExcel.forEach((bordereau, index) => {
+                        let task = function(callback){
+                            console.log("Building observable...");
+                            let bordereauObservable = convertRowIntoBordereauSequelize(bordereau);
+                            bordereauObservable.subscribe({
+                                onNext: bordereau => {
+                                    console.log("Successfully pushed excel whole row into database |", index+1);
+                                },
+                                onError: error => {
+                                    console.error("Error thrown by bordereauObservable", error);
+                                    process.nextTick(() => {
+                                        callback(null, true);
+                                    });
+                                },
+                                onCompleted: () => {
+                                    process.nextTick(() => {
+                                        callback(null, true);
+                                    });
+                                }
+                            });
+                        };
+                        tasksArray.push(task);
+                    });
+                    const begin = new Date();
+                    async.series(tasksArray, (err,res) => {
+                        const end = new Date();
+                        console.log("Durée : " + (end-begin)/100 + "s");
+                        db.mysqlDisconnect(sequelize);
+                        obs.onCompleted();
+                    });
+                },
+                onError: error => {
+                    obs.onError(error);
+                },
+                onCompleted: () => {
+                    console.log("Successfully read whole excel");
+                }
+            });
+        })
+        .catch(err => {
+            obs.onError(err);
         });
-    })
-    .catch(err => {
-        console.error('Database connection lost or unable to start');
     });
 };
 
-//TEST PHASE
-//writeReferentielDechetIntoBdd("./data/liste_dechets.xlsx");
-writeIntoBdd("datamars.xlsx");
+/*
+ * MAIN FUNCTION
+ */
+
+function __main(datasExcelArray, referentielExcel){
+    let dataInsertionTasksArray = [];
+    datasExcelArray.forEach(dataExcel => {
+        let dataInsertionTask = callback => {
+            writeIntoBdd(dataExcel).subscribe({
+                onCompleted: () => {
+                    callback(null, true);
+                },
+                onError: err => {
+                    console.error(err);
+                    callback(null, true);
+                }
+            })
+        }
+        dataInsertionTasksArray.push(dataInsertionTask);
+    });
+    async.series(dataInsertionTasksArray, (err,res) => {
+        writeReferentielDechetIntoBdd(referentielExcel);
+    });
+}
+writeReferentielDechetIntoBdd('liste_dechets.xlsx');
+//__main(["datamars.xlsx"],"liste_dechets.xlsx");

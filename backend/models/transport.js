@@ -31,10 +31,6 @@ module.exports = function(sequelize, DataTypes) {
     immatriculation: {
       type: DataTypes.STRING(255),
       allowNull: true
-    },
-    adr: {
-      type: DataTypes.STRING(255),
-      allowNull: true
     }
   }, {
     tableName: 'transport',
