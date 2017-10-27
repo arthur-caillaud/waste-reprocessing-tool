@@ -218,6 +218,20 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     let total_lost_actual = 0;
     let date = actualJson[0].date
 
+    let volume_total_before = 0.0000;
+    let volume_listeverte_before = 0.0000;
+    let valorisation_l_verte_before = 0.0000;
+    let valorisation_totale_before = 0.0000;
+    let ecarts_pesee_before = 0;
+    let filieres_interdites_dd_before = 0;
+    let filieres_interdites_norm_before = 0;
+    let incoherences_filieres_dd_before = 0;
+    let incoherences_filieres_norm_before = 0;
+    let retards_dd_before = 0;
+    let retards_norm_before = 0;
+    let total_bdx_before = 0;
+    let total_lost_before = 0;
+
     actualJson.forEach(function(element) {
         volume_total_actual += parseFloat(element.volume_total);
         volume_listeverte_actual += parseFloat(element.volume_l_verte);
@@ -234,6 +248,25 @@ function presentDataForNewSite(actualJson, lastYearJson) {
             total_lost_actual += parseFloat(element.non_dates);
         }
         total_bdx_actual += parseFloat(element.bordereaux);
+
+    });
+
+    lastYearJson.forEach(function(element) {
+        volume_total_before += parseFloat(element.volume_total);
+        volume_listeverte_before += parseFloat(element.volume_l_verte);
+        valorisation_l_verte_before += parseFloat(element.valorisation_l_verte);
+        valorisation_totale_before += parseFloat(element.valorisation_totale);
+        ecarts_pesee_before += parseFloat(element.ecarts_pesee);
+        filieres_interdites_dd_before += parseFloat(element.filieres_interdites_dd);
+        filieres_interdites_norm_before += parseFloat(element.filieres_interdites_norm);
+        incoherences_filieres_dd_before += parseFloat(element.incoherences_filieres_dd);
+        incoherences_filieres_norm_before += parseFloat(element.incoherences_filieres_norm);
+        retards_dd_before += parseFloat(element.retards_dd);
+        retards_norm_before += parseFloat(element.retards_norm);
+        if (element.date === date) {
+            total_lost_before += parseFloat(element.non_dates);
+        }
+        total_bdx_before += parseFloat(element.bordereaux);
 
     });
 
@@ -260,7 +293,7 @@ function presentDataForNewSite(actualJson, lastYearJson) {
 
     if (!(volume_total_actual === 0.0000)) {
 
-        dataForLeftGauge.leftvalue = valorisation_l_verte_actual*100/volume_total_actual
+        dataForLeftGauge.leftvalue = valorisation_l_verte_actual*100/volume_listeverte_actual
         dataForLeftGauge.leftvalueBefore = 12
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
