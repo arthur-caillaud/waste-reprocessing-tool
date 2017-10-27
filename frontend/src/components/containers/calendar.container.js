@@ -5,19 +5,22 @@ import CalendarElement from '../calendar.component';
 
 function mapStateToProps(state) {
     return {
-        focusedInput: state.pageOptions.focusedInput,
-        startDate: state.pageOptions.startDate,
-        endDate: state.pageOptions.endDate
+        date: state.pageOptions.date
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onFocusChange: () => {
-            dispatch(actions.displayCalendar())
+        onDatesChange: (date) => {
+            dispatch(actions.updateDate(date))
+        },
+        onClose: (date) => {
+            dispatch(actions.updateDate(date))
+            dispatch(apiCalls.updateSite(window.store.getState().updateSearchBar.site))
         }
     }
 }
+
 
 const Calendar = connect(mapStateToProps, mapDispatchToProps)(CalendarElement);
 export default Calendar
