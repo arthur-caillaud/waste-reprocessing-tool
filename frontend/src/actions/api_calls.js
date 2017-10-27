@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import config from '../config.json';
 import HelperService from './service';
 import * as actions from './index';
+import * as moment from 'moment';
 
 export function getArchitecture() {
     return dispatch => {
@@ -12,7 +13,6 @@ export function getArchitecture() {
             })
     }
 }
-
 /*
 Main Search Bar API calls
 */
@@ -40,11 +40,21 @@ export function loadSuggestions(value) {
   };
 }
 
+
 export function updateSite(site) {
 
     /*Here we get data in order to update the dashboard with new site*/
     let level = site.real_level
     let name = site.nom
+    let date = window.store.getState().pageOptions.date
+    let startDate = date.startDate
+    let endDate= date.endDate
+    let EndDate = endDate.format().toString().substring(0,10)
+    let StartDate = startDate.format().toString().substring(0, 10)
+
+
+
+
 
     site.suggestions = {}
     return dispatch => {
@@ -56,7 +66,7 @@ export function updateSite(site) {
         //Here we must have a dispatch that updates the search tree according to new site
         //Which means that we need the new architecture
         dispatch(actions.updateSiteName(site))
-        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate=2017-01-01&endDate=2017-10-01')
+        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
             .then(response => response.json())
             .then(json => {
                 let newValues = HelperService.presentDataForNewSite(json)
@@ -69,7 +79,7 @@ export function updateSite(site) {
                 let rightTileValues = newValues.dataForRightTile;
 
 
-                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate=2017-01-01&endDate=2017-10-01')
+                return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                     .then(response => response.json())
                     .then(json => {
                         dispatch(actions.saveBordereauxForSite(json))

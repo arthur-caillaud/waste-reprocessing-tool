@@ -5,6 +5,7 @@ export const CHANGE_SCALE = 'CHANGE_SCALE';
 export const CHANGE_URL = 'CHANGE_URL';
 export const SAVE_ARCHITECTURE = 'SAVE_ARCHITECTURE';
 export const SAVE_BORDEREAUX_FOR_SITE = 'SAVE_BORDEREAUX_FOR_SITE';
+export const UPDATE_DATE = 'UPDATE_DATE';
 
 export const CHANGE_GRAPH_INPUT = 'CHANGE_GRAPH_INPUT';
 export const CHANGE_GRAPH_TYPE = 'CHANGE_GRAPH_TYPE';
@@ -102,6 +103,13 @@ export function saveBordereauxForSite(bordereaux) {
         bordereaux
     }
 }
+export function updateDate(date) {
+    return {
+        type: UPDATE_DATE,
+        date
+    }
+}
+
 
 
 export function changePage(url){

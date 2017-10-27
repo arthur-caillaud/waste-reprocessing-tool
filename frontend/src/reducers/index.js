@@ -10,10 +10,11 @@ import MiddleRightTileInfos from '../components/showmoreinfos/middlerighttileinf
 import MiddleRightTileAlerts from '../components/showmoreinfos/middlerighttilealerts.showmoreinfos';
 import RightTileInfos from '../components/showmoreinfos/righttileinfos.showmoreinfos';
 import RightTileAlerts from '../components/showmoreinfos/righttilealerts.showmoreinfos';
-
+import * as moment from 'moment';
 import {
     SAVE_ARCHITECTURE,
     SAVE_BORDEREAUX_FOR_SITE,
+    UPDATE_DATE,
 
     DISPLAY_LEFTGAUGE_INFOS,
     DISPLAY_MIDDLEGAUGE_INFOS,
@@ -224,12 +225,21 @@ function infosPanelOptions(
     }
 }
 let today = new Date();
-function pageOptions(state = {architecture: {}, bordereaux: {}, beginDate: '2017/01/01', endDate: today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()}, action){
+function pageOptions(state = {
+    architecture: {},
+    bordereaux: {},
+    date: {
+        startDate: moment('2017-01-01'),
+        endDate: moment('2017-12-31')
+        }
+    }, action){
     switch (action.type) {
         case SAVE_ARCHITECTURE:
             return Object.assign({}, state, {architecture: action.architecture});
         case SAVE_BORDEREAUX_FOR_SITE:
-            return Object.assign({}, state, {bordereaux: action.bordereaux})
+            return Object.assign({}, state, {bordereaux: action.bordereaux});
+        case UPDATE_DATE:
+            return Object.assign({}, state, {date: action.date})
         default:
             return state;
     }
