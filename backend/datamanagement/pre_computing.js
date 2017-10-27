@@ -249,7 +249,7 @@ function preComputeForDate(year, month, callback) {
             // for each value in the array, computes the datas for the given date
             // in the corresponding site
             idArray.forEach((id) => {
-                // if (id == 476) {
+                // if (id == 1) {
                 var task = function(intermCallback) {
                     utilities.computeDates(year, month, id, computeForSite, intermCallback);
                 };
@@ -318,6 +318,7 @@ function preCompute() {
         const duration = end - begin;
 
         printDuration(duration);
+        // process.exit(0);
     });
 
 }

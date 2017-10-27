@@ -40,7 +40,22 @@ function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
                 model: traitement,
                 as: 'traitementFinal',
                 where: {
-                    date_priseencharge: {
+                    $or:
+                        {
+                            date_priseencharge: {
+                                $not: null
+                            },
+                            id_type_traitement: {
+                                $not: null
+                            }
+                        }
+                }
+            },
+            {
+                model: transport,
+                as: 'transport1',
+                where: {
+                    date: {
                         $lt: endDate,
                         $gte: beginDate,
                     }
@@ -87,14 +102,20 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
                     as: 'traitementFinal',
                     required: true,
                     where: {
-                        date_priseencharge: {
-                            $lt: endDate,
-                            $gte: beginDate,
-                        },
                         id_type_traitement: {
                             $ne: sequelize.col('bordereau.id_traitement_prevu')
                         }
                     },
+                },
+                {
+                    model: transport,
+                    as: 'transport1',
+                    where: {
+                        date: {
+                            $lt: endDate,
+                            $gte: beginDate
+                        }
+                    }
                 },
                 {
                     model: site
@@ -146,14 +167,18 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
                     model: site
                 },
                 {
-                    model: traitement,
-                    as: 'traitementFinal',
+                    model: transport,
+                    as: 'transport1',
                     where: {
-                        date_priseencharge: {
+                        date: {
                             $lt: endDate,
-                            $gte: beginDate,
+                            $gte: beginDate
                         }
                     }
+                },
+                {
+                    model: traitement,
+                    as: 'traitementFinal',
                 }],
             where: {
                 traitement: sequelize.where(sequelize.col('traitementFinal.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
@@ -330,14 +355,19 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 // processed. If no bordereau exists for the given site, returns 0
 function getTotalVolume(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_finale', {
+        bordereau.findAll({
             include: [
                 {
                     model: traitement,
                     as: 'traitementFinal',
                     attributes: [],
+                },
+                {
+                    model: transport,
+                    as: 'transport1',
+                    attributes: [],
                     where: {
-                        date_priseencharge: {
+                        date: {
                             $lt: endDate,
                             $gte: beginDate
                         }
@@ -348,10 +378,18 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
                 id_site: {$in: idArray}
             }
         })
-        .then((sum) => {
-            if (isNaN(sum)) {
-                sum = 0;
-            }
+        .then((bordereaux) => {
+            var sum = 0
+            bordereaux.forEach((bordereau) => {
+                var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                if (quantitee_finale == 0) {
+                    sum += quantitee_transportee;
+                }
+                else {
+                    sum += quantitee_finale;
+                }
+            })
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
@@ -369,14 +407,19 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
 // site, returns 0
 function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_finale', {
+        bordereau.findAll({
             include: [
                 {
                     model: traitement,
                     as: 'traitementFinal',
                     attributes: [],
+                },
+                {
+                    model: transport,
+                    as: 'transport1',
+                    attributes: [],
                     where: {
-                        date_priseencharge: {
+                        date: {
                             $lt: endDate,
                             $gte: beginDate
                         }
@@ -394,10 +437,18 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
                 id_site: {$in: idArray}
             }
         })
-        .then((sum) => {
-            if (isNaN(sum)) {
-                sum = 0;
-            }
+        .then((bordereaux) => {
+            var sum = 0
+            bordereaux.forEach((bordereau) => {
+                var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                if (quantitee_finale == 0) {
+                    sum += quantitee_transportee;
+                }
+                else {
+                    sum += quantitee_finale;
+                }
+            })
             obs.onNext([sum, label]);
             obs.onCompleted();
         })
@@ -414,38 +465,53 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
 // recycled. If no bordereau exists for the given site, returns 0
 function getValorisationTotale(idArray, beginDate, endDate, label) {
     var query = {
+        attributes: ['id', 'quantitee_finale', 'quantitee_transportee'],
         include: [
             {
                 model: traitement,
                 as: 'traitementFinal',
-                attributes: [],
-                where: {
-                    date_priseencharge: {
-                        $lt: endDate,
-                        $gte: beginDate
-                    }
-                },
+                attributes: ['id'],
                 include: [
                     {
                         model: type_traitement,
-                        attributes: [],
+                        attributes: ['id', 'qualification'],
                         where: {
                             qualification: "Recyclage"
                         }
                     }
                 ]
             },
+            {
+                model: transport,
+                as: 'transport1',
+                attributes: [],
+                where: {
+                    date: {
+                        $lt: endDate,
+                        $gte: beginDate
+                    }
+                }
+            }
         ],
         where: {
-            id_site: {$in: idArray}
+            id_site: {$in: idArray},
+            type_traitement: sequelize.where(sequelize.literal('qualification'), 'Recyclage')
         }
     };
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_finale', query)
-            .then((sum) => {
-                if (isNaN(sum)) {
-                    sum = 0;
-                }
+        bordereau.findAll(query)
+            .then((bordereaux) => {
+                var sum = 0
+                bordereaux.forEach((bordereau) => {
+                    var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                    var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                    if (quantitee_finale == 0) {
+                        sum += quantitee_transportee;
+                    }
+                    else {
+                        sum += quantitee_finale;
+                    }
+                })
                 obs.onNext([sum, label]);
                 obs.onCompleted();
             })
@@ -467,22 +533,27 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
             {
                 model: traitement,
                 as: 'traitementFinal',
-                attributes: [],
-                where: {
-                    date_priseencharge: {
-                        $lt: endDate,
-                        $gte: beginDate
-                    }
-                },
+                attributes: ['id'],
                 include: [
                     {
                         model: type_traitement,
-                        attributes: [],
+                        attributes: ['id', 'qualification'],
                         where: {
                             qualification: "Recyclage"
                         }
                     }
                 ]
+            },
+            {
+                model: transport,
+                attributes: [],
+                as: 'transport1',
+                where: {
+                    date: {
+                        $lt: endDate,
+                        $gte: beginDate
+                    }
+                }
             },
             {
                 model: dechet,
@@ -493,15 +564,24 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
             }
         ],
         where: {
-            id_site: {$in: idArray}
+            id_site: {$in: idArray},
+            type_traitement: sequelize.where(sequelize.literal('qualification'), 'Recyclage')
         }
     };
     var observable = Rx.Observable.create((obs) => {
-        bordereau.sum('quantitee_finale', query)
-            .then((sum) => {
-                if (isNaN(sum)) {
-                    sum = 0;
-                }
+        bordereau.findAll(query)
+            .then((bordereaux) => {
+                var sum = 0
+                bordereaux.forEach((bordereau) => {
+                    var quantitee_finale = parseFloat(bordereau.dataValues.quantitee_finale);
+                    var quantitee_transportee = parseFloat(bordereau.dataValues.quantitee_transportee);
+                    if (quantitee_finale == 0) {
+                        sum += quantitee_transportee;
+                    }
+                    else {
+                        sum += quantitee_finale;
+                    }
+                })
                 obs.onNext([sum, label]);
                 obs.onCompleted();
             })
@@ -526,8 +606,13 @@ function countBordereaux(idArray, beginDate, endDate, label) {
                  model: traitement,
                  as: 'traitementFinal',
                  attributes: [],
+             },
+             {
+                 model: transport,
+                 as: 'transport1',
+                 attributes: [],
                  where: {
-                     date_priseencharge: {
+                     date: {
                          $lt: endDate,
                          $gte: beginDate
                      }

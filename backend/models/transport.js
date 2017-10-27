@@ -32,10 +32,6 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
-    adr: {
-      type: DataTypes.STRING(255),
-      allowNull: true
-    }
   }, {
     tableName: 'transport',
     timestamps: false

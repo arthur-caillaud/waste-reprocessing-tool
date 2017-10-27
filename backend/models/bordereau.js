@@ -107,7 +107,7 @@ module.exports = function(sequelize, DataTypes) {
 
   bordereau.associate = function(models){
       bordereau.belongsTo(models.dechet, {foreignKey: 'id_dechet', targetKey: 'id'});
-      bordereau.hasOne(models.type_traitement, {foreignKey: 'id', targetKey: 'id_traitement_prevu', through: 'bordereauxForTraitementPrevu'});
+      bordereau.belongsTo(models.type_traitement, {foreignKey: 'id_traitement_prevu', targetKey: 'id'});
       bordereau.belongsTo(models.site, {foreignKey: 'id_site', targetKey: 'id'});
       bordereau.belongsTo(models.transport, {as: 'transport1', foreignKey: 'id_transport_1', targetKey: 'id'});
       bordereau.belongsTo(models.transport, {as: 'transport2', foreignKey: 'id_transport_2', targetKey: 'id'});
