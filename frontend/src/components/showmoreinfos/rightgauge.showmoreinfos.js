@@ -1,21 +1,15 @@
 import React, { Component } from "react";
 
-
-
-
-export default class MiddleGaugeInfos extends Component {
-    render () {
-        if (window.store.getState().infosPanelOptions.middleGaugeShown === true){
+export default class RightGaugeInfos extends Component {
+    render() {
+        if (window.store.getState().infosPanelOptions.rightGaugeShown ===true){
         return (
             <div>
                 <h3>
-                    Valorisation Globale
+                    Bordereaux non datés
                 </h3>
                 <p>
-                    Taux de valorisation de l'année: {window.store.getState().updateGauge.middlevalue.toFixed(2)} %
-                </p>
-                <p>
-                    Taux de valorisation l'an passé: {window.store.getState().updateGauge.middlevalueBefore.toFixed(2)} %
+                    Nombre cette année: {window.store.getState().updateGauge.rightvalue.toFixed(2)} %
                 </p>
                 <p>
                     {window.store.getState().updateGauge.details}

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { searchInArray } from './service';
 import  MiddleGaugeInfos from '../components/showmoreinfos/middlegauge.showmoreinfos';
 import LeftGaugeInfos from '../components/showmoreinfos/leftgauge.showmoreinfos';
+import RightGaugeInfos from '../components/showmoreinfos/rightgauge.showmoreinfos';
 import LeftTileInfos from '../components/showmoreinfos/lefttileinfos.showmoreinfos';
 import MiddleLeftTileInfos from '../components/showmoreinfos/middlelefttileinfos.showmoreinfos';
 import MiddleLeftTileAlerts from '../components/showmoreinfos/middlelefttilealerts.showmoreinfos';
@@ -18,6 +19,7 @@ import {
 
     DISPLAY_LEFTGAUGE_INFOS,
     DISPLAY_MIDDLEGAUGE_INFOS,
+    DISPLAY_RIGHTGAUGE_INFOS,
     DISPLAY_LEFTTILE_INFOS,
     DISPLAY_MIDDLELEFTTILE_INFOS,
     DISPLAY_MIDDLELEFTTILE_ALERTS,
@@ -84,6 +86,7 @@ function infosPanelOptions(
     middleRightTileAlerts: false,
     rightTileShown: false,
     rightTileAlerts: false,
+    rightGaugeShown: false,
     },
     action){
     switch (action.type){
@@ -99,7 +102,22 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <LeftGaugeInfos />
+                });
+        case DISPLAY_RIGHTGAUGE_INFOS:
+            return Object.assign({}, state, {
+                leftGaugeShown: false,
+                leftTileShown: false,
+                middleGaugeShown: false,
+                middleLeftTileShown: false,
+                middleLeftTileAlerts: false,
+                middleRightTileShown: false,
+                middleRightTileAlerts: false,
+                rightTileShown: false,
+                rightTileAlerts: false,
+                rightGaugeShown: !state.rightGaugeShown,
+                defaultBody: <RightGaugeInfos />
                 });
         case DISPLAY_LEFTTILE_INFOS:
             return Object.assign({}, state, {
@@ -112,6 +130,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <LeftTileInfos />
             });
         case DISPLAY_MIDDLEGAUGE_INFOS:
@@ -125,6 +144,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <MiddleGaugeInfos />
             });
         case DISPLAY_MIDDLELEFTTILE_INFOS:
@@ -138,6 +158,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <MiddleLeftTileInfos />
             });
         case DISPLAY_MIDDLELEFTTILE_ALERTS:
@@ -151,6 +172,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <MiddleLeftTileAlerts />
             });
         case DISPLAY_MIDDLERIGHTTILE_INFOS:
@@ -164,6 +186,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <MiddleRightTileInfos />
             });
         case DISPLAY_MIDDLERIGHTTILE_ALERTS:
@@ -177,6 +200,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: !state.middleRightTileAlerts,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <MiddleRightTileAlerts />
             });
         case DISPLAY_RIGHTTILE_INFOS:
@@ -190,6 +214,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: !state.rightTileShown,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
                 defaultBody: <RightTileInfos />
             });
         case DISPLAY_RIGHTTILE_ALERTS:
@@ -203,6 +228,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: !state.rightTileAlerts,
+                rightGaugeShown: false,
                 defaultBody: <RightTileAlerts />
             });
 
@@ -219,6 +245,7 @@ function infosPanelOptions(
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
+                rightGaugeShown: false,
             });
         default:
             return state;

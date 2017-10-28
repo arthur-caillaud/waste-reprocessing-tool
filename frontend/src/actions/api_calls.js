@@ -472,8 +472,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                     json.sites.quantity.forEach(prestataire => {
                                         if(chosenPrestataire.prestataire.id === prestataire.prestataire.id){
                                             quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
-                                            console.log(prestataire.prestataire.nom);
-                                            console.log("Quantitee totale ", quantiteeTotale);
+
                                         }
                                     });
                                     json.sites.recycled.forEach(prestataire => {
@@ -482,14 +481,10 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                         }
                                     });
                                     if(quantiteeTotale > 0){
-                                        console.log(chosenPrestataire.prestataire.nom);
-                                        console.log("Quantitee recyclée ", quantiteeRecyclee);
                                         tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                     }
                                     values.push(tauxDeValorisation.toPrecision(4));
-                                    console.log(values);
                                     volumes.push(quantiteeRecyclee.toPrecision(5));
-                                    console.log(volumes);
                                     keys.push(chosenPrestataire.prestataire.nom);
                                 }
                             }
