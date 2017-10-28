@@ -1,5 +1,7 @@
 #root {
     background-color: #fafafa;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 * {
@@ -29,21 +31,43 @@ button .btn.btn-sm.btn-default {
 .searchbar-container{
     position: relative;
     vertical-align: center;
-    padding-bottom: 5vh;
-    border-bottom: 1px solid rgb(221,221,221);
-    border-radius: 5px;
-    box-shadow: 0px 3px 5px rgb(221,221,221);
-    background-color: #e7e7e7;
+    padding-bottom: calc(1vh + 30px);
+    padding-top: 1vh;
+    box-shadow: 0px 0px 8px grey;
+    background-color: #FBFBFB;
+    z-index: 1;
 }
 
 .main-app{
     position: relative;
-
+    background-color: #e7e7e7;
     height: 89vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.right-col{
+    position: fixed;
+    height: 89vh;
+    bottom: 0px;
+    overflow: scroll;
+    box-shadow: 0px 0px 8px grey;
+    background-color: #F7F7F7;
+}
+.right-col-wrapper{
+    padding-left: 30px;
 }
 
 img.grenouille-logo {
-    width: 100%;
+    width: 150px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid #CCC;
+}
+.grenouille-logo-wrapper {
+    text-align: center;
+    padding: 5px;
+    margin-top: 10px;
 }
 
 img.loading-gif {
@@ -62,11 +86,24 @@ div.no-right-padding{
 }
 
 .DateRangePickerInput {
-    height: 40px;
+    position: relative;
+    height: 30px;
+    border-radius: 5px;
 }
 .DateInput {
-    height: 38px;
+
+    height: 28px;
+    border-radius: 5px;
 }
 .DateInput_input {
-    height: 38px;
+    height: 28px;
+    border-radius: 5px;
+}
+#startDate{
+    font-size: 15px;
+    text-align: center;
+}
+#endDate{
+    font-size: 15px;
+    text-align: center;
 }

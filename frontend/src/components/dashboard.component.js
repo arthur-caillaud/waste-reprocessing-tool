@@ -29,24 +29,32 @@ class DashboardElement extends Component {
       <div>
         <div>
           <Grid fluid>
-            <Row className="show-grid">
-
-                <Col sm={3}> <LeftGauge/> </Col>
-                <Col sm={3}> <MiddleGauge/> </Col>
-                <Col sm={3}> <RightGauge/> </Col>
-                <Col sm={3}> <img className="grenouille-logo" src={grenouille} alt=""/> </Col>
-            </Row>
-
-            <Row className="show-grid">
-              <Col sm={9}>
-                <Row>
-                  <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
-                  <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
-                  <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
-                  <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
-                </Row>
-              </Col>
-              <Col sm={3}> <MoreInfosContainer/> </Col>
+              <Row>
+                  <Col sm={9}>
+                    <Row className="show-grid">
+                        <Col sm={4}> <LeftGauge/> </Col>
+                        <Col sm={4}> <MiddleGauge/> </Col>
+                        <Col sm={4}> <RightGauge/> </Col>
+                    </Row>
+                    <Row>
+                      <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
+                      <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
+                      <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
+                      <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
+                    </Row>
+                </Col>
+                <Col sm={3} className="right-col">
+                    <Row>
+                        <Col sm={12}>
+                            <div className="grenouille-logo-wrapper">
+                                <img className="grenouille-logo" src={grenouille} alt=""/>
+                            </div>
+                        </Col>
+                        <Col sm={12}>
+                            <MoreInfosContainer/>
+                        </Col>
+                    </Row>
+                </Col>
             </Row>
           </Grid>
         </div>

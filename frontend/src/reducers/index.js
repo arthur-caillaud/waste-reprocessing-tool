@@ -74,7 +74,7 @@ import {
 
 function infosPanelOptions(
     state = {
-    defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
+    defaultBody: <center>Cliquez quelque part pour afficher d'avantage d'informations</center>,
     leftGaugeShown: false,
     leftTileShown: false,
     middleGaugeShown: false,
@@ -209,7 +209,7 @@ function infosPanelOptions(
 
         case RESET_MOREINFOS_TO_DEFAULT:
             return Object.assign({}, state, {
-                defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
+                defaultBody: <center>Cliquez quelque part pour afficher d'avantage d'informations</center>,
                 leftGaugeShown: false,
                 leftTileShown: false,
                 middleGaugeShown: false,
