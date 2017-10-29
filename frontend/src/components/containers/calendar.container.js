@@ -2,11 +2,23 @@ import { connect } from "react-redux";
 import * as actions from '../../actions';
 import * as apiCalls from '../../actions/api_calls';
 import CalendarElement from '../calendar.component';
-
+import * as moment from 'moment';
 function mapStateToProps(state) {
-    return {
-        date: state.pageOptions.date
+
+        if (typeof state.pageOptions.date.startDate === 'string') {
+            return {
+                date: {
+                    startDate: moment(state.pageOptions.date.startDate),
+                    endDate: moment(state.pageOptions.date.endDate)
+            }
+        }
+    } else {
+        return {
+            date: state.pageOptions.date
+        }
     }
+
+
 }
 
 function mapDispatchToProps(dispatch) {

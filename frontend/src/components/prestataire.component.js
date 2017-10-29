@@ -10,8 +10,8 @@ import * as apiCalls from '../actions/api_calls';
 class PrestataireElement extends Component {
     componentDidMount(){
 
-        this.props.getArchitecture()
-        this.props.getNationalState()
+        //this.props.getArchitecture()
+        //this.props.getNationalState()
 
     }
   render() {
