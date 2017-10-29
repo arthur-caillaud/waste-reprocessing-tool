@@ -265,6 +265,8 @@ function pageOptions(state = {
         case SAVE_BORDEREAUX_FOR_SITE:
             return Object.assign({}, state, {bordereaux: action.bordereaux});
         case UPDATE_DATE:
+            console.log(action.type)
+            console.log(action.date)
             return Object.assign({}, state, {date: action.date})
         default:
             return state;

@@ -236,9 +236,8 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     let retards_norm_before = 0;
     let total_bdx_before = 0;
     let total_lost_before = 0;
-    console.log(lastYearJson)
-    let dateBefore = (lastYearJson.length !== 0) ? lastYearJson[0].date : date
-
+    //let dateBefore = (lastYearJson.length !== 0) ? lastYearJson[0].date : date
+    let dateBefore = date
 
 
     actualJson.forEach(function(element) {
