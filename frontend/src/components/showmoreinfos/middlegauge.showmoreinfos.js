@@ -15,6 +15,9 @@ export default class MiddleGaugeInfos extends Component {
                     Taux de valorisation de l'année: {window.store.getState().updateGauge.middlevalue.toFixed(2)} %
                 </p>
                 <p>
+                    Taux de valorisation l'an passé: {window.store.getState().updateGauge.middlevalueBefore.toFixed(2)} %
+                </p>
+                <p>
                     {window.store.getState().updateGauge.details}
                 </p>
             </div>

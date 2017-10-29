@@ -4,9 +4,16 @@ import { Grid, Col, Row } from 'react-bootstrap';
 import Histogram from '../components/containers/histogram.container';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 import GraphTagsPanel from '../components/containers/graphtagspanel.container';
+import { connect } from "react-redux";
+import * as actions from '../actions';
+import * as apiCalls from '../actions/api_calls';
+class PrestataireElement extends Component {
+    componentDidMount(){
 
-class Prestataire extends Component {
+        //this.props.getArchitecture()
+        //this.props.getNationalState()
 
+    }
   render() {
 
     return (
@@ -52,5 +59,33 @@ class Prestataire extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+    return {
 
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getNationalState: () => {
+
+            dispatch(apiCalls.updateSite({
+                    nom: "National",
+                    level: 0,
+                    real_level:0,
+                    architecture: {
+                        nom: {name: "", real_level:0},
+                        unite_dependance: {name: "", real_level:0},
+                        up_dependance: {name: "", real_level:0},
+                        metier_dependance: {name: "", real_level:0}
+                    }
+                }
+            ))
+        },
+        getArchitecture: () => {
+            dispatch(apiCalls.getArchitecture())
+        }
+    }
+}
+
+const Prestataire = connect(mapStateToProps, mapDispatchToProps)(PrestataireElement)
 export default Prestataire;

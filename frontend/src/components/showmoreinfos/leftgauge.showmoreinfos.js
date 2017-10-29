@@ -12,6 +12,9 @@ export default class LeftGaugeInfos extends Component {
                     Taux de valorisation de l'année: {window.store.getState().updateGauge.leftvalue.toFixed(2)} %
                 </p>
                 <p>
+                    Taux de valorisation l'an passé: {window.store.getState().updateGauge.leftvalueBefore.toFixed(2)} %
+                </p>
+                <p>
                     {window.store.getState().updateGauge.details}
                 </p>
             </div>

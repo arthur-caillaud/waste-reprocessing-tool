@@ -17,6 +17,7 @@ class CalendarElement extends Component {
             onClose,
 
         } = this.props;
+        
 
         return(<DateRangePicker
             startDate={date.startDate} // momentPropTypes.momentObj or null,

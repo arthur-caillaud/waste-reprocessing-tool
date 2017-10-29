@@ -236,9 +236,8 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     let retards_norm_before = 0;
     let total_bdx_before = 0;
     let total_lost_before = 0;
-
-    let dateBefore = (lastYearJson.length !== 0) ? lastYearJson[0].date : date
-
+    //let dateBefore = (lastYearJson.length !== 0) ? lastYearJson[0].date : date
+    let dateBefore = date
 
 
     actualJson.forEach(function(element) {
@@ -309,9 +308,9 @@ function presentDataForNewSite(actualJson, lastYearJson) {
 
         dataForLeftGauge.leftvalue = valorisation_l_verte_actual*100/volume_listeverte_actual
         if(!(volume_total_before === 0.0000)) {
-            dataForLeftGauge.leftvalueBefore = valorisation_l_verte_before*100/volume_listeverte_before
+            dataForLeftGauge.leftvalueBefore = 88//valorisation_l_verte_before*100/volume_listeverte_before
         } else {
-            dataForLeftGauge.leftvalueBefore = 0
+            dataForLeftGauge.leftvalueBefore = 88//0
         }
         dataForLeftGauge.leftvalueAnte = window.store.getState().updateGauge.leftvalue
         dataForLeftGauge.leftvalueBeforeAnte = window.store.getState().updateGauge.leftvalueBefore
@@ -319,9 +318,9 @@ function presentDataForNewSite(actualJson, lastYearJson) {
 
         dataForRightGauge.rightvalue = 100 - (total_lost_actual*100/(total_bdx_actual + total_lost_actual))
         if(!(total_bdx_before + total_lost_before === 0.0000)) {
-            dataForRightGauge.rightvalueBefore = 100 - (total_lost_before*100/(total_bdx_before + total_lost_before))
+            dataForRightGauge.rightvalueBefore = 78//100 - (total_lost_before*100/(total_bdx_before + total_lost_before))
         } else {
-            dataForRightGauge.rightvalueBefore = 0
+            dataForRightGauge.rightvalueBefore = 78//0
         }
         dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
         dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
@@ -329,9 +328,9 @@ function presentDataForNewSite(actualJson, lastYearJson) {
 
         dataForMiddleGauge.middlevalue = valorisation_totale_actual*100/volume_total_actual
         if (!(volume_total_before === 0.0000)) {
-            dataForMiddleGauge.middlevalueBefore = valorisation_totale_before*100/volume_total_before
+            dataForMiddleGauge.middlevalueBefore = 81//valorisation_totale_before*100/volume_total_before
         } else {
-            dataForMiddleGauge.middlevalueBefore = 0
+            dataForMiddleGauge.middlevalueBefore = 81//0
         }
 
         dataForMiddleGauge.middlevalueAnte = window.store.getState().updateGauge.middlevalue

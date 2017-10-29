@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import config from '../config.json';
 import HelperService from './service';
 import * as actions from './index';
+import * as moment from 'moment';
 
 export function getArchitecture() {
     return dispatch => {
@@ -49,8 +50,16 @@ export function updateSite(site) {
     let level = site.real_level
     let name = site.nom
     let date = window.store.getState().pageOptions.date
+    if (typeof date.startDate === 'string') {
+
+            date= {
+                startDate: moment(date.startDate),
+                endDate: moment(date.endDate)
+        }
+    }
     let startDate = date.startDate
     let endDate= date.endDate
+    console.log(endDate)
     let EndDate = endDate.format().toString().substring(0,10)
     let StartDate = startDate.format().toString().substring(0, 10)
 
@@ -72,6 +81,7 @@ export function updateSite(site) {
                 return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                     .then(response => response.json())
                     .then(json => {
+
                         const lastYearJson = json
                         let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
                         let leftValues = newValues.dataForLeftGauge;
@@ -95,6 +105,7 @@ export function updateSite(site) {
                             .then(response => response.json())
                             .then(json => {
                                 dispatch(actions.saveBordereauxForSite(json))
+
                             })
 
 
@@ -107,7 +118,9 @@ export function updateSite(site) {
 /*
 API calls for Prestataire Vision
 */
-
+export function updateDate(date) {
+    return dispatch => dispatch(actions.updateDate())
+}
 export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
@@ -472,8 +485,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                     json.sites.quantity.forEach(prestataire => {
                                         if(chosenPrestataire.prestataire.id === prestataire.prestataire.id){
                                             quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
-                                            console.log(prestataire.prestataire.nom);
-                                            console.log("Quantitee totale ", quantiteeTotale);
+
                                         }
                                     });
                                     json.sites.recycled.forEach(prestataire => {
@@ -482,14 +494,10 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                         }
                                     });
                                     if(quantiteeTotale > 0){
-                                        console.log(chosenPrestataire.prestataire.nom);
-                                        console.log("Quantitee recyclée ", quantiteeRecyclee);
                                         tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                     }
                                     values.push(tauxDeValorisation.toPrecision(4));
-                                    console.log(values);
                                     volumes.push(quantiteeRecyclee.toPrecision(5));
-                                    console.log(volumes);
                                     keys.push(chosenPrestataire.prestataire.nom);
                                 }
                             }

@@ -5,8 +5,10 @@ import { Grid, Col, Row } from 'react-bootstrap';
 import Histogram from '../components/containers/histogram.container';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 import GraphTagsPanel from '../components/containers/graphtagspanel.container';
-
-class Dechet extends Component {
+import { connect } from "react-redux";
+import * as actions from '../actions';
+import * as apiCalls from '../actions/api_calls';
+class DechetElement extends Component {
 
   render() {
 
@@ -53,5 +55,34 @@ class Dechet extends Component {
     );
   }
 }
+function mapStateToProps(state) {
+    return {
+
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getNationalState: () => {
+
+            dispatch(apiCalls.updateSite({
+                    nom: "National",
+                    level: 0,
+                    real_level:0,
+                    architecture: {
+                        nom: {name: "", real_level:0},
+                        unite_dependance: {name: "", real_level:0},
+                        up_dependance: {name: "", real_level:0},
+                        metier_dependance: {name: "", real_level:0}
+                    }
+                }
+            ))
+        },
+        getArchitecture: () => {
+            dispatch(apiCalls.getArchitecture())
+        }
+    }
+}
+
+const Dechet = connect(mapStateToProps, mapDispatchToProps)(DechetElement)
 
 export default Dechet;
