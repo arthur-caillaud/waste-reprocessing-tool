@@ -14,9 +14,10 @@
     "test": {
         "username": "backend",
         "password": "password",
-        "database": "db_test",
-        "host": "91.134.242.69",
-        "dialect": "mysql"
+        "database": "db",
+        "host": "localhost",
+        "dialect": "mysql",
+        "logging": false
     },
     "production": {
         "username": "root",
@@ -47,8 +48,9 @@
     "test": {
         "username": "backend",
         "password": "password",
-        "database": "db_test",
-        "host": "91.134.242.69",
-        "dialect": "mysql"
+        "database": "db",
+        "host": "localhost",
+        "dialect": "mysql",
+        "logging": false
     }
 }
