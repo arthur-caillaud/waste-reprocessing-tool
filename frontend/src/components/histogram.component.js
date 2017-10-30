@@ -102,8 +102,6 @@ export default class Histogram extends Component {
 
         y.domain([0,100]).nice();
 
-        console.log(nullData);
-
         //Creating empty collumn bundles
         g.append('g')
         .selectAll('g')
