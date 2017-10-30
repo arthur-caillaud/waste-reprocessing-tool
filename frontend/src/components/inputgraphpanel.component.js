@@ -37,7 +37,7 @@ class InputGraphPanel extends Component {
         let containerArray = [];
         containerArray = (suggestion.length > 0) ? suggestion : inputArray;
 
-        if(containerArray.length > 0){
+        if(containerArray && containerArray.length > 0){
             containerArray.forEach(input => {
                 let listItem;
                 if (input.id === selectedInput.id){
