@@ -40,7 +40,7 @@
         "user": "root",
         "password": "arthurpierreaurelien",
         "database": "db",
-        "poolsize": 100,
+        "poolsize": 1000,
         "minimumpoolsize": 0,
         "connectionduration": 100000
     },

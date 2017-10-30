@@ -1,5 +1,5 @@
 import "es6-promise/auto";
-import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 import config from '../config.json';
 import HelperService from './service';
 import * as actions from './index';
@@ -11,10 +11,9 @@ export function getArchitecture() {
     This function get the architecture of EDF sites and store it in the Redux Store
     */
     return dispatch => {
-        return fetch(config.backend.adress+'dashboard/architecture')
-            .then(response => response.json())
+        return axios.get(config.backend.adress+'dashboard/architecture')
             .then(json => {
-                dispatch(actions.saveArchitecture(json))
+                dispatch(actions.saveArchitecture(json.data))
             })
     }
 }
@@ -29,10 +28,9 @@ export function loadSuggestions(value) {
     */
   return dispatch => {
     dispatch(actions.loadSuggestionsBegin())
-    return fetch(config.backend.adress+'dashboard/architecture')
-        .then(response => response.json())
+    return axios.get(config.backend.adress+'dashboard/architecture')
         .then(json => {
-            let suggestions = HelperService.filterByValue(HelperService.getAllLevelNames(json), value)
+            let suggestions = HelperService.filterByValue(HelperService.getAllLevelNames(json.data), value)
             suggestions.push({
                 nom: "$t$r$a$p$",
                 level: 0,
@@ -104,16 +102,15 @@ export function updateSite(site) {
             */
             console.time("test")
 
-            return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                .then(response => response.json())
+            return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                 .then(json => {
-                    const actualJson = json;
+                    console.log(json.data)
+                    const actualJson = json.data;
                     console.timeEnd("test")
-                    return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
-                        .then(response => response.json())
+                    return axios.get(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                         .then(json => {
 
-                            const lastYearJson = json
+                            const lastYearJson = json.data
                             let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
                             let leftValues = newValues.dataForLeftGauge;
                             let middleValues = newValues.dataForMiddleGauge;
@@ -132,13 +129,13 @@ export function updateSite(site) {
                             dispatch(actions.updateMiddleGauge(middleValues))
                             dispatch(actions.updateRightGauge(rightValues))
 
-                            return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                                .then(response => response.json())
+                            return axios.get(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+
                                 .then(json => {
                                     /*
                                     Finally we call for informations for the other pages, they will be loaded after the display.
                                     */
-                                    dispatch(actions.saveBordereauxForSite(json))
+                                    dispatch(actions.saveBordereauxForSite(json.data))
                                     dispatch(loadPrestataireList(site.real_level,site.nom));
                                     dispatch(loadDechetList(site.real_level,site.nom));
                                     dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
@@ -156,15 +153,13 @@ export function updateSite(site) {
             dispatch(loadPrestataireList(site.real_level,site.nom));
             dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
 
-            return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                .then(response => response.json())
+            return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                 .then(json => {
-                    const actualJson = json;
-                    return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
-                        .then(response => response.json())
+                    const actualJson = json.data;
+                    return axios.get(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                         .then(json => {
 
-                            const lastYearJson = json
+                            const lastYearJson = json.data
                             let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
                             let leftValues = newValues.dataForLeftGauge;
                             let middleValues = newValues.dataForMiddleGauge;
@@ -183,10 +178,9 @@ export function updateSite(site) {
                             dispatch(actions.updateMiddleGauge(middleValues))
                             dispatch(actions.updateRightGauge(rightValues))
 
-                            return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                                .then(response => response.json())
+                            return axios.get(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                                 .then(json => {
-                                    dispatch(actions.saveBordereauxForSite(json))
+                                    dispatch(actions.saveBordereauxForSite(json.data))
                                     dispatch(loadDechetList(site.real_level,site.nom));
                                     dispatch(loadDechetGraphValues(site.real_level,site.nom));
 
@@ -205,15 +199,13 @@ export function updateSite(site) {
             /*
             Gotta add here dispatchs for dechet vision
             */
-            return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                .then(response => response.json())
+            return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                 .then(json => {
-                    const actualJson = json;
-                    return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
-                        .then(response => response.json())
+                    const actualJson = json.data;
+                    return axios.get(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                         .then(json => {
 
-                            const lastYearJson = json
+                            const lastYearJson = json.data
                             let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
                             let leftValues = newValues.dataForLeftGauge;
                             let middleValues = newValues.dataForMiddleGauge;
@@ -232,10 +224,9 @@ export function updateSite(site) {
                             dispatch(actions.updateMiddleGauge(middleValues))
                             dispatch(actions.updateRightGauge(rightValues))
 
-                            return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                                .then(response => response.json())
+                            return axios.get(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                                 .then(json => {
-                                    dispatch(actions.saveBordereauxForSite(json))
+                                    dispatch(actions.saveBordereauxForSite(json.data))
                                     dispatch(loadPrestataireList(site.real_level,site.nom));
                                     dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
 
@@ -262,10 +253,9 @@ export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
         dispatch(actions.cleanDechetsChosenTagsArray());
-        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
-            .then(response => response.json())
+        return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
             .then(json => {
-                dispatch(actions.updatePrestataireList(json));
+                dispatch(actions.updatePrestataireList(json.data));
             });
     }
 }
@@ -273,12 +263,11 @@ export function loadPrestataireList(level,name){
 export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
-        return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+idPrestataire)
-            .then(response => response.json())
+        return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+idPrestataire)
             .then(json => {
                 let inputArray = [];
-                if(json.sites){
-                    json.sites.quantity.forEach(row => {
+                if(json.data.sites){
+                    json.data.sites.quantity.forEach(row => {
                         inputArray.push(row.dechet);
                     });
                     dispatch(actions.updateDechetTagsInputArray(inputArray));
@@ -291,12 +280,11 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
     return dispatch => {
         dispatch(actions.loadPrestataireGraphValuesBegin());
         if(prestataire){
-            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+prestataire.id)
-                .then(response => response.json())
+            return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+prestataire.id)
                 .then(json => {
                     let valuesArray = [];
-                    const columnNames = (json.region.quantity.length > 0) ? ["sites","global","region"] : ["sites","global"];
-                    const keys = (json.region.quantity.length > 0) ? [prestataire.nom, "GLOBAL", "REGIONAL"] : [prestataire.nom, "GLOBAL"];
+                    const columnNames = (json.data.region.quantity.length > 0) ? ["sites","global","region"] : ["sites","global"];
+                    const keys = (json.data.region.quantity.length > 0) ? [prestataire.nom, "GLOBAL", "REGIONAL"] : [prestataire.nom, "GLOBAL"];
                     /*
                      * We start by computing the two taux de valorisation
                      */
@@ -312,8 +300,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                     let valuesListeVerte = [];
                     let volumesListeVerte = [];
                     columnNames.forEach(name => {
-                        if(json[name].quantity.length > 0){
-                            json[name].quantity.forEach(dechet => {
+                        if(json.data[name].quantity.length > 0){
+                            json.data[name].quantity.forEach(dechet => {
                                 quantiteeTotale += parseFloat(dechet.quantitee_traitee);
                                 if(dechet.dechet.is_listeverte){
                                     quantiteeTotaleListeVerte += parseFloat(dechet.quantitee_traitee);
@@ -324,8 +312,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                             quantiteeTotale = 0.;
                             quantiteeTotaleListeVerte = 0.;
                         }
-                        if(json[name].recycled.length > 0){
-                            json[name].recycled.forEach(dechet => {
+                        if(json.data[name].recycled.length > 0){
+                            json.data[name].recycled.forEach(dechet => {
                                 quantiteeTotaleRecyclee += parseFloat(dechet.quantitee_traitee);
                                 if(dechet.dechet.is_listeverte){
                                     quantiteeTotaleRecycleeListeVerte += parseFloat(dechet.quantitee_traitee);
@@ -389,18 +377,18 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                 let tauxDeValorisation = 0;
                                 let quantiteeValorisee = 0;
                                 let quantiteeTotale = 0;
-                                if(json[name].quantity.length > 0){
-                                    json[name].quantity.forEach(dechet => {
+                                if(json.data[name].quantity.length > 0){
+                                    json.data[name].quantity.forEach(dechet => {
                                         if(chosenDechet.id === dechet.dechet.id){
-                                            if(json[name].recycled.length > 0){
-                                                json[name].recycled.forEach(dechetRecycle => {
+                                            if(json.data[name].recycled.length > 0){
+                                                json.data[name].recycled.forEach(dechetRecycle => {
                                                     if(dechetRecycle.dechet.id === dechet.dechet.id){
                                                         quantiteeValorisee += parseFloat(dechetRecycle.quantitee_traitee);
                                                     }
                                                 });
                                             }
-                                            if(json[name].quantity.length > 0){
-                                                json[name].quantity.forEach(dechetQuantity => {
+                                            if(json.data[name].quantity.length > 0){
+                                                json.data[name].quantity.forEach(dechetQuantity => {
                                                     if(dechetQuantity.dechet.id === dechet.dechet.id){
                                                         quantiteeTotale += parseFloat(dechetQuantity.quantitee_traitee);
                                                     }
@@ -424,25 +412,25 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                     }
                     else{
                         for (let i = 0; i < 3; i++) {
-                            if(json.sites.quantity[i]){
+                            if(json.data.sites.quantity[i]){
                                 let dechetColumn;
                                 let values = [];
                                 let volumes = [];
-                                let dechet = json.sites.quantity[i];
+                                let dechet = json.data.sites.quantity[i];
                                 dispatch(actions.addPrestataireGraphTag(dechet.dechet));
                                 columnNames.forEach(name => {
                                     let tauxDeValorisation = 0;
                                     let quantiteeValorisee = 0;
                                     let quantiteeTotale = 0;
-                                    if(json[name].recycled.length > 0){
-                                        json[name].recycled.forEach(dechetRecycle => {
+                                    if(json.data[name].recycled.length > 0){
+                                        json.data[name].recycled.forEach(dechetRecycle => {
                                             if(dechetRecycle.dechet.id === dechet.dechet.id){
                                                 quantiteeValorisee += parseFloat(dechetRecycle.quantitee_traitee);
                                             }
                                         });
                                     }
-                                    if(json[name].quantity.length > 0){
-                                        json[name].quantity.forEach(dechetQuantity => {
+                                    if(json.data[name].quantity.length > 0){
+                                        json.data[name].quantity.forEach(dechetQuantity => {
                                             if(dechetQuantity.dechet.id === dechet.dechet.id){
                                                 quantiteeTotale += parseFloat(dechetQuantity.quantitee_traitee);
                                             }
@@ -467,10 +455,9 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
 
         }
         else{
-            return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
-                .then(response => response.json())
+            return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
                 .then(json => {
-                    const biggestPrestataire = (json.prestataires && json.prestataires[0]) ? json.prestataires[0] : null ;
+                    const biggestPrestataire = (json.data.prestataires && json.data.prestataires[0]) ? json.data.prestataires[0] : null ;
                     if(biggestPrestataire){
                         dispatch(actions.updateSelectedPrestataire(biggestPrestataire));
                         dispatch(loadPrestataireGraphValues(level, name, biggestPrestataire));
@@ -492,12 +479,11 @@ export function loadDechetList(level,name){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
         dispatch(actions.cleanPrestatairesChosenTagsArray());
-        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
-            .then(response => response.json())
+        return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
             .then(json => {
                 let newInputArray = [];
-                if(json.dechets){
-                    json.dechets.forEach(row => {
+                if(json.data.dechets){
+                    json.data.dechets.forEach(row => {
                         let newRow = Object.assign({}, row, {nom: row.libelle});
                         newInputArray.push(newRow);
                     });
@@ -510,12 +496,11 @@ export function loadDechetList(level,name){
 export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
-        return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
-            .then(response => response.json())
+        return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
             .then(json => {
                 let inputArray = [];
-                if(json.sites){
-                    json.sites.quantity.forEach(row => {
+                if(json.data.sites){
+                    json.data.sites.quantity.forEach(row => {
                         inputArray.push(row.prestataire);
                     });
                     dispatch(actions.updateDechetTagsInputArray(inputArray));
@@ -529,8 +514,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
     return dispatch => {
         dispatch(actions.loadDechetGraphValuesBegin());
         if(dechet){
-            return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id)
-                .then(response => response.json())
+            return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id)
                 .then(json => {
                     /*
                      * We start by computing the two taux de valorisation global and regional (if exists)
@@ -545,13 +529,13 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     let keys = [];
                     let values = [];
                     let volumes = [];
-                    if(json.global.quantity.length > 0){
-                        json.global.quantity.forEach(prestataire => {
+                    if(json.data.global.quantity.length > 0){
+                        json.data.global.quantity.forEach(prestataire => {
                             quantiteeTotaleNation += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
-                    if(json.global.recycled.length > 0){
-                        json.global.recycled.forEach(prestataire => {
+                    if(json.data.global.recycled.length > 0){
+                        json.data.global.recycled.forEach(prestataire => {
                             quantiteeTotaleNationRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
@@ -561,13 +545,13 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                         volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
                         keys.push("NATIONAL");
                     }
-                    if(json.global.quantity.length > 0){
-                        json.global.quantity.forEach(prestataire => {
+                    if(json.data.global.quantity.length > 0){
+                        json.data.global.quantity.forEach(prestataire => {
                             quantiteeTotaleRegion += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
-                    if(json.global.recycled.length > 0){
-                        json.global.recycled.forEach(prestataire => {
+                    if(json.data.global.recycled.length > 0){
+                        json.data.global.recycled.forEach(prestataire => {
                             quantiteeTotaleRegionRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
@@ -585,13 +569,13 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                             let tauxDeValorisation = 0;
                             let quantiteeTotale = 0;
                             let quantiteeRecyclee = 0;
-                            if(json.sites.quantity.length > 0){
-                                json.sites.quantity.forEach(prestataire => {
+                            if(json.data.sites.quantity.length > 0){
+                                json.data.sites.quantity.forEach(prestataire => {
                                     if(chosenPrestataire.id === prestataire.prestataire.id){
                                         quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
                                     }
                                 });
-                                json.sites.recycled.forEach(prestataire => {
+                                json.data.sites.recycled.forEach(prestataire => {
                                     if(chosenPrestataire.id === prestataire.prestataire.id){
                                         quantiteeRecyclee += parseFloat(prestataire.quantitee_traitee);
                                     }
@@ -614,20 +598,20 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     }
                     else{
                         for (let i = 0; i < 3; i++) {
-                            if(json.sites.quantity[i]){
+                            if(json.data.sites.quantity[i]){
                                 let tauxDeValorisation = 0;
                                 let quantiteeTotale = 0;
                                 let quantiteeRecyclee = 0;
-                                let chosenPrestataire = json.sites.quantity[i];
+                                let chosenPrestataire = json.data.sites.quantity[i];
                                 dispatch(actions.addDechetGraphTag(chosenPrestataire.prestataire));
-                                if(json.sites.quantity.length > 0){
-                                    json.sites.quantity.forEach(prestataire => {
+                                if(json.data.sites.quantity.length > 0){
+                                    json.data.sites.quantity.forEach(prestataire => {
                                         if(chosenPrestataire.prestataire.id === prestataire.prestataire.id){
                                             quantiteeTotale += parseFloat(prestataire.quantitee_traitee);
 
                                         }
                                     });
-                                    json.sites.recycled.forEach(prestataire => {
+                                    json.data.sites.recycled.forEach(prestataire => {
                                         if(chosenPrestataire.prestataire.id === prestataire.prestataire.id){
                                             quantiteeRecyclee += parseFloat(prestataire.quantitee_traitee);
                                         }
@@ -652,10 +636,9 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                 });
             }
             else{
-                return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
-                    .then(response => response.json())
+                return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
                     .then(json => {
-                        const biggestDechet = (json.dechets && json.dechets[0]) ? json.dechets[0] : null ;
+                        const biggestDechet = (json.data.dechets && json.data.dechets[0]) ? json.data.dechets[0] : null ;
                         if(biggestDechet){
                             dispatch(actions.updateSelectedDechet(biggestDechet));
                             dispatch(loadDechetGraphValues(level, name, biggestDechet));
