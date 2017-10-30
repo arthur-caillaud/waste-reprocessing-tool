@@ -45,14 +45,15 @@ const tolerance = config.computing.tolerance;
 function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
 
     const queryString = "SELECT * FROM bordereau INNER JOIN site ON bordereau.id_site = site.id " +
-    "INNER JOIN transport ON transport.id = bordereau.id_transport_1 INNER JOIN " +
-    "traitement ON traitement.id = bordereau.id_traitement_final WHERE id_site IN (?) " +
-    "AND (traitement.date_priseencharge IS NOT NULL OR traitement.id_type_traitement " +
-    "IS NOT NULL) AND transport.date < ? AND transport.date >= ? AND (quantitee_finale - quantitee_transportee >= ? " +
+    "INNER JOIN transport AS transport1 ON transport1.id = bordereau.id_transport_1 INNER JOIN " +
+    "traitement as traitementFinal ON traitementFinal.id = bordereau.id_traitement_final WHERE id_site IN (?) " +
+    "AND (traitementFinal.date_priseencharge IS NOT NULL OR traitementFinal.id_type_traitement " +
+    "IS NOT NULL) AND transport1.date < ? AND transport1.date >= ? AND (quantitee_finale - quantitee_transportee >= ? " +
     "OR quantitee_transportee - quantitee_finale >= ?)"
 
     const query = {
         sql: queryString,
+        nestTables: true,
         values: [idArray, endDate, beginDate, tolerance, tolerance]
     };
 
@@ -120,21 +121,23 @@ function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
 // different to the required treatment (that was asked)
 function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, label) {
 
-    const queryString = "SELECT * FROM bordereau INNER JOIN traitement ON " +
-    "traitement.id = bordereau.id_traitement_final INNER JOIN transport ON " +
-    "transport.id = bordereau.id_transport_1 INNER JOIN site ON site.id = bordereau.id_site " +
-    "INNER JOIN DECHET ON dechet.id = bordereau.id_dechet WHERE traitement.id_type_traitement != bordereau.id_traitement_prevu " +
-    "AND transport.date < ? AND transport.date >= ? AND dechet.is_dangereux = ? " +
-    "id_site IN (?)";
+    const queryString = "SELECT * FROM bordereau INNER JOIN traitement AS traitementFinal ON " +
+    "traitementFinal.id = bordereau.id_traitement_final INNER JOIN transport AS transport1 ON " +
+    "transport1.id = bordereau.id_transport_1 INNER JOIN site ON site.id = bordereau.id_site " +
+    "INNER JOIN dechet ON dechet.id = bordereau.id_dechet WHERE traitementFinal.id_type_traitement != bordereau.id_traitement_prevu " +
+    "AND transport1.date < ? AND transport1.date >= ? AND dechet.is_dangereux = ? " +
+    "AND id_site IN (?)";
 
     const query = {
         sql: queryString,
+        nestTables: true,
         values: [endDate, beginDate, dangereux, idArray]
     };
 
     var observable = Rx.Observable.create(obs => {
         connection.query(query, (error, results, fields) => {
             obs.onNext([results, label]);
+            console.log(error);
             obs.onCompleted();
         })
     })
@@ -195,16 +198,17 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
 function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label){
 
     var queryString = "SELECT * FROM bordereau INNER JOIN site ON site.id = " +
-    "bordereau.id_site INNER JOIN transport ON transport.id = bordereau.id_transport_1 " +
-    "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    "bordereau.id_site INNER JOIN transport AS transport1 ON transport1.id = bordereau.id_transport_1 " +
+    "INNER JOIN traitement AS traitementFinal ON traitementFinal.id = bordereau.id_traitement_final INNER JOIN " +
     " dechet ON dechet.id = bordereau.id_dechet INNER JOIN referentiel_dechet ON " +
     "referentiel_dechet.id_dechet = dechet.id WHERE dechet.is_dangereux = ? AND " +
-    "referentiel_dechet.gestion = 'r' AND transport.date < ? AND transport.date >= ? "  +
-    "AND traitement.id_type_traitement = referentiel_dechet.id_type_traitement AND " +
+    "referentiel_dechet.gestion = 'r' AND transport1.date < ? AND transport1.date >= ? "  +
+    "AND traitementFinal.id_type_traitement = referentiel_dechet.id_type_traitement AND " +
     "id_site IN (?)";
 
     var query = {
         sql: queryString,
+        nestTables: true,
         values: [dangereux, endDate, beginDate, idArray]
     };
 
@@ -299,13 +303,14 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
     var dateLimitString = '' + dateLimit.getFullYear() + '-' + month + '-' + day;
 
     var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
-    "bordereau.id_dechet INNER JOIN transport ON transport.id = bordereau.id_transport_1 " +
+    "bordereau.id_dechet INNER JOIN transport AS transport1 ON transport1.id = bordereau.id_transport_1 " +
     "INNER JOIN site ON site.id = bordereau.id_site WHERE dechet.is_dangereux = ? " +
-    "AND transport.date < ? AND transport.date >= AND transport.date <= ? AND " +
+    "AND transport1.date < ? AND transport1.date >= AND transport1.date <= ? AND " +
     "id_site IN (?) AND bordereau_finished = 0";
 
     var query = {
         sql: queryString,
+        nestTables: true,
         values: [dangereux, endDate, beginDate, dateLimitString, idArray]
     };
 
@@ -364,7 +369,6 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
     //         obs.onError(err);
     //     })
     // });
-    console.log("coucou")
     return observable;
 };
 
@@ -389,11 +393,12 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
     "bordereau.id_dechet INNER JOIN site ON site.id = bordereau.id_site INNER JOIN " +
-    "transport ON transport.id = bordereau.id_transport_1 WHERE dechet.is_dangereux " +
-    "= ? AND transport.date < ? AND id_site IN (?) AND bordereau_finished = 0";
+    "transport AS transport1 ON transport1.id = bordereau.id_transport_1 WHERE dechet.is_dangereux " +
+    "= ? AND transport1.date < ? AND id_site IN (?) AND bordereau_finished = 0";
 
     var query = {
         sql: queryString,
+        nestTables: true,
         values: [dangereux, lastDate, idArray]
     };
 
