@@ -123,10 +123,11 @@ export function updateDate(date) {
 export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
+        dispatch(actions.cleanDechetsChosenTagsArray());
         return fetch(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
             .then(response => response.json())
             .then(json => {
-                dispatch(actions.updatePrestataireList(json))
+                dispatch(actions.updatePrestataireList(json));
             });
     }
 }
@@ -352,6 +353,7 @@ API calls for Dechet Vision
 export function loadDechetList(level,name){
     return dispatch => {
         dispatch(actions.loadDechetListBegin());
+        dispatch(actions.cleanPrestatairesChosenTagsArray());
         return fetch(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
             .then(response => response.json())
             .then(json => {
