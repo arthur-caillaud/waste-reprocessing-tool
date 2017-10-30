@@ -137,7 +137,9 @@ function processDashboardData(req, res) {
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
-    var onCompleted = () => {};
+    var onCompleted = () => {
+        console.log(new Date())
+    };
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getDataForSites(idArray, beginDate, endDate).subscribe(observer);

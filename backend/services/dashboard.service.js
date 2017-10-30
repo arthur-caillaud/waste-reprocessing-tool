@@ -2,6 +2,15 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'backend',
+    password: 'password',
+    database: 'db'
+});
+
+connection.connect();
 
 //Import required local modules
 var models = require('../models/');
@@ -687,26 +696,41 @@ function getUndated(idArray, label) {
 // matching the provided id and date.
 // NOTE: considering the constraints, it should return only one site (or 0)
 function getDataForSites(idArray, beginDate, endDate) {
+    console.log(new Date());
     var query = {
-        where: {
-            id_site: {$in: idArray},
-            date: {
-                $lt: endDate,
-                $gte: beginDate
-            }
-        }
-    };
+        sql: 'SELECT * FROM dashboard WHERE id_site IN (?) AND date < ? AND date >= ?',
+        values: [idArray, endDate, beginDate]
+    }
 
     var observable = Rx.Observable.create((observer) => {
-        dashboard.findAll(query)
-            .then((elements) => {
-                observer.onNext(elements);
-                observer.onCompleted();
-            })
-            .catch ((error) => {
+        connection.query(query, (error, results, fields) => {
+            observer.onNext(results);
+            observer.onCompleted();
+            if (error) {
                 observer.onError(error);
-            });
-    });
+            }
+        })
+    })
+    // var query = {
+    //     where: {
+    //         id_site: {$in: idArray},
+    //         date: {
+    //             $lt: endDate,
+    //             $gte: beginDate
+    //         }
+    //     }
+    // };
+    //
+    // var observable = Rx.Observable.create((observer) => {
+    //     dashboard.findAll(query)
+    //         .then((elements) => {
+    //             observer.onNext(elements);
+    //             observer.onCompleted();
+    //         })
+    //         .catch ((error) => {
+    //             observer.onError(error);
+    //         });
+    // });
     return observable;
 }
 
