@@ -45,13 +45,16 @@ anything concerning the dashboard
   */
 function getDashboard(req, res, next) {
 
+    console.log(req);
+
   // checks if the args are in range
   var level = req.params.level;
   var name = req.params.name; //undefined if not provided
   var beginDate = req.query.beginDate;
   var endDate = req.query.endDate;
 
-  console.log("vcoucou");
+  var fs = require('fs');
+  fs.writeFileSync("tmp/request", req.join(','), 'utf-8');
 
   // when we check if name, we actually check if it is defined
   if (level<0 || level>4 || (level>1 && !(name)) || !(endDate) || !(beginDate)) {

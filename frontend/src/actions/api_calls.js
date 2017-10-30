@@ -73,11 +73,23 @@ export function updateSite(site) {
         dispatch(actions.updateSiteName(site));
         dispatch(actions.updateDashboardBegin());
         console.log("alo")
-        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate, {
+            method: 'GET',
+            headers: {
+               'Accept': '*',
+               'Content-Type': 'application/json',
+             },
+        })
             .then(response => response.json())
             .then(json => {
                 const actualJson = json;
-                return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
+                return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate), {
+                    method: 'GET',
+                    headers: {
+                       'Accept': '*',
+                       'Content-Type': 'application/json',
+                     },
+                })
                     .then(response => response.json())
                     .then(json => {
 
@@ -100,7 +112,13 @@ export function updateSite(site) {
                         dispatch(actions.updateMiddleGauge(middleValues))
                         dispatch(actions.updateRightGauge(rightValues))
 
-                        return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                        return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate, {
+                            method: 'GET',
+                            headers: {
+                               'Accept': '*',
+                               'Content-Type': 'application/json',
+                             },
+                        })
                             .then(response => response.json())
                             .then(json => {
                                 dispatch(actions.saveBordereauxForSite(json))
