@@ -59,7 +59,6 @@ export function updateSite(site) {
     }
     let startDate = date.startDate
     let endDate= date.endDate
-    console.log(endDate)
     let EndDate = endDate.format().toString().substring(0,10)
     let StartDate = startDate.format().toString().substring(0, 10)
 
