@@ -362,15 +362,15 @@ function presentDataForNewSite(actualJson, lastYearJson) {
          dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
          dataForRightGauge.bdx = total_lost_actual
      }
-
-    let response = {
-        dataForLeftGauge: dataForLeftGauge,
-        dataForMiddleGauge: dataForMiddleGauge,
-        dataForRightGauge: dataForRightGauge,
-        dataForLeftTile: dataForLeftTile,
-        dataForRightTile: dataForRightTile,
-        dataForMiddleRightTile: dataForMiddleRightTile,
-        dataForMiddleLeftTile:  dataForMiddleLeftTile
+     console.log(typeof window.location.href)
+     let response = {
+            dataForLeftGauge: dataForLeftGauge,
+            dataForMiddleGauge: dataForMiddleGauge,
+            dataForRightGauge: dataForRightGauge,
+            dataForLeftTile: dataForLeftTile,
+            dataForRightTile: dataForRightTile,
+            dataForMiddleRightTile: dataForMiddleRightTile,
+            dataForMiddleLeftTile:  dataForMiddleLeftTile
 
     }
     return response
