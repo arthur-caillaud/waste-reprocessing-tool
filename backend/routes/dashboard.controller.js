@@ -51,6 +51,8 @@ function getDashboard(req, res, next) {
   var beginDate = req.query.beginDate;
   var endDate = req.query.endDate;
 
+  console.log("vcoucou");
+
   // when we check if name, we actually check if it is defined
   if (level<0 || level>4 || (level>1 && !(name)) || !(endDate) || !(beginDate)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {

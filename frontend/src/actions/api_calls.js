@@ -45,7 +45,6 @@ function substractYear(date){
     return split.join('-')
 }
 export function updateSite(site) {
-
     /*Here we get data in order to update the dashboard with new site*/
     let level = site.real_level
     let name = site.nom
@@ -59,7 +58,6 @@ export function updateSite(site) {
     }
     let startDate = date.startDate
     let endDate= date.endDate
-    console.log(endDate)
     let EndDate = endDate.format().toString().substring(0,10)
     let StartDate = startDate.format().toString().substring(0, 10)
 
@@ -74,6 +72,7 @@ export function updateSite(site) {
         //Which means that we need the new architecture
         dispatch(actions.updateSiteName(site));
         dispatch(actions.updateDashboardBegin());
+        console.log("alo")
         return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
             .then(response => response.json())
             .then(json => {

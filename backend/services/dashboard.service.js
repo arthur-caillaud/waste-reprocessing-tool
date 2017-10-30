@@ -43,55 +43,74 @@ const tolerance = config.computing.tolerance;
 // this function looks for all the bordereau in which the difference between
 // the estimated quantity and the actual quantity is bigger than a max value
 function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
+
+    const queryString = "SELECT * FROM bordereau INNER JOIN site ON bordereau.id_site = site.id " +
+    "INNER JOIN transport ON transport.id = bordereau.id_transport_1 INNER JOIN " +
+    "traitement ON traitement.id = bordereau.id_traitement_final WHERE id_site IN (?) " +
+    "AND (traitement.date_priseencharge IS NOT NULL OR traitement.id_type_traitement " +
+    "IS NOT NULL) AND transport.date < ? AND transport.date >= ? AND (quantitee_finale - quantitee_transportee >= ? " +
+    "OR quantitee_transportee - quantitee_finale >= ?)"
+
     const query = {
-        include: [
-            {
-                model: traitement,
-                as: 'traitementFinal',
-                where: {
-                    $or:
-                        {
-                            date_priseencharge: {
-                                $not: null
-                            },
-                            id_type_traitement: {
-                                $not: null
-                            }
-                        }
-                }
-            },
-            {
-                model: transport,
-                as: 'transport1',
-                where: {
-                    date: {
-                        $lt: endDate,
-                        $gte: beginDate,
-                    }
-                }
-            },
-            {
-                model: site,
-            }
-        ],
-        where: {
-            id_site: {$in: idArray},
-            $or: [
-                sequelize.where(sequelize.literal('quantitee_finale - quantitee_transportee'), '>=', tolerance),
-                sequelize.where(sequelize.literal('quantitee_transportee - quantitee_finale'), '>=', tolerance)
-            ]
-        }
+        sql: queryString,
+        values: [idArray, endDate, beginDate, tolerance, tolerance]
     };
-    var observable = Rx.Observable.create(obs => {
-        bordereau.findAll(query)
-            .then(bordereaux => {
-                obs.onNext([bordereaux, label]);
-                obs.onCompleted();
-            })
-            .catch(err => {
-                obs.onError(err);
-            });
-    });
+
+    var observable = Rx.Observable.create((obs) => {
+        connection.query(query, (error, results, fields) => {
+            obs.onNext([results, label])
+            obs.onCompleted()
+        })
+    })
+    // const query = {
+    //     include: [
+    //         {
+    //             model: traitement,
+    //             as: 'traitementFinal',
+    //             where: {
+    //                 $or:
+    //                     {
+    //                         date_priseencharge: {
+    //                             $not: null
+    //                         },
+    //                         id_type_traitement: {
+    //                             $not: null
+    //                         }
+    //                     }
+    //             }
+    //         },
+    //         {
+    //             model: transport,
+    //             as: 'transport1',
+    //             where: {
+    //                 date: {
+    //                     $lt: endDate,
+    //                     $gte: beginDate,
+    //                 }
+    //             }
+    //         },
+    //         {
+    //             model: site,
+    //         }
+    //     ],
+    //     where: {
+    //         id_site: {$in: idArray},
+    //         $or: [
+    //             sequelize.where(sequelize.literal('quantitee_finale - quantitee_transportee'), '>=', tolerance),
+    //             sequelize.where(sequelize.literal('quantitee_transportee - quantitee_finale'), '>=', tolerance)
+    //         ]
+    //     }
+    // };
+    // var observable = Rx.Observable.create(obs => {
+    //     bordereau.findAll(query)
+    //         .then(bordereaux => {
+    //             obs.onNext([bordereaux, label]);
+    //             obs.onCompleted();
+    //         })
+    //         .catch(err => {
+    //             obs.onError(err);
+    //         });
+    // });
     return observable;
 }
 
@@ -100,52 +119,72 @@ function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
 // this function looks for all the bordereau in which the actual treatment is
 // different to the required treatment (that was asked)
 function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, label) {
-    var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
-        bordereau.findAll({
-            where: {
-                id_site: {$in: idArray}
-            },
-            include: [
-                {
-                    model: traitement,
-                    as: 'traitementFinal',
-                    required: true,
-                    where: {
-                        id_type_traitement: {
-                            $ne: sequelize.col('bordereau.id_traitement_prevu')
-                        }
-                    },
-                },
-                {
-                    model: transport,
-                    as: 'transport1',
-                    where: {
-                        date: {
-                            $lt: endDate,
-                            $gte: beginDate
-                        }
-                    }
-                },
-                {
-                    model: site
-                },
-                {
-                    model: dechet,
-                    where: {
-                        is_dangereux: dangereux
-                    }
-                }
-        ]
-        })
-        .then(bordereaux => {
-            obs.onNext([bordereaux, label]);
+
+    const queryString = "SELECT * FROM bordereau INNER JOIN traitement ON " +
+    "traitement.id = bordereau.id_traitement_final INNER JOIN transport ON " +
+    "transport.id = bordereau.id_transport_1 INNER JOIN site ON site.id = bordereau.id_site " +
+    "INNER JOIN DECHET ON dechet.id = bordereau.id_dechet WHERE traitement.id_type_traitement != bordereau.id_traitement_prevu " +
+    "AND transport.date < ? AND transport.date >= ? AND dechet.is_dangereux = ? " +
+    "id_site IN (?)";
+
+    const query = {
+        sql: queryString,
+        values: [endDate, beginDate, dangereux, idArray]
+    };
+
+    var observable = Rx.Observable.create(obs => {
+        connection.query(query, (error, results, fields) => {
+            obs.onNext([results, label]);
             obs.onCompleted();
         })
-        .catch(err => {
-            obs.onError(err)
-        })
     })
-    return getAllIncoherencesFilieresObservable;
+    // var getAllIncoherencesFilieresObservable = Rx.Observable.create(obs => {
+    //     bordereau.findAll({
+    //         where: {
+    //             id_site: {$in: idArray}
+    //         },
+    //         include: [
+    //             {
+    //                 model: traitement,
+    //                 as: 'traitementFinal',
+    //                 required: true,
+    //                 where: {
+    //                     id_type_traitement: {
+    //                         $ne: sequelize.col('bordereau.id_traitement_prevu')
+    //                     }
+    //                 },
+    //             },
+    //             {
+    //                 model: transport,
+    //                 as: 'transport1',
+    //                 where: {
+    //                     date: {
+    //                         $lt: endDate,
+    //                         $gte: beginDate
+    //                     }
+    //                 }
+    //             },
+    //             {
+    //                 model: site
+    //             },
+    //             {
+    //                 model: dechet,
+    //                 where: {
+    //                     is_dangereux: dangereux
+    //                 }
+    //             }
+    //     ]
+    //     })
+    //     .then(bordereaux => {
+    //         obs.onNext([bordereaux, label]);
+    //         obs.onCompleted();
+    //     })
+    //     .catch(err => {
+    //         obs.onError(err)
+    //     })
+    // })
+    // return getAllIncoherencesFilieresObservable;
+    return observable;
 };
 
 
@@ -155,54 +194,77 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
 // For instance: if oil is burnt or rejected into water (forbidden by law)
 function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label){
 
-    var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
-        bordereau.findAll({
-            include: [
-                {
-                    model: dechet,
-                    required: true,
-                    where: {
-                        is_dangereux: dangereux
-                    },
-                    include: {
-                        model: referentiel_dechet,
-                        required: true,
-                        where: {
-                            gestion: 'r'
-                        }
-                    }
-                },
-                {
-                    model: site
-                },
-                {
-                    model: transport,
-                    as: 'transport1',
-                    where: {
-                        date: {
-                            $lt: endDate,
-                            $gte: beginDate
-                        }
-                    }
-                },
-                {
-                    model: traitement,
-                    as: 'traitementFinal',
-                }],
-            where: {
-                traitement: sequelize.where(sequelize.col('traitementFinal.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
-                id_site: {$in: idArray}
-            }
-        }).
-        then(bordereauxAvecFilieresInterdites => {
-            obs.onNext([bordereauxAvecFilieresInterdites, label]);
+    var queryString = "SELECT * FROM bordereau INNER JOIN site ON site.id = " +
+    "bordereau.id_site INNER JOIN transport ON transport.id = bordereau.id_transport_1 " +
+    "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    " dechet ON dechet.id = bordereau.id_dechet INNER JOIN referentiel_dechet ON " +
+    "referentiel_dechet.id_dechet = dechet.id WHERE dechet.is_dangereux = ? AND " +
+    "referentiel_dechet.gestion = 'r' AND transport.date < ? AND transport.date >= ? "  +
+    "AND traitement.id_type_traitement = referentiel_dechet.id_type_traitement AND " +
+    "id_site IN (?)";
+
+    var query = {
+        sql: queryString,
+        values: [dangereux, endDate, beginDate, idArray]
+    };
+
+    var observable = Rx.Observable.create((obs) => {
+        connection.query(query, (error, values, fields) => {
+            obs.onNext([values, label]);
             obs.onCompleted();
-        }).
-        catch(err => {
-            obs.onError(err)
         })
-    });
-    return getAllFilieresInterditesObservable;
+    })
+
+    return observable;
+
+    // var getAllFilieresInterditesObservable = Rx.Observable.create(obs => {
+    //     bordereau.findAll({
+    //         include: [
+    //             {
+    //                 model: dechet,
+    //                 required: true,
+    //                 where: {
+    //                     is_dangereux: dangereux
+    //                 },
+    //                 include: {
+    //                     model: referentiel_dechet,
+    //                     required: true,
+    //                     where: {
+    //                         gestion: 'r'
+    //                     }
+    //                 }
+    //             },
+    //             {
+    //                 model: site
+    //             },
+    //             {
+    //                 model: transport,
+    //                 as: 'transport1',
+    //                 where: {
+    //                     date: {
+    //                         $lt: endDate,
+    //                         $gte: beginDate
+    //                     }
+    //                 }
+    //             },
+    //             {
+    //                 model: traitement,
+    //                 as: 'traitementFinal',
+    //             }],
+    //         where: {
+    //             traitement: sequelize.where(sequelize.col('traitementFinal.id_type_traitement'),sequelize.col('dechet->referentiel_dechets.id_type_traitement')),
+    //             id_site: {$in: idArray}
+    //         }
+    //     }).
+    //     then(bordereauxAvecFilieresInterdites => {
+    //         obs.onNext([bordereauxAvecFilieresInterdites, label]);
+    //         obs.onCompleted();
+    //     }).
+    //     catch(err => {
+    //         obs.onError(err)
+    //     })
+    // });
+    // return getAllFilieresInterditesObservable;
 };
 
 
@@ -235,61 +297,74 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
     }
 
     var dateLimitString = '' + dateLimit.getFullYear() + '-' + month + '-' + day;
-    //
-    // console.log(minComputingDateString);
-    // console.log(maxComputingDateString);
-    // console.log(dateLimitString);
-    // console.log('\n');
 
-    // console.log("looking for " + dangereux + " bordereaux before " + dateLimitString + " and between " + beginDate + " and " + endDate);
+    var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
+    "bordereau.id_dechet INNER JOIN transport ON transport.id = bordereau.id_transport_1 " +
+    "INNER JOIN site ON site.id = bordereau.id_site WHERE dechet.is_dangereux = ? " +
+    "AND transport.date < ? AND transport.date >= AND transport.date <= ? AND " +
+    "id_site IN (?) AND bordereau_finished = 0";
 
     var query = {
-        include: [
-            {
-                model: dechet,
-                where: {
-                    is_dangereux: dangereux
-                }
-            },
-            {
-                model: site
-            },
-            {
-                model: transport,
-                as: 'transport1',
-                where: {
-                    date: {
-                        $lt: endDate,
-                        $gte: beginDate,
-                        $lte: dateLimitString
-                    }
-                }
-            }
-            ],
-        where: {
-            id_site: {$in: idArray},
-            bordereau_finished: 0
-        }
+        sql: queryString,
+        values: [dangereux, endDate, beginDate, dateLimitString, idArray]
     };
 
-    // console.log(query.include[2].where.date);
-
-    // console.log(Date.getUTCDate(date-maxDelay));
-    // console.log(Date.getUTCDate(date-maxDelay-month));
-
     var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll(query)
-        .then((bordereaux) => {
-            // console.log(bordereaux[0].dataValues);
-            // console.log("total " + dangereux + ": " + bordereaux.length);
-            // console.log(result.length);
-            obs.onNext([bordereaux, label]);
+        connection.query(query, (error, results, fields) => {
+            obs.onNext(results);
             obs.onCompleted();
+            console.log(error);
         })
-        .catch((err) => {
-            obs.onError(err);
-        })
-    });
+    })
+
+    // var query = {
+    //     include: [
+    //         {
+    //             model: dechet,
+    //             where: {
+    //                 is_dangereux: dangereux
+    //             }
+    //         },
+    //         {
+    //             model: site
+    //         },
+    //         {
+    //             model: transport,
+    //             as: 'transport1',
+    //             where: {
+    //                 date: {
+    //                     $lt: endDate,
+    //                     $gte: beginDate,
+    //                     $lte: dateLimitString
+    //                 }
+    //             }
+    //         }
+    //         ],
+    //     where: {
+    //         id_site: {$in: idArray},
+    //         bordereau_finished: 0
+    //     }
+    // };
+    //
+    // // console.log(query.include[2].where.date);
+    //
+    // // console.log(Date.getUTCDate(date-maxDelay));
+    // // console.log(Date.getUTCDate(date-maxDelay-month));
+    //
+    // var observable = Rx.Observable.create((obs) => {
+    //     bordereau.findAll(query)
+    //     .then((bordereaux) => {
+    //         // console.log(bordereaux[0].dataValues);
+    //         // console.log("total " + dangereux + ": " + bordereaux.length);
+    //         // console.log(result.length);
+    //         obs.onNext([bordereaux, label]);
+    //         obs.onCompleted();
+    //     })
+    //     .catch((err) => {
+    //         obs.onError(err);
+    //     })
+    // });
+    console.log("coucou")
     return observable;
 };
 
@@ -312,57 +387,99 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
     // console.log("before " +lastDate);
     // console.log("after " + firstDate);
 
+    var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
+    "bordereau.id_dechet INNER JOIN site ON site.id = bordereau.id_site INNER JOIN " +
+    "transport ON transport.id = bordereau.id_transport_1 WHERE dechet.is_dangereux " +
+    "= ? AND transport.date < ? AND id_site IN (?) AND bordereau_finished = 0";
+
     var query = {
-        include: [
-            {
-                model: dechet,
-                where: {
-                    is_dangereux: dangereux
-                }
-            },
-            {
-                model: site
-            },
-            {
-                model: transport,
-                as: 'transport1',
-                where: {
-                    date: {
-                        $lt: lastDate,
-                    }
-                }
-            }
-            ],
-        where: {
-            id_site: {$in: idArray},
-            bordereau_finished: 0
-        }
+        sql: queryString,
+        values: [dangereux, lastDate, idArray]
     };
+
+    var observable = Rx.Observable.create((obs) => {
+        connection.query(query, (error, results, fields) => {
+            console.log(error);
+            obs.onNext([results, label]);
+            obs.onCompleted();
+        })
+    })
+
+    return observable;
+
+    // var query = {
+    //     include: [
+    //         {
+    //             model: dechet,
+    //             where: {
+    //                 is_dangereux: dangereux
+    //             }
+    //         },
+    //         {
+    //             model: site
+    //         },
+    //         {
+    //             model: transport,
+    //             as: 'transport1',
+    //             where: {
+    //                 date: {
+    //                     $lt: lastDate,
+    //                 }
+    //             }
+    //         }
+    //         ],
+    //     where: {
+    //         id_site: {$in: idArray},
+    //         bordereau_finished: 0
+    //     }
+    // };
 
     // console.log(query.include[2].where.date);
 
     // console.log(Date.getUTCDate(date-maxDelay));
     // console.log(Date.getUTCDate(date-maxDelay-month));
 
-    var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll(query)
-        .then((bordereaux) => {
-            // console.log(bordereaux[0].dataValues);
-            // console.log("total: " + bordereaux.length);
-            obs.onNext([bordereaux, label]);
-            obs.onCompleted();
-        })
-        .catch((err) => {
-            obs.onError(err);
-        })
-    });
-    return observable;
+    // var observable = Rx.Observable.create((obs) => {
+    //     bordereau.findAll(query)
+    //     .then((bordereaux) => {
+    //         // console.log(bordereaux[0].dataValues);
+    //         // console.log("total: " + bordereaux.length);
+    //         obs.onNext([bordereaux, label]);
+    //         obs.onCompleted();
+    //     })
+    //     .catch((err) => {
+    //         obs.onError(err);
+    //     })
+    // });
+    // return observable;
 };
 
 
 // this function looks for all the bordereaux and sums the total volume
 // processed. If no bordereau exists for the given site, returns 0
 function getTotalVolume(idArray, beginDate, endDate, label) {
+    //
+    // var queryString = "SELECT quantitee_finale, quantitee_transportee FROM bordereau " +
+    // "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    // "transport ON transport.id = bordereau.id_transport_1 WHERE transport.date < ? " +
+    // "AND transport.date >= ? AND id_site IN (?)";
+    //
+    // var query = {
+    //     sql: queryString,
+    //     values: [endDate, beginDate, idArray]
+    // };
+    //
+    // var observable = Rx.Observable.create((obs) => {
+    //     connection.query(query, (error, results, fields) => {
+    //         console.log(results);
+    //         obs.onNext([0, label]);
+    //         obs.onCompleted();
+    //     })
+    // })
+    //
+    // return observable;
+
+
     var observable = Rx.Observable.create((obs) => {
         bordereau.findAll({
             include: [
