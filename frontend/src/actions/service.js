@@ -100,7 +100,9 @@ function getAllLevelNames(architecture) {
 
     return levelNames;
 }
-
+/*
+    the next four functions are pretty obvious : given a site, they retrieve the searchtree menus.
+*/
 function getMenuForMetiers(site) {
     let menuMetier = [];
     let architecture = window.store.getState().pageOptions.architecture;
@@ -206,7 +208,7 @@ function filterByValue(array, value) {
 
 function presentDataForNewSite(actualJson, lastYearJson) {
     /*
-    values for current year
+    Here we initialize values for current year and last year
     */
     let volume_total_actual = 0.0000;
     let volume_listeverte_actual = 0.0000;
@@ -237,7 +239,9 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     let total_bdx_before = 0;
     let total_lost_before = 0;
 
-
+    /*
+    If we received values, we got a json containing many bordereaux. We need to sum the pertinent values on all bordereaux
+    */
     if (actualJson.length !== 0) {
         let date = actualJson[0].date;
         actualJson.forEach(function(element) {
@@ -308,7 +312,9 @@ function presentDataForNewSite(actualJson, lastYearJson) {
     dataForMiddleLeftTile.isGrowingMiddleLeft = (filieres_interdites_norm_actual + filieres_interdites_dd_actual >= filieres_interdites_norm_before + filieres_interdites_dd_before) ? true : false;
     dataForMiddleRightTile.isGrowingMiddleRight = (retards_norm_actual + retards_dd_actual >= retards_norm_before + retards_dd_before) ? true : false;
 
-
+    /*
+    Here we try to compute smartly the values for gauge. And to avoid dividing by zero
+    */
     if (!(volume_total_actual === 0.0000)) {
 
         dataForLeftGauge.leftvalue = valorisation_l_verte_actual*100/volume_listeverte_actual
@@ -362,7 +368,6 @@ function presentDataForNewSite(actualJson, lastYearJson) {
          dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
          dataForRightGauge.bdx = total_lost_actual
      }
-     console.log(typeof window.location.href)
      let response = {
             dataForLeftGauge: dataForLeftGauge,
             dataForMiddleGauge: dataForMiddleGauge,

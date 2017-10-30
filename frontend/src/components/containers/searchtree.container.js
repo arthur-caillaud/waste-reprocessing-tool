@@ -30,10 +30,7 @@ function mapDispatchToProps(dispatch) {
                 }
             ));
             dispatch(actions.updateInputValue(''));
-            dispatch(apiCalls.loadPrestataireList(0,"National"));
-            dispatch(apiCalls.loadDechetList(0,"National"));
-            dispatch(apiCalls.loadPrestataireGraphValues(0,"National"));
-            dispatch(apiCalls.loadDechetGraphValues(0,"National"));
+
         },
         onRenderUpClickHandler: () => {
             dispatch(apiCalls.updateSite({
@@ -52,22 +49,6 @@ function mapDispatchToProps(dispatch) {
                 }
             ));
             dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.metier_dependance.name));
-            dispatch(apiCalls.loadPrestataireList(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadDechetList(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadPrestataireGraphValues(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadDechetGraphValues(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
         },
         onRenderUniteClickHandler: () => {
             dispatch(apiCalls.updateSite({
@@ -89,22 +70,6 @@ function mapDispatchToProps(dispatch) {
                 }
             ));
             dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.up_dependance.name));
-            dispatch(apiCalls.loadPrestataireList(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadDechetList(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadPrestataireGraphValues(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadDechetGraphValues(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
         },
         onRenderSiteClickHandler: () => {
             dispatch(apiCalls.updateSite({
@@ -129,22 +94,6 @@ function mapDispatchToProps(dispatch) {
                 }
             ));
             dispatch(actions.updateInputValue(window.store.getState().updateSearchBar.site.architecture.unite_dependance.name));
-            dispatch(apiCalls.loadPrestataireList(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadDechetList(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadPrestataireGraphValues(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
-            dispatch(apiCalls.loadDechetGraphValues(
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.real_level,
-                window.store.getState().updateSearchBar.site.architecture.metier_dependance.name
-            ));
         },
         updateMetier:  (evt) => {
             dispatch(apiCalls.updateSite({
@@ -159,10 +108,6 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt.name))
-            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetGraphValues(evt.real_level,evt.name));
         },
         updateUp: (evt) => {
             dispatch(apiCalls.updateSite({
@@ -180,10 +125,6 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt.name))
-            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetGraphValues(evt.real_level,evt.name));
         },
         updateUnite: (evt) => {
             dispatch(apiCalls.updateSite({
@@ -204,10 +145,6 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt.name))
-            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetGraphValues(evt.real_level,evt.name));
         },
         updateSite: (evt) => {
             dispatch(apiCalls.updateSite({
@@ -231,10 +168,6 @@ function mapDispatchToProps(dispatch) {
                 }
             }));
             dispatch(actions.updateInputValue(evt.name))
-            dispatch(apiCalls.loadPrestataireList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetList(evt.real_level,evt.name));
-            dispatch(apiCalls.loadPrestataireGraphValues(evt.real_level,evt.name));
-            dispatch(apiCalls.loadDechetGraphValues(evt.real_level,evt.name));
         },
     }
 }

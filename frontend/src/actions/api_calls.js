@@ -1,3 +1,4 @@
+import "es6-promise/auto";
 import fetch from 'isomorphic-fetch';
 import config from '../config.json';
 import HelperService from './service';
@@ -5,6 +6,10 @@ import * as actions from './index';
 import * as moment from 'moment';
 
 export function getArchitecture() {
+
+    /*
+    This function get the architecture of EDF sites and store it in the Redux Store
+    */
     return dispatch => {
         return fetch(config.backend.adress+'dashboard/architecture')
             .then(response => response.json())
@@ -17,6 +22,11 @@ export function getArchitecture() {
 Main Search Bar API calls
 */
 export function loadSuggestions(value) {
+
+    /*
+    This function is activated on key down on the main search bar. It browses through the architecture
+    and retrieve any thing that contains the value in the main search bar.
+    */
   return dispatch => {
     dispatch(actions.loadSuggestionsBegin())
     return fetch(config.backend.adress+'dashboard/architecture')
@@ -40,22 +50,29 @@ export function loadSuggestions(value) {
 }
 
 function substractYear(date){
+    /*
+    This just substracts one year to the given date
+    */
     let split = date.split('-');
     split[0] -= 1
     return split.join('-')
 }
 export function updateSite(site) {
-
+    /*
+    This is the app's main function. It updates everything when a new site is selected in the selection tree
+    or the searchbar. The "if" sections are made to optimize performance based on the page we are on, it's three times the same requests,
+    but in a different order.
+    */
     /*Here we get data in order to update the dashboard with new site*/
     let level = site.real_level
     let name = site.nom
     let date = window.store.getState().pageOptions.date
     if (typeof date.startDate === 'string') {
 
-            date= {
-                startDate: moment(date.startDate),
-                endDate: moment(date.endDate)
-        }
+        date= {
+            startDate: moment(date.startDate),
+            endDate: moment(date.endDate)
+    }
     }
     let startDate = date.startDate
     let endDate= date.endDate
@@ -64,62 +81,183 @@ export function updateSite(site) {
 
     site.suggestions = {}
     return dispatch => {
+        /*
+        This updates the search tree based on the new given site
+        */
         site.suggestions.metier_dependance = HelperService.getMenuForMetiers(site)
         site.suggestions.up_dependance = HelperService.getMenuForUp(site)
         site.suggestions.unite_dependance = HelperService.getMenuForUnite(site)
         site.suggestions.nom = HelperService.getMenuForSite(site)
 
+
+
+
         //Here we must have a dispatch that updates the search tree according to new site
         //Which means that we need the new architecture
         dispatch(actions.updateSiteName(site));
         dispatch(actions.updateDashboardBegin());
-        return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-            .then(response => response.json())
-            .then(json => {
-                const actualJson = json;
-                return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
-                    .then(response => response.json())
-                    .then(json => {
+        if (window.location.href.split('/')[3] === "") {
+            /*
+                Here we are on the dashboard page, so the first request gets the informations for the dashboard,
+                for this year and for last year. Then we call presentDataForNewSite, a function that redistributes the values requested
+                in the different components
+            */
+            console.time("test")
 
-                        const lastYearJson = json
-                        let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
-                        let leftValues = newValues.dataForLeftGauge;
-                        let middleValues = newValues.dataForMiddleGauge;
-                        let rightValues = newValues.dataForRightGauge;
-                        let leftTileValues = newValues.dataForLeftTile;
-                        let middleLeftTileValues = newValues.dataForMiddleLeftTile;
-                        let middleRightTileValues = newValues.dataForMiddleRightTile;
-                        let rightTileValues = newValues.dataForRightTile;
+            return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                .then(response => response.json())
+                .then(json => {
+                    const actualJson = json;
+                    console.timeEnd("test")
+                    return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
+                        .then(response => response.json())
+                        .then(json => {
 
-                        dispatch(actions.updateLeftTile(leftTileValues))
-                        dispatch(actions.updateRightTile(rightTileValues))
-                        dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
-                        dispatch(actions.updateMiddleRightTile(middleRightTileValues))
-                        dispatch(actions.resetMoreInfosToDefault())
-                        dispatch(actions.updateLeftGauge(leftValues))
-                        dispatch(actions.updateMiddleGauge(middleValues))
-                        dispatch(actions.updateRightGauge(rightValues))
+                            const lastYearJson = json
+                            let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
+                            let leftValues = newValues.dataForLeftGauge;
+                            let middleValues = newValues.dataForMiddleGauge;
+                            let rightValues = newValues.dataForRightGauge;
+                            let leftTileValues = newValues.dataForLeftTile;
+                            let middleLeftTileValues = newValues.dataForMiddleLeftTile;
+                            let middleRightTileValues = newValues.dataForMiddleRightTile;
+                            let rightTileValues = newValues.dataForRightTile;
 
-                        return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
-                            .then(response => response.json())
-                            .then(json => {
-                                dispatch(actions.saveBordereauxForSite(json))
+                            dispatch(actions.updateLeftTile(leftTileValues))
+                            dispatch(actions.updateRightTile(rightTileValues))
+                            dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                            dispatch(actions.updateMiddleRightTile(middleRightTileValues))
+                            dispatch(actions.resetMoreInfosToDefault())
+                            dispatch(actions.updateLeftGauge(leftValues))
+                            dispatch(actions.updateMiddleGauge(middleValues))
+                            dispatch(actions.updateRightGauge(rightValues))
 
-                            })
+                            return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                                .then(response => response.json())
+                                .then(json => {
+                                    /*
+                                    Finally we call for informations for the other pages, they will be loaded after the display.
+                                    */
+                                    dispatch(actions.saveBordereauxForSite(json))
+                                    dispatch(loadPrestataireList(site.real_level,site.nom));
+                                    dispatch(loadDechetList(site.real_level,site.nom));
+                                    dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
+                                    dispatch(loadDechetGraphValues(site.real_level,site.nom));
+
+                                })
 
 
-                    });
-            })
+                        });
+                })
+        } else if (window.location.href.split('/')[3] === "prestataire") {
+            /*
+            Gotta add here dispatch for prestataire page
+            */
+            dispatch(loadPrestataireList(site.real_level,site.nom));
+            dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
+
+            return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                .then(response => response.json())
+                .then(json => {
+                    const actualJson = json;
+                    return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
+                        .then(response => response.json())
+                        .then(json => {
+
+                            const lastYearJson = json
+                            let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
+                            let leftValues = newValues.dataForLeftGauge;
+                            let middleValues = newValues.dataForMiddleGauge;
+                            let rightValues = newValues.dataForRightGauge;
+                            let leftTileValues = newValues.dataForLeftTile;
+                            let middleLeftTileValues = newValues.dataForMiddleLeftTile;
+                            let middleRightTileValues = newValues.dataForMiddleRightTile;
+                            let rightTileValues = newValues.dataForRightTile;
+
+                            dispatch(actions.updateLeftTile(leftTileValues))
+                            dispatch(actions.updateRightTile(rightTileValues))
+                            dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                            dispatch(actions.updateMiddleRightTile(middleRightTileValues))
+                            dispatch(actions.resetMoreInfosToDefault())
+                            dispatch(actions.updateLeftGauge(leftValues))
+                            dispatch(actions.updateMiddleGauge(middleValues))
+                            dispatch(actions.updateRightGauge(rightValues))
+
+                            return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                                .then(response => response.json())
+                                .then(json => {
+                                    dispatch(actions.saveBordereauxForSite(json))
+                                    dispatch(loadDechetList(site.real_level,site.nom));
+                                    dispatch(loadDechetGraphValues(site.real_level,site.nom));
+
+                                })
+
+
+                        });
+                })
+
+        } else {
+
+            dispatch(loadDechetList(site.real_level,site.nom));
+            dispatch(loadDechetGraphValues(site.real_level,site.nom));
+
+
+            /*
+            Gotta add here dispatchs for dechet vision
+            */
+            return fetch(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                .then(response => response.json())
+                .then(json => {
+                    const actualJson = json;
+                    return fetch(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
+                        .then(response => response.json())
+                        .then(json => {
+
+                            const lastYearJson = json
+                            let newValues = HelperService.presentDataForNewSite(actualJson, lastYearJson)
+                            let leftValues = newValues.dataForLeftGauge;
+                            let middleValues = newValues.dataForMiddleGauge;
+                            let rightValues = newValues.dataForRightGauge;
+                            let leftTileValues = newValues.dataForLeftTile;
+                            let middleLeftTileValues = newValues.dataForMiddleLeftTile;
+                            let middleRightTileValues = newValues.dataForMiddleRightTile;
+                            let rightTileValues = newValues.dataForRightTile;
+
+                            dispatch(actions.updateLeftTile(leftTileValues))
+                            dispatch(actions.updateRightTile(rightTileValues))
+                            dispatch(actions.updateMiddleLeftTile(middleLeftTileValues))
+                            dispatch(actions.updateMiddleRightTile(middleRightTileValues))
+                            dispatch(actions.resetMoreInfosToDefault())
+                            dispatch(actions.updateLeftGauge(leftValues))
+                            dispatch(actions.updateMiddleGauge(middleValues))
+                            dispatch(actions.updateRightGauge(rightValues))
+
+                            return fetch(config.backend.adress + 'dashboard/details/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
+                                .then(response => response.json())
+                                .then(json => {
+                                    dispatch(actions.saveBordereauxForSite(json))
+                                    dispatch(loadPrestataireList(site.real_level,site.nom));
+                                    dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
+
+                                })
+
+
+                        });
+                })
+        }
+
     };
 }
 
 
-/*
-API calls for Prestataire Vision
-*/
+
 export function updateDate(date) {
     return dispatch => dispatch(actions.updateDate())
 }
+/*
+API calls for Prestataire Vision
+*/
+
 export function loadPrestataireList(level,name){
     return dispatch => {
         dispatch(actions.loadPrestataireListBegin());
