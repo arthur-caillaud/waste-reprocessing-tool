@@ -35,7 +35,7 @@ function getDashboard(req, res, next) {
   // fs.writeFileSync("tmp/request", req.join(','), 'utf-8');
 
   // when we check if name, we actually check if it is defined
-  if (level<0 || level>4 || (level>1 && !(name)) || !(endDate) || !(beginDate)) {
+  if (level<0 || level>4 || (level>0 && !(name)) || !(endDate) || !(beginDate)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {
           res.status(errorPacket.status).send(errorPacket.message);
       });
