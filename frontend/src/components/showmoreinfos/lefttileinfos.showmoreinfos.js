@@ -2,14 +2,34 @@ import React, { Component } from "react";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import '../../styles/tile.css';
 
+function handleOnRowMouseOver(row) {
+    this.setState({rowOver:row})
+}
+function handleOnRowMouseOut() {
+    this.setState({rowOver:{}})
+}
+
+function ToolTip(props){
+    console.log(props)
+    if(props.row.Num_Bdx === undefined)
+        return (<div className='tooltip32'></div>)
+    return (<div className='tooltip32 show'>{props.row.Num_Bdx}</div>)
+}
+
 export default class LeftTileInfos extends Component {
     constructor(props) {
         super(props);
         this.state = {
             ecarts_pesee: window.store.getState().pageOptions.bordereaux.ecarts_pesee,
-            data: []
+            data: [],
+            rowOver:{}
         }
+        handleOnRowMouseOver = handleOnRowMouseOver.bind(this)
+        handleOnRowMouseOut = handleOnRowMouseOut.bind(this)
     }
+
+
+
     componentWillMount() {
         let data = []
         this.state.ecarts_pesee.forEach(function(element) {
@@ -25,12 +45,27 @@ export default class LeftTileInfos extends Component {
 
     render() {
         if (window.store.getState().infosPanelOptions.leftTileShown === true){
+
+            const options = {
+                onRowMouseOver: function(row, e) {
+                    handleOnRowMouseOver(row)
+                },
+                onRowMouseOut: function() {
+                    handleOnRowMouseOut()
+                }
+            }
+
         return (
-            <BootstrapTable data={this.state.data} scrollTop={ 'Top' }>
-                <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
-                <TableHeaderColumn dataField="Qte_estimee" dataAlign="center"> Qté Est.</TableHeaderColumn>
-                <TableHeaderColumn dataField="Qte_recue" dataAlign="center">Qté Reç.</TableHeaderColumn>
-            </BootstrapTable>
+            <div>
+                <ToolTip row={this.state.rowOver}/>
+                <div className="tooltiparrow"></div>
+                <BootstrapTable data={this.state.data} scrollTop={ 'Top' } options={ options }>
+                    <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
+                    <TableHeaderColumn dataField="Qte_estimee" dataAlign="center"> Qté Est.</TableHeaderColumn>
+                    <TableHeaderColumn dataField="Qte_recue" dataAlign="center">Qté Reç.</TableHeaderColumn>
+                </BootstrapTable>
+
+            </div>
         );
     }
         else {
