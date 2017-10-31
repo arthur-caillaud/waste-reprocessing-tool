@@ -2,6 +2,13 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host: '91.134.242.69',
+    user: 'root',
+    password: 'arthurpierreaurelien',
+    database: 'db'
+});
 
 var models = require('../models/');
 var traitement = models.traitement;
@@ -52,51 +59,30 @@ function getAllPrestataires(queryParameters) {
 // the given timeframe
 function getPrestatairesForSites(sitesArray, beginDate, endDate) {
 
-    var prestatairesId = [];
+    var queryString = "SELECT prestataire.nom, prestataire.localisation, " +
+    "prestataire.siret, prestataire.id FROM bordereau INNER JOIN traitement ON " +
+    "traitement.id = bordereau.id_traitement_final INNER JOIN transport " +
+    "ON transport.id = bordereau.id_transport_1 INNER JOIN prestataire " +
+    "ON prestataire.id = traitement.id_prestataire WHERE bordereau.id_site IN (?) " +
+    "AND transport.date < ? AND transport.date >= ? GROUP BY prestataire.id " +
+    "ORDER BY SUM(quantitee_finale) DESC";
 
     var query = {
-        attributes: ['id'],
-        where: {
-            id_site: {$in: sitesArray},
-        },
-        order: [
-            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'DESC']
-        ],
-        group: [
-            sequelize.literal('traitementFinal.id_prestataire')
-        ],
-        include: [
-            {
-                model: traitement,
-                as: 'traitementFinal',
-                where: {
-                    date_priseencharge: {
-                        $lte: endDate,
-                        $gte: beginDate
-                    }
-                },
-                include: [
-                    {
-                        model: prestataire
-                    }
-                ]
-            },
-        ]
-    };
+        sql: queryString,
+        values: [sitesArray, endDate, beginDate]
+    }
 
     var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll(query)
-            .then((bordereaux) => {
-                bordereaux.forEach((bordereau) => {
-                    bordereau.dataValues = bordereau.dataValues.traitementFinal.dataValues.prestataire.dataValues;
-                })
-                obs.onNext(bordereaux);
+        connection.query(query, (errors, results, fields) => {
+            if (errors) {
+                obs.onError(errors);
+            }
+            else {
+                obs.onNext(results);
                 obs.onCompleted();
-            })
-            .catch((error) => {
-                obs.onError(error);
-            })
-    });
+            }
+        })
+    })
 
     return observable;
 }
@@ -158,67 +144,116 @@ function getDechetsForPrestataire(id, sitesId, recycled, beginDate, endDate) {
         qualification = "%";
     }
 
-    var query = {
-        where: {
-            id_site: {$in: sitesId}
-        },
-        attributes: [
-            'id_dechet',
-            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'quantitee_traitee']
-        ],
-        group: 'id_dechet',
-        order: [
-            [sequelize.literal('quantitee_traitee'), 'DESC']
-        ],
-        include: [
-            {
-                model: traitement,
-                as: 'traitementFinal',
-                attributes: [],
-                where: {
-                    date_priseencharge: {
-                        $lte: endDate,
-                        $gte: beginDate
-                    }
-                },
-                include: [
-                    {
-                        model: type_traitement,
-                        attributes: [],
-                        where: {
-                            qualification: {$like: qualification}
-                        }
-                    }
-                ]
-            },
-            {
-                model: dechet,
-                attributes: [
-                    'id',
-                    'codeinterne',
-                    'famille',
-                    'libelle',
-                    'is_listeverte',
-                ]
-            }
-        ]
-    };
+
+    var queryString = "SELECT SUM(bordereau.quantitee_finale) AS quantitee_traitee, " +
+    "dechet.id, dechet.codeinterne, dechet.famille, dechet.libelle, dechet.is_listeverte " +
+    "FROM bordereau INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final " +
+    "INNER JOIN type_traitement ON type_traitement.id = bordereau.id_traitement_prevu " +
+    "INNER JOIN transport ON transport.id = bordereau.id_transport_1 " +
+    "INNER JOIN prestataire ON traitement.id_prestataire = prestataire.id " +
+    "INNER JOIN dechet on dechet.id = bordereau.id_dechet " +
+    "WHERE bordereau.id_site IN (?) ";
 
     if (typeof id != 'undefined') {
-        query.include[0].where["id_prestataire"] = id;
+        queryString += "AND prestataire.id = ? ";
+    }
+
+    queryString += "AND transport.date < ? AND transport.date >= ? " +
+    "AND type_traitement.qualification LIKE ? " +
+    "GROUP BY dechet.id  HAVING SUM(quantitee_finale) > 0 ORDER BY SUM(quantitee_finale) DESC";
+
+    var query = {
+        sql: queryString,
+        nestTables: true,
+        values: []
+    }
+
+    if (typeof id != 'undefined') {
+        query.values = [sitesId, id, endDate, beginDate, qualification];
+    }
+    else {
+        query.values = [sitesId, endDate, beginDate, qualification];
     }
 
     var observable = Rx.Observable.create((obs) => {
-        bordereau.findAll(query)
-            .then((bordereaux) => {
-                obs.onNext(bordereaux);
+        connection.query(query, (errors, results, fields) => {
+            if (errors) {
+                obs.onError(errors);
+            }
+            else {
+                results.forEach((row) => {
+                    row.quantitee_traitee = row[''].quantitee_traitee;
+                    row[''] = undefined;
+                })
+                obs.onNext(results);
                 obs.onCompleted();
-            })
-            .catch((error) => {
-                obs.onError(error);
-            })
-    });
+            }
+        })
+    })
+
     return observable;
+    //
+    // var query = {
+    //     where: {
+    //         id_site: {$in: sitesId}
+    //     },
+    //     attributes: [
+    //         'id_dechet',
+    //         [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'quantitee_traitee']
+    //     ],
+    //     group: 'id_dechet',
+    //     order: [
+    //         [sequelize.literal('quantitee_traitee'), 'DESC']
+    //     ],
+    //     include: [
+    //         {
+    //             model: traitement,
+    //             as: 'traitementFinal',
+    //             attributes: [],
+    //             where: {
+    //                 date_priseencharge: {
+    //                     $lte: endDate,
+    //                     $gte: beginDate
+    //                 }
+    //             },
+    //             include: [
+    //                 {
+    //                     model: type_traitement,
+    //                     attributes: [],
+    //                     where: {
+    //                         qualification: {$like: qualification}
+    //                     }
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             model: dechet,
+    //             attributes: [
+    //                 'id',
+    //                 'codeinterne',
+    //                 'famille',
+    //                 'libelle',
+    //                 'is_listeverte',
+    //             ]
+    //         }
+    //     ]
+    // };
+    //
+    // if (typeof id != 'undefined') {
+    //     query.include[0].where["id_prestataire"] = id;
+    // }
+    //
+    // var observable = Rx.Observable.create((obs) => {
+    //     bordereau.findAll(query)
+    //         .then((bordereaux) => {
+    //             obs.onNext(bordereaux);
+    //             obs.onCompleted();
+    //         })
+    //         .catch((error) => {
+    //             obs.onError(error);
+    //         })
+    // });
+    // return observable;
 }
 
 function getQuantityForPrestataire(id, sitesId, beginDate, endDate) {

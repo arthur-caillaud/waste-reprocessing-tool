@@ -4,9 +4,9 @@ var service = {};
 var sequelize = require('sequelize');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'backend',
-    password: 'password',
+    host: '91.134.242.69',
+    user: 'root',
+    password: 'arthurpierreaurelien',
     database: 'db'
 });
 
@@ -453,7 +453,6 @@ function getUndated(idArray, label) {
 // matching the provided id and date.
 // NOTE: considering the constraints, it should return only one site (or 0)
 function getDataForSites(idArray, beginDate, endDate) {
-    console.log(new Date());
     var query = {
         sql: 'SELECT * FROM dashboard WHERE id_site IN (?) AND date < ? AND date >= ?',
         values: [idArray, endDate, beginDate]

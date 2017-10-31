@@ -141,7 +141,6 @@ function processDashboardData(req, res) {
         });
     };
     var onCompleted = () => {
-        console.log(new Date())
     };
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
