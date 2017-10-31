@@ -226,7 +226,7 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 function getTotalVolume(idArray, beginDate, endDate, label) {
 
     var queryString = "SELECT quantitee_finale, quantitee_transportee FROM bordereau " +
-    "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    "INNER JOIN " +
     "transport ON transport.id = bordereau.id_transport_1 WHERE transport.date < ? " +
     "AND transport.date >= ? AND id_site IN (?)";
 
@@ -262,7 +262,7 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
 function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
 
     var queryString = "SELECT quantitee_finale, quantitee_transportee FROM bordereau " +
-    "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    "INNER JOIN " +
     "transport ON transport.id = bordereau.id_transport_1 INNER JOIN dechet ON " +
     "dechet.id = bordereau.id_dechet WHERE transport.date < ? " +
     "AND transport.date >= ? AND id_site IN (?) AND dechet.is_listeverte = 1";
@@ -297,7 +297,7 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
 // recycled. If no bordereau exists for the given site, returns 0
 function getValorisationTotale(idArray, beginDate, endDate, label) {
     var queryString = "SELECT quantitee_finale, quantitee_transportee FROM bordereau " +
-    "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    "INNER JOIN " +
     "type_traitement ON bordereau.id_traitement_prevu = type_traitement.id INNER JOIN " +
     "transport ON transport.id = bordereau.id_transport_1 WHERE transport.date < ? " +
     "AND transport.date >= ? AND id_site IN (?) AND type_traitement.qualification = 'Recyclage'";
@@ -333,7 +333,7 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
 // site, returns 0
 function getValorisationVerte(idArray, beginDate, endDate, label) {
     var queryString = "SELECT quantitee_finale, quantitee_transportee FROM bordereau " +
-    "INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final INNER JOIN " +
+    "INNER JOIN " +
     "type_traitement ON bordereau.id_traitement_prevu = type_traitement.id INNER JOIN " +
     "dechet ON dechet.id = bordereau.id_dechet INNER JOIN " +
     "transport ON transport.id = bordereau.id_transport_1 WHERE transport.date < ? " +
