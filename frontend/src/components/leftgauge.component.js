@@ -54,13 +54,13 @@ class LeftGauged3 extends Component {
              );
          var tip = d3tip()
          .attr('class', 'd3-tip')
-         .offset([-10, 0])
+         .offset([-1.15 * height, 0])
          .html(function(d) {
              return ("<div><div><strong>"+
-             d.key+
+             'Valorisation Liste Verte'+
              "</strong></div>"+
-             "<div>Taux de valorisation <span style='color:red'>" + d.value + "%</span></div>"+
-             "<div>Volume traité <span style='color:red'>" + d.volume + "t</span></div></div>"
+             "<div>Cette année: <span style='color:red'>" + leftvalue.toFixed(2) + "%</span></div>"+
+             "<div>Année précédente: <span style='color:red'>" + leftvalueBefore.toFixed(2) + "%</span></div></div>"
          )});
          svgDoc.call(tip);
 

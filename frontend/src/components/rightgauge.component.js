@@ -184,7 +184,7 @@ class RightGauged3 extends Component {
                       .tween("text", function() {
                         var that = d3.select(this),
                             i = d3.interpolateNumber(0, bdx);
-                        return function(t) { that.text("Sans Date: " + format(i(t))); };
+                        return function(t) { that.text(format(i(t)) + ' (tot.)'); };
                       })
                       .styleTween("fill", function() {
                           var interpolate = d3.interpolateRgb(color(rightvalueAnte), color(rightvalue))
