@@ -184,7 +184,7 @@ class MiddleGauged3 extends Component {
                       .tween("text", function() {
                         var that = d3.select(this),
                             i = d3.interpolateNumber(0, v_total);
-                        return function(t) { that.text("Volume Total : " + format(i(t)) + "t"); };
+                        return function(t) { that.text(format(i(t)) + "t (tot.)"); };
                       })
                       .styleTween("fill", function() {
                           var interpolate = d3.interpolateRgb(color(middlevalueAnte), color(middlevalue))

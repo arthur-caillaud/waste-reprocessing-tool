@@ -4,7 +4,7 @@ var service = {};
 var sequelize = require('sequelize');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'localhost',
+    host: '91.134.242.69',
     user: 'backend',
     password: 'password',
     database: 'db'
