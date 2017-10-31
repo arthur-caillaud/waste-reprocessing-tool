@@ -31,16 +31,23 @@ class DashboardElement extends Component {
           <Grid fluid>
               <Row>
                   <Col sm={9}>
-                    <Row className="show-grid">
-                        <Col sm={4}> <LeftGauge/> </Col>
-                        <Col sm={4}> <MiddleGauge/> </Col>
-                        <Col sm={4}> <RightGauge/> </Col>
+                    <Row>
+                        <div className="row show-grid">
+                            <Col sm={4}> <LeftGauge/> </Col>
+                            <Col sm={4}> <MiddleGauge/> </Col>
+                            <Col sm={4}> <RightGauge/> </Col>
+                        </div>
+
+
                     </Row>
                     <Row>
-                      <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
-                      <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
-                      <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
-                      <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
+                        <div className="row show-grid-tiles">
+                            <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
+                            <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
+                            <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
+                            <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
+                        </div>
+
                     </Row>
                 </Col>
                 <Col sm={3} className="right-col">

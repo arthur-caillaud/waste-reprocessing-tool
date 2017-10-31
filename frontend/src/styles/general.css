@@ -1,5 +1,5 @@
 #root {
-    background-color: #fafafa;
+    background-color: rgb(238, 238, 238);
     width: 100vw;
     overflow-x: hidden;
 }
@@ -9,9 +9,18 @@
 }
 
 .show-grid{
-    margin-top: 3vh;
+    margin-top: 60px;
+    background-color: rgb(250, 250, 250);
+    box-shadow: 0px 1px 3px grey;
+    margin-bottom: 30px;
+    border-radius: 2px;
+    margin-left: 30px !important;
+    margin-right: 30px !important;
 }
-
+.show-grid-tiles {
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+}
 .more-infos {
     height:100%;
 }
@@ -33,7 +42,7 @@ button .btn.btn-sm.btn-default {
     vertical-align: center;
     padding-bottom: calc(1vh + 30px);
     padding-top: 1vh;
-    box-shadow: 0px 0px 8px grey;
+    box-shadow: 0px 1px 3px grey;
     background-color: #FBFBFB;
     z-index: 1;
 }
@@ -51,8 +60,8 @@ button .btn.btn-sm.btn-default {
     height: 89vh;
     bottom: 0px;
     overflow: scroll;
-    box-shadow: 0px 0px 8px grey;
-    background-color: #F7F7F7;
+    box-shadow: 0px 1px 3px grey;
+    background-color: rgb(250, 250, 250);
 }
 .right-col-wrapper{
     padding-left: 30px;
