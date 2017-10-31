@@ -1,2 +1,2 @@
 # generate doc for the backend REST API
-apidoc -i ./backend/routes/ -o ./docs/apidoc/
+apidoc -i ./backend/doc/ -o ./docs/apidoc/

@@ -23,26 +23,6 @@ Only one function is needed: you don't need to create, modify or delete
 anything concerning the dashboard
 */
 
-
-/**
-  * @api {GET} /dashboard/:level/:id Recherche les informations nécessaires pour
-  * construire la dashboard en fonction de l'endroit voulu.
-  * @apiGroup Dashboard
-  * @apiVersion 1.0.0
-  * @apiParam (queryArgs) {number} level niveau voulu dans la hierarchie (allant
-  * de 0 : central à 4 : site)
-  * @apiParam (queryArgs) {string} name nom du lieu voulu dans sa hierarchie
-  * (facultatif dans le cas d'une hierarchie 1 (niveau central))
-  * @apiParam (queryParam) {number} beginDate première date
-  * @apiParam (queryParam) {number} endDate dernière date
-  *
-  * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/dashboard/2/42?beginDate=2017-01-01&endDate=2017-06-01
-  *
-  * @apiSuccess {JSONString} dashboard Informations nécessaires à la construction
-  * de la dashboard sur le site voulu
-  * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
-  */
 function getDashboard(req, res, next) {
 
   // checks if the args are in range
@@ -147,18 +127,7 @@ function processDashboardData(req, res) {
     DashboardService.getDataForSites(idArray, beginDate, endDate).subscribe(observer);
 }
 
-/**
-  * @api {GET} /architecture/ Récupère l'architecture globale de l'organisation
-  * de tous les sites possibles
-  * @apiGroup Dashboard
-  * @apiVersion 1.0.0
-  *
-  * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/dashboard/dashboard
-  *
-  * @apiSuccess {JSONString} dashboard Architecture du site
-  * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
-  */
+
 function getArchitecture(req, res) {
 
     var onNext = (data) => {

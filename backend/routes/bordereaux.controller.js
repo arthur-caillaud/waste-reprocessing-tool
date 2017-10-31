@@ -16,37 +16,12 @@ anything concerning the bordereaux
 */
 
 
-/**
-  * @api {GET} /bordereaux Recherche tous les bordereaux
-  * @apiGroup Bordereaux
-  * @apiVersion 1.0.0
-  *
-  * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/bordereaux
-  *
-  * @apiSuccess {JSONString[]} bordereaux Liste des bordereaux corresponant
-  * à la recherche
-  * @apiError BordereauxNotFound Impossible de trouver de bordereaux
-  */
 function getAllBordereaux(req, res) {
     // currently only returns a 200 code with dummy data
     var dummyResponse = {"message": "OK"};
     res.json(dummyResponse);
 }
 
-
-/**
-  * @api {GET} /bordereaux/:id Recherche un bordereau selon son id
-  * @apiGroup Bordereaux
-  * @apiVersion 1.0.0
-  * @apiParam {number} id Id du bordereau recherché
-  *
-  * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/bordereaux/42
-  *
-  * @apiSuccess {JSONString} bordereau Bordereau recherché
-  * @apiError BordereauNotFound Bordereau recherché inexistant
-  */
 function getBordereau(req, res) {
   // currently only returns a 200 code with dummy data
   // the data will contain the id that was requested
