@@ -22,10 +22,10 @@ describe("Déchets Routes", () => {
         });
 
         it("should return the correct number of data", (done) => {
-            // shoud return 162 unique values
+            // shoud return 199 unique values
             server.get("/dechets")
                 .then((response) => {
-                    assert.equal(response.body.length, 162);
+                    assert.equal(response.body.length, 199);
                     done();
                 })
                 .catch((err) => {

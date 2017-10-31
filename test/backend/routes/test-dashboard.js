@@ -22,7 +22,7 @@ describe("Dashboard Routes", () => {
         it("should return the right amount of entries", (done) => {
             server.get('/dashboard')
                 .then((response) => {
-                    assert.equal(response.body.length, 909);
+                    assert.equal(response.body.length, 4410);
                     done();
                 })
                 .catch((error) => {
@@ -37,8 +37,7 @@ describe("Dashboard Routes", () => {
                     response.body.forEach((element) => {
                         sum += parseInt(element.bordereaux);
                     })
-                    //total should be 4715, but with NULL dates, it comes to 3914
-                    assert.equal(sum, 3914);
+                    assert.equal(sum, 11418);
                     done();
                 })
                 .catch((error) => {
@@ -53,8 +52,8 @@ describe("Dashboard Routes", () => {
                     response.body.forEach((element) => {
                         sum += parseFloat(element.volume_total);
                     })
-                    //total should be 60358.3682, but with NULL dates, it comes to 58873.9291
-                    assert.equal(sum, 58873.9291);
+                    //total should be 95121.xxxx
+                    assert.equal(sum, 95121.75550000009);
                     done();
                 })
                 .catch((error) => {

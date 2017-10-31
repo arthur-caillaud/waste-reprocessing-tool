@@ -24,10 +24,10 @@ describe("Prestataires Routes", () => {
         });
 
         it("should return the correct data", (done) => {
-            // should get 435 values
+            // should get 892 values
             server.get("/prestataires/")
                 .then((response) => {
-                    assert.equal(response.body.length, 434);
+                    assert.equal(response.body.length, 892);
                     done();
                 })
                 .catch((err) => {
