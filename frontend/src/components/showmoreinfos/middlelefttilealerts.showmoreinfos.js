@@ -66,8 +66,8 @@ export default class MiddleLeftTileAlerts extends Component {
         <div>
             <ToolTip row={this.state.rowOver}/>
             <BootstrapTable data={this.state.data} scrollTop={ 'Top' } options={ options }>
-                <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
-                <TableHeaderColumn dataField="Code_Interne" dataAlign="center">CodeInt.</TableHeaderColumn>
+                <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Brdx</TableHeaderColumn>
+                <TableHeaderColumn dataField="Code_Interne" dataAlign="center">Code</TableHeaderColumn>
                 <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
             </BootstrapTable>
         </div>
