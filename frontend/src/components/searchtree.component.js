@@ -82,16 +82,17 @@ class SearchTreeElement extends Component {
                 })}
             </DropdownButton>) : (<div></div>);
 
-        var RenderSite = <DropdownButton
-                            bsSize="small"
-                            bsStyle={(site.name) ? 'primary' : 'default'}
-                            title={trimString(site.name, 18, 'Choix site')}
-                            key={5}
-                            id={5}>
-                            {suggestions.nom.map(function(site, i){
-                                return <MenuItem eventKey={site} key={i} onSelect={updateSite}>{site.name}</MenuItem>
-                            })}
-                        </DropdownButton>;
+        var RenderSite = (suggestions.nom.length > 0) ? (
+            <DropdownButton
+                bsSize="small"
+                bsStyle={(site.name) ? 'primary' : 'default'}
+                title={trimString(site.name, 18, 'Choix site')}
+                key={5}
+                id={5}>
+                {suggestions.nom.map(function(site, i){
+                    return <MenuItem eventKey={site} key={i} onSelect={updateSite}>{site.name}</MenuItem>
+                })}
+            </DropdownButton>) : (<div></div>);
 
         //We define different renders to display things accordingly
 
