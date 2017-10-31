@@ -4,7 +4,7 @@ import { SplitButton, MenuItem, ButtonToolbar } from 'react-bootstrap';
 import '../styles/searchtree.css';
 
 function trimString(string, value, defaultString) {
-    return string === '' ? defaultString : string.substring(0, value)+'...';
+    return (string === '') ? defaultString : ((string.length < value) ? string : string.substring(0, value)+'...');
 }
 
 class SearchTreeElement extends Component {
