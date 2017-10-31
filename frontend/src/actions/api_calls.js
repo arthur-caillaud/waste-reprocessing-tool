@@ -342,7 +342,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                         valuesListeVerte.push(parseFloat(tauxDeValorisationListeVerte.toPrecision(5)));
                         volumes.push(parseFloat(quantiteeTotaleRecyclee.toPrecision(4)));
                         volumesListeVerte.push(parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(5)));
-                    })
+                    });
 
 
                     /*
