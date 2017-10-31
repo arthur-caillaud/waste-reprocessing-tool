@@ -4,9 +4,9 @@ var service = {};
 var sequelize = require('sequelize');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'backend',
-    password: 'password',
+    host: '91.134.242.69',
+    user: 'root',
+    password: 'arthurpierreaurelien',
     database: 'db'
 });
 
@@ -173,7 +173,6 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
         connection.query(query, (error, results, fields) => {
             obs.onNext(results);
             obs.onCompleted();
-            console.log(error);
         })
     })
     return observable;
@@ -211,7 +210,6 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            console.log(error);
             obs.onNext([results, label]);
             obs.onCompleted();
         })
@@ -347,7 +345,6 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            console.log(error);
             var sum = 0;
             results.forEach((row) => {
                 if (row.quantitee_finale == 0) {
@@ -456,7 +453,6 @@ function getUndated(idArray, label) {
 // matching the provided id and date.
 // NOTE: considering the constraints, it should return only one site (or 0)
 function getDataForSites(idArray, beginDate, endDate) {
-    console.log(new Date());
     var query = {
         sql: 'SELECT * FROM dashboard WHERE id_site IN (?) AND date < ? AND date >= ?',
         values: [idArray, endDate, beginDate]

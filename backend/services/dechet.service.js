@@ -2,6 +2,13 @@
 var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+    host: '91.134.242.69',
+    user: 'root',
+    password: 'arthurpierreaurelien',
+    database: 'db'
+});
 
 var models = require('../models/');
 var Dechet = models.dechet;
@@ -28,8 +35,6 @@ function getAllDechets(queryParameters) {
              queryParameters.where = where;
          }
      }
-
-     console.log(queryParameters);
 
      var observable = Rx.Observable.create((observer) => {
          Dechet.findAll(queryParameters)
@@ -72,48 +77,28 @@ function getDechetById(id) {
 
 function getDechetsForSites(idArray, beginDate, endDate) {
 
+    var queryString = "SELECT dechet.* FROM bordereau INNER JOIN transport ON " +
+    "transport.id = bordereau.id_transport_1 INNER JOIN dechet ON dechet.id = " +
+    "bordereau.id_dechet WHERE bordereau.id_site IN (?) AND transport.date < " +
+    "? AND transport.date >= ? GROUP BY dechet.id " +
+    "ORDER BY SUM(bordereau.quantitee_transportee) DESC";
+
     var query = {
-        attributes: ['id'],
-        group: sequelize.col('dechet.id'),
-        where: {
-            id_site: {$in: idArray}
-        },
-        order: [
-            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'DESC']
-        ],
-        include: [
-            {
-                attributes: [],
-                model: Traitement,
-                as: 'traitementFinal',
-                where: {
-                    date_priseencharge: {
-                        $lte: endDate,
-                        $gte: beginDate
-                    }
-                }
-            },
-            {
-                model: Dechet,
-            }
-        ]
-    };
+        sql: queryString,
+        values: [idArray, endDate, beginDate]
+    }
 
     var observable = Rx.Observable.create((obs) => {
-        Bordereau.findAll(query)
-            .then((bordereaux) => {
-                bordereaux.forEach((bordereau) => {
-                    var dechet = bordereau.dataValues.dechet;
-                    bordereau.dataValues = dechet.dataValues;
-                    // bordereau.dataValues = bordereau.dataValues.dechet;
-                })
-                obs.onNext(bordereaux);
+        connection.query(query, (errors, results, fields) => {
+            if (errors) {
+                obs.onError(errors);
+            }
+            else {
+                obs.onNext(results);
                 obs.onCompleted();
-            })
-            .catch((error) => {
-                obs.onError(error);
-            })
-    });
+            }
+        })
+    })
 
     return observable;
 }
@@ -129,65 +114,39 @@ function getPrestatairesForDechet(id, sitesId, recycled, beginDate, endDate) {
         qualification = "%";
     }
 
+    var queryString = "SELECT SUM(quantitee_finale) AS quantitee_traitee, " +
+    "prestataire.nom, prestataire.siret, prestataire.id, prestataire.localisation " +
+    "FROM bordereau INNER JOIN traitement ON traitement.id = bordereau.id_traitement_final " +
+    "INNER JOIN type_traitement ON type_traitement.id = bordereau.id_traitement_prevu " +
+    "INNER JOIN transport ON transport.id = bordereau.id_transport_1 " +
+    "INNER JOIN prestataire ON traitement.id_prestataire = prestataire.id " +
+    "WHERE bordereau.id_site IN (?) AND bordereau.id_dechet = ? AND " +
+    "transport.date < ? AND transport.date >= ? " +
+    "AND type_traitement.qualification LIKE ? " +
+    "GROUP BY prestataire.id  HAVING SUM(quantitee_finale) > 0 ORDER BY SUM(quantitee_finale) DESC"
+
     var query = {
-        where: {
-            id_site: {$in: sitesId},
-            id_dechet: id
-        },
-        group: sequelize.col('traitementFinal.id_prestataire'),
-        attributes: [
-            [sequelize.fn('SUM', sequelize.col('quantitee_finale')), 'quantitee_traitee']
-        ],
-        order: [
-            [sequelize.literal('quantitee_traitee'), 'DESC']
-        ],
-        include: [
-            {
-                model: Traitement,
-                as: 'traitementFinal',
-                attributes: ['id'],
-                where: {
-                    date_priseencharge: {
-                        $lte: endDate,
-                        $gte: beginDate
-                    }
-                },
-                include: [
-                    {
-                        model: Type_traitement,
-                        attributes: [],
-                        where: {
-                            qualification: {$like: qualification}
-                        }
-                    },
-                    {
-                        model: Prestataire,
-                        attributes: [
-                            'nom',
-                            'siret',
-                            'id',
-                            'localisation'
-                        ]
-                    }
-                ]
-            },
-        ]
-    };
+        sql: queryString,
+        nestTables: true,
+        values: [sitesId, id, endDate, beginDate, qualification]
+    }
 
     var observable = Rx.Observable.create((obs) => {
-        Bordereau.findAll(query)
-            .then((bordereaux) => {
-                bordereaux.forEach((bordereau) => {
-                    bordereau.dataValues.prestataire = bordereau.dataValues.traitementFinal.prestataire;
-                    bordereau.dataValues.traitementFinal = undefined;
+        connection.query(query, (errors, results, fields) => {
+            if (errors) {
+                obs.onError(errors);
+            }
+            else {
+                results.forEach((row) => {
+                    row.quantitee_traitee = row[''].quantitee_traitee;
+                    row[''] = undefined;
                 })
-                obs.onNext(bordereaux);
+                obs.onNext(results);
                 obs.onCompleted();
-            })
-            .catch((error) => {
-                obs.onError(error);
-            })
-    });
+            }
+        })
+    })
+
     return observable;
 }
 
