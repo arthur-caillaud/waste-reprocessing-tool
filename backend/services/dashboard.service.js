@@ -117,8 +117,8 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
     };
 
     var observable = Rx.Observable.create((obs) => {
-        connection.query(query, (error, values, fields) => {
-            obs.onNext([values, label]);
+        connection.query(query, (error, results, fields) => {
+            obs.onNext([results, label]);
             obs.onCompleted();
         })
     })
@@ -160,7 +160,7 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
     var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
     "bordereau.id_dechet INNER JOIN transport AS transport1 ON transport1.id = bordereau.id_transport_1 " +
     "INNER JOIN site ON site.id = bordereau.id_site WHERE dechet.is_dangereux = ? " +
-    "AND transport1.date < ? AND transport1.date >= AND transport1.date <= ? AND " +
+    "AND transport1.date < ? AND transport1.date >= ? AND transport1.date <= ? AND " +
     "id_site IN (?) AND bordereau_finished = 0";
 
     var query = {
@@ -171,9 +171,8 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext(results);
+            obs.onNext([results, label]);
             obs.onCompleted();
-            console.log(error);
         })
     })
     return observable;
@@ -211,7 +210,6 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            console.log(error);
             obs.onNext([results, label]);
             obs.onCompleted();
         })
@@ -347,7 +345,6 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            console.log(error);
             var sum = 0;
             results.forEach((row) => {
                 if (row.quantitee_finale == 0) {
