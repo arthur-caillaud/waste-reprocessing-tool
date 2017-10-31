@@ -3,12 +3,6 @@ var Rx = require('rx');
 var service = {};
 var sequelize = require('sequelize');
 var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host: '91.134.242.69',
-    user: 'root',
-    password: 'arthurpierreaurelien',
-    database: 'db'
-});
 
 var models = require('../models/');
 var traitement = models.traitement;
@@ -22,6 +16,18 @@ var transporteur = models.transporteur;
 var type_traitement = models.type_traitement;
 var referentiel_dechet = models.referentiel_dechet;
 var dashboard = models.dashboard;
+
+var env       = process.env.NODE_ENV || 'development';
+var dbConfig    = require(__dirname + '/../config/config.json')[env];
+
+var connectionInfo = {
+    host: dbConfig.host,
+    user: dbConfig.username,
+    password: dbConfig.password,
+    database: dbConfig.database
+}
+
+var connection = mysql.createConnection(connectionInfo);
 
 function getAllPrestataires(queryParameters) {
     /* This function creates an Observable and returns it. It searches for all

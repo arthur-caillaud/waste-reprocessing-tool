@@ -29,6 +29,18 @@ var dashboard = models.dashboard;
 var config = require('../config/config.json');
 const tolerance = config.computing.tolerance;
 
+var env       = process.env.NODE_ENV || 'development';
+var dbConfig    = require(__dirname + '/../config/config.json')[env];
+
+var connectionInfo = {
+    host: dbConfig.host,
+    user: dbConfig.username,
+    password: dbConfig.password,
+    database: dbConfig.database
+}
+
+var connection = mysql.createConnection(connectionInfo);
+
 /** All the get functions have exactly the same format:
     First we create a query corresponding to the data we want to find
     Then we create an observable object that will execute the request
