@@ -2,13 +2,41 @@ import React, { Component } from "react";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
 import '../../styles/tile.css';
 
+function handleOnRowMouseOver(row) {
+    this.setState({rowOver:row})
+}
+function handleOnRowMouseOut() {
+    this.setState({rowOver:{}})
+}
+
+var tooltipstyle = {
+    color: 'red',
+    textAlign: 'left'
+}
+var tooltiptitle = {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+}
+function ToolTip(props){
+    if(props.row.Num_Bdx === undefined){
+        return (<div className='tooltip32'></div>)
+    }
+    console.log(props.row)
+    return (<div className='tooltip32 show'><span style={tooltiptitle}>Site: </span><span style={tooltipstyle}>{props.row.Nom}</span></div>)
+}
+
 export default class RightTileAlerts extends Component {
     constructor(props) {
         super(props);
         this.state = {
             incoherences_filieres_dd: window.store.getState().pageOptions.bordereaux.incoherences_filieres_dd,
             data: [],
+            rowOver:{}
         }
+        handleOnRowMouseOver = handleOnRowMouseOver.bind(this)
+        handleOnRowMouseOut = handleOnRowMouseOut.bind(this)
+
     }
     componentWillMount() {
 
@@ -17,7 +45,8 @@ export default class RightTileAlerts extends Component {
             data.push({
                 Num_Bdx: element.num_bordereau.substring(0, 10),
                 Code_Interne: element.dechet.codeinterne.substring(0, 10),
-                Site: parseFloat(element.id_site).toFixed(0),
+                Site: (element.site.nom).substring(0, 10),
+                Nom: element.site.nom
         })
     })
         this.setState({data: data});
@@ -25,13 +54,24 @@ export default class RightTileAlerts extends Component {
 
     render() {
         if (window.store.getState().infosPanelOptions.rightTileAlerts === true){
+            const options = {
+                onRowMouseOver: function(row, e) {
+                    handleOnRowMouseOver(row)
+                },
+                onRowMouseOut: function() {
+                    handleOnRowMouseOut()
+                }
+            }
 
         return (
-            <BootstrapTable data={this.state.data} scrollTop={ 'Top' }>
-                <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Bdx</TableHeaderColumn>
-                <TableHeaderColumn dataField="Code_Interne" dataAlign="center">CodeInt.</TableHeaderColumn>
-                <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
-            </BootstrapTable>
+            <div>
+                <ToolTip row={this.state.rowOver}/>
+                <BootstrapTable data={this.state.data} scrollTop={ 'Top' } options={ options }>
+                    <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Brdx</TableHeaderColumn>
+                    <TableHeaderColumn dataField="Code_Interne" dataAlign="center">Code</TableHeaderColumn>
+                    <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
+                </BootstrapTable>
+            </div>
         );
     }
         else {
