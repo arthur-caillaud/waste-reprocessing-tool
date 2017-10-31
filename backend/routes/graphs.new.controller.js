@@ -418,42 +418,42 @@ function getDataForPrestataire(req, res) {
     }
 
     var filterResult = () => {
-        var idDechets = [];
-        result.sites.quantity.forEach((dechet) => {
-            idDechets.push(dechet.dataValues.id_dechet);
-        });
-
-        var tmp = [];
-        result.global.quantity.forEach((dechet) => {
-            if (idDechets.includes(dechet.dataValues.id_dechet )) {
-                tmp.push(dechet);
-            }
-        })
-        result.global.quantity = tmp;
-
-        tmp = [];
-        result.global.recycled.forEach((dechet) => {
-            if (idDechets.includes(dechet.dataValues.id_dechet)) {
-                tmp.push(dechet);
-            }
-        })
-        result.global.recycled = tmp;
-
-        tmp = [];
-        result.region.quantity.forEach((dechet) => {
-            if (idDechets.includes(dechet.dataValues.id_dechet)) {
-                tmp.push(dechet);
-            }
-        })
-        result.region.quantity = tmp;
-
-        tmp = [];
-        result.region.recycled.forEach((dechet) => {
-            if (idDechets.includes(dechet.dataValues.id_dechet)) {
-                tmp.push(dechet);
-            }
-        })
-        result.region.recycled = tmp;
+        // var idDechets = [];
+        // result.sites.quantity.forEach((dechet) => {
+        //     idDechets.push(dechet.dataValues.id_dechet);
+        // });
+        //
+        // var tmp = [];
+        // result.global.quantity.forEach((dechet) => {
+        //     if (idDechets.includes(dechet.dataValues.id_dechet )) {
+        //         tmp.push(dechet);
+        //     }
+        // })
+        // result.global.quantity = tmp;
+        //
+        // tmp = [];
+        // result.global.recycled.forEach((dechet) => {
+        //     if (idDechets.includes(dechet.dataValues.id_dechet)) {
+        //         tmp.push(dechet);
+        //     }
+        // })
+        // result.global.recycled = tmp;
+        //
+        // tmp = [];
+        // result.region.quantity.forEach((dechet) => {
+        //     if (idDechets.includes(dechet.dataValues.id_dechet)) {
+        //         tmp.push(dechet);
+        //     }
+        // })
+        // result.region.quantity = tmp;
+        //
+        // tmp = [];
+        // result.region.recycled.forEach((dechet) => {
+        //     if (idDechets.includes(dechet.dataValues.id_dechet)) {
+        //         tmp.push(dechet);
+        //     }
+        // })
+        // result.region.recycled = tmp;
 
         res.json(result);
     }
