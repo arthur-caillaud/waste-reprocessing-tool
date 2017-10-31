@@ -112,23 +112,26 @@ function processDashboardData(req, res) {
         res.status(404).send("Unknown sites");
     }
 
-    for (var i=0; i<sites.length; i++) {
-        idArray.push(sites[i].id);
+    else {
+        for (var i=0; i<sites.length; i++) {
+            idArray.push(sites[i].id);
+        }
+
+        var onNext = (data) => {
+            res.json(data);
+        };
+        var onError = (error) => {
+            utilities.errorHandler(error, (errorPacket) => {
+                res.status(errorPacket.status).send(errorPacket.message);
+            });
+        };
+        var onCompleted = () => {
+        };
+
+        var observer = Rx.Observer.create(onNext, onError, onCompleted);
+        DashboardService.getDataForSites(idArray, beginDate, endDate).subscribe(observer);
     }
 
-    var onNext = (data) => {
-        res.json(data);
-    };
-    var onError = (error) => {
-        utilities.errorHandler(error, (errorPacket) => {
-            res.status(errorPacket.status).send(errorPacket.message);
-        });
-    };
-    var onCompleted = () => {
-    };
-
-    var observer = Rx.Observer.create(onNext, onError, onCompleted);
-    DashboardService.getDataForSites(idArray, beginDate, endDate).subscribe(observer);
 }
 
 
