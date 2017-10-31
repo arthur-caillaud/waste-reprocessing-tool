@@ -404,6 +404,9 @@ function getDataForPrestataire(req, res) {
 
     if (regionArray.length > 0) {
 
+        console.log(regionArray.length);
+        console.log(globalArray.length);
+
         var observerRegionQuantity = Rx.Observer.create((data) => onNext(["region", "quantity"], data), onError, onCompleted);
         prestataireService.getDechetsForPrestataire(undefined, regionArray, 0, beginDate, endDate)
             .subscribe(observerRegionQuantity);

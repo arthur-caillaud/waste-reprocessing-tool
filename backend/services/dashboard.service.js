@@ -381,8 +381,13 @@ function countBordereaux(idArray, beginDate, endDate, label) {
 
      var observable = Rx.Observable.create(obs => {
          connection.query(query, (error, results, fields) => {
-             obs.onNext([results[0].sum, label]);
-             obs.onCompleted();
+             if (error) {
+                 obs.onError(error);
+             }
+             else {
+                 obs.onNext([results[0].sum, label]);
+                 obs.onCompleted();
+             }
          })
      })
 

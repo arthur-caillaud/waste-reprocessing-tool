@@ -25,17 +25,17 @@ function getAllSites(queryParameters) {
                  var anyValue = queryParameters.where.any;
                  var anyFilter = {
                      $or: [
-                         sequelize.where(sequelize.fn('LOWER', sequelize.col('nom')), 'LIKE', anyValue),
-                         sequelize.where(sequelize.fn('LOWER', sequelize.col('unite_dependance')), 'LIKE', anyValue),
-                         sequelize.where(sequelize.fn('LOWER', sequelize.col('up_dependance')), 'LIKE', anyValue),
-                         sequelize.where(sequelize.fn('LOWER', sequelize.col('metier_dependance')), 'LIKE', anyValue),
+                         sequelize.where(sequelize.col('nom'), 'LIKE', anyValue),
+                         sequelize.where(sequelize.col('unite_dependance'), 'LIKE', anyValue),
+                         sequelize.where(sequelize.col('up_dependance'), 'LIKE', anyValue),
+                         sequelize.where(sequelize.col('metier_dependance'), 'LIKE', anyValue),
                      ]
                  };
                  where["any"] = anyFilter;
              }
              else {
                  const val = queryParameters.where[key];
-                 where[key] = sequelize.where(sequelize.fn('LOWER', sequelize.col(key)), 'LIKE', val)
+                 where[key] = sequelize.where(sequelize.col(key), 'LIKE', val)
              }
          }
          queryParameters.where = where;
