@@ -71,8 +71,13 @@ function getAllEcartsDePesee(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext([results, label])
-            obs.onCompleted()
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                obs.onNext([results, label])
+                obs.onCompleted()
+            }
         })
     })
     return observable;
@@ -99,8 +104,13 @@ function getAllIncoherencesFilieres(idArray, dangereux, beginDate, endDate, labe
 
     var observable = Rx.Observable.create(obs => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext([results, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                obs.onNext([results, label]);
+                obs.onCompleted();
+            }
         })
     })
     return observable;
@@ -130,8 +140,13 @@ function getAllFilieresInterdites(idArray, dangereux, beginDate, endDate, label)
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext([results, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                obs.onNext([results, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -183,8 +198,13 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext([results, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                obs.onNext([results, label]);
+                obs.onCompleted();
+            }
         })
     })
     return observable;
@@ -222,8 +242,13 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext([results, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                obs.onNext([results, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -247,17 +272,22 @@ function getTotalVolume(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            var sum = 0;
-            results.forEach((row) => {
-                if (row.quantitee_finale == 0) {
-                    sum += row.quantitee_transportee;
-                }
-                else {
-                    sum += row.quantitee_finale;
-                }
-            })
-            obs.onNext([sum, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                var sum = 0;
+                results.forEach((row) => {
+                    if (row.quantitee_finale == 0) {
+                        sum += row.quantitee_transportee;
+                    }
+                    else {
+                        sum += row.quantitee_finale;
+                    }
+                })
+                obs.onNext([sum, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -284,17 +314,22 @@ function getTotalVolumeVerte(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            var sum = 0;
-            results.forEach((row) => {
-                if (row.quantitee_finale == 0) {
-                    sum += row.quantitee_transportee;
-                }
-                else {
-                    sum += row.quantitee_finale;
-                }
-            })
-            obs.onNext([sum, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                var sum = 0;
+                results.forEach((row) => {
+                    if (row.quantitee_finale == 0) {
+                        sum += row.quantitee_transportee;
+                    }
+                    else {
+                        sum += row.quantitee_finale;
+                    }
+                })
+                obs.onNext([sum, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -319,17 +354,22 @@ function getValorisationTotale(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            var sum = 0;
-            results.forEach((row) => {
-                if (row.quantitee_finale == 0) {
-                    sum += row.quantitee_transportee;
-                }
-                else {
-                    sum += row.quantitee_finale;
-                }
-            })
-            obs.onNext([sum, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                var sum = 0;
+                results.forEach((row) => {
+                    if (row.quantitee_finale == 0) {
+                        sum += row.quantitee_transportee;
+                    }
+                    else {
+                        sum += row.quantitee_finale;
+                    }
+                })
+                obs.onNext([sum, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -357,17 +397,22 @@ function getValorisationVerte(idArray, beginDate, endDate, label) {
 
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            var sum = 0;
-            results.forEach((row) => {
-                if (row.quantitee_finale == 0) {
-                    sum += row.quantitee_transportee;
-                }
-                else {
-                    sum += row.quantitee_finale;
-                }
-            })
-            obs.onNext([sum, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error);
+            }
+            else {
+                var sum = 0;
+                results.forEach((row) => {
+                    if (row.quantitee_finale == 0) {
+                        sum += row.quantitee_transportee;
+                    }
+                    else {
+                        sum += row.quantitee_finale;
+                    }
+                })
+                obs.onNext([sum, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -456,8 +501,13 @@ function getUndated(idArray, label) {
     }
     var observable = Rx.Observable.create((obs) => {
         connection.query(query, (error, results, fields) => {
-            obs.onNext([results, label]);
-            obs.onCompleted();
+            if (error) {
+                obs.onError(error)
+            }
+            else {
+                obs.onNext([results, label]);
+                obs.onCompleted();
+            }
         })
     })
 
@@ -477,11 +527,11 @@ function getDataForSites(idArray, beginDate, endDate) {
 
     var observable = Rx.Observable.create((observer) => {
         connection.query(query, (error, results, fields) => {
-            observer.onNext(results);
-            observer.onCompleted();
             if (error) {
                 observer.onError(error);
             }
+            observer.onNext(results);
+            observer.onCompleted();
         })
     })
     return observable;
