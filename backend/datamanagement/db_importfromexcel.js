@@ -981,7 +981,7 @@ const writeIntoBdd = function(excelName) {
                     const begin = new Date();
                     async.series(tasksArray, (err,res) => {
                         const end = new Date();
-                        console.log("Durée : " + (end-begin)/100 + "s");
+                        console.log("Durée : " + (end-begin)/1000 + "s");
                         db.mysqlDisconnect(sequelize);
                         obs.onCompleted();
                     });
