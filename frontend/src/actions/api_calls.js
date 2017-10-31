@@ -138,12 +138,7 @@ export function updateSite(site) {
                                     dispatch(actions.saveBordereauxForSite(json.data))
                                     dispatch(loadPrestataireList(site.real_level,site.nom));
                                     dispatch(loadDechetList(site.real_level,site.nom));
-                                    dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
-                                    dispatch(loadDechetGraphValues(site.real_level,site.nom));
-
-                                })
-
-
+                                });
                         });
                 })
         } else if (window.location.href.split('/')[3] === "prestataire") {
@@ -151,7 +146,6 @@ export function updateSite(site) {
             Gotta add here dispatch for prestataire page
             */
             dispatch(loadPrestataireList(site.real_level,site.nom));
-            dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
 
             return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                 .then(json => {
@@ -182,19 +176,13 @@ export function updateSite(site) {
                                 .then(json => {
                                     dispatch(actions.saveBordereauxForSite(json.data))
                                     dispatch(loadDechetList(site.real_level,site.nom));
-                                    dispatch(loadDechetGraphValues(site.real_level,site.nom));
-
                                 })
-
-
                         });
                 })
 
         } else {
 
             dispatch(loadDechetList(site.real_level,site.nom));
-            dispatch(loadDechetGraphValues(site.real_level,site.nom));
-
 
             /*
             Gotta add here dispatchs for dechet vision
@@ -228,8 +216,6 @@ export function updateSite(site) {
                                 .then(json => {
                                     dispatch(actions.saveBordereauxForSite(json.data))
                                     dispatch(loadPrestataireList(site.real_level,site.nom));
-                                    dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
-
                                 })
 
 
@@ -255,7 +241,9 @@ export function loadPrestataireList(level,name){
         dispatch(actions.cleanDechetsChosenTagsArray());
         return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
             .then(json => {
+                dispatch(actions.updateBiggestPrestataire(json.data.prestataires[0]));
                 dispatch(actions.updatePrestataireList(json.data));
+                dispatch(loadPrestataireGraphValues(level,name, json.data.prestataires[0]));
             });
     }
 }
@@ -280,6 +268,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
     return dispatch => {
         dispatch(actions.loadPrestataireGraphValuesBegin());
         if(prestataire){
+            dispatch(actions.updateSelectedPrestataire(prestataire));
             return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+prestataire.id)
                 .then(json => {
                     let valuesArray = [];
@@ -487,7 +476,9 @@ export function loadDechetList(level,name){
                         let newRow = Object.assign({}, row, {nom: row.libelle});
                         newInputArray.push(newRow);
                     });
+                    dispatch(actions.updateBiggestDechet(json.data.dechets[0]));
                     dispatch(actions.updateDechetList(newInputArray));
+                    dispatch(loadDechetGraphValues(level,name,json.data.dechets[0]));
                 }
             });
     }
@@ -514,6 +505,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
     return dispatch => {
         dispatch(actions.loadDechetGraphValuesBegin());
         if(dechet){
+            dispatch(actions.updateSelectedDechet(dechet));
             return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id)
                 .then(json => {
                     /*

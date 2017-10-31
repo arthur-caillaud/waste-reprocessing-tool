@@ -48,12 +48,14 @@ import {
     CLEAR_PRESTATAIRES_SEARCHSUGGESTIONS,
     UPDATE_SELECTEDPRESTATAIRE,
     UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT,
+    UPDATE_BIGGEST_PRESTATAIRE,
 
     LOAD_DECHETLIST_BEGIN,
     UPDATE_DECHETLIST,
     CLEAR_DECHETS_SEARCHSUGGESTIONS,
     UPDATE_SELECTEDDECHET,
     UPDATE_DECHETPANEL_SEARCHBAR_INPUT,
+    UPDATE_BIGGEST_DECHET,
 
     LOAD_PRESTATAIREGRAPH_TAGS_BEGIN,
     ADD_DECHET_GRAPH_TAG,
@@ -451,7 +453,7 @@ And UPDATE_SITE (see HelperService again)
         }
 }
 
-function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
+function updatePrestataireSelectionPanel(state = {input: '', biggest: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
     switch(action.type){
         case LOAD_PRESTATAIRELIST_BEGIN:
             return Object.assign({}, state, {
@@ -471,13 +473,17 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
                 suggestion: []
             });
         case UPDATE_PRESTATAIREPANEL_SEARCHBAR_INPUT:
-        const input = action.input;
-        const arrayInWhichToSearch = state.inputArray;
-        const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
-        return Object.assign({}, state, {
-            input: action.input,
-            suggestion: foundElementsArray,
-        });
+            const input = action.input;
+            const arrayInWhichToSearch = state.inputArray;
+            const foundElementsArray = searchInArray(arrayInWhichToSearch, input);
+            return Object.assign({}, state, {
+                input: action.input,
+                suggestion: foundElementsArray,
+            });
+        case UPDATE_BIGGEST_PRESTATAIRE:
+            return Object.assign({}, state, {
+                biggest: action.prestataire
+            })
         case UPDATE_SELECTEDPRESTATAIRE:
             return Object.assign({}, state, {
                 selectedInput: action.prestataire
@@ -487,7 +493,7 @@ function updatePrestataireSelectionPanel(state = {input: '', inputArray: [], isL
     }
 }
 
-function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
+function updateDechetSelectionPanel(state = {input: '', biggest: '', inputArray: [], isLoading: false, selectedInput: '', suggestion: []}, action){
     switch(action.type){
         case LOAD_DECHETLIST_BEGIN:
             return Object.assign({}, state, {
@@ -514,6 +520,10 @@ function updateDechetSelectionPanel(state = {input: '', inputArray: [], isLoadin
                 input: action.input,
                 suggestion: foundElementsArray,
             });
+        case UPDATE_BIGGEST_DECHET:
+            return Object.assign({}, state, {
+                biggest: action.dechet
+            })
         case UPDATE_SELECTEDDECHET:
             return Object.assign({}, state, {
                 selectedInput: action.dechet
