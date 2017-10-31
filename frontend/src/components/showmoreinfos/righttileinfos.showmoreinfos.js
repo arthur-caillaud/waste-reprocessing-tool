@@ -68,6 +68,9 @@ export default class RightTileInfos extends Component {
                     <TableHeaderColumn dataField="Code_Interne" dataAlign="center">Code</TableHeaderColumn>
                     <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
                 </BootstrapTable>
+                <div>
+                    <h5 className="titleshowmoreinfos">Incohérences Filières</h5>
+                </div>
             </div>
         );
     }

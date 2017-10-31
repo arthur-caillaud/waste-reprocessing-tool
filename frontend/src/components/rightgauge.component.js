@@ -1,6 +1,7 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
+import * as d3tip from 'd3-tip';
 import { connect } from "react-redux";
 import MoreInfosService from '../actions/showmoreinfos.service.js';
 import Loading from '../resources/Rolling.gif';
@@ -51,6 +52,17 @@ class RightGauged3 extends Component {
         var g = svgDoc.append("g")
             .attr("transform", "translate(" + (width+ margin.left + margin.right)/2 + "," + (height + margin.top + margin.bottom)/2 + ")rotate(180)"
              );
+        var tip = d3tip()
+            .attr('class', 'd3-tip')
+            .offset([-1.15 * height, 0])
+            .html(function(d) {
+                 return ("<div><div><strong>"+
+                 'Bordereaux Datés'+
+                 "</strong></div>"+
+                 "<div>Cette année: <span style='color:red'>" + rightvalue.toFixed(2) + "%</span></div>"+
+                 "<div>Année précédente: <span style='color:red'>" + rightvalueBefore.toFixed(2) + "%</span></div></div>"
+                )});
+            svgDoc.call(tip)
 
         //This FUNCTION permits to scale 0 to 100% onto a domain that represent the gauge.
         //Without it, the gauge goes from 0 to 100 in a full circle.
@@ -142,6 +154,8 @@ class RightGauged3 extends Component {
                     .attr("endAngle", scale(0))
 
                     .attr("class", arc)
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide)
                     .transition().duration(2500)
                     .attrTween("d", function(d) {
 

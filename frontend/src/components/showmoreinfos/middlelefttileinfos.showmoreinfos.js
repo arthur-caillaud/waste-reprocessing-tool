@@ -68,6 +68,9 @@ export default class MiddleLeftTileInfos extends Component {
                     <TableHeaderColumn dataField="Code_Interne" dataAlign="center">Code</TableHeaderColumn>
                     <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
                 </BootstrapTable>
+                <div>
+                    <h5 className="titleshowmoreinfos">Filières Interdites</h5>
+                </div>
             </div>
 
         );

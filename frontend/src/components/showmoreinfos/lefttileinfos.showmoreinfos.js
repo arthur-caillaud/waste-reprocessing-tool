@@ -69,12 +69,17 @@ export default class LeftTileInfos extends Component {
 
         return (
             <div>
+
                 <ToolTip row={this.state.rowOver}/>
                 <BootstrapTable data={this.state.data} scrollTop={ 'Top' } options={ options }>
                     <TableHeaderColumn isKey={true} dataField="Num_Bdx" dataAlign="center">#Brdx</TableHeaderColumn>
                     <TableHeaderColumn dataField="Qte_estimee" dataAlign="center"> Qté Est.</TableHeaderColumn>
                     <TableHeaderColumn dataField="Qte_recue" dataAlign="center">Qté Reç.</TableHeaderColumn>
                 </BootstrapTable>
+                <div>
+                    <h5 className="titleshowmoreinfos">Ecarts de Pesée</h5>
+                </div>
+
 
             </div>
         );
