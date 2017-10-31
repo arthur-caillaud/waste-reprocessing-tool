@@ -9,11 +9,21 @@ function handleOnRowMouseOut() {
     this.setState({rowOver:{}})
 }
 
+var tooltipstyle = {
+    color: 'red',
+    textAlign: 'left'
+}
+var tooltiptitle = {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center'
+}
 function ToolTip(props){
-    console.log(props)
-    if(props.row.Num_Bdx === undefined)
+    if(props.row.Num_Bdx === undefined){
         return (<div className='tooltip32'></div>)
-    return (<div className='tooltip32 show'>{props.row.Num_Bdx}</div>)
+    }
+    console.log(props.row)
+    return (<div className='tooltip32 show'><span style={tooltiptitle}>Site: </span><span style={tooltipstyle}>{props.row.Site}</span></div>)
 }
 
 export default class LeftTileInfos extends Component {
@@ -37,6 +47,8 @@ export default class LeftTileInfos extends Component {
                 Num_Bdx: element.num_bordereau.substring(0, 10),
                 Qte_estimee: parseFloat(element.quantitee_transportee).toFixed(2),
                 Qte_recue: parseFloat(element.quantitee_finale).toFixed(2),
+                Site: element.site.nom
+
         })
     })
         this.setState({data: data});
