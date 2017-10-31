@@ -17,32 +17,6 @@ Only two functions are needed: you don't need to create, modify or delete
 anything concerning the prestataires
 */
 
-/**
-  * @api {GET} /sites Recherche tous les sites
-  * @apiGroup Sites
-  * @apiVersion 1.0.0
-  *
-  * @apiParam (queryParam) {string} [nom] Noms des sites
-  * @apiParam (queryParam) {number} [id] Id des sites
-  * @apiParam (queryParam) {string} [site_production] je sais pas ce que c'est
-  * @apiParam (queryParam) {string} [unite_dependance] unité de dépendance des sites
-  * @apiParam (queryParam) {string} [up_dependance] aucune idée non plus
-  * @apiParam (queryParam) {string} [metier_dependance] métier de dépendance des sites
-  * @apiParam (queryParam) {string} [any] recherche sur n'importe quel champ possible
-  * @apiParam (queryParam) {string} [order] Tri de la liste des résultats
-  * @apiParam (queryParam) {string[]} [fields] Sélection des champs
-  *
-  * @apiExample {curl} Exemple sans argument
-  *   curl -i http://localhost:4000/api/sites
-  * @apiExample {curl} Exemple recherche sur tous les champs
-  *   curl -i http://localhost:4000/api/sites/?any=aquitaine
-  * @apiExample {curl} Exemple avec arguments
-  *   curl -i http://localhost:4000/api/sites/?fields=id,nom&order=-nom
-  *
-  * @apiSuccess {JSONString[]} prestataires Liste des sites
-  * correspondant à la recherche
-  * @apiError PrestatairesNotFound Impossible de trouver les prestataires
-  */
 function getAllSites(req, res) {
     // Returns all the prestataires, currently returns a 500 error code when
     // an error is raised
@@ -61,16 +35,6 @@ function getAllSites(req, res) {
     var subscription = sitesService.getAllSites(parsedArgs).subscribe(observer);
 }
 
-/**
-  * @api {GET} /sites/:id Recherche un site selon son id
-  * @apiGroup Sites
-  * @apiVersion 1.1.0
-  *
-  * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/sites/42
-  * @apiSuccess {JSONString} prestataire Prestataire recherché
-  * @apiError PrestataireNotFound Prestataire introuvable
-  */
 function getSiteById(req, res) {
     var id = req.params.id;
     var next = (data) => {

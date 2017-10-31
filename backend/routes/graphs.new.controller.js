@@ -25,51 +25,6 @@ anything concerning the graphs
 */
 
 
-
-/**
-  * @api {GET} /graphs/prestataires/ A CHANGER
-  * @apiGroup Graphs
-  * @apiVersion 1.1.0
-  *
-  * @apiParam (queryParam) {string} [beginDate] première date voulue (format yyyy-mm-dd)
-  * @apiParam (queryParam) {string} [endDate] première date voulue (format yyyy-mm-dd)
-  * @apiParam (queryParam) {number} [level] niveau voulu dans la hierarchie (allant
-  * de 0 : central à 4 : site) default: 0
-  * @apiParam (queryParam) {string} [name] nom du lieu voulu dans sa hierarchie
-  * (facultatif dans le cas d'une hierarchie 0 (niveau central))
-  *
-  * @apiExample {curl} Exemple
-  *   curl -i http://localhost:4000/api/graphs/prestataires/0
-  * @apiExample {curl} Exemple avec arguments
-  *   curl -i http://localhost:4000/api/graphs/prestataires/1/SEI/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
-  *
-  * @apiSuccess {JSONString} data Informations nécessaires
-  * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
-  */
-
-
-/**
-    * @api {GET} /graphs/prestataires/:level/:name/dechets/:id Donne la liste des déchets
-    * avec les déchets valorisés pour un prestataire donné sur un lieu donné
-    * @apiGroup Graphs
-    * @apiVersion 1.1.0
-    *
-    * @apiParam (queryParam) {string} [beginDate] première date voulue (format yyyy-mm-dd)
-    * @apiParam (queryParam) {string} [endDate] première date voulue (format yyyy-mm-dd)
-    * @apiParam (queryParam) {number} [level] niveau voulu dans la hierarchie (allant
-    * de 0 : central à 4 : site) default: 0
-    * @apiParam (queryParam) {string} [name] nom du lieu voulu dans sa hierarchie
-    * (facultatif dans le cas d'une hierarchie 0 (niveau central))
-    *
-    * @apiExample {curl} Exemple
-    *   curl -i http://localhost:4000/api/graphs/prestataires/0/dechets/1
-    * @apiExample {curl} Exemple avec arguments
-    *   curl -i http://localhost:4000/api/graphs/0/prestataires/1/?beginDate=2017-11-11&endDate=2017-03-18&level=1&name=SEI
-    *
-    * @apiSuccess {JSONString} data Informations nécessaires
-    * @apiError ResourceNotFound Impossible de trouver le lieu spécifié
-*/
-
 /**
 This function is first called upon request. It verifies that all necessary
 arguments are provided and returns an error if not the case
@@ -421,43 +376,6 @@ function getDataForPrestataire(req, res) {
     }
 
     var filterResult = () => {
-        // var idDechets = [];
-        // result.sites.quantity.forEach((dechet) => {
-        //     idDechets.push(dechet.dataValues.id_dechet);
-        // });
-        //
-        // var tmp = [];
-        // result.global.quantity.forEach((dechet) => {
-        //     if (idDechets.includes(dechet.dataValues.id_dechet )) {
-        //         tmp.push(dechet);
-        //     }
-        // })
-        // result.global.quantity = tmp;
-        //
-        // tmp = [];
-        // result.global.recycled.forEach((dechet) => {
-        //     if (idDechets.includes(dechet.dataValues.id_dechet)) {
-        //         tmp.push(dechet);
-        //     }
-        // })
-        // result.global.recycled = tmp;
-        //
-        // tmp = [];
-        // result.region.quantity.forEach((dechet) => {
-        //     if (idDechets.includes(dechet.dataValues.id_dechet)) {
-        //         tmp.push(dechet);
-        //     }
-        // })
-        // result.region.quantity = tmp;
-        //
-        // tmp = [];
-        // result.region.recycled.forEach((dechet) => {
-        //     if (idDechets.includes(dechet.dataValues.id_dechet)) {
-        //         tmp.push(dechet);
-        //     }
-        // })
-        // result.region.recycled = tmp;
-
         res.json(result);
     }
 

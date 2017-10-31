@@ -10,7 +10,6 @@ var users = require('./routes/users');
 
 var bordereaux = require('./routes/bordereaux.controller');
 var prestataires = require('./routes/prestataires.controller');
-var prestatairesNew = require('./routes/prestataires-new.controller');
 var dechets = require('./routes/dechets.controller');
 var sites = require('./routes/sites.controller');
 var dashboard = require('./routes/dashboard.controller');
@@ -56,8 +55,7 @@ router.use('/users', users);
 
 router.use('/bordereaux', bordereaux);
 router.use('/dechets', dechets);
-router.use('/prestataires', prestatairesNew);
-router.use('/old/prestataires', prestataires);
+router.use('/prestataires', prestataires);
 router.use('/sites', sites);
 router.use('/dashboard', dashboard);
 router.use('/graphs', graphs);
