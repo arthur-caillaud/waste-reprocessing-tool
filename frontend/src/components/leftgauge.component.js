@@ -184,7 +184,7 @@ class LeftGauged3 extends Component {
                       .tween("text", function() {
                         var that = d3.select(this),
                             i = d3.interpolateNumber(0, v_listeverte);
-                        return function(t) { that.text("Volume L. Verte: " + format(i(t)) + "t"); };
+                        return function(t) { that.text(format(i(t)) + "t (tot.)"); };
                       })
                       .styleTween("fill", function() {
                           var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
