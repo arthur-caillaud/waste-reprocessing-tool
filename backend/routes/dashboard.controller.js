@@ -108,6 +108,10 @@ function processDashboardData(req, res) {
     var result = {};
     var loopsToDo = 4;
 
+    if (sites.length == 0) {
+        res.status(404).send("Unknown sites");
+    }
+
     for (var i=0; i<sites.length; i++) {
         idArray.push(sites[i].id);
     }

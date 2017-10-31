@@ -126,7 +126,7 @@ function getNecessarySites(req, res, next) {
     const level = req.params.level;
     const name = req.params.name;
 
-    if (level<0 || level>4 || (level>1 && !(name))) {
+    if (level<0 || level>4 || (level>0 && !(name))) {
         utilities.errorHandler("Invalid arguments", (errorPacket) => {
             res.status(errorPacket.status).send(errorPacket.message);
         });
@@ -159,7 +159,12 @@ function getNecessarySites(req, res, next) {
     var complete = () => {
         loops -= 1;
         if (loops == 0) {
-            next();
+            if (req.locals.sites.length == 0) {
+                res.status(404).send("Unknown sites");
+            }
+            else {
+                next();
+            }
         }
 
     };
