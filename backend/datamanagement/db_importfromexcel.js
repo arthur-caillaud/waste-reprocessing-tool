@@ -1024,5 +1024,5 @@ function __main(datasExcelArray, referentielExcel){
         writeReferentielDechetIntoBdd(referentielExcel);
     });
 }
-writeReferentielDechetIntoBdd('liste_dechets.xlsx');
-//__main(["datamars.xlsx"],"liste_dechets.xlsx");
+
+__main(["datajuillet.xlsx"],"liste_dechets.xlsx");
