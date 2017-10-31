@@ -51,6 +51,9 @@ function getDashboard(req, res, next) {
   var beginDate = req.query.beginDate;
   var endDate = req.query.endDate;
 
+  // var fs = require('fs');
+  // fs.writeFileSync("tmp/request", req.join(','), 'utf-8');
+
   // when we check if name, we actually check if it is defined
   if (level<0 || level>4 || (level>1 && !(name)) || !(endDate) || !(beginDate)) {
       utilities.errorHandler("Invalid arguments", (errorPacket) => {
@@ -137,7 +140,9 @@ function processDashboardData(req, res) {
             res.status(errorPacket.status).send(errorPacket.message);
         });
     };
-    var onCompleted = () => {};
+    var onCompleted = () => {
+        console.log(new Date())
+    };
 
     var observer = Rx.Observer.create(onNext, onError, onCompleted);
     DashboardService.getDataForSites(idArray, beginDate, endDate).subscribe(observer);

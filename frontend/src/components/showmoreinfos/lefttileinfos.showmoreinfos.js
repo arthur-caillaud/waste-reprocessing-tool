@@ -14,9 +14,9 @@ export default class LeftTileInfos extends Component {
         let data = []
         this.state.ecarts_pesee.forEach(function(element) {
             data.push({
-                Num_Bdx: element.num_bordereau.substring(0, 10),
-                Qte_estimee: parseFloat(element.quantitee_transportee).toFixed(2),
-                Qte_recue: parseFloat(element.quantitee_finale).toFixed(2),
+                Num_Bdx: element.bordereau.num_bordereau.substring(0, 10),
+                Qte_estimee: parseFloat(element.bordereau.quantitee_transportee).toFixed(2),
+                Qte_recue: parseFloat(element.bordereau.quantitee_finale).toFixed(2),
         })
     })
         this.setState({data: data});

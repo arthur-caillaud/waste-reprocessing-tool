@@ -13,11 +13,12 @@ export default class RightTileAlerts extends Component {
     componentWillMount() {
 
         let data = []
+        console.log(window.store.getState().pageOptions.bordereaux);
         this.state.incoherences_filieres_dd.forEach(function(element) {
             data.push({
-                Num_Bdx: element.num_bordereau.substring(0, 10),
+                Num_Bdx: element.bordereau.num_bordereau.substring(0, 10),
                 Code_Interne: element.dechet.codeinterne.substring(0, 10),
-                Site: parseFloat(element.id_site).toFixed(0),
+                Site: parseFloat(element.bordereau.id_site).toFixed(0),
         })
     })
         this.setState({data: data});
