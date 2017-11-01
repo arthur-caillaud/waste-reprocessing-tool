@@ -64,7 +64,7 @@ export function updateSite(site) {
     /*Here we get data in order to update the dashboard with new site*/
     let level = site.real_level;
     let name = site.nom;
-    
+
     let date = window.store.getState().pageOptions.date;
     if (typeof date.startDate === 'string') {
         date= {
