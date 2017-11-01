@@ -1,5 +1,5 @@
 import React, { Component, } from 'react';
-import { SplitButton, MenuItem, ButtonToolbar, DropdownButton, Button } from 'react-bootstrap';
+import { MenuItem, ButtonToolbar, DropdownButton, Button } from 'react-bootstrap';
 
 import '../styles/searchtree.css';
 

@@ -3,7 +3,6 @@ import '../styles/gauge.css';
 import * as d3 from 'd3';
 import { connect } from "react-redux";
 import MoreInfosService from '../actions/showmoreinfos.service.js';
-import Loading from '../resources/Rolling.gif';
 
 function getChartSize(el) {
     var margin = {top: 40, right: 20, bottom: 40, left: 20};

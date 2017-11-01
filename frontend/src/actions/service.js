@@ -7,12 +7,13 @@ function trimAbove99(value) {
         return value
     }
 }
+/*
 function substractYear(date){
     let split = date.split('-');
     split[0] -= 1
     return split.join('-')
 }
-
+*/
 function getAllLevelNames(architecture) {
     /*
     When typing something in the main searchbar, we can search any type of level in EDF Structure
