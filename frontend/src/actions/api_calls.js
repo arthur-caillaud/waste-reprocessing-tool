@@ -148,6 +148,7 @@ export function updateSite(site) {
             /*
             Gotta add here dispatch for prestataire page
             */
+            
             dispatch(loadPrestataireList(site.real_level,site.nom));
             dispatch(loadPrestataireGraphValues(site.real_level,site.nom));
 

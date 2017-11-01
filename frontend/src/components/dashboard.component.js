@@ -16,13 +16,8 @@ import '../styles/general.css';
 import grenouille from '../resources/grenouille-edf.png';
 
 
-class DashboardElement extends Component {
-    componentDidMount(){
+class Dashboard extends Component {
 
-        this.props.getArchitecture()
-        this.props.getNationalState()
-
-}
 
   render() {
     return (
@@ -69,33 +64,5 @@ class DashboardElement extends Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-    return {
-
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getNationalState: () => {
-
-            dispatch(apiCalls.updateSite({
-                    nom: "National",
-                    level: 0,
-                    real_level:0,
-                    architecture: {
-                        nom: {name: "", real_level:0},
-                        unite_dependance: {name: "", real_level:0},
-                        up_dependance: {name: "", real_level:0},
-                        metier_dependance: {name: "", real_level:0}
-                    }
-                }
-            ))
-        },
-        getArchitecture: () => {
-            dispatch(apiCalls.getArchitecture())
-        }
-    }
-}
-const Dashboard = connect(mapStateToProps, mapDispatchToProps)(DashboardElement)
 
 export default Dashboard;
