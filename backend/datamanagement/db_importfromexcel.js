@@ -900,7 +900,6 @@ const writeReferentielDechetIntoBdd = function (filepath) {
         let readXlsxObservable = readReferentielDechetXlsx(config.excel.DATA_DIR + "liste_dechets.xlsx", config.excel.REFERENTIELDECHET_SHEET, config.excel.REFERENTIELDECHET_STARTING_ROW);
         readXlsxObservable.subscribe({
             onNext: (jsonExcel) => {
-                console.log("Successfully loaded excel data in RAM");
                 let tasksArray = [];
                 jsonExcel.forEach(row => {
                     let task = function(callback){
@@ -909,7 +908,6 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                             onNext: referentiel_dechet => {
                             },
                             onError: err => {
-                                console.error("Error thrown by referentielDechetObservable");
                                 console.error(err);
                                 process.nextTick(() => {
                                     callback(null, true);
@@ -925,16 +923,14 @@ const writeReferentielDechetIntoBdd = function (filepath) {
                     tasksArray.push(task);
                 });
                 async.series(tasksArray, (err,res) => {
-                    console.log("Async tasks done");
                     db.mysqlDisconnect(sequelize);
                     process.exit();
                 });
             },
             onError: error => {
-                console.error("Error in writeReferentielDechetIntoBdd");
+                console.error(error);
             },
             onCompleted: () => {
-                console.log("readXlsx completed");
             }
         })
     })
@@ -950,23 +946,20 @@ const writeIntoBdd = function(excelName) {
         const sequelize = db.mySqlConnect();
         sequelize.authenticate()
         .then(() => {
-            console.log('Connection has been established successfully.');
             let readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
-            console.log("readXlsxObservable built");
+            console.log("Reading excel...");
             readXlsxObservable.subscribe({
                 onNext: (jsonExcel) => {
-                    console.log("Successfully loaded excel data in RAM");
                     let tasksArray = [];
                     jsonExcel.forEach((bordereau, index) => {
                         let task = function(callback){
-                            console.log("Building observable...");
                             let bordereauObservable = convertRowIntoBordereauSequelize(bordereau);
                             bordereauObservable.subscribe({
                                 onNext: bordereau => {
-                                    console.log("Successfully pushed excel whole row into database |", index+1);
+                                    console.log("Successfully pushed excel whole row into database |", "\x1b[32m", index+1, "\x1b[0m");
                                 },
                                 onError: error => {
-                                    console.error("Error thrown by bordereauObservable", error);
+                                    console.error(error);
                                     process.nextTick(() => {
                                         callback(null, true);
                                     });
@@ -992,7 +985,6 @@ const writeIntoBdd = function(excelName) {
                     obs.onError(error);
                 },
                 onCompleted: () => {
-                    console.log("Successfully read whole excel");
                 }
             });
         })
