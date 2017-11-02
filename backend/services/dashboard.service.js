@@ -222,7 +222,7 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var ms = Date.parse(date);
     var lastDate = (new Date(ms-maxDelay));
-    
+
     var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
     "bordereau.id_dechet INNER JOIN site ON site.id = bordereau.id_site INNER JOIN " +
     "transport AS transport1 ON transport1.id = bordereau.id_transport_1 WHERE dechet.is_dangereux " +
@@ -586,11 +586,11 @@ function getDetailsForSites(beginDate, endDate, idArray) {
             .subscribe(observerFilieresInterditesDD);
 
         var observerRetards = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetardsDetails(idArray, 0, endDate, "retards_norm")
+        getAllRetardsDetails(idArray, 0, date, "retards_norm")
             .subscribe(observerRetards);
 
         var observerRetardsDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetardsDetails(idArray, 1, endDate, "retards_dd")
+        getAllRetardsDetails(idArray, 1, date, "retards_dd")
             .subscribe(observerRetardsDD);
 
         var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);
