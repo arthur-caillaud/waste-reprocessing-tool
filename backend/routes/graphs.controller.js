@@ -263,7 +263,6 @@ function getGraphsData(req, res) {
     }
 
     var onNext = (data) => {
-        console.log(data[0]);
         result[data[2]][data[1]] = data[0];
     }
     var onCompleted = () => {
