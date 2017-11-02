@@ -421,7 +421,7 @@ And UPDATE_SITE (see HelperService again)
                     value: action.value.name
                 });
             };
-            
+
         case UPDATE_DASHBOARD_BEGIN:
             return Object.assign({}, state, {
                 dashboardLoading: !state.dashboardLoading
