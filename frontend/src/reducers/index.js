@@ -411,21 +411,21 @@ And UPDATE_SITE (see HelperService again)
 
     switch (action.type) {
         case UPDATE_INPUT_VALUE:
-
             if (typeof(action.value) ==='string') {
                 return Object.assign({}, state, {
                     value: action.value
                 });
-            } else {
+            }
+            else {
                 return Object.assign({}, state, {
                     value: action.value.name
                 });
             };
+            
         case UPDATE_DASHBOARD_BEGIN:
             return Object.assign({}, state, {
                 dashboardLoading: !state.dashboardLoading
             })
-
 
         case CLEAR_SUGGESTIONS:
             return Object.assign({}, state, {
