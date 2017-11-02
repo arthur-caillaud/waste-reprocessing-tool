@@ -12,9 +12,12 @@
 }
 .titleshowmoreinfos{
     position:relative;
+    top: 60px;
     text-align: center;
-    transform: translate(100px, 100px);
-
+    background-color: rgb(150,150,150);
+    color: rgb(250,250,250);
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 div.tooltip32 {
