@@ -27,7 +27,7 @@ class MiddleGauged3 extends Component {
         var middlevalueAnte = this.props.middlevalueAnte;
         var middlevalueBeforeAnte = this.props.middlevalueBeforeAnte;
         var v_total = this.props.v_total
-        var margin = {top: 10, right: 0, bottom: 40, left: 0};
+        var margin = {top: 20, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
 
