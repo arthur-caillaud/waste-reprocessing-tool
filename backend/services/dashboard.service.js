@@ -213,8 +213,6 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
 
 function getAllRetardsDetails(idArray, dangereux, date, label) {
 
-    // console.log(date);
-
     if (dangereux==1) {
         var maxDelay = 30 * 24 * 60 * 60 * 1000;
     }
@@ -224,11 +222,7 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var ms = Date.parse(date);
     var lastDate = (new Date(ms-maxDelay));
-
-    // console.log("dangereux: " + dangereux);
-    // console.log("before " +lastDate);
-    // console.log("after " + firstDate);
-
+    
     var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
     "bordereau.id_dechet INNER JOIN site ON site.id = bordereau.id_site INNER JOIN " +
     "transport AS transport1 ON transport1.id = bordereau.id_transport_1 WHERE dechet.is_dangereux " +

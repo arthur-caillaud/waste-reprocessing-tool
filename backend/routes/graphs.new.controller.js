@@ -213,7 +213,7 @@ function getGlobalPrestataires(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
@@ -319,7 +319,7 @@ function getDataForPrestataire(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
@@ -363,9 +363,6 @@ function getDataForPrestataire(req, res) {
         .subscribe(observerGlobalRecycled);
 
     if (regionArray.length > 0) {
-
-        console.log(regionArray.length);
-        console.log(globalArray.length);
 
         var observerRegionQuantity = Rx.Observer.create((data) => onNext(["region", "quantity"], data), onError, onCompleted);
         prestataireService.getDechetsForPrestataire(undefined, regionArray, 0, beginDate, endDate)
@@ -414,7 +411,7 @@ function getGlobalDechets(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
@@ -524,7 +521,7 @@ function getDataForDechet(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 

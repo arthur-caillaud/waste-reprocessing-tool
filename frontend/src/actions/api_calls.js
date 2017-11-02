@@ -248,7 +248,7 @@ export function loadPrestataireList(level,name){
 
 export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire){
     return dispatch => {
-        dispatch(actions.loadDechetListBegin());
+        //dispatch(actions.loadPrestataireGraphTagsBegin());
         return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+idPrestataire)
             .then(json => {
                 let inputArray = [];
@@ -286,18 +286,17 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                     /*
                      * We start by computing the two taux de valorisation
                      */
-                    let tauxDeValorisationGlobal = 0;
-                    let tauxDeValorisationListeVerte = 0;
-                    let quantiteeTotale = 0;
-                    let quantiteeTotaleListeVerte = 0;
-                    let quantiteeTotaleRecyclee = 0;
-                    let quantiteeTotaleRecycleeListeVerte = 0;
-
                     let values = [];
                     let volumes = [];
                     let valuesListeVerte = [];
                     let volumesListeVerte = [];
                     columnNames.forEach(name => {
+                        let tauxDeValorisationGlobal = 0;
+                        let tauxDeValorisationListeVerte = 0;
+                        let quantiteeTotale = 0;
+                        let quantiteeTotaleListeVerte = 0;
+                        let quantiteeTotaleRecyclee = 0;
+                        let quantiteeTotaleRecycleeListeVerte = 0;
                         if(json.data[name].quantity.length > 0){
                             json.data[name].quantity.forEach(dechet => {
                                 quantiteeTotale += parseFloat(dechet.quantitee_traitee);
@@ -338,8 +337,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                         }
                         values.push(parseFloat(tauxDeValorisationGlobal.toPrecision(4)));
                         valuesListeVerte.push(parseFloat(tauxDeValorisationListeVerte.toPrecision(5)));
-                        volumes.push(parseFloat(quantiteeTotaleRecyclee.toPrecision(4)));
-                        volumesListeVerte.push(parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(5)));
+                        volumes.push(parseFloat(quantiteeTotale.toPrecision(4)));
+                        volumesListeVerte.push(parseFloat(quantiteeTotaleListeVerte.toPrecision(5)));
                     });
 
 
@@ -397,7 +396,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                 }
                                 tauxDeValorisation = 100*(parseFloat(quantiteeValorisee))/(parseFloat(quantiteeTotale));
                                 values.push(parseFloat(tauxDeValorisation.toPrecision(4)));
-                                volumes.push(parseFloat(quantiteeValorisee.toPrecision(5)));
+                                volumes.push(parseFloat(quantiteeTotale.toPrecision(5)));
                             });
                             chosenDechetColumn = {
                                 title: chosenDechet.codeinterne + ' - ' + chosenDechet.libelle.slice(0,20) + '...',
@@ -436,7 +435,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                     }
                                     tauxDeValorisation = 100*(parseFloat(quantiteeValorisee))/(parseFloat(quantiteeTotale));
                                     values.push(parseFloat(tauxDeValorisation.toPrecision(4)));
-                                    volumes.push(parseFloat(quantiteeValorisee.toPrecision(5)));
+                                    volumes.push(parseFloat(quantiteeTotale.toPrecision(5)));
                                 });
                                 dechetColumn = {
                                     title: dechet.dechet.codeinterne + ' - ' + dechet.dechet.libelle.slice(0,20) + '...',
@@ -505,7 +504,7 @@ export function loadDechetList(level,name){
 
 export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
     return dispatch => {
-        dispatch(actions.loadPrestataireListBegin());
+        //dispatch(actions.loadDechetGraphTagsBegin());
         return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
             .then(json => {
                 let inputArray = [];
@@ -513,7 +512,7 @@ export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
                     json.data.sites.quantity.forEach(row => {
                         inputArray.push(row.prestataire);
                     });
-                    dispatch(actions.updateDechetTagsInputArray(inputArray));
+                    dispatch(actions.updatePrestataireTagsInputArray(inputArray));
                 }
             });
     }
@@ -541,8 +540,11 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     /*
                      * We start by computing the two taux de valorisation global and regional (if exists)
                      */
+                    let tauxDeValorisationSite = 0;
                     let tauxDeValorisationNation = 0;
                     let tauxDeValorisationRegion = 0;
+                    let quantiteeTotaleSite = 0;
+                    let quantiteeTotaleSiteRecyclee = 0;
                     let quantiteeTotaleNation = 0;
                     let quantiteeTotaleNationRecyclee = 0;
                     let quantiteeTotaleRegion = 0;
@@ -551,6 +553,22 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     let keys = [];
                     let values = [];
                     let volumes = [];
+                    if(json.data.sites.quantity.length > 0){
+                        json.data.sites.quantity.forEach(prestataire => {
+                            quantiteeTotaleSite += parseFloat(prestataire.quantitee_traitee);
+                        });
+                    }
+                    if(json.data.sites.recycled.length > 0){
+                        json.data.sites.recycled.forEach(prestataire => {
+                            quantiteeTotaleSiteRecyclee += parseFloat(prestataire.quantitee_traitee);
+                        });
+                    }
+                    if(quantiteeTotaleSite > 0){
+                        tauxDeValorisationSite = 100*(parseFloat(quantiteeTotaleSiteRecyclee))/(parseFloat(quantiteeTotaleSite));
+                        values.push(tauxDeValorisationSite.toPrecision(4));
+                        volumes.push(quantiteeTotaleSite.toPrecision(5));
+                        keys.push("SITE");
+                    }
                     if(json.data.global.quantity.length > 0){
                         json.data.global.quantity.forEach(prestataire => {
                             quantiteeTotaleNation += parseFloat(prestataire.quantitee_traitee);
@@ -564,23 +582,23 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     if(quantiteeTotaleNation > 0){
                         tauxDeValorisationNation = 100*(parseFloat(quantiteeTotaleNationRecyclee))/(parseFloat(quantiteeTotaleNation));
                         values.push(tauxDeValorisationNation.toPrecision(4));
-                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
+                        volumes.push(quantiteeTotaleNation.toPrecision(5));
                         keys.push("NATIONAL");
                     }
-                    if(json.data.global.quantity.length > 0){
-                        json.data.global.quantity.forEach(prestataire => {
+                    if(json.data.region.quantity.length > 0){
+                        json.data.region.quantity.forEach(prestataire => {
                             quantiteeTotaleRegion += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
-                    if(json.data.global.recycled.length > 0){
-                        json.data.global.recycled.forEach(prestataire => {
+                    if(json.data.region.recycled.length > 0){
+                        json.data.region.recycled.forEach(prestataire => {
                             quantiteeTotaleRegionRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
                     if(quantiteeTotaleRegion > 0){
                         tauxDeValorisationRegion = 100*(parseFloat(quantiteeTotaleRegionRecyclee))/(parseFloat(quantiteeTotaleRegion));
                         values.push(tauxDeValorisationRegion.toPrecision(4));
-                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
+                        volumes.push(quantiteeTotaleRegion.toPrecision(5));
                         keys.push("REGIONAL");
                     }
                     /*
@@ -606,7 +624,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                     tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                 }
                                 values.push(tauxDeValorisation.toPrecision(4));
-                                volumes.push(quantiteeRecyclee.toPrecision(5));
+                                volumes.push(quantiteeTotale.toPrecision(5));
                                 keys.push(chosenPrestataire.nom);
                             }
                         });
@@ -642,7 +660,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                         tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                     }
                                     values.push(tauxDeValorisation.toPrecision(4));
-                                    volumes.push(quantiteeRecyclee.toPrecision(5));
+                                    volumes.push(quantiteeTotale.toPrecision(5));
                                     keys.push(chosenPrestataire.prestataire.nom);
                                 }
                             }

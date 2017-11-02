@@ -69,7 +69,7 @@ export default class Histogram extends Component {
             d.key+
             "</strong></div>"+
             "<div>Taux de valorisation <span style='color:red'>" + d.value + "%</span></div>"+
-            "<div>Volume traité <span style='color:red'>" + d.volume + "t</span></div></div>"
+            "<div>Volume <span style='color:red'>" + d.volume + "t (tot.)</span></div></div>"
         )});
         svgDoc.call(tip);
 
@@ -212,8 +212,8 @@ export default class Histogram extends Component {
                 })
             })
             .transition().duration(1500)
-            .attr("y", d => {  return y(d.value); })
-            .attr("height", d => { return (height - y(d.value)); });
+            .attr("y", d => {  return ((y(d.value) == height) ? 5 : y(d.value)); })
+            .attr("height", d => { return (height - ((y(d.value) == height) ? 5 : y(d.value))); });
 
     }
 

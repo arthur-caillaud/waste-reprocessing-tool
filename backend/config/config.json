@@ -20,11 +20,12 @@
         "logging": false
     },
     "production": {
-        "username": "root",
-        "password": null,
-        "database": "database_production",
-        "host": "91.134.242.69",
-        "dialect": "mysql"
+        "username": "backend",
+        "password": "password",
+        "database": "db",
+        "host": "localhost",
+        "dialect": "mysql",
+        "logging": false
     },
     "server": {
         "listen_port": 4000

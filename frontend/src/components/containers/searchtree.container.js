@@ -17,6 +17,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onRenderMetierClickHandler: () => {
+            dispatch(actions.updateInputValue(''));
             dispatch(apiCalls.updateSite({
                     nom: "National",
                     level: 0,
@@ -29,12 +30,11 @@ function mapDispatchToProps(dispatch) {
                     }
                 }
             ));
-            dispatch(actions.updateInputValue(''));
-
         },
         onRenderUpClickHandler: () => {
             const nom = window.store.getState().updateSearchBar.site.architecture.metier_dependance.name;
             if(nom){
+                dispatch(actions.updateInputValue(nom));
                 dispatch(apiCalls.updateSite({
                         nom: nom,
                         level: 1,
@@ -51,11 +51,11 @@ function mapDispatchToProps(dispatch) {
                     }
                 ));
             }
-            dispatch(actions.updateInputValue(nom));
         },
         onRenderUniteClickHandler: () => {
             const nom = window.store.getState().updateSearchBar.site.architecture.up_dependance.name;
             if(nom){
+                dispatch(actions.updateInputValue(nom));
                 dispatch(apiCalls.updateSite({
                         nom: nom,
                         level: 2,
@@ -74,12 +74,12 @@ function mapDispatchToProps(dispatch) {
                         }
                     }
                 ));
-                dispatch(actions.updateInputValue(nom));
             }
         },
         onRenderSiteClickHandler: () => {
             const nom = window.store.getState().updateSearchBar.site.architecture.unite_dependance.name;
             if(nom){
+                dispatch(actions.updateInputValue(nom));
                 dispatch(apiCalls.updateSite({
                         nom: nom,
                         level: 3,
@@ -101,7 +101,6 @@ function mapDispatchToProps(dispatch) {
                         }
                     }
                 ));
-                dispatch(actions.updateInputValue(nom));
             }
         },
         updateMetier:  (evt) => {

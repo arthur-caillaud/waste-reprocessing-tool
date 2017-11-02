@@ -43,7 +43,7 @@ button .btn.btn-sm.btn-default {
     padding-bottom: calc(1vh + 30px);
     padding-top: 1vh;
     box-shadow: 0px 1px 3px grey;
-    background-color: #FBFBFB;
+    background-color: rgb(223,223,223);
     z-index: 10;
 }
 
