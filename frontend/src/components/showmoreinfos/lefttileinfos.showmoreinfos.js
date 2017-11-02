@@ -4,9 +4,12 @@ import '../../styles/tile.css';
 
 function handleOnRowMouseOver(row) {
     this.setState({rowOver:row})
+
+
 }
 function handleOnRowMouseOut() {
-    this.setState({rowOver:{}})
+
+        this.setState({rowOver:{}})
 }
 
 var tooltipstyle = {
@@ -22,7 +25,6 @@ function ToolTip(props){
     if(props.row.Num_Bdx === undefined){
         return (<div className='tooltip32'></div>)
     }
-    console.log(props.row)
     return (<div className='tooltip32 show'><span style={tooltiptitle}>Site: </span><span style={tooltipstyle}>{props.row.Site}</span></div>)
 }
 
@@ -41,18 +43,23 @@ export default class LeftTileInfos extends Component {
 
 
     componentWillMount() {
+        console.log("ouioui")
         let data = []
         this.state.ecarts_pesee.forEach(function(element) {
             data.push({
-                Num_Bdx: element.num_bordereau.substring(0, 10),
-                Qte_estimee: parseFloat(element.quantitee_transportee).toFixed(2),
-                Qte_recue: parseFloat(element.quantitee_finale).toFixed(2),
+                Num_Bdx: element.bordereau.num_bordereau.substring(0, 10),
+                Qte_estimee: parseFloat(element.bordereau.quantitee_transportee).toFixed(2),
+                Qte_recue: parseFloat(element.bordereau.quantitee_finale).toFixed(2),
                 Site: element.site.nom
 
         })
     })
         this.setState({data: data});
 
+    }
+
+    componentWillUnmount() {
+        console.log("ouiouioui")
     }
 
     render() {

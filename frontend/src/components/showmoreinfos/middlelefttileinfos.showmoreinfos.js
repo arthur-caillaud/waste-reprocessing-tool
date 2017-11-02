@@ -22,7 +22,6 @@ function ToolTip(props){
     if(props.row.Num_Bdx === undefined){
         return (<div className='tooltip32'></div>)
     }
-    console.log(props.row)
     return (<div className='tooltip32 show'><span style={tooltiptitle}>Site: </span><span style={tooltipstyle}>{props.row.Site}</span></div>)
 }
 
