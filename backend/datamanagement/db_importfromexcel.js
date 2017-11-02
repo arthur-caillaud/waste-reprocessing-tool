@@ -4,6 +4,8 @@ const config = require('../config/config.json');
 const Sequelize = require('sequelize');
 const db = require('./db');
 const async = require('async');
+const fs = require('fs');
+const dataFolder = './data';
 
 //Import data models
 const models = require('../models/');
@@ -1025,4 +1027,22 @@ function __main(datasExcelArray, referentielExcel){
     });
 }
 
-__main(["data_avriljuin.xlsx"],"liste_dechets.xlsx");
+/*
+ * MAIN PROCESS
+ * - Find all files in data directory
+ * - Add the files whose name begin with "data" to the data array
+ * WARNING *
+ * DATA'S EXCELS FILES HAVE TO BE .XLSX FILES
+ * - Runs the import process on each of the data files
+ * - Runs the referentiel_dechet function to know about new wastes
+ * - Terminate
+ */
+fs.readdir(dataFolder, (err,files) => {
+    let dataArray = [];
+    files.forEach(file => {
+        if(file.slice(0,4) ==="data"){
+            dataArray.push(file)
+        }
+    });
+    __main(dataArray,"liste_dechets.xlsx");
+});
