@@ -25,7 +25,7 @@ function mapDispatchToProps(dispatch, ownProps) {
         onTagClick: (tag) => {
             dispatch(actions[onClickActionName](tag));
             dispatch(apiCalls[loadGraphValuesActionName](
-                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.real_level,
                 window.store.getState().updateSearchBar.site.nom,
                 window.store.getState()[inputGraphPanelBranch].selectedInput,
                 window.store.getState()[branchName].tagsArray));
@@ -33,7 +33,7 @@ function mapDispatchToProps(dispatch, ownProps) {
         onRemove: (tag) => {
             dispatch(actions[onRemoveActionName](tag));
             dispatch(apiCalls[loadGraphValuesActionName](
-                window.store.getState().updateSearchBar.site.level,
+                window.store.getState().updateSearchBar.site.real_level,
                 window.store.getState().updateSearchBar.site.nom,
                 window.store.getState()[inputGraphPanelBranch].selectedInput,
                 window.store.getState()[branchName].tagsArray));

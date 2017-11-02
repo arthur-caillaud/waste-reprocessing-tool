@@ -210,7 +210,6 @@ function getAllRetards(idArray, dangereux, date, beginDate, endDate, label) {
     return observable;
 };
 
-
 function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     if (dangereux==1) {
@@ -222,7 +221,7 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     var ms = Date.parse(date);
     var lastDate = (new Date(ms-maxDelay));
-    
+
     var queryString = "SELECT * FROM bordereau INNER JOIN dechet ON dechet.id = " +
     "bordereau.id_dechet INNER JOIN site ON site.id = bordereau.id_site INNER JOIN " +
     "transport AS transport1 ON transport1.id = bordereau.id_transport_1 WHERE dechet.is_dangereux " +
@@ -248,7 +247,6 @@ function getAllRetardsDetails(idArray, dangereux, date, label) {
 
     return observable;
 };
-
 
 // this function looks for all the bordereaux and sums the total volume
 // processed. If no bordereau exists for the given site, returns 0
