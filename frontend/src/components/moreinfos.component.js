@@ -290,8 +290,8 @@ class MoreInfos extends Component {
                 <TableHeaderColumn dataField="Code_Interne" dataAlign="center">Code</TableHeaderColumn>
                 <TableHeaderColumn dataField="Site" dataAlign="center">Site</TableHeaderColumn>
             </BootstrapTable>
-            <div className="titleshowmoreinfos">
-                <h5>Incohérences Filières DD</h5>
+            <div>
+                <h5 className="titleshowmoreinfos">Incohérences Filières DD</h5>
             </div>
         </div>
 
