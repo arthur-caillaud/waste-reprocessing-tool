@@ -213,7 +213,7 @@ function getGlobalPrestataires(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
@@ -319,7 +319,7 @@ function getDataForPrestataire(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
@@ -411,7 +411,7 @@ function getGlobalDechets(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
@@ -521,7 +521,7 @@ function getDataForDechet(req, res) {
     var regionArray = [];
     if (typeof regionSites != 'undefined') {
         for (var i=0; i<regionSites.length; i++) {
-            regionArray.push(globalSites[i].id);
+            regionArray.push(regionSites[i].id);
         }
     }
 
