@@ -51,7 +51,7 @@ div.tooltip32::after{
 div.tooltip32.show,div.tooltip32.show::after{
     opacity: 1;
     transform: translateY(0px);
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transition: opacity 0.05s ease-in-out, transform 0.05s ease-in-out;
 }
 
 .dashboard-tile{
@@ -62,13 +62,12 @@ div.tooltip32.show,div.tooltip32.show::after{
     padding-bottom: 100%;
     margin-bottom: 15%;
     border-radius: 2px;
-    transition: background-color 0.3s ease-in-out;
-
+    transition: background-color 0.05s ease-in-out;
 }
 
 .dashboard-tile:hover{
     cursor: pointer;
-    background-color: #ffd5bc;
+    background-color: #e0e0e0;
 }
 
 .dashboard-tile .title{
@@ -111,7 +110,7 @@ div.tooltip32.show,div.tooltip32.show::after{
     align-items: center;
     cursor: pointer;
     z-index: 1;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.1s ease-in-out;
 }
 .notifDD{
     position: absolute;

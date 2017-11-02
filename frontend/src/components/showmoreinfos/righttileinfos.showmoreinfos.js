@@ -9,11 +9,11 @@ function handleOnRowMouseOut() {
     this.setState({rowOver:{}})
 }
 
-var tooltipstyle = {
+const tooltipstyle = {
     color: 'red',
     textAlign: 'left'
 }
-var tooltiptitle = {
+const tooltiptitle = {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center'

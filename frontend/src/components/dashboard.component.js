@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
 import { Row, Col, Grid } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import * as apiCalls from '../actions/api_calls';
 import LeftGauge from './leftgauge.component';
 import MiddleGauge from './middlegauge.component';
 import RightGauge from './rightgauge.component';
