@@ -1,0 +1,239 @@
+<div id="root"></div>
+<style>
+#root {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 300px;
+    height: 300px;
+    position: relative;
+}
+
+.gauge-title{
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    bottom: 2%;
+    font-size: 1.3em;
+}
+.gauge-container {
+    position: relative;
+    width: 100%;
+    height: 120%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+</style>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+<script type="text/babel">
+
+class Jauge extends React.Component {
+
+    drawJauge() {
+
+        var leftvalue = this.props.leftvalue;
+        var leftvalueBefore = this.props.leftvalueBefore;
+        var leftvalueAnte = this.props.leftvalueAnte;
+        var leftvalueBeforeAnte = this.props.leftvalueBeforeAnte;
+        var width = 300;
+        var height = 300;
+        var v_total = 10000;
+
+        var svgDoc = d3.select("#"+this.props.id)
+            .attr("align","center")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+        var g = svgDoc.append("g")
+            .attr("transform", "translate(" + (width)/2 + "," + (height)/2 + ")rotate(180)"
+             );
+             var tip = d3.tip()
+                 .attr('class', 'd3-tip')
+                 .offset([-1.15 * height, 0])
+                 .html(function(d) {
+                     return ("<div><div><strong>"+
+                     'Valorisation'+
+                     "</strong></div>"+
+                     "<div>Cette année: <span style='color:red'>" + leftvalue.toFixed(2) + "%</span></div>"+
+                     "<div>Année précédente: <span style='color:red'>" + leftvalueBefore.toFixed(2) + "%</span></div></div>"
+                 )});
+             svgDoc.call(tip);
+        var scale = d3.scaleLinear()
+             .domain([0, 100])
+             .range([1/5*Math.PI, 9/5*Math.PI])
+
+        var color = d3.scaleLinear()
+            .domain([0, 33, 66, 100])
+            .range(["red", "#CC5500", "#ED7F10", "green"]);
+        var data = [
+            {
+                innerRadius: (width/2)-55,
+                outerRadius: (width/2)-40,
+                startAngle: scale(0),
+                endAngle: scale(leftvalue),
+                valueAnte: scale(leftvalueAnte)
+            },
+            {
+                innerRadius: (width/2) -70,
+                outerRadius: (width/2) - 60,
+                startAngle: scale(0),
+                endAngle: scale(leftvalueBefore),
+                valueAnte: scale(leftvalueBeforeAnte)
+            }
+        ]
+        var middleTextCount=g.append('text')
+                .style("fill",function (d) { return color(d); })
+                .style('font-size', '5vmin')
+                .datum(0)
+                .attr("class",'middleText')
+                .attr("text-anchor", 'middle')
+                .attr("dy", 12)
+                .attr("dx",0)
+                .attr("transform", 'rotate(180)');
+        var volumeTotal= g.append('text')
+                .style("fill",function (d) { return color(d); })
+                .style('font-size', '2vmin')
+                .datum(0)
+                .attr("class",'middleText')
+                .attr("text-anchor", 'middle')
+                .attr("dy", 50)
+                .attr("dx",0)
+                .attr("transform", 'rotate(180)');
+
+        var format = d3.format("d");
+        var arc = d3.arc()
+
+        var percentage = g.append('text')
+                .style("fill", function (d) { return color(d); })
+                .style('font-size', '1.5vmin')
+                .attr('text-anchor', 'middle')
+                .attr('dx', '-4.7vmin')
+                .attr('dy', -3)
+
+        function doTransition() {
+            g.selectAll("path.arc")
+                .data(data)
+                .enter().append("path")
+                    .attr("innerRadius", function(d) {return d.innerRadius})
+                    .attr("outerRadius", function(d) {return d.outerRadius})
+                    .attr("startAngle", scale(0))
+                    .attr("endAngle", scale(0))
+
+
+                    .attr("class", arc)
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide)
+                    .transition().duration(2500)
+                    .attrTween("d", function(d) {
+
+                        var start = {startAngle: scale(0), endAngle: d.valueAnte};
+
+                        var interpolate = d3.interpolate(start, d)
+                        return function (t) {
+                            return arc(interpolate(t));
+                        };
+                    })
+                    .styleTween("fill", function() {
+                        var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
+                        return function(t) {
+                            return interpolate(t)
+                        }
+                      })
+              middleTextCount
+                .transition()
+                  .duration(2500)
+                  .on("start", function () {
+                    d3.active(this)
+                        .tween("text", function() {
+                          var that = d3.select(this),
+                              i = d3.interpolateNumber(leftvalueAnte, leftvalue);
+                          return function(t) { that.text(format(i(t))); };
+                        })
+                        .styleTween("fill", function() {
+                            var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
+                            return function(t) {
+                                return interpolate(t)
+                            }
+                          })
+                  });
+              volumeTotal
+                  .transition()
+                  .duration(2500)
+                  .on("start", function () {
+                    d3.active(this)
+                        .tween("text", function() {
+                          var that = d3.select(this),
+                              i = d3.interpolateNumber(0, v_total);
+                          return function(t) { that.text(format(i(t)) + " t (tot.)"); };
+                        })
+                        .styleTween("fill", function() {
+                            var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
+                            return function(t) {
+                                return interpolate(t)
+                            }
+                          })
+                  });
+              percentage
+                .transition()
+                    .duration(2500)
+                    .on("start", function() {
+                        d3.active(this)
+                          .tween("text", function(){
+                              var that = d3.select(this);
+                              return function(t) {that.text('%')}
+                          })
+                          .styleTween("fill", function() {
+                              var interpolate = d3.interpolateRgb(color(leftvalueAnte), color(leftvalue))
+                              return function(t) {
+                                  return interpolate(t)
+                              }
+                            })
+                      })
+              }
+
+                  doTransition()
+
+
+    }
+
+    redrawJauge() {
+
+        d3.select("#"+this.props.id).select("svg").remove("svg")
+        this.drawJauge();
+    };
+
+    componentDidMount() {
+
+        this.drawJauge()
+
+
+    };
+
+    componentDidUpdate() {
+
+        this.redrawJauge();
+
+    };
+
+
+
+    render() {
+
+        return (
+            <div className="gauge-container">
+                <h2 className="gauge-title">Valorisation</h2>
+            <div id={this.props.id} className="chart-container"></div>
+
+          </div>
+      )
+
+  };
+}
+
+ReactDOM.render(<Jauge leftvalue={100} leftvalueBefore={90} leftvalueAnte={15} leftvalueBeforeAnte={34} id={"leftgauge"}/>, document.getElementById('root'))
+</script>

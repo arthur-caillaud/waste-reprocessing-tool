@@ -7,12 +7,13 @@ function trimAbove99(value) {
         return value
     }
 }
+/*
 function substractYear(date){
     let split = date.split('-');
     split[0] -= 1
     return split.join('-')
 }
-
+*/
 function getAllLevelNames(architecture) {
     /*
     When typing something in the main searchbar, we can search any type of level in EDF Structure
@@ -335,7 +336,7 @@ function presentDataForNewSite(actualJson, lastYearJson) {
         }
         dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
         dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
-        dataForRightGauge.bdx = total_lost_actual
+        dataForRightGauge.bdx = total_bdx_actual
 
         dataForMiddleGauge.middlevalue = valorisation_totale_actual*100/volume_total_actual
         if (!(volume_total_before === 0.0000)) {
@@ -366,7 +367,7 @@ function presentDataForNewSite(actualJson, lastYearJson) {
          dataForRightGauge.rightvalueBefore = 100 - (total_lost_before*100/(total_bdx_before + total_lost_before))
          dataForRightGauge.rightvalueAnte = window.store.getState().updateGauge.rightvalue
          dataForRightGauge.rightvalueBeforeAnte = window.store.getState().updateGauge.rightvalueBefore
-         dataForRightGauge.bdx = total_lost_actual
+         dataForRightGauge.bdx = total_bdx_actual
      }
      let response = {
             dataForLeftGauge: dataForLeftGauge,

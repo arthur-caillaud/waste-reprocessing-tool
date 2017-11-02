@@ -6,7 +6,6 @@ import Histogram from '../components/containers/histogram.container';
 import InputGraphPanel from '../components/containers/inputgraphpanel.container';
 import GraphTagsPanel from '../components/containers/graphtagspanel.container';
 import { connect } from "react-redux";
-import * as actions from '../actions';
 import * as apiCalls from '../actions/api_calls';
 class DechetElement extends Component {
 

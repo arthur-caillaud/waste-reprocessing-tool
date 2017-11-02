@@ -16,6 +16,7 @@ import {
     SAVE_ARCHITECTURE,
     SAVE_BORDEREAUX_FOR_SITE,
     UPDATE_DATE,
+    UPDATE_DASHBOARD_BEGIN,
 
     DISPLAY_LEFTGAUGE_INFOS,
     DISPLAY_MIDDLEGAUGE_INFOS,
@@ -78,7 +79,7 @@ import {
 
 function infosPanelOptions(
     state = {
-    defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
+    defaultBody: <center>Cliquez quelque part pour afficher d'avantage d'informations</center>,
     leftGaugeShown: false,
     leftTileShown: false,
     middleGaugeShown: false,
@@ -237,7 +238,7 @@ function infosPanelOptions(
 
         case RESET_MOREINFOS_TO_DEFAULT:
             return Object.assign({}, state, {
-                defaultBody: <p>Cliquez quelque part pour afficher d'avantage d'informations</p>,
+                defaultBody: <center>Cliquez quelque part pour afficher d'avantage d'informations</center>,
                 leftGaugeShown: false,
                 leftTileShown: false,
                 middleGaugeShown: false,
@@ -393,7 +394,8 @@ function updateSearchBar(
                 up_dependance: [],
                 metier_dependance: []
             }
-        }
+        },
+        dashboardLoading: false,
     },
     action) {
 
@@ -409,17 +411,21 @@ And UPDATE_SITE (see HelperService again)
 
     switch (action.type) {
         case UPDATE_INPUT_VALUE:
-
             if (typeof(action.value) ==='string') {
                 return Object.assign({}, state, {
                     value: action.value
                 });
-            } else {
+            }
+            else {
                 return Object.assign({}, state, {
                     value: action.value.name
                 });
-            }
-
+            };
+            
+        case UPDATE_DASHBOARD_BEGIN:
+            return Object.assign({}, state, {
+                dashboardLoading: !state.dashboardLoading
+            })
 
         case CLEAR_SUGGESTIONS:
             return Object.assign({}, state, {

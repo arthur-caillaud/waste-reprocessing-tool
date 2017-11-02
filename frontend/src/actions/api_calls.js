@@ -62,20 +62,20 @@ export function updateSite(site) {
     but in a different order.
     */
     /*Here we get data in order to update the dashboard with new site*/
-    let level = site.real_level
-    let name = site.nom
-    let date = window.store.getState().pageOptions.date
-    if (typeof date.startDate === 'string') {
+    let level = site.real_level;
+    let name = site.nom;
 
+    let date = window.store.getState().pageOptions.date;
+    if (typeof date.startDate === 'string') {
         date= {
             startDate: moment(date.startDate),
             endDate: moment(date.endDate)
+        }
     }
-    }
-    let startDate = date.startDate
-    let endDate= date.endDate
-    let EndDate = endDate.format().toString().substring(0,10)
-    let StartDate = startDate.format().toString().substring(0, 10)
+    let startDate = date.startDate;
+    let endDate= date.endDate;
+    let EndDate = endDate.format().toString().substring(0,10);
+    let StartDate = startDate.format().toString().substring(0, 10);
 
     site.suggestions = {}
     return dispatch => {
@@ -100,13 +100,10 @@ export function updateSite(site) {
                 for this year and for last year. Then we call presentDataForNewSite, a function that redistributes the values requested
                 in the different components
             */
-            console.time("test")
 
             return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                 .then(json => {
-                    console.log(json.data)
                     const actualJson = json.data;
-                    console.timeEnd("test")
                     return axios.get(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                         .then(json => {
 
@@ -141,10 +138,12 @@ export function updateSite(site) {
                                 });
                         });
                 })
-        } else if (window.location.href.split('/')[3] === "prestataire") {
+        }
+        else if (window.location.href.split('/')[3] === "prestataire") {
             /*
             Gotta add here dispatch for prestataire page
             */
+
             dispatch(loadPrestataireList(site.real_level,site.nom));
 
             return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
@@ -269,7 +268,18 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
         dispatch(actions.loadPrestataireGraphValuesBegin());
         if(prestataire){
             dispatch(actions.updateSelectedPrestataire(prestataire));
-            return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+prestataire.id)
+
+            let date = window.store.getState().pageOptions.date;
+            if (typeof date.startDate === 'string') {
+                date= {
+                    startDate: moment(date.startDate),
+                    endDate: moment(date.endDate)
+                }
+            }
+            const startDate = date.startDate.format().toString().substring(0, 10);
+            const endDate = date.endDate.format().toString().substring(0,10);
+
+            return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+prestataire.id+'?beginDate='+startDate+'&endDate='+endDate)
                 .then(json => {
                     let valuesArray = [];
                     const columnNames = (json.data.region.quantity.length > 0) ? ["sites","global","region"] : ["sites","global"];
@@ -444,7 +454,17 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
 
         }
         else{
-            return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name))
+            let date = window.store.getState().pageOptions.date;
+            if (typeof date.startDate === 'string') {
+                date= {
+                    startDate: moment(date.startDate),
+                    endDate: moment(date.endDate)
+                }
+            }
+            const startDate = date.startDate.format().toString().substring(0, 10);
+            const endDate = date.endDate.format().toString().substring(0,10);
+
+            return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'?beginDate='+startDate+'&endDate='+endDate)
                 .then(json => {
                     const biggestPrestataire = (json.data.prestataires && json.data.prestataires[0]) ? json.data.prestataires[0] : null ;
                     if(biggestPrestataire){
@@ -506,7 +526,18 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
         dispatch(actions.loadDechetGraphValuesBegin());
         if(dechet){
             dispatch(actions.updateSelectedDechet(dechet));
-            return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id)
+
+            let date = window.store.getState().pageOptions.date;
+            if (typeof date.startDate === 'string') {
+                date= {
+                    startDate: moment(date.startDate),
+                    endDate: moment(date.endDate)
+                }
+            }
+            const startDate = date.startDate.format().toString().substring(0, 10);
+            const endDate = date.endDate.format().toString().substring(0,10);
+
+            return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+dechet.id+'?beginDate='+startDate+'&endDate='+endDate)
                 .then(json => {
                     /*
                      * We start by computing the two taux de valorisation global and regional (if exists)
@@ -628,7 +659,18 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                 });
             }
             else{
-                return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name))
+
+                let date = window.store.getState().pageOptions.date;
+                if (typeof date.startDate === 'string') {
+                    date= {
+                        startDate: moment(date.startDate),
+                        endDate: moment(date.endDate)
+                    }
+                }
+                const startDate = date.startDate.format().toString().substring(0, 10);
+                const endDate = date.endDate.format().toString().substring(0,10);
+
+                return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'?beginDate='+startDate+'&endDate='+endDate)
                     .then(json => {
                         const biggestDechet = (json.data.dechets && json.data.dechets[0]) ? json.data.dechets[0] : null ;
                         if(biggestDechet){
