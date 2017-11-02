@@ -339,8 +339,8 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                         }
                         values.push(parseFloat(tauxDeValorisationGlobal.toPrecision(4)));
                         valuesListeVerte.push(parseFloat(tauxDeValorisationListeVerte.toPrecision(5)));
-                        volumes.push(parseFloat(quantiteeTotaleRecyclee.toPrecision(4)));
-                        volumesListeVerte.push(parseFloat(quantiteeTotaleRecycleeListeVerte.toPrecision(5)));
+                        volumes.push(parseFloat(quantiteeTotale.toPrecision(4)));
+                        volumesListeVerte.push(parseFloat(quantiteeTotaleListeVerte.toPrecision(5)));
                     });
 
 
@@ -398,7 +398,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                 }
                                 tauxDeValorisation = 100*(parseFloat(quantiteeValorisee))/(parseFloat(quantiteeTotale));
                                 values.push(parseFloat(tauxDeValorisation.toPrecision(4)));
-                                volumes.push(parseFloat(quantiteeValorisee.toPrecision(5)));
+                                volumes.push(parseFloat(quantiteeTotale.toPrecision(5)));
                             });
                             chosenDechetColumn = {
                                 title: chosenDechet.codeinterne + ' - ' + chosenDechet.libelle.slice(0,20) + '...',
@@ -437,7 +437,7 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                                     }
                                     tauxDeValorisation = 100*(parseFloat(quantiteeValorisee))/(parseFloat(quantiteeTotale));
                                     values.push(parseFloat(tauxDeValorisation.toPrecision(4)));
-                                    volumes.push(parseFloat(quantiteeValorisee.toPrecision(5)));
+                                    volumes.push(parseFloat(quantiteeTotale.toPrecision(5)));
                                 });
                                 dechetColumn = {
                                     title: dechet.dechet.codeinterne + ' - ' + dechet.dechet.libelle.slice(0,20) + '...',
@@ -565,7 +565,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     if(quantiteeTotaleNation > 0){
                         tauxDeValorisationNation = 100*(parseFloat(quantiteeTotaleNationRecyclee))/(parseFloat(quantiteeTotaleNation));
                         values.push(tauxDeValorisationNation.toPrecision(4));
-                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
+                        volumes.push(quantiteeTotaleNation.toPrecision(5));
                         keys.push("NATIONAL");
                     }
                     if(json.data.global.quantity.length > 0){
@@ -581,7 +581,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     if(quantiteeTotaleRegion > 0){
                         tauxDeValorisationRegion = 100*(parseFloat(quantiteeTotaleRegionRecyclee))/(parseFloat(quantiteeTotaleRegion));
                         values.push(tauxDeValorisationRegion.toPrecision(4));
-                        volumes.push(quantiteeTotaleNationRecyclee.toPrecision(5));
+                        volumes.push(quantiteeTotaleRegion.toPrecision(5));
                         keys.push("REGIONAL");
                     }
                     /*
@@ -607,7 +607,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                     tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                 }
                                 values.push(tauxDeValorisation.toPrecision(4));
-                                volumes.push(quantiteeRecyclee.toPrecision(5));
+                                volumes.push(quantiteeTotale.toPrecision(5));
                                 keys.push(chosenPrestataire.nom);
                             }
                         });
@@ -643,7 +643,7 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                                         tauxDeValorisation = 100*(parseFloat(quantiteeRecyclee))/(parseFloat(quantiteeTotale))
                                     }
                                     values.push(tauxDeValorisation.toPrecision(4));
-                                    volumes.push(quantiteeRecyclee.toPrecision(5));
+                                    volumes.push(quantiteeTotale.toPrecision(5));
                                     keys.push(chosenPrestataire.prestataire.nom);
                                 }
                             }
