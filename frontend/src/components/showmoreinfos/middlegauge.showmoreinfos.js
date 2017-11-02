@@ -26,7 +26,7 @@ export default class MiddleGaugeInfos extends Component {
         else {
             return(
                 <div>
-                    <p>Cliquez quelque part pour afficher d'avantage d'informations</p>
+                    <center>Cliquez quelque part pour afficher d'avantage d'informations</center>
                 </div>
             )
         }

@@ -16,37 +16,47 @@ import '../styles/general.css';
 import grenouille from '../resources/grenouille-edf.png';
 
 
-class DashboardElement extends Component {
-    componentDidMount(){
+class Dashboard extends Component {
 
-        this.props.getArchitecture()
-        this.props.getNationalState()
-
-}
 
   render() {
     return (
       <div>
         <div>
           <Grid fluid>
-            <Row className="show-grid">
+              <Row>
+                  <Col sm={9}>
+                    <Row>
+                        <div className="row show-grid">
+                            <Col sm={4}> <LeftGauge/> </Col>
+                            <Col sm={4}> <MiddleGauge/> </Col>
+                            <Col sm={4}> <RightGauge/> </Col>
+                        </div>
 
-                <Col sm={3}> <LeftGauge/> </Col>
-                <Col sm={3}> <MiddleGauge/> </Col>
-                <Col sm={3}> <RightGauge/> </Col>
-                <Col sm={3}> <img className="grenouille-logo" src={grenouille} alt=""/> </Col>
-            </Row>
 
-            <Row className="show-grid">
-              <Col sm={9}>
-                <Row>
-                  <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
-                  <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
-                  <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
-                  <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
-                </Row>
-              </Col>
-              <Col sm={3}> <MoreInfosContainer/> </Col>
+                    </Row>
+                    <Row>
+                        <div className="row show-grid-tiles">
+                            <Col sm={3}> <LeftTile id="dashboard-tile1"/> </Col>
+                            <Col sm={3}> <MiddleLeftTile id="dashboard-tile2"/> </Col>
+                            <Col sm={3}> <MiddleRightTile id="dashboard-tile3"/> </Col>
+                            <Col sm={3}> <RightTile id="dashboard-tile4"/> </Col>
+                        </div>
+
+                    </Row>
+                </Col>
+                <Col sm={3} className="right-col">
+                    <Row>
+                        <Col sm={12}>
+                            <div className="grenouille-logo-wrapper">
+                                <img className="grenouille-logo" src={grenouille} alt=""/>
+                            </div>
+                        </Col>
+                        <Col sm={12}>
+                            <MoreInfosContainer/>
+                        </Col>
+                    </Row>
+                </Col>
             </Row>
           </Grid>
         </div>
@@ -54,33 +64,5 @@ class DashboardElement extends Component {
     );
   }
 }
-const mapStateToProps = (state) => {
-    return {
-
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getNationalState: () => {
-
-            dispatch(apiCalls.updateSite({
-                    nom: "National",
-                    level: 0,
-                    real_level:0,
-                    architecture: {
-                        nom: {name: "", real_level:0},
-                        unite_dependance: {name: "", real_level:0},
-                        up_dependance: {name: "", real_level:0},
-                        metier_dependance: {name: "", real_level:0}
-                    }
-                }
-            ))
-        },
-        getArchitecture: () => {
-            dispatch(apiCalls.getArchitecture())
-        }
-    }
-}
-const Dashboard = connect(mapStateToProps, mapDispatchToProps)(DashboardElement)
 
 export default Dashboard;

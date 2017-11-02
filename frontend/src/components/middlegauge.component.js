@@ -1,6 +1,7 @@
 import React, { Component, } from 'react';
 import '../styles/gauge.css';
 import * as d3 from 'd3';
+import * as d3tip from 'd3-tip';
 import { connect } from "react-redux";
 import showMoreInfos from '../actions/showmoreinfos.service';
 
@@ -50,7 +51,17 @@ class MiddleGauged3 extends Component {
         var g = svgDoc.append("g")
             .attr("transform", "translate(" + (width+ margin.left + margin.right)/2 + "," + (height + margin.top + margin.bottom)/2 + ")rotate(180)"
              );
-
+         var tip = d3tip()
+         .attr('class', 'd3-tip')
+         .offset([-1.15 * height, 0])
+         .html(function(d) {
+             return ("<div><div><strong>"+
+             'Valorisation Globale'+
+             "</strong></div>"+
+             "<div>Cette année: <span style='color:red'>" + middlevalue.toFixed(2) + "%</span></div>"+
+             "<div>Année précédente: <span style='color:red'>" + middlevalueBefore.toFixed(2) + "%</span></div></div>"
+         )});
+         svgDoc.call(tip)
         //This FUNCTION permits to scale 0 to 100% onto a domain that represent the gauge.
         //Without it, the gauge goes from 0 to 100 in a full circle.
         var scale = d3.scaleLinear()
@@ -139,8 +150,9 @@ class MiddleGauged3 extends Component {
                     .attr("outerRadius", function(d) {return d.outerRadius})
                     .attr("startAngle", scale(0))
                     .attr("endAngle", scale(0))
-
                     .attr("class", arc)
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide)
                     .transition().duration(2500)
                     .attrTween("d", function(d) {
 

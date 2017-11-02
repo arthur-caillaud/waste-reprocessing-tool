@@ -9,7 +9,10 @@ export default class RightGaugeInfos extends Component {
                     Bordereaux non datés
                 </h3>
                 <p>
-                    Nombre cette année: {window.store.getState().updateGauge.rightvalue.toFixed(2)} %
+                    Nombre cette année: {window.store.getState().updateGauge.rightvalue.toFixed(2)}
+                </p>
+                <p>
+                    Nombre l'an passé: {window.store.getState().updateGauge.rightvalueBefore.toFixed(2)} 
                 </p>
                 <p>
                     {window.store.getState().updateGauge.details}

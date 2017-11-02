@@ -100,13 +100,10 @@ export function updateSite(site) {
                 for this year and for last year. Then we call presentDataForNewSite, a function that redistributes the values requested
                 in the different components
             */
-            console.time("test")
 
             return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
                 .then(json => {
-                    console.log(json.data)
                     const actualJson = json.data;
-                    console.timeEnd("test")
                     return axios.get(config.backend.adress + 'dashboard/'+level+'/'+name+'?beginDate='+substractYear(StartDate)+'&endDate='+substractYear(EndDate))
                         .then(json => {
 
@@ -146,6 +143,7 @@ export function updateSite(site) {
             /*
             Gotta add here dispatch for prestataire page
             */
+
             dispatch(loadPrestataireList(site.real_level,site.nom));
 
             return axios.get(config.backend.adress+ 'dashboard/'+level+'/'+name+'?beginDate='+StartDate+'&endDate='+EndDate)
