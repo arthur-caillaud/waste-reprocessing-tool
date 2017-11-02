@@ -42,7 +42,7 @@ export function loadSuggestions(value) {
                 }
             });
             dispatch(actions.maybeUpdateSuggestions(suggestions, value))
-        
+
   };
 }
 
