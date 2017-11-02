@@ -86,7 +86,7 @@ function getDechetsForSites(idArray, beginDate, endDate) {
     var queryString = "SELECT dechet.* FROM bordereau INNER JOIN transport ON " +
     "transport.id = bordereau.id_transport_1 INNER JOIN dechet ON dechet.id = " +
     "bordereau.id_dechet WHERE bordereau.id_site IN (?) AND transport.date < " +
-    "? AND transport.date >= ? GROUP BY dechet.id " +
+    "? AND transport.date >= ? AND quantitee_finale > 0 GROUP BY dechet.id " +
     "ORDER BY SUM(bordereau.quantitee_transportee) DESC";
 
     var query = {

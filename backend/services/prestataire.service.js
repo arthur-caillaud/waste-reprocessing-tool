@@ -70,6 +70,7 @@ function getPrestatairesForSites(sitesArray, beginDate, endDate) {
     "traitement.id = bordereau.id_traitement_final INNER JOIN transport " +
     "ON transport.id = bordereau.id_transport_1 INNER JOIN prestataire " +
     "ON prestataire.id = traitement.id_prestataire WHERE bordereau.id_site IN (?) " +
+    "AND quantitee_finale > 0 " +
     "AND transport.date < ? AND transport.date >= ? GROUP BY prestataire.id " +
     "ORDER BY SUM(quantitee_finale) DESC";
 
