@@ -541,8 +541,11 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     /*
                      * We start by computing the two taux de valorisation global and regional (if exists)
                      */
+                    let tauxDeValorisationSite = 0;
                     let tauxDeValorisationNation = 0;
                     let tauxDeValorisationRegion = 0;
+                    let quantiteeTotaleSite = 0;
+                    let quantiteeTotaleSiteRecyclee = 0;
                     let quantiteeTotaleNation = 0;
                     let quantiteeTotaleNationRecyclee = 0;
                     let quantiteeTotaleRegion = 0;
@@ -551,6 +554,22 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                     let keys = [];
                     let values = [];
                     let volumes = [];
+                    if(json.data.sites.quantity.length > 0){
+                        json.data.sites.quantity.forEach(prestataire => {
+                            quantiteeTotaleSite += parseFloat(prestataire.quantitee_traitee);
+                        });
+                    }
+                    if(json.data.sites.recycled.length > 0){
+                        json.data.sites.recycled.forEach(prestataire => {
+                            quantiteeTotaleSiteRecyclee += parseFloat(prestataire.quantitee_traitee);
+                        });
+                    }
+                    if(quantiteeTotaleSite > 0){
+                        tauxDeValorisationSite = 100*(parseFloat(quantiteeTotaleSiteRecyclee))/(parseFloat(quantiteeTotaleSite));
+                        values.push(tauxDeValorisationSite.toPrecision(4));
+                        volumes.push(quantiteeTotaleSite.toPrecision(5));
+                        keys.push("SITE");
+                    }
                     if(json.data.global.quantity.length > 0){
                         json.data.global.quantity.forEach(prestataire => {
                             quantiteeTotaleNation += parseFloat(prestataire.quantitee_traitee);
