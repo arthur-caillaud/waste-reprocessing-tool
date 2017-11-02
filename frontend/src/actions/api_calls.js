@@ -568,13 +568,13 @@ export function loadDechetGraphValues(level,name,dechet = null,chosenPrestataire
                         volumes.push(quantiteeTotaleNation.toPrecision(5));
                         keys.push("NATIONAL");
                     }
-                    if(json.data.global.quantity.length > 0){
-                        json.data.global.quantity.forEach(prestataire => {
+                    if(json.data.region.quantity.length > 0){
+                        json.data.region.quantity.forEach(prestataire => {
                             quantiteeTotaleRegion += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
-                    if(json.data.global.recycled.length > 0){
-                        json.data.global.recycled.forEach(prestataire => {
+                    if(json.data.region.recycled.length > 0){
+                        json.data.region.recycled.forEach(prestataire => {
                             quantiteeTotaleRegionRecyclee += parseFloat(prestataire.quantitee_traitee);
                         });
                     }
