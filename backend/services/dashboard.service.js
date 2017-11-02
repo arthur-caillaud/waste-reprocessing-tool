@@ -584,11 +584,11 @@ function getDetailsForSites(beginDate, endDate, idArray) {
             .subscribe(observerFilieresInterditesDD);
 
         var observerRetards = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetardsDetails(idArray, 0, endDate, "retards_norm")
+        getAllRetardsDetails(idArray, 0, date, "retards_norm")
             .subscribe(observerRetards);
 
         var observerRetardsDD = Rx.Observer.create(tempNext, tempError, tempCompleted);
-        getAllRetardsDetails(idArray, 1, endDate, "retards_dd")
+        getAllRetardsDetails(idArray, 1, date, "retards_dd")
             .subscribe(observerRetardsDD);
 
         var observerCounter = Rx.Observer.create(tempNext, tempError, tempCompleted);
