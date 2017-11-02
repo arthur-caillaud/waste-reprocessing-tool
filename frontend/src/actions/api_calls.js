@@ -249,7 +249,7 @@ export function loadPrestataireList(level,name){
 
 export function loadDechetsConsideringChosenPrestataire(level,name,idPrestataire){
     return dispatch => {
-        dispatch(actions.loadDechetListBegin());
+        //dispatch(actions.loadPrestataireGraphTagsBegin());
         return axios.get(config.backend.adress+'new/graphs/prestataires/'+level+'/'+((level === 0)?"national":name)+'/dechets/'+idPrestataire)
             .then(json => {
                 let inputArray = [];
@@ -287,18 +287,17 @@ export function loadPrestataireGraphValues(level,name,prestataire = null,chosenD
                     /*
                      * We start by computing the two taux de valorisation
                      */
-                    let tauxDeValorisationGlobal = 0;
-                    let tauxDeValorisationListeVerte = 0;
-                    let quantiteeTotale = 0;
-                    let quantiteeTotaleListeVerte = 0;
-                    let quantiteeTotaleRecyclee = 0;
-                    let quantiteeTotaleRecycleeListeVerte = 0;
-
                     let values = [];
                     let volumes = [];
                     let valuesListeVerte = [];
                     let volumesListeVerte = [];
                     columnNames.forEach(name => {
+                        let tauxDeValorisationGlobal = 0;
+                        let tauxDeValorisationListeVerte = 0;
+                        let quantiteeTotale = 0;
+                        let quantiteeTotaleListeVerte = 0;
+                        let quantiteeTotaleRecyclee = 0;
+                        let quantiteeTotaleRecycleeListeVerte = 0;
                         if(json.data[name].quantity.length > 0){
                             json.data[name].quantity.forEach(dechet => {
                                 quantiteeTotale += parseFloat(dechet.quantitee_traitee);
@@ -506,7 +505,7 @@ export function loadDechetList(level,name){
 
 export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
     return dispatch => {
-        dispatch(actions.loadPrestataireListBegin());
+        //dispatch(actions.loadDechetGraphTagsBegin());
         return axios.get(config.backend.adress+'new/graphs/dechets/'+level+'/'+((level === 0)?"national":name)+'/prestataires/'+idDechet)
             .then(json => {
                 let inputArray = [];
