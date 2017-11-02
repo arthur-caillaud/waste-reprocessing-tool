@@ -17,6 +17,7 @@ window.store = composeEnhancers(autoRehydrate(), applyMiddleware(thunkMiddleware
 persistStore(window.store, {}, () => {
     console.log(window.store.getState().pageOptions.architecture.niveau === undefined)
     if (window.store.getState().pageOptions.architecture.niveau === undefined) {
+        console.log("nous sommes dans index.js")
         window.store.dispatch(apiCalls.getArchitecture());
         window.store.dispatch(apiCalls.updateSite(window.store.getState().updateSearchBar.site));
 
