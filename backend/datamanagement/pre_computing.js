@@ -81,6 +81,7 @@ function printDuration(duration) {
     }
 
     console.log("Done in " + result);
+    process.exit();
 
 }
 
