@@ -69,7 +69,7 @@ export default class Histogram extends Component {
             d.key+
             "</strong></div>"+
             "<div>Taux de valorisation <span style='color:red'>" + d.value + "%</span></div>"+
-            "<div>Volume traité <span style='color:red'>" + d.volume + "t</span></div></div>"
+            "<div>Volume <span style='color:red'>" + d.volume + "t (tot.)</span></div></div>"
         )});
         svgDoc.call(tip);
 
