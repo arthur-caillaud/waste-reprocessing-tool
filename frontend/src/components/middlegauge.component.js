@@ -272,14 +272,13 @@ function mapStateToProps(state) {
 
 
 function mapDispatchToProps(dispatch) {
-    return {showMoreInfos: () => {dispatch(showMoreInfos.displayMiddleGaugeInfos())
-    }
-};
+    return {
+    };
 }
 
 const MiddleGauge = ({showMoreInfos, middlevalue, middlevalueBefore, middlevalueBeforeAnte, middlevalueAnte, v_total}) => {
     return(
-        <div onClick={showMoreInfos}>
+        <div>
             <MiddleGauged3 id="middlegauge" middlevalue={middlevalue} middlevalueBefore={middlevalueBefore} middlevalueAnte={middlevalueAnte} middlevalueBeforeAnte={middlevalueBeforeAnte} v_total={v_total}/>
         </div>
     )

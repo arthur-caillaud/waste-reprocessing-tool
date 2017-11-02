@@ -274,16 +274,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 
-    return {showMoreInfos: () => {
-        dispatch(MoreInfosService.displayRightGaugeInfos())
-    }
+    return {
 
     }
 };
 
 const RightGauge = ({showMoreInfos, rightvalue, rightvalueBefore, rightvalueBeforeAnte, rightvalueAnte, bdx}) => {
     return(
-        <div onClick={showMoreInfos}>
+        <div>
             <RightGauged3 id="rightgauge" rightvalue={rightvalue} rightvalueBefore={rightvalueBefore} rightvalueAnte={rightvalueAnte} rightvalueBeforeAnte={rightvalueBeforeAnte} bdx={bdx}/>
         </div>
     )

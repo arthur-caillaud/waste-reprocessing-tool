@@ -28,9 +28,8 @@ export function loadSuggestions(value) {
     */
   return dispatch => {
     dispatch(actions.loadSuggestionsBegin())
-    return axios.get(config.backend.adress+'dashboard/architecture')
-        .then(json => {
-            let suggestions = HelperService.filterByValue(HelperService.getAllLevelNames(json.data), value)
+
+            let suggestions = HelperService.filterByValue(HelperService.getAllLevelNames(window.store.getState().pageOptions.architecture), value)
             suggestions.push({
                 nom: "$t$r$a$p$",
                 level: 0,
@@ -43,7 +42,7 @@ export function loadSuggestions(value) {
                 }
             });
             dispatch(actions.maybeUpdateSuggestions(suggestions, value))
-        });
+        
   };
 }
 
