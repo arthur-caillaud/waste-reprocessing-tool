@@ -27,7 +27,7 @@ class RightGauged3 extends Component {
         var rightvalueAnte = this.props.rightvalueAnte;
         var rightvalueBeforeAnte = this.props.rightvalueBeforeAnte;
         var bdx = this.props.bdx;
-        var margin = {top: 10, right: 0, bottom: 40, left: 0};
+        var margin = {top: 20, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
 

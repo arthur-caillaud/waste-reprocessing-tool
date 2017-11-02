@@ -27,7 +27,7 @@ class LeftGauged3 extends Component {
         var leftvalueAnte = this.props.leftvalueAnte;
         var leftvalueBeforeAnte = this.props.leftvalueBeforeAnte;
         var v_listeverte = this.props.v_listeverte;
-        var margin = {top: 10, right: 0, bottom: 40, left: 0};
+        var margin = {top: 20, right: 0, bottom: 40, left: 0};
         var width = getChartSize("#"+this.props.id)[0];
         var height = getChartSize("#"+this.props.id)[1];
 

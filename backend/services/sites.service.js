@@ -83,11 +83,11 @@ function getSitesCloseToSite(name, distanceMax) {
     var observable = Rx.Observable.create((observer) => {
         Site.findAll({
             where: {
-                nom: name
+                nom: name,
             },
             include: [
                 {
-                    model: localisation
+                    model: localisation,
                 }
             ]
         })
@@ -95,36 +95,42 @@ function getSitesCloseToSite(name, distanceMax) {
                 var givenSite = givenSites[0];
                 if (givenSite) {
                     // gets all the other sites
-                    var latitude = givenSite.dataValues.localisation.dataValues.latitude;
-                    var longitude = givenSite.dataValues.localisation.dataValues.longitude;
-                    Site.findAll({
-                        include: [
-                            {
-                                model: localisation,
-                                where: {
-                                    id: {$not: null}
-                                }
-                            }
-                        ]
-                    })
-                        .then((sites) => {
-                            // for each site, only gets the close ones
-                            sites.forEach((site) => {
-                                var lat = site.dataValues.localisation.dataValues.latitude;
-                                var long = site.dataValues.localisation.dataValues.longitude;
-                                location.getDistance(longitude, latitude, long, lat, (distance) => {
-                                    if (distance < distanceMax) {
-                                        site.dataValues.localisation = undefined;
-                                        result.push(site);
+                    if (givenSite.dataValues.localisation != null) {
+                        var latitude = givenSite.dataValues.localisation.dataValues.latitude;
+                        var longitude = givenSite.dataValues.localisation.dataValues.longitude;
+                        Site.findAll({
+                            include: [
+                                {
+                                    model: localisation,
+                                    where: {
+                                        id: {$not: null}
                                     }
+                                }
+                            ]
+                        })
+                            .then((sites) => {
+                                // for each site, only gets the close ones
+                                sites.forEach((site) => {
+                                    var lat = site.dataValues.localisation.dataValues.latitude;
+                                    var long = site.dataValues.localisation.dataValues.longitude;
+                                    location.getDistance(longitude, latitude, long, lat, (distance) => {
+                                        if (distance < distanceMax) {
+                                            site.dataValues.localisation = undefined;
+                                            result.push(site);
+                                        }
+                                    })
                                 })
+                                observer.onNext(result);
+                                observer.onCompleted();
                             })
-                            observer.onNext(result);
+                            .catch((error) => {
+                                throw error;
+                            })
+                        }
+                        else {
+                            observer.onNext([givenSite]);
                             observer.onCompleted();
-                        })
-                        .catch((error) => {
-                            throw error;
-                        })
+                        }
 
                 }
                 else {
