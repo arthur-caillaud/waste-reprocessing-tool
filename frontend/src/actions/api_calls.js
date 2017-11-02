@@ -513,7 +513,7 @@ export function loadPrestatairesConsideringChosenDechet(level,name,idDechet){
                     json.data.sites.quantity.forEach(row => {
                         inputArray.push(row.prestataire);
                     });
-                    dispatch(actions.updateDechetTagsInputArray(inputArray));
+                    dispatch(actions.updatePrestataireTagsInputArray(inputArray));
                 }
             });
     }

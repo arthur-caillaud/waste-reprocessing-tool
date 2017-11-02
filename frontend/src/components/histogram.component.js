@@ -212,8 +212,8 @@ export default class Histogram extends Component {
                 })
             })
             .transition().duration(1500)
-            .attr("y", d => {  return y(d.value); })
-            .attr("height", d => { return (height - y(d.value)); });
+            .attr("y", d => {  return ((y(d.value) == height) ? 5 : y(d.value)); })
+            .attr("height", d => { return (height - ((y(d.value) == height) ? 5 : y(d.value))); });
 
     }
 
