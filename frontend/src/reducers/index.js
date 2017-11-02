@@ -1,16 +1,6 @@
 import React from "react"
 import { combineReducers } from 'redux';
 import { searchInArray } from './service';
-import  MiddleGaugeInfos from '../components/showmoreinfos/middlegauge.showmoreinfos';
-import LeftGaugeInfos from '../components/showmoreinfos/leftgauge.showmoreinfos';
-import RightGaugeInfos from '../components/showmoreinfos/rightgauge.showmoreinfos';
-import LeftTileInfos from '../components/showmoreinfos/lefttileinfos.showmoreinfos';
-import MiddleLeftTileInfos from '../components/showmoreinfos/middlelefttileinfos.showmoreinfos';
-import MiddleLeftTileAlerts from '../components/showmoreinfos/middlelefttilealerts.showmoreinfos';
-import MiddleRightTileInfos from '../components/showmoreinfos/middlerighttileinfos.showmoreinfos';
-import MiddleRightTileAlerts from '../components/showmoreinfos/middlerighttilealerts.showmoreinfos';
-import RightTileInfos from '../components/showmoreinfos/righttileinfos.showmoreinfos';
-import RightTileAlerts from '../components/showmoreinfos/righttilealerts.showmoreinfos';
 import * as moment from 'moment';
 import {
     SAVE_ARCHITECTURE,
@@ -18,9 +8,7 @@ import {
     UPDATE_DATE,
     UPDATE_DASHBOARD_BEGIN,
 
-    DISPLAY_LEFTGAUGE_INFOS,
-    DISPLAY_MIDDLEGAUGE_INFOS,
-    DISPLAY_RIGHTGAUGE_INFOS,
+
     DISPLAY_LEFTTILE_INFOS,
     DISPLAY_MIDDLELEFTTILE_INFOS,
     DISPLAY_MIDDLELEFTTILE_ALERTS,
@@ -79,176 +67,97 @@ import {
 
 function infosPanelOptions(
     state = {
-    defaultBody: <center>Cliquez quelque part pour afficher d'avantage d'informations</center>,
-    leftGaugeShown: false,
     leftTileShown: false,
-    middleGaugeShown: false,
     middleLeftTileShown: false,
     middleLeftTileAlerts: false,
     middleRightTileShown: false,
     middleRightTileAlerts: false,
     rightTileShown: false,
     rightTileAlerts: false,
-    rightGaugeShown: false,
     },
     action){
     switch (action.type){
-
-        case DISPLAY_LEFTGAUGE_INFOS:
-            return Object.assign({}, state, {
-                leftGaugeShown: !state.leftGaugeShown,
-                leftTileShown: false,
-                middleGaugeShown: false,
-                middleLeftTileShown: false,
-                middleLeftTileAlerts: false,
-                middleRightTileShown: false,
-                middleRightTileAlerts: false,
-                rightTileShown: false,
-                rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <LeftGaugeInfos />
-                });
-        case DISPLAY_RIGHTGAUGE_INFOS:
-            return Object.assign({}, state, {
-                leftGaugeShown: false,
-                leftTileShown: false,
-                middleGaugeShown: false,
-                middleLeftTileShown: false,
-                middleLeftTileAlerts: false,
-                middleRightTileShown: false,
-                middleRightTileAlerts: false,
-                rightTileShown: false,
-                rightTileAlerts: false,
-                rightGaugeShown: !state.rightGaugeShown,
-                defaultBody: <RightGaugeInfos />
-                });
         case DISPLAY_LEFTTILE_INFOS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: !state.leftTileShown,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <LeftTileInfos />
-            });
-        case DISPLAY_MIDDLEGAUGE_INFOS:
-            return Object.assign({}, state, {
-                leftGaugeShown: false,
-                leftTileShown: false,
-                middleGaugeShown: !state.middleGaugeShown,
-                middleLeftTileShown: false,
-                middleLeftTileAlerts: false,
-                middleRightTileShown: false,
-                middleRightTileAlerts: false,
-                rightTileShown: false,
-                rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <MiddleGaugeInfos />
             });
         case DISPLAY_MIDDLELEFTTILE_INFOS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: !state.middleLeftTileShown,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <MiddleLeftTileInfos />
             });
         case DISPLAY_MIDDLELEFTTILE_ALERTS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: !state.middleLeftTileAlerts,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <MiddleLeftTileAlerts />
             });
         case DISPLAY_MIDDLERIGHTTILE_INFOS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: !state.middleRightTileShown,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <MiddleRightTileInfos />
             });
         case DISPLAY_MIDDLERIGHTTILE_ALERTS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: !state.middleRightTileAlerts,
                 rightTileShown: false,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <MiddleRightTileAlerts />
             });
         case DISPLAY_RIGHTTILE_INFOS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: !state.rightTileShown,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
-                defaultBody: <RightTileInfos />
             });
         case DISPLAY_RIGHTTILE_ALERTS:
             return Object.assign({}, state, {
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: !state.rightTileAlerts,
-                rightGaugeShown: false,
-                defaultBody: <RightTileAlerts />
             });
 
 
         case RESET_MOREINFOS_TO_DEFAULT:
             return Object.assign({}, state, {
-                defaultBody: <center>Cliquez quelque part pour afficher d'avantage d'informations</center>,
-                leftGaugeShown: false,
                 leftTileShown: false,
-                middleGaugeShown: false,
                 middleLeftTileShown: false,
                 middleLeftTileAlerts: false,
                 middleRightTileShown: false,
                 middleRightTileAlerts: false,
                 rightTileShown: false,
                 rightTileAlerts: false,
-                rightGaugeShown: false,
             });
         default:
             return state;
@@ -421,7 +330,7 @@ And UPDATE_SITE (see HelperService again)
                     value: action.value.name
                 });
             };
-            
+
         case UPDATE_DASHBOARD_BEGIN:
             return Object.assign({}, state, {
                 dashboardLoading: !state.dashboardLoading

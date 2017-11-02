@@ -11,9 +11,9 @@
     overflow:auto;
 }
 .titleshowmoreinfos{
-    position:absolute;
+    position:relative;
     text-align: center;
-    transform: translate(100%, 400%);
+    transform: translate(100px, 100px);
 
 }
 

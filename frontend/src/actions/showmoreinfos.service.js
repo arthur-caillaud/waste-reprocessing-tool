@@ -1,22 +1,6 @@
 import * as actions from './index';
 var MoreInfosService = {}
 
-function displayLeftGaugeInfos() {
-    return dispatch => {
-        dispatch(actions.displayLeftGaugeInfos())
-    }
-}
-function displayRightGaugeInfos() {
-    return dispatch => {
-        dispatch(actions.displayRightGaugeInfos())
-    }
-}
-
-function displayMiddleGaugeInfos() {
-    return dispatch => {
-        dispatch(actions.displayMiddleGaugeInfos())
-    }
-}
 function displayLeftTileInfos() {
     return dispatch => {
         dispatch(actions.displayLeftTileInfos())
@@ -53,9 +37,6 @@ function displayRightTileAlerts() {
     }
 }
 
-MoreInfosService.displayMiddleGaugeInfos = displayMiddleGaugeInfos;
-MoreInfosService.displayLeftGaugeInfos = displayLeftGaugeInfos;
-MoreInfosService.displayRightGaugeInfos = displayRightGaugeInfos;
 MoreInfosService.displayMiddleLeftTileInfos = displayMiddleLeftTileInfos;
 MoreInfosService.displayMiddleLeftTileAlerts = displayMiddleLeftTileAlerts;
 MoreInfosService.displayLeftTileInfos = displayLeftTileInfos;

@@ -275,16 +275,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 
-    return {showMoreInfos: () => {
-        dispatch(MoreInfosService.displayLeftGaugeInfos())
-    }
+    return {
 
     }
 };
 
 const LeftGauge = ({showMoreInfos, leftvalue, leftvalueBefore, leftvalueBeforeAnte, leftvalueAnte, v_listeverte}) => {
     return(
-        <div onClick={showMoreInfos}>
+        <div>
             <LeftGauged3 id="leftgauge" leftvalue={leftvalue} leftvalueBefore={leftvalueBefore} leftvalueAnte={leftvalueAnte} leftvalueBeforeAnte={leftvalueBeforeAnte} v_listeverte={v_listeverte}/>
         </div>
     )
