@@ -1,4 +1,5 @@
 const excel = require('exceljs');
+const csvParse = require('csv-parse');
 const Rx = require ('rx');
 const config = require('../config/config.json');
 const Sequelize = require('sequelize');
@@ -821,9 +822,42 @@ const convertRowIntoReferentielDechetSequelize = function(excelRow){
     return referentielDechetObservable;
 }
 
+const readCsv = function (filePath, startingRow){
+    return Rx.Observable.create(obs => {
+        csvParse(filePath)
+        fs.readFile(filePath, (err,data) => {
+            if(err){
+                obs.onError(err);
+            }
+            if(data){
+                csvParse(data, {delimiter: ';', from: startingRow}, (err, output) => {
+                    let jsonExcel = [];
+                    output.forEach(row => {
+                        let newRow = [null];
+                        row.forEach(cell => {
+                            let newCell = cell;
+                            if (typeof cell == "string"){
+                                newCell = cell.trim();
+                                newCell = newCell.replace(/[\u0300-\u036f]/g, "");
+                                newCell = newCell.toUpperCase();
+                            }
+                            if (cell == ""){
+                                newCell = null;
+                            }
+                            newRow.push(newCell);
+                        });
+                        jsonExcel.push(newRow);
+                    });
+                    obs.onNext(jsonExcel);
+                });
+            }
+        });
+    });
+}
+
 //Function used to read the data extracted from the Ogive EDF database
 const readXlsx = function (filepath, sheetNumber, startingRow) {
-    //The input is an xlsx filepath et the function callbacks a json containing the whole excel data
+    //The input is an xlsx filepath and the function callbacks a json containing the whole excel data
     //WARNING: function only supports .XLSX files
 
     let workBook = new excel.Workbook();
@@ -946,7 +980,7 @@ const writeIntoBdd = function(excelName) {
         const sequelize = db.mySqlConnect();
         sequelize.authenticate()
         .then(() => {
-            let readXlsxObservable = readXlsx(config.excel.DATA_DIR + excelName, config.excel.MAIN_SHEET, config.excel.STARTING_ROW);
+            let readXlsxObservable = readCsv(config.excel.DATA_DIR + excelName, config.excel.STARTING_ROW);
             console.log("Reading excel...");
             readXlsxObservable.subscribe({
                 onNext: (jsonExcel) => {
@@ -1029,6 +1063,8 @@ function __main(datasExcelArray, referentielExcel){
  * - Runs the referentiel_dechet function to know about new wastes
  * - Terminate
  */
+
+
 fs.readdir(dataFolder, (err,files) => {
     let dataArray = [];
     files.forEach(file => {
@@ -1037,4 +1073,4 @@ fs.readdir(dataFolder, (err,files) => {
         }
     });
     __main(dataArray,"liste_dechets.xlsx");
-});
+})
