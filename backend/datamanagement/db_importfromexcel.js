@@ -845,8 +845,10 @@ const readCsv = function (filePath, startingRow){
                                 newCell = null;
                             }
                             if(newCell && [19,32,33,44,46].includes(index)){
-                                newCell = newCell.replace('/','-');
-                                newCell = newCell.replace('/','-');
+                                let year = newCell.slice(6);
+                                let month = newCell.slice(3,5);
+                                let day = newCell.slice(0,2);
+                                newCell = year + '-' + month + '-' + day;
                             }
                             newRow.push(newCell);
                         });
@@ -1074,7 +1076,6 @@ readCsv('./data/data_avriljuin.csv',3).subscribe({
     }
 })
 
-/*
 fs.readdir(dataFolder, (err,files) => {
     let dataArray = [];
     files.forEach(file => {
@@ -1083,5 +1084,4 @@ fs.readdir(dataFolder, (err,files) => {
         }
     });
     __main(dataArray,"liste_dechets.xlsx");
-})
-*/
+});
