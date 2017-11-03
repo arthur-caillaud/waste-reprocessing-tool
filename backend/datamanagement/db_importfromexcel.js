@@ -1073,7 +1073,7 @@ function __main(datasExcelArray, referentielExcel){
 fs.readdir(dataFolder, (err,files) => {
     let dataArray = [];
     files.forEach(file => {
-        if(file.slice(0,4) ==="data"){
+        if(file.slice(0,4) === "data"){
             dataArray.push(file)
         }
     });
