@@ -1070,12 +1070,6 @@ function __main(datasExcelArray, referentielExcel){
  * - Terminate
  */
 
-readCsv('./data/data_avriljuin.csv',3).subscribe({
-    onNext: data => {
-        console.log(data[0]);
-    }
-})
-
 fs.readdir(dataFolder, (err,files) => {
     let dataArray = [];
     files.forEach(file => {
