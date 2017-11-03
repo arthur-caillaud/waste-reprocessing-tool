@@ -834,7 +834,7 @@ const readCsv = function (filePath, startingRow){
                     let jsonExcel = [];
                     output.forEach(row => {
                         let newRow = [null];
-                        row.forEach(cell => {
+                        row.forEach((cell, index) => {
                             let newCell = cell;
                             if (typeof cell == "string"){
                                 newCell = cell.trim();
@@ -843,6 +843,10 @@ const readCsv = function (filePath, startingRow){
                             }
                             if (cell == ""){
                                 newCell = null;
+                            }
+                            if(newCell && [19,32,33,44,46].includes(index)){
+                                newCell = newCell.replace('/','-');
+                                newCell = newCell.replace('/','-');
                             }
                             newRow.push(newCell);
                         });
@@ -1064,7 +1068,13 @@ function __main(datasExcelArray, referentielExcel){
  * - Terminate
  */
 
+readCsv('./data/data_avriljuin.csv',3).subscribe({
+    onNext: data => {
+        console.log(data[0]);
+    }
+})
 
+/*
 fs.readdir(dataFolder, (err,files) => {
     let dataArray = [];
     files.forEach(file => {
@@ -1074,3 +1084,4 @@ fs.readdir(dataFolder, (err,files) => {
     });
     __main(dataArray,"liste_dechets.xlsx");
 })
+*/
